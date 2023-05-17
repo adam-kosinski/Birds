@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Birdsong</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans">
+    <link type="text/css" rel="stylesheet" href="base.css">
+    <link type="text/css" rel="stylesheet" href="game.css">
+    <meta name="viewport" content="width=device-width initial-scale=1">
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <img id="background-image" src="images/cloud_background.png">
+
+
+    <div id="list-screen" class="screen">
+        <nav>
+            <a href="index.html"><img class="nav-icon" src="images/birdhouse.png" alt="birdhouse icon">Exit</a>
+            <button><img class="nav-icon" src="images/list_icon.png" alt="list icon">Save List</button>
+        </nav>
+        <div id="white-container">
+            <div id="list-title">
+                <p class="font-large">Birds to Practice</p>
+                <button id="start-game-button" disabled class="btn-primary">Start</button>
+                <img id="bird-list-loader" class="loader" src="images/loader.png" alt="loader">
+            </div>
+            <input id="add-bird-input" type="text" placeholder="Search for bird to add">
+            <div id="bird-list-message">No birds selected</div>
+            <div id="bird-list"></div>
+        </div>
+    </div>
+
+
+    <div id="game-screen" class="screen">
+        <nav>
+            <a href="index.html"><img id="birdhouse" src="images/birdhouse.png" alt="birdhouse icon">Exit</a>
+
+        </nav>
+    </div>
+
+
+    <script src="add_remove_birds.js"></script>
+    <script src="game_events.js"></script>
+
+</body>
+
+</html>

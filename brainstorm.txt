@@ -1,0 +1,23 @@
+Design goals
+
+Practice identifying bird species based on their calls
+- select bird species to practice
+- have nonselected species show up too
+
+Practice identifying birds based on appearance
+- at the order, family, genus, species levels
+
+Don't rely on downloaded csv for observations (more flexible)
+
+
+
+Common name issue
+- We can build a database of order and family common names, but there are too many genera/species
+- We use common names for selecting what to practice, autocompleting the guess input, and displaying results
+- Can dynamically query common names before images are presented
+
+
+
+Wildflower incompatibilities:
+- family common names come from family csv
+- observations are organized by family
