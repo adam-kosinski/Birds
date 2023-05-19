@@ -25,13 +25,14 @@ bird_grid.addEventListener("click", (e) => {
 
     let bird_grid_option = e.target.closest(".bird-grid-option");
     if(bird_grid_option){
+        let originally_selected = bird_grid_option.classList.contains("selected");
         bird_grid.querySelectorAll(".bird-grid-option.selected").forEach(el => {
             el.classList.remove("selected");
         });
-        bird_grid_option.classList.add("selected");
+        if(!originally_selected) bird_grid_option.classList.add("selected");
 
         //update text input
-        document.getElementById("guess-input").value = bird_grid_option.dataset.commonName;
+        document.getElementById("guess-input").value = originally_selected ? "" : bird_grid_option.dataset.commonName;
     }
 });
 

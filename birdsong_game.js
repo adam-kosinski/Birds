@@ -206,7 +206,7 @@ function nextObservation(taxon_balancing = true) {
     let options = taxon_obs[next_taxon];
     console.log("options", options);
     current = options[Math.floor(options.length * Math.random())];
-    console.log("current", current)
+    console.log("current", current);
 
     //add to HTML
     document.getElementById("inat-link").href = current.uri;
@@ -230,6 +230,7 @@ function nextObservation(taxon_balancing = true) {
     document.getElementById("question").style.display = "block";
     document.getElementById("answer").style.display = "none";
     document.getElementById("bird-grid").style.display = "grid";
+    document.getElementById("bird-grid").scrollTop = 0;
     document.getElementById("correct-button").style.display = "none";
     document.getElementById("incorrect-button").style.display = "none";
     document.getElementById("guess-button").style.display = "block";
