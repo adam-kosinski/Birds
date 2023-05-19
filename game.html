@@ -36,22 +36,39 @@
         <nav>
             <div>
                 <a href="index.html"><img class="nav-icon" src="images/birdhouse.png" alt="birdhouse icon">Exit</a>
-                <button id="back-to-list"><img class="nav-icon" src="images/list_icon.png" alt="list icon">Back to List</button>
+                <button id="back-to-list"><img class="nav-icon" src="images/list_icon.png" alt="list icon">Back to
+                    List</button>
             </div>
-            <a id="inat-link" class="font-small" target="_blank" href=""><div>iNaturalist<br>Observation</div><img class="nav-icon" src="images/external_link.png" alt="external link icon"></a>
+            <a id="inat-link" class="font-small" target="_blank" href="">
+                <div>iNaturalist<br>Observation</div><img class="nav-icon" src="images/external_link.png"
+                    alt="external link icon">
+            </a>
         </nav>
         <div id="birdsong-main">
             <audio id="birdsong-audio" controls autoplay controlslist="nodownload"></audio>
-            <!-- <div id="image-reveal-container"></div> -->
-            <p>
+            <p id="question">
                 <span class="font-large">What bird is singing?</span><br>
                 Select a bird or write its name
             </p>
+
+            <div id="answer" class="birdsong-subflex">
+                <p>
+                    <b id="answer-common-name" class="font-large"></b><br>
+                    <i id="answer-scientific-name"></i>
+                </p>
+                <img id="answer-image" src="" alt="image of answer">
+            </div>
+
             <div id="bird-grid">
                 <button id="other-option" class="bird-grid-option font-medium" data-common-name="Other">Other</button>
             </div>
-            <input id="guess-input" type="text" placeholder="Write your guess">
-            <button class="btn-primary">Check</button>
+
+            <div class="birdsong-subflex">
+                <input id="guess-input" type="text" placeholder="Write your guess">
+                <button id="guess-button" class="btn-primary">Check</button>
+                <button id="correct-button" class="btn-primary">Correct! Next ></button>
+                <button id="incorrect-button" class="btn-primary">Incorrect. Next ></button>
+            </div>
         </div>
     </div>
 

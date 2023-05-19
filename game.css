@@ -102,7 +102,17 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 550px;
+    justify-content: space-between;
     gap: 10px;
+}
+
+#birdsong-main > .birdsong-subflex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
 }
 
 #birdsong-audio {
@@ -111,16 +121,29 @@
     margin-top: 10px;
 }
 
-#image-reveal-container {
-    height: 200px;
-    width: 200px;
-    background-color: white;
+#birdsong-main p {
+    text-align: center;
+}
+
+#answer {
+    display: none;
+    height: 0; /* start at 0 and then use flex-grow to take up as much space as is available*/
+    flex-grow: 1;
+    justify-content: center;
+}
+
+#answer-image {
+    box-sizing: border-box;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: auto; /* needed so that max height obeys what the flexbox wants, not what the image wants (make the image size "uncompromising") */
+    border: 10px solid white;
     box-shadow: 0 4px 4px rgba(0,0,0,0.25);
 }
 
 #bird-grid {
     width: 100%;
-    max-height: 325px;
+    height: 325px;
     overflow-y: auto;
     background-color: white;
     display: grid;
@@ -135,8 +158,8 @@
 .bird-grid-option {
     box-shadow: 0 4px 4px rgba(0,0,0,0.25);
     border-radius: 12px;
-    min-width: 75px;
-    min-height: 75px;
+    max-width: 75px;
+    max-height: 75px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -178,4 +201,16 @@
     text-align: center;
     width: 70%;
     box-sizing: border-box;
+}
+
+#correct-button {
+    display: none;
+    background-color: #28d328;
+    border-bottom-color: #095200;
+}
+
+#incorrect-button {
+    display: none;
+    background-color: #ff7d7d;
+    border-bottom-color: #740000;
 }

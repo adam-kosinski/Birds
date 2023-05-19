@@ -39,4 +39,12 @@ document.addEventListener("keypress", (e) => {
     if(/^[a-zA-Z]$/.test(e.key) && getComputedStyle(document.getElementById("birdsong-screen")).display == "block"){
         document.getElementById("guess-input").focus();
     }
-})
+});
+
+
+//check answer
+document.getElementById("guess-button").addEventListener("click", checkAnswer);
+
+//next observation
+document.getElementById("correct-button").addEventListener("click", nextObservation);
+document.getElementById("incorrect-button").addEventListener("click", nextObservation);

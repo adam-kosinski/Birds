@@ -11,6 +11,8 @@ let current; //current observation object
 
 
 function initBirdsongGame(){
+    console.log("\nINIT GAME ============================\n\n");
+
     //start loader
     document.getElementById("bird-list-loader").style.display = "block";
 
@@ -148,13 +150,49 @@ function nextObservation(taxon_balancing=true){
     //add to HTML
     document.getElementById("birdsong-audio").src = current.sounds[0].file_url;
     document.getElementById("inat-link").href = current.uri;
+
+    //reset HTML
     document.getElementById("guess-input").value = "";
     document.getElementById("bird-grid").querySelectorAll(".bird-grid-option.selected").forEach(el => {
         el.classList.remove("selected");
     });
+    document.getElementById("question").style.display = "block";
+    document.getElementById("answer").style.display = "none";
+    document.getElementById("bird-grid").style.display = "grid";
+    document.getElementById("correct-button").style.display = "none";
+    document.getElementById("incorrect-button").style.display = "none";
+    document.getElementById("guess-button").style.display = "block";
     //TODO other resetting things
+
+    //preload the answer image
+    document.getElementById("answer-image").src = current.taxon.default_photo.medium_url;
 
 
     //check if we're getting low on data and need to fetch more
     //TODO
+}
+
+
+
+function checkAnswer(){
+    document.getElementById("guess-button").style.display = "none";
+    let guess = document.getElementById("guess-input").value;
+
+    if (guess.toLowerCase() == current.taxon.name.toLowerCase() ||
+        guess.toLowerCase() == current.taxon.preferred_common_name.toLowerCase())
+    {
+        document.getElementById("correct-button").style.display = "block";
+    }
+    else {
+        document.getElementById("incorrect-button").style.display = "block";
+    }
+
+    //reveal taxon
+    document.getElementById("answer-common-name").textContent = current.taxon.preferred_common_name;
+    document.getElementById("answer-scientific-name").textContent = current.taxon.name;
+    document.getElementById("question").style.display = "none";
+    document.getElementById("bird-grid").style.display = "none";
+    document.getElementById("answer").style.display = "flex";
+
+    //TODO have answer image load when the question loads, and only become visible now
 }
