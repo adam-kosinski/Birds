@@ -2,7 +2,7 @@
 
 let obs = []; //stores raw objects returned from data fetch, no ordering
 let taxon_obs = {}; //stores lists of objects, organized by taxon id keys
-//note that we can use .indexOf(obj) to find where one object is in the other data structure
+//note that we can use .indexOf(obj) to find where one object is in the other data structure, if necessary
 
 let n_pages_by_query = {}; //cache for total results queries, key is args string '?sounds=true' etc, value is n pages
 
@@ -79,10 +79,9 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "")
     //prep API calls
     let prefix = "https://api.inaturalist.org/v1/observations";
     let args = "?" + extra_args + "&sounds=true&quality_grade=research&taxon_id=" + taxa_id_string + "&not_id=" + obs_ids_we_have.join(",");
-
     console.log(prefix + args);
 
-    //figure out how many pages we're dealing with if we don't know
+    //figure out how many pages we're dealing with if we don't know -------------------
 
     let n_pages = n_pages_by_query[args];
 
@@ -104,7 +103,7 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "")
     console.log(n_pages + " usable pages with per_page=" + per_page);
 
 
-    //fetch data
+    //fetch data -------------------------------------------------------------------
 
     if (n_pages == 0) {
         console.log("n_pages is 0, skipping fetch");
@@ -148,18 +147,31 @@ async function fetchUntilThreshold(threshold = 1) {
     console.log("FETCH UNTIL THRESHOLD " + threshold);
 
     let lacking_ids;
+    let trying_popular = true;
 
-    for (let attempt = 1; attempt <= 3; attempt++) {
+    for (let attempt = 1; attempt <= max_fetch_attempts; attempt++) {
         //figure out ids with less than threshold, and check if we're done
         lacking_ids = Object.keys(taxon_obs).filter(id => taxon_obs[id].length < threshold);
         if (lacking_ids.length == 0) return true;
 
-        //fetch observations
-        console.log("ids w < " + threshold + " obs", lacking_ids)
-        let fetched_data = await fetchObservationData(lacking_ids.join(","), "popular=true");
+        //prepare fetch
+        console.log("ids w < " + threshold + " obs", lacking_ids);
+        if(attempt > attempts_to_try_popular) trying_popular = false;
+        let extra_args = trying_popular ? "popular=true" : "";
+
+        //fetch data, handle if couldn't get any
+        let was_data_fetched = await fetchObservationData(lacking_ids.join(","), extra_args);
+        if(!was_data_fetched){
+            if(trying_popular) {
+                trying_popular = false;
+            }
+            else {
+                console.log("Not enough observations to reach threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","));
+                return false;
+            }
+        }
     }
-    //TODO handle if a bird has no observations
-    console.log("Exceeded max (3) number of attempts to fetch until threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","))
+    console.log("Exceeded max (3) number of attempts to fetch until threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","));
     return false;
 }
 
@@ -179,18 +191,14 @@ function nextObservation(taxon_balancing = true) {
     //take a random observation from our available ones for that taxon
     let options = taxon_obs[next_taxon];
     console.log("options", options);
-    let i = Math.floor(options.length * Math.random());
-    current = options.splice(i, 1)[0];
+    current = options[Math.floor(options.length * Math.random())];
     console.log("current", current)
-
-    //remove from the flat data structure
-    obs.splice(obs.indexOf(current), 1);
 
     //add to HTML
     document.getElementById("birdsong-audio").src = current.sounds[0].file_url;
     document.getElementById("inat-link").href = current.uri;
 
-    //reset HTML
+    //reset HTML from answer screen
     document.getElementById("guess-input").value = "";
     document.getElementById("bird-grid").querySelectorAll(".bird-grid-option.selected").forEach(el => {
         el.classList.remove("selected");
@@ -205,10 +213,6 @@ function nextObservation(taxon_balancing = true) {
 
     //preload the answer image
     document.getElementById("answer-image").src = current.taxon.default_photo.medium_url;
-
-
-    //check if we're getting low on data and need to fetch more
-    //TODO
 
     console.groupEnd();
 }
@@ -233,6 +237,4 @@ function checkAnswer() {
     document.getElementById("question").style.display = "none";
     document.getElementById("bird-grid").style.display = "none";
     document.getElementById("answer").style.display = "flex";
-
-    //TODO have answer image load when the question loads, and only become visible now
 }

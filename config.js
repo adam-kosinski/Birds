@@ -1,5 +1,6 @@
 let per_page = 200;
 
+let max_fetch_attempts = 5;
 let attempts_to_try_popular = 3;
 let n_obs_threshold = 10;
 
