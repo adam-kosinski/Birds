@@ -31,3 +31,13 @@ bird_grid.addEventListener("click", (e) => {
         document.getElementById("guess-input").value = bird_grid_option.dataset.commonName;
     }
 });
+
+
+//autofocus guess input
+document.addEventListener("keypress", (e) => {
+    //if typed a single letter, focus the input (avoid stuff like space or the Enter key)
+    if(/^[a-zA-Z]$/.test(e.key) && getComputedStyle(document.getElementById("birdsong-screen")).display == "block"){
+        console.log("block")
+        document.getElementById("guess-input").focus();
+    }
+})

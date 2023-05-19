@@ -1,3 +1,23 @@
+Audio filtering
+- popular observations are all very good (from a brief test)
+- observation comment might mean something had to be clarified?
+    - this doesn't seem to be true in general
+- observations with more identifications are easier?
+- observations without photos - rely only upon sound
+- audio clips that aren't that long - less chance of a ton of silence before hearing the bird
+
+
+Some birds might not have any observations - especially if filters are restrictive
+- check for this somehow?
+- doing a test with backyard birds, popular observations only:
+    - rock pigeon: 0
+    - white breasted nuthatch: 3
+    - cedar waxwing: 4
+    - mourning dove, tufted titmouse, downy woodpecker: 8
+    - yellow warbler: 12
+    - rest were 16+
+
+
 Customization
 - setting to not include the "other" red herrings
 - setting to load sounds distributed how they are in nature, not evenly among taxa

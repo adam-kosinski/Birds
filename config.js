@@ -1,7 +1,7 @@
 let per_page = 200;
 
 let backyard_birds_ids = [
-    144814, //carolina chickadee
+    144815, //black capped chickadee
     9744,   //red winged blackbird
     9602,   //common grackle
     12727,  //american robin
@@ -22,5 +22,6 @@ let backyard_birds_ids = [
     12890,  //hermit thrush
     19893,  //barred owl
     13632,  //tufted titmouse
-    8229    //blue jay
+    8229,   //blue jay
+    7513    //carolina wren
 ];

@@ -53,14 +53,10 @@ function initBirdsongGame(){
 
 
 
-function fetchObservationData(extra_args="", taxa_id_string=undefined){
-    //extra args allows this func to be more general - can use for birdsong, or anything else really
-
-    if(!taxa_id_string){
-        taxa_id_string = bird_taxa.map(obj => obj.id).join(",");
-    }
+function fetchObservationData(){
+    taxa_id_string = bird_taxa.map(obj => obj.id).join(",");
     let prefix = "https://api.inaturalist.org/v1/observations";
-    let args = "?" + extra_args + "&quality_grade=research&taxon_id=" + taxa_id_string;
+    let args = "?" + "&sounds=true&popular=true&quality_grade=research&taxon_id=" + taxa_id_string;
 
     //figure out how many pages we're dealing with if we don't know
     //and pick a shuffled order to fetch them in
@@ -71,7 +67,10 @@ function fetchObservationData(extra_args="", taxa_id_string=undefined){
         .then(data => {
             //n_pages * per_page must be strictly less than 10000, or iNaturalist will block
             //per_page is a global config var
-            n_pages = Math.floor(Math.min(data.total_results, 10000) / per_page);
+
+            let quotient = Math.min(data.total_results, 10000) / per_page;
+            n_pages = Math.ceil(quotient) * per_page < 10000 ?
+                Math.ceil(quotient) : Math.floor(quotient);
             console.log(n_pages + " usable pages with per_page=" + per_page);
 
             //create a shuffled page order
@@ -113,7 +112,6 @@ function fetchObservationData(extra_args="", taxa_id_string=undefined){
                             break;
                         }
                     }
-                    
                 });
                 console.log("done adding to data structures")
             });
@@ -130,7 +128,7 @@ function fetchObservationData(extra_args="", taxa_id_string=undefined){
 function nextObservation(taxon_balancing=true){
     //when we load an observation, it gets put into the 'current' var and removed from the data structures
 
-    console.log("Next Observation ---------------------------------")
+    console.log("Next Observation ----------------------")
 
     //default behavior is to do taxon_balancing - each taxon is roughly equal to appear
     let taxon_keys = Object.keys(taxon_obs);
@@ -151,6 +149,9 @@ function nextObservation(taxon_balancing=true){
     document.getElementById("birdsong-audio").src = current.sounds[0].file_url;
     document.getElementById("inat-link").href = current.uri;
     document.getElementById("guess-input").value = "";
+    document.getElementById("bird-grid").querySelectorAll(".bird-grid-option.selected").forEach(el => {
+        el.classList.remove("selected");
+    });
     //TODO other resetting things
 
 
