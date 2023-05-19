@@ -41,7 +41,7 @@ function initBirdsongGame() {
     fetchUntilThreshold(1)
         .then(success => {
             if (!success) {
-                alert("Couldn't find observations for all taxa");
+                alert("Couldn't find observations for all taxa, talk to Adam this breaks stuff");
                 document.getElementById("bird-list-loader").style.display = "none";
                 return;
             }
@@ -52,6 +52,9 @@ function initBirdsongGame() {
             document.getElementById("list-screen").style.display = "none";
             document.getElementById("birdsong-screen").style.display = "block";
             document.getElementById("bird-list-loader").style.display = "none";
+
+            //fetch the rest more slowly (limit to < 1 API call per sec)
+            fetchUntilThreshold(taxon_obs_threshold, 3000); //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
         });
 }
 
@@ -138,11 +141,12 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "")
 
 
 
-async function fetchUntilThreshold(threshold = 1) {
+async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
     //keeps fetching until each taxon in taxon_obs has at least threshold observations
     //requires taxon_obs to be initialized with taxon id keys
     //does prioritization for popular observations etc.
     //returns a promise for when we are done with this, that resolves to whether we succeeded at meeting the threshold (true/false)
+    //delay_between_attempts (ms) is for after we've started, be less aggressive when fetching to be nice to iNaturalist
 
     console.log("FETCH UNTIL THRESHOLD " + threshold);
 
@@ -152,11 +156,17 @@ async function fetchUntilThreshold(threshold = 1) {
     for (let attempt = 1; attempt <= max_fetch_attempts; attempt++) {
         //figure out ids with less than threshold, and check if we're done
         lacking_ids = Object.keys(taxon_obs).filter(id => taxon_obs[id].length < threshold);
-        if (lacking_ids.length == 0) return true;
+        if (lacking_ids.length == 0) {
+            console.log("THRESHOLD MET");
+            return true;
+        }
 
         //prepare fetch
         console.log("ids w < " + threshold + " obs", lacking_ids);
-        if(attempt > attempts_to_try_popular) trying_popular = false;
+        if(attempt > attempts_to_try_popular) {
+            trying_popular = false;
+            console.warn("stopped trying popular b/c attempt #" + attempt + " > " + attempts_to_try_popular);
+        }
         let extra_args = trying_popular ? "popular=true" : "";
 
         //fetch data, handle if couldn't get any
@@ -164,12 +174,16 @@ async function fetchUntilThreshold(threshold = 1) {
         if(!was_data_fetched){
             if(trying_popular) {
                 trying_popular = false;
+                console.warn("stopped trying popular because no data fetched");
             }
             else {
                 console.log("Not enough observations to reach threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","));
                 return false;
             }
         }
+
+        //pause for the specified duration
+        await new Promise(resolve => setTimeout(resolve, delay_between_attempts));
     }
     console.log("Exceeded max (3) number of attempts to fetch until threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","));
     return false;

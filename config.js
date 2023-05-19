@@ -1,8 +1,8 @@
 let per_page = 200;
 
-let max_fetch_attempts = 5;
+let max_fetch_attempts = 10; //how many times to attempt fetching to meet threshold, before quit
 let attempts_to_try_popular = 3;
-let n_obs_threshold = 10;
+let taxon_obs_threshold = 20; //number of observations we'd like to have for each taxon, will stop when reach this
 
 let backyard_birds_ids = [
     144815, //black capped chickadee
@@ -23,6 +23,7 @@ let backyard_birds_ids = [
     792988, //downy woodpecker
     14801,  //white breasted nuthatch
 
+    9424,   //eastern towhee
     12890,  //hermit thrush
     19893,  //barred owl
     13632,  //tufted titmouse

@@ -1,14 +1,9 @@
-
-Fetch page
-Prioritize finding an observation for those who have nothing
-Prioritize finding observations for those who have below threshold
-
-Fetch for all from popular (maybe several times?)
-Fetch birds not meeting threshold, from popular
-At somepoint (before exhausting popular perhaps), start fetching from non-popular
-
-
-TODO fix sidescrolling on bird grid
+TODO
+Fix sidescrolling on bird list
+Include all audio clips if there are multiple (or up to like 3, the bird grid will shrink to accomodate)
+    - doing a quick stats test, it seems that having two audio players is sufficient
+Other audio filtering? Though current sounds are fairly good I think
+- do some experimentation listening to with photos vs without photos, and number identifications
 
 
 
@@ -19,17 +14,6 @@ Audio filtering
 - observations with more identifications are easier?
 - observations without photos - rely only upon sound
 - audio clips that aren't that long - less chance of a ton of silence before hearing the bird
-
-
-Some birds might not have any observations - especially if filters are restrictive
-- check for this somehow?
-- doing a test with backyard birds, popular observations only:
-    - rock pigeon: 0
-    - white breasted nuthatch: 3
-    - cedar waxwing: 4
-    - mourning dove, tufted titmouse, downy woodpecker: 8
-    - yellow warbler: 12
-    - rest were 16+
 
 
 Customization
@@ -49,16 +33,3 @@ Practice identifying birds based on appearance
 - at the order, family, genus, species levels
 
 Don't rely on downloaded csv for observations (more flexible)
-
-
-
-Common name issue
-- We can build a database of order and family common names, but there are too many genera/species
-- We use common names for selecting what to practice, autocompleting the guess input, and displaying results
-- Can dynamically query common names before images are presented
-
-
-
-Wildflower incompatibilities:
-- family common names come from family csv
-- observations are organized by family
