@@ -1,3 +1,10 @@
+Customization
+- setting to not include the "other" red herrings
+- setting to load sounds distributed how they are in nature, not evenly among taxa
+
+
+
+
 Design goals
 
 Practice identifying bird species based on their calls

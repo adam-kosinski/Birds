@@ -4,6 +4,8 @@ let bird_taxa = []; //list of iNaturalist taxon objects that are on the practice
 initURLTaxa();
 
 function initURLTaxa() {
+    // history.replaceState(null,"","?taxa=144814,9744,9602,12727,9721,145238,9083,3454,18236,7428,3017,8021,14850,13858,20044,792988,14801,12890,19893,13632,8229")
+
     let url = new URL(window.location.href);
     let taxa_ids = url.searchParams.get("taxa");
 

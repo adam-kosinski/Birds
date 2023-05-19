@@ -2,7 +2,7 @@
 :root {
     --focus-color: #59B6D3;
     --focus-color-shadow: #2E4C68;
-    --light-gray: #D9D9D9;
+    --light-gray: #d1d1d1;
     --medium-gray: #9D9D9D;
     --dark-gray: #464646;
 }
@@ -25,6 +25,7 @@ body {
 
 #background-image {
     filter: blur(8px);
+    opacity: 0.6;
     display: block;
     width: 110%;
     height: 110%;
@@ -35,7 +36,7 @@ body {
     object-fit: cover;
 }
 
-a {
+a, a:visited {
     text-decoration: none;
     color: inherit;
 }
@@ -46,6 +47,8 @@ button {
     padding: 0;
     font-size: inherit;
     font-family: inherit;
+    cursor: pointer;
+    color: inherit;
 }
 
 button[disabled] {
@@ -74,14 +77,14 @@ nav {
     justify-content: space-between;
 }
 
-nav > * {
+nav * {
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
 .nav-icon {
-    height: 20px;
+    width: 20px;
 }
 
 
