@@ -11,7 +11,7 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     //reset vars
     obs = [];
     taxon_obs = {};
-    page_order = [];
+    n_pages_by_query = {};
     current = undefined;
 });
 

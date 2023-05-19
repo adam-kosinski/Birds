@@ -1,5 +1,8 @@
 let per_page = 200;
 
+let attempts_to_try_popular = 3;
+let n_obs_threshold = 10;
+
 let backyard_birds_ids = [
     144815, //black capped chickadee
     9744,   //red winged blackbird

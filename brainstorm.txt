@@ -1,3 +1,17 @@
+
+Fetch page
+Prioritize finding an observation for those who have nothing
+Prioritize finding observations for those who have below threshold
+
+Fetch for all from popular (maybe several times?)
+Fetch birds not meeting threshold, from popular
+At somepoint (before exhausting popular perhaps), start fetching from non-popular
+
+
+TODO fix sidescrolling on bird grid
+
+
+
 Audio filtering
 - popular observations are all very good (from a brief test)
 - observation comment might mean something had to be clarified?

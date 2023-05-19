@@ -4,7 +4,7 @@ let obs = []; //stores raw objects returned from data fetch, no ordering
 let taxon_obs = {}; //stores lists of objects, organized by taxon id keys
 //note that we can use .indexOf(obj) to find where one object is in the other data structure
 
-let page_order = []; //stores order of pages to fetch (shuffled order), when fetch we pop then push a page #
+let n_pages_by_query = {}; //cache for total results queries, key is args string '?sounds=true' etc, value is n pages
 
 let current; //current observation object
 
@@ -38,11 +38,14 @@ function initBirdsongGame(){
         taxon_obs[obj.id] = [];
     });
 
-    //fetch observations from iNaturalist
-    fetchObservationData("sounds=true")
-    .then(() => {
-        //TODO - check if we have enough data, similar logic as at the end of nextObservation()
-
+    fetchUntilThreshold(3)
+    .then(success => {
+        if(!success){
+            alert("Couldn't find observations for all taxa");
+            document.getElementById("bird-list-loader").style.display = "none";
+            return;
+        }
+        
         nextObservation();
 
         //switch screens and stop loader
@@ -55,15 +58,32 @@ function initBirdsongGame(){
 
 
 
-function fetchObservationData(){
-    taxa_id_string = bird_taxa.map(obj => obj.id).join(",");
+async function fetchObservationData(taxa_id_string=undefined, extra_args=""){
+    //returns a promise (b/c async) that fulfills when data has been fetched and added to data structures
+
+    if(!taxa_id_string) {
+        taxa_id_string = bird_taxa.map(obj => obj.id).join(",");
+    }
+    //figure out which observations (of the requested taxa) we have already so we don't repeat
+    let obs_ids_we_have = [];
+    for (let taxon_id in taxon_obs){
+        if(taxa_id_string.includes(taxon_id)){
+            let obs_ids_for_taxon = taxon_obs[taxon_id].map(obj => obj.id);
+            obs_ids_we_have = obs_ids_we_have.concat(obs_ids_for_taxon);
+        }
+    }
+
+    //prep API calls
     let prefix = "https://api.inaturalist.org/v1/observations";
-    let args = "?" + "&sounds=true&popular=true&quality_grade=research&taxon_id=" + taxa_id_string;
+    let args = "?" + extra_args + "&sounds=true&quality_grade=research&taxon_id=" + taxa_id_string + "&not_id=" + obs_ids_we_have.join(",");
+
+    console.log(prefix + args);
 
     //figure out how many pages we're dealing with if we don't know
     //and pick a shuffled order to fetch them in
-    //the promise will be instantly fulfilled and the fetch skipped if page_order has stuff in it
-    let init_pages_promise = Promise.resolve(page_order.length > 0 || 
+    //the promise will be instantly fulfilled and the fetch skipped if we've done this query before
+    //the promise will resolve to the value of n pages
+    let init_pages_promise = Promise.resolve(n_pages_by_query.hasOwnProperty(args) ? n_pages_by_query[args] : 
         fetch(prefix + args + "&only_id=true&per_page=1")
         .then(res => res.json())
         .then(data => {
@@ -75,24 +95,20 @@ function fetchObservationData(){
                 Math.ceil(quotient) : Math.floor(quotient);
             console.log(n_pages + " usable pages with per_page=" + per_page);
 
-            //create a shuffled page order
-            let nums = [];
-            for(let n=1; n<=n_pages; n++){
-                nums.push(n);
-            }
-            while(nums.length > 0){
-                let i = Math.floor(Math.random()*nums.length);
-                let page = nums.splice(i,1)[0];
-                page_order.push(page);
-            }
+            // store and return n pages
+            n_pages_by_query[args] = n_pages;
+            return n_pages;
         })
     );
 
     let finish_promise = Promise.resolve(
-        init_pages_promise.then(() => {
+        init_pages_promise.then(n_pages => {
+            if(n_pages == 0){
+                console.log("n_pages is 0, skipping fetch");
+                return;
+            }
             //get next page and fetch it
-            let next_page = page_order.shift();
-            page_order.push(next_page);
+            let next_page = Math.ceil(n_pages * Math.random());
 
             console.log("Fetching page " + next_page);
 
@@ -122,6 +138,38 @@ function fetchObservationData(){
 
     //a calling function can use this promise to take action once data has finished being fetched
     return finish_promise;
+}
+
+
+
+
+function fetchUntilThreshold(threshold=1, attempt=1){
+    //keeps fetching until each taxon in taxon_obs has at least threshold observations
+    //requires taxon_obs to be initialized with taxon id keys
+    //does prioritization for popular observations etc.
+    //returns a promise for when we are done with this, that resolves to whether we succeeded at meeting the threshold (true/false)
+    //attempt is a counter only used during recursive calls, for deciding when to stop or switch args
+
+    let lacking_ids = Object.keys(taxon_obs).filter(id => taxon_obs[id].length < threshold);
+    if(lacking_ids.length == 0){
+        //we succeeded
+        return Promise.resolve(true);
+    }
+    console.log("ids w < " + threshold + " obs", lacking_ids)
+
+    if(attempt > 3){
+        //TODO handle if a bird has no observations
+        
+        console.log("Exceeded max (3) number of attempts to fetch until threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","))
+        return Promise.resolve(false); //return a fulfilled promise
+    }
+
+    return fetchObservationData(lacking_ids.join(","), "popular=true")
+    .then(() => {
+        return fetchUntilThreshold(threshold, lacking_ids.join(","), attempt+1);
+        //we do the checks at the beginning of this function, so just call it
+    });
+
 }
 
 
