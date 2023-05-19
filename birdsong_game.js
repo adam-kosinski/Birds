@@ -209,8 +209,18 @@ function nextObservation(taxon_balancing = true) {
     console.log("current", current)
 
     //add to HTML
-    document.getElementById("birdsong-audio").src = current.sounds[0].file_url;
     document.getElementById("inat-link").href = current.uri;
+    document.getElementById("birdsong-audio-0").src = current.sounds[0].file_url;
+    let audio1 = document.getElementById("birdsong-audio-1");
+    if(current.sounds[1]){
+        audio1.src = current.sounds[1].file_url;
+        audio1.style.display = "block";
+    }
+    else {
+        audio1.pause();
+        audio1.removeAttribute("src");
+        audio1.style.display = "none";
+    }
 
     //reset HTML from answer screen
     document.getElementById("guess-input").value = "";

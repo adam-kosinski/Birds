@@ -4,7 +4,10 @@ document.getElementById("start-game-button").addEventListener("click", () => {
 });
 
 document.getElementById("back-to-list").addEventListener("click", () => {
-    document.getElementById("birdsong-audio").pause(); //don't keep playing the birdsong
+    //don't keep playing the birdsong
+    document.getElementById("birdsong-audio-0").pause();
+    document.getElementById("birdsong-audio-1").pause();
+
     document.getElementById("list-screen").style.display = "flex";
     document.getElementById("birdsong-screen").style.display = "none";
 
@@ -48,3 +51,12 @@ document.getElementById("guess-button").addEventListener("click", checkAnswer);
 //next observation
 document.getElementById("correct-button").addEventListener("click", nextObservation);
 document.getElementById("incorrect-button").addEventListener("click", nextObservation);
+
+
+//autoplay second audio when first finishes
+document.getElementById("birdsong-audio-0").addEventListener("ended", () => {
+    let audio1 = document.getElementById("birdsong-audio-1");
+    if (audio1.hasAttribute("src")){
+        audio1.play();
+    }
+});

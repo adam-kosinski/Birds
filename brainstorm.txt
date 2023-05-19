@@ -1,10 +1,8 @@
 TODO
 Fix sidescrolling on bird list
-Include all audio clips if there are multiple (or up to like 3, the bird grid will shrink to accomodate)
-    - doing a quick stats test, it seems that having two audio players is sufficient
 Other audio filtering? Though current sounds are fairly good I think
 - do some experimentation listening to with photos vs without photos, and number identifications
-
+- and evaluate more rigorously the idea that popular recordings are better
 
 
 Audio filtering
