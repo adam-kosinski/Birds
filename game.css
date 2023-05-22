@@ -41,10 +41,45 @@
     display: none;
 }
 
-#add-bird-input {
+#bird-input-container {
+    position: relative;
     margin: 10px 0 10px 0;
+}
+
+#add-bird-input {
     width: 100%;
     box-sizing: border-box;
+    position: relative;
+}
+
+#taxon-autocomplete-list {
+    display: none;
+    position: absolute;
+    transform: translateX(10px);
+    top: calc(100% - 10px);
+    padding-top: 10px;
+    width: calc(100% - 20px); /* 10px on either side of input */
+    background-color: white;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+}
+
+.autocomplete-option {
+    display: grid;
+    grid-template-columns: 60px 1fr 35px; /* image, name, map icon */
+    align-items: center;
+    padding: 5px 10px 5px 10px;
+    text-align: left;
+    width: 100%;
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+}
+
+.autocomplete-option:hover {
+    background-color: var(--light-gray);
+}
+
+.autocomplete-option img {
+    width: 50px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
 }
 
 #bird-list-message {

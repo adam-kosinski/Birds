@@ -4,6 +4,9 @@ let max_fetch_attempts = 10; //how many times to attempt fetching to meet thresh
 let attempts_to_try_popular = 3;
 let taxon_obs_threshold = 20; //number of observations we'd like to have for each taxon, will stop when reach this
 
+let autocomplete_delay = 1000; //ms after user stops typing, to update the autocomplete
+let n_autocomplete_results = 5;
+
 let backyard_birds_ids = [
     144815, //black capped chickadee
     9744,   //red winged blackbird

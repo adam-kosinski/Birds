@@ -20,8 +20,6 @@ function initURLTaxa() {
 
 
 
-
-
 function addBirds(taxa_id_list) {
 
     //clear message about no birds selected
@@ -162,4 +160,80 @@ function removeBird(taxon_id) {
         document.getElementById("bird-list-message").style.display = "block";
         document.getElementById("start-game-button").disabled = true;
     }
+}
+
+
+
+
+//autocomplete list stuff
+
+let autocomplete_timeout_id;
+let add_bird_input = document.getElementById("add-bird-input");
+
+add_bird_input.addEventListener("input", e => {
+    clearTimeout(autocomplete_timeout_id); //works even if undefined
+
+    if (add_bird_input.value.length == 0) {
+        document.getElementById("taxon-autocomplete-list").style.display = "none";
+    }
+    else {
+        autocomplete_timeout_id = setTimeout(updateAutocomplete, autocomplete_delay);
+    }
+});
+
+
+function capitalize(str) {
+    return str.replace(/^\w|(?<=\s)\w|-\w/g, function (char) {
+        return char.toUpperCase();
+    });
+}
+
+
+function updateAutocomplete() {
+    let query = add_bird_input.value;
+    fetch("https://api.inaturalist.org/v1/taxa/autocomplete?taxon_id=3&rank=species&q=" + query + "&is_active=true&per_page=" + n_autocomplete_results)
+        //TODO determine whether to only do rank species
+        .then(res => res.json())
+        .then(data => {
+            let autocomplete_list = document.getElementById("taxon-autocomplete-list");
+            autocomplete_list.innerHTML = "";
+
+            console.log(data);
+
+            data.results.forEach(obj => {
+                let result = document.createElement("button");
+                result.className = "autocomplete-option";
+
+                let img = document.createElement("img");
+                img.src = obj.default_photo.square_url;
+
+                let p = document.createElement("p");
+                let b = document.createElement("b");
+                let br = document.createElement("br");
+                let rank_label = document.createTextNode(capitalize(obj.rank) + " "); //for family or higher
+                let i = document.createElement("i");
+                let name_no_italics = document.createTextNode(obj.name); //for higher than family
+                b.textContent = obj.preferred_common_name;
+                if(!obj.preferred_common_name.includes(obj.matched_term) && !obj.name.includes(obj.matched_term)){
+                    b.textContent += " (" + obj.matched_term + ")";
+                }
+                i.textContent = obj.name;
+
+                p.append(b,br);
+                if(obj.rank_level >= 30) p.append(rank_label);
+                obj.rank_level <= 30 ? p.append(i) : p.append(name_no_italics);
+                
+
+                let map_icon = document.createElement("button");
+                map_icon.className = "range-map-icon";
+                map_icon.dataset.commonName = obj.preferred_common_name;
+                map_icon.dataset.scientificName = obj.name;
+                map_icon.dataset.imageUrl = obj.default_photo.square_url;
+
+                result.append(img, p, map_icon);
+                autocomplete_list.append(result);
+            });
+
+            document.getElementById("taxon-autocomplete-list").style.display = "block";
+        });
 }

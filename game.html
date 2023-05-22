@@ -25,7 +25,12 @@
                 <button id="start-game-button" disabled class="btn-primary">Start</button>
                 <img id="bird-list-loader" class="loader" src="images/loader.png" alt="loader">
             </div>
-            <input id="add-bird-input" type="text" placeholder="Search for bird to add">
+
+            <div id="bird-input-container">
+                <div id="taxon-autocomplete-list"></div>
+                <input id="add-bird-input" type="text" placeholder="Search for bird to add">
+            </div>
+            
             <div id="bird-list-message">No birds selected</div>
             <div id="bird-list"></div>
         </div>
