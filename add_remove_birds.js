@@ -200,7 +200,9 @@ function updateAutocomplete() {
 
             console.log(data);
 
-            data.results.forEach(obj => {
+            for (let k = 0; k < n_autocomplete_results; k++) { //for loop because sometimes extra results are returned
+                let obj = data.results[k];
+
                 let result = document.createElement("button");
                 result.className = "autocomplete-option";
 
@@ -214,15 +216,15 @@ function updateAutocomplete() {
                 let i = document.createElement("i");
                 let name_no_italics = document.createTextNode(obj.name); //for higher than family
                 b.textContent = obj.preferred_common_name;
-                if(!obj.preferred_common_name.includes(obj.matched_term) && !obj.name.includes(obj.matched_term)){
+                if (!obj.preferred_common_name.includes(obj.matched_term) && !obj.name.includes(obj.matched_term)) {
                     b.textContent += " (" + obj.matched_term + ")";
                 }
                 i.textContent = obj.name;
 
-                p.append(b,br);
-                if(obj.rank_level >= 30) p.append(rank_label);
+                p.append(b, br);
+                if (obj.rank_level >= 30) p.append(rank_label);
                 obj.rank_level <= 30 ? p.append(i) : p.append(name_no_italics);
-                
+
 
                 let map_icon = document.createElement("button");
                 map_icon.className = "range-map-icon";
@@ -232,7 +234,7 @@ function updateAutocomplete() {
 
                 result.append(img, p, map_icon);
                 autocomplete_list.append(result);
-            });
+            }
 
             document.getElementById("taxon-autocomplete-list").style.display = "block";
         });
