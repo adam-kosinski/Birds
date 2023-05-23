@@ -1,4 +1,5 @@
 let bird_taxa = []; //list of iNaturalist taxon objects that are on the practice list
+let cached_bird_taxa = []; //whenever we get taxon info from autocomplete search, add it here so we don't have to make another API call to add to the list
 
 //automatically read taxa from URL and populate the HTML and JS taxa lists
 initURLTaxa();
@@ -20,10 +21,11 @@ function initURLTaxa() {
 
 
 
-function addBirds(taxa_id_list) {
+async function addBirds(taxa_id_list) {
 
-    //clear message about no birds selected
+    //clear message about no birds selected, start loader
     document.getElementById("bird-list-message").style.display = "none";
+    document.getElementById("bird-list-loader").style.display = "block";
 
     //extract only taxon ids we don't have
     let ids_we_have = bird_taxa.map(obj => obj.id);
@@ -41,93 +43,99 @@ function addBirds(taxa_id_list) {
     window.history.replaceState(null, "", args);
 
 
-    //fetch 30 taxa at a time (iNaturalist limit)
-    //only when they've all arrived add them to the list (so ensure same order as in id list)
+    // Get bird data
 
     let results = new Array(ids_to_fetch.length); //array of undefined, will check if array includes undefined to tell if all arrived
-    let start_idx = 0; //for indexing ids_to_fetch
-    document.getElementById("bird-list-loader").style.display = "block";
 
-    while (start_idx < ids_to_fetch.length) {
-        let ids = ids_to_fetch.slice(start_idx, start_idx + 30);
-        start_idx += 30;
-
-        fetch("https://api.inaturalist.org/v1/taxa/" + ids.join(","))
-            .then(res => res.json())
-            .then(data => {
-                //insert into correct location in results array
-                let offset = ids_to_fetch.indexOf(data.results[0].id);
-                for (let i = 0; i < data.results.length; i++) {
-                    results[i + offset] = data.results[i];
-                }
-
-                //check if we were the last one, if so process the results list
-                if (!results.includes(undefined)) {
-
-                    //insert before existing birds, but in order, use before() on the original first element to do this
-                    let first_elem = document.getElementById("bird-list").firstElementChild;
-
-                    results.forEach(obj => {
-
-                        //add to JS list
-                        bird_taxa.push(obj);
-
-                        //add to HTML list
-                        let div = document.createElement("div");
-                        div.id = "bird-list-" + obj.id;
-
-                        let birdinfo = document.createElement("div");
-
-                        let bird_square = document.createElement("img");
-                        bird_square.className = "bird-square";
-                        bird_square.src = obj.default_photo.square_url;
-                        bird_square.alt = "Photo of " + obj.name;
-
-                        let p = document.createElement("p");
-                        let b = document.createElement("b");
-                        let i = document.createElement("i");
-                        let br = document.createElement("br");
-                        b.textContent = obj.preferred_common_name;
-                        i.textContent = obj.name;
-                        p.append(b, br, i);
-
-                        birdinfo.append(bird_square, p);
-                        div.append(birdinfo);
-
-                        let buttons = document.createElement("div");
-
-                        let map_icon = document.createElement("button");
-                        map_icon.className = "range-map-icon";
-                        map_icon.dataset.commonName = obj.preferred_common_name;
-                        map_icon.dataset.scientificName = obj.name;
-                        map_icon.dataset.imageUrl = obj.default_photo.square_url;
-
-                        let x_button = document.createElement("button");
-                        x_button.className = "x-button";
-                        x_button.addEventListener("click", e => {
-                            removeBird(obj.id);
-                        });
-
-                        buttons.append(map_icon, x_button);
-                        div.append(buttons);
-
-                        if (first_elem) {
-                            first_elem.before(div);
-                        }
-                        else {
-                            document.getElementById("bird-list").append(div);
-                        }
-                    });
-
-                    //enable button
-                    document.getElementById("start-game-button").removeAttribute("disabled");
-
-                    //stop loader
-                    document.getElementById("bird-list-loader").style.display = "none";
-                }
-
-            });
+    // If cached and only one bird (from the autocomplete basically), use that, else ask iNaturalist
+    if (ids_to_fetch.length == 1 && cached_bird_taxa.hasOwnProperty(ids_to_fetch[0])) {
+        results = [cached_bird_taxa[ids_to_fetch[0]]];
     }
+    else {
+        //fetch 30 taxa at a time (iNaturalist limit)
+        //only when they've all arrived add them to the list (so ensure same order as in id list)
+        let promises = [];
+        let start_idx = 0; //for indexing ids_to_fetch
+
+        while (start_idx < ids_to_fetch.length) {
+            let ids = ids_to_fetch.slice(start_idx, start_idx + 30);
+            start_idx += 30;
+
+            promises.push(fetch("https://api.inaturalist.org/v1/taxa/" + ids.join(","))
+                .then(res => res.json())
+                .then(data => {
+                    //insert into correct location in results array
+                    let offset = ids_to_fetch.indexOf(data.results[0].id);
+                    for (let i = 0; i < data.results.length; i++) {
+                        results[i + offset] = data.results[i];
+                    }
+                })
+            );
+        }
+
+        await Promise.all(promises);
+    }
+
+    //insert before existing birds, but in order, use before() on the original first element to do this
+    let first_elem = document.getElementById("bird-list").firstElementChild;
+
+    results.forEach(obj => {
+
+        //add to JS list
+        bird_taxa.push(obj);
+
+        //add to HTML list
+        let div = document.createElement("div");
+        div.id = "bird-list-" + obj.id;
+
+        let birdinfo = document.createElement("div");
+
+        let bird_square = document.createElement("img");
+        bird_square.className = "bird-square";
+        bird_square.src = obj.default_photo.square_url;
+        bird_square.alt = "Photo of " + obj.name;
+
+        let p = document.createElement("p");
+        let b = document.createElement("b");
+        let i = document.createElement("i");
+        let br = document.createElement("br");
+        b.textContent = obj.preferred_common_name;
+        i.textContent = obj.name;
+        p.append(b, br, i);
+
+        birdinfo.append(bird_square, p);
+        div.append(birdinfo);
+
+        let buttons = document.createElement("div");
+
+        let map_icon = document.createElement("button");
+        map_icon.className = "range-map-icon";
+        map_icon.dataset.commonName = obj.preferred_common_name;
+        map_icon.dataset.scientificName = obj.name;
+        map_icon.dataset.imageUrl = obj.default_photo.square_url;
+
+        let x_button = document.createElement("button");
+        x_button.className = "x-button";
+        x_button.addEventListener("click", e => {
+            removeBird(obj.id);
+        });
+
+        buttons.append(map_icon, x_button);
+        div.append(buttons);
+
+        if (first_elem) {
+            first_elem.before(div);
+        }
+        else {
+            document.getElementById("bird-list").append(div);
+        }
+    });
+
+    //enable button
+    document.getElementById("start-game-button").removeAttribute("disabled");
+
+    //stop loader
+    document.getElementById("bird-list-loader").style.display = "none";
 }
 
 
@@ -202,9 +210,11 @@ function updateAutocomplete() {
 
             for (let k = 0; k < n_autocomplete_results; k++) { //for loop because sometimes extra results are returned
                 let obj = data.results[k];
+                cached_bird_taxa[obj.id] = obj; //add to cache for faster adding to the list
 
                 let result = document.createElement("button");
                 result.className = "autocomplete-option";
+                result.dataset.taxonId = obj.id;
 
                 let img = document.createElement("img");
                 img.src = obj.default_photo.square_url;
@@ -239,3 +249,13 @@ function updateAutocomplete() {
             document.getElementById("taxon-autocomplete-list").style.display = "block";
         });
 }
+
+
+document.getElementById("taxon-autocomplete-list").addEventListener("click", e => {
+    let option = e.target.closest(".autocomplete-option");
+    if (option && !e.target.classList.contains("range-map-icon")) {
+        addBirds([Number(option.dataset.taxonId)]);
+        document.getElementById("add-bird-input").value = "";
+        document.getElementById("taxon-autocomplete-list").style.display = "none";
+    }
+});
