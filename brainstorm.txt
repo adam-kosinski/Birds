@@ -1,7 +1,3 @@
-Priority TODO
-- fix bug: when checking an answer, if the guessed taxon is a parent of the specific taxon, it's marked incorrect
-    - e.g. guessing rock pigeon for feral pigeon gets marked wrong, even though feral pigeon is a subspecies
-
 TODO
 Fix sidescrolling on bird list
 Fix selection box not fully covering image on iOS

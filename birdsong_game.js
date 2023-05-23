@@ -248,8 +248,13 @@ function checkAnswer() {
     document.getElementById("guess-button").style.display = "none";
     let guess = document.getElementById("guess-input").value;
 
-    if (guess.toLowerCase() == current.taxon.name.toLowerCase() ||
-        guess.toLowerCase() == current.taxon.preferred_common_name.toLowerCase()) {
+    //find taxon object that matches the guess, if it exists
+    let guess_obj = bird_taxa.find(obj => 
+        guess.toLowerCase() == obj.name.toLowerCase() ||
+        guess.toLowerCase() == obj.preferred_common_name.toLowerCase()
+    );
+    
+    if(current.taxon.ancestor_ids.includes(guess_obj.id)){
         document.getElementById("correct-button").style.display = "block";
     }
     else {
