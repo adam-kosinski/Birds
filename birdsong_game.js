@@ -8,6 +8,11 @@ let n_pages_by_query = {}; //cache for total results queries, key is args string
 
 let current; //current observation object
 
+const INACTIVE = 0;
+const GUESSING = 1;
+const ANSWER_SHOWN = 2;
+let game_state = INACTIVE;
+
 
 
 function initBirdsongGame() {
@@ -16,37 +21,50 @@ function initBirdsongGame() {
     //start loader
     document.getElementById("bird-list-loader").style.display = "block";
 
-    //populate bird grid
-    let bird_grid = document.getElementById("bird-grid");
-    //clear previous grid
-    bird_grid.querySelectorAll(".bird-grid-option:not(#other-option").forEach(el => {
-        el.parentElement.removeChild(el);
-    });
-    //add taxa
+    //init taxon_obs data structure
+    taxon_obs = []; //in case last init failed
     bird_taxa.forEach(obj => {
-        //HTML
-        let button = document.createElement("button");
-        button.className = "bird-grid-option";
-        button.dataset.commonName = obj.preferred_common_name;
-
-        let img = document.createElement("img");
-        img.src = obj.default_photo.square_url;
-        button.append(img);
-        bird_grid.append(button);
-
-        //init taxon_obs data structure
         taxon_obs[obj.id] = [];
     });
 
     fetchUntilThreshold(1)
-        .then(success => {
-            if (!success) {
-                alert("Couldn't find observations for all taxa, talk to Adam this breaks stuff");
+        .then(result => {
+            if (!result.success) {
+                let failed_names = result.lacking_ids.map(id_str => {
+                    return bird_taxa.find(obj => obj.id == Number(id_str)).preferred_common_name;
+                });
+                alert("Failed to find research grade iNaturalist sound observations for " + failed_names.join(", ") + ". Please remove from the list and try again.");
                 document.getElementById("bird-list-loader").style.display = "none";
                 return;
             }
 
-            nextObservation();
+            //populate bird grid
+            let bird_grid = document.getElementById("bird-grid");
+            //clear previous grid
+            bird_grid.querySelectorAll(".bird-grid-option:not(#other-option").forEach(el => {
+                el.parentElement.removeChild(el);
+            });
+            //add taxa
+            bird_taxa.forEach(obj => {
+                //HTML
+                let button = document.createElement("button");
+                button.className = "bird-grid-option";
+                button.dataset.commonName = obj.preferred_common_name;
+
+                let img = document.createElement("img");
+                img.src = obj.default_photo.square_url;
+                button.append(img);
+                bird_grid.append(button);
+
+                let option_common = document.createElement("option");
+                let option_scientific = document.createElement("option");
+                option_common.value = obj.preferred_common_name;
+                option_scientific.value = obj.name;
+                document.getElementById("guess-datalist").append(option_common, option_scientific);
+
+            });
+
+            nextObservation(); //sets game_state
 
             //switch screens and stop loader
             document.getElementById("list-screen").style.display = "none";
@@ -145,7 +163,7 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
     //keeps fetching until each taxon in taxon_obs has at least threshold observations
     //requires taxon_obs to be initialized with taxon id keys
     //does prioritization for popular observations etc.
-    //returns a promise for when we are done with this, that resolves to whether we succeeded at meeting the threshold (true/false)
+    //returns a promise for when we are done with this, that resolves to {success: true/false, lacking_ids:[...]}
     //delay_between_attempts (ms) is for after we've started, be less aggressive when fetching to be nice to iNaturalist
 
     console.log("FETCH UNTIL THRESHOLD " + threshold);
@@ -158,12 +176,12 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
         lacking_ids = Object.keys(taxon_obs).filter(id => taxon_obs[id].length < threshold);
         if (lacking_ids.length == 0) {
             console.log("THRESHOLD MET");
-            return true;
+            return {success: true, lacking_ids: lacking_ids};
         }
 
         //prepare fetch
         console.log("ids w < " + threshold + " obs", lacking_ids);
-        if(attempt > attempts_to_try_popular) {
+        if (attempt > attempts_to_try_popular) {
             trying_popular = false;
             console.warn("stopped trying popular b/c attempt #" + attempt + " > " + attempts_to_try_popular);
         }
@@ -171,14 +189,14 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
 
         //fetch data, handle if couldn't get any
         let was_data_fetched = await fetchObservationData(lacking_ids.join(","), extra_args);
-        if(!was_data_fetched){
-            if(trying_popular) {
+        if (!was_data_fetched) {
+            if (trying_popular) {
                 trying_popular = false;
                 console.warn("stopped trying popular because no data fetched");
             }
             else {
                 console.log("Not enough observations to reach threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","));
-                return false;
+                return {success: false, lacking_ids: lacking_ids};
             }
         }
 
@@ -186,7 +204,7 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
         await new Promise(resolve => setTimeout(resolve, delay_between_attempts));
     }
     console.log("Exceeded max (3) number of attempts to fetch until threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","));
-    return false;
+    return {success: false, lacking_ids: lacking_ids};
 }
 
 
@@ -212,7 +230,7 @@ function nextObservation(taxon_balancing = true) {
     document.getElementById("inat-link").href = current.uri;
     document.getElementById("birdsong-audio-0").src = current.sounds[0].file_url;
     let audio1 = document.getElementById("birdsong-audio-1");
-    if(current.sounds[1]){
+    if (current.sounds[1]) {
         audio1.src = current.sounds[1].file_url;
         audio1.style.display = "block";
     }
@@ -224,6 +242,7 @@ function nextObservation(taxon_balancing = true) {
 
     //reset HTML from answer screen
     document.getElementById("guess-input").value = "";
+    document.getElementById("guess-input").readOnly = false;
     document.getElementById("bird-grid").querySelectorAll(".bird-grid-option.selected").forEach(el => {
         el.classList.remove("selected");
     });
@@ -236,6 +255,8 @@ function nextObservation(taxon_balancing = true) {
     document.getElementById("guess-button").style.display = "block";
     //TODO other resetting things
 
+    game_state = GUESSING;
+
     //preload the answer image
     document.getElementById("answer-image").src = current.taxon.default_photo.medium_url;
 
@@ -245,16 +266,20 @@ function nextObservation(taxon_balancing = true) {
 
 
 function checkAnswer() {
-    document.getElementById("guess-button").style.display = "none";
-    let guess = document.getElementById("guess-input").value;
+    game_state = ANSWER_SHOWN;
+
+    let guess_input = document.getElementById("guess-input");
+    guess_input.readOnly = true;
+    guess_input.blur();
+    let guess = guess_input.value;
 
     //find taxon object that matches the guess, if it exists
-    let guess_obj = bird_taxa.find(obj => 
+    let guess_obj = bird_taxa.find(obj =>
         guess.toLowerCase() == obj.name.toLowerCase() ||
         guess.toLowerCase() == obj.preferred_common_name.toLowerCase()
     );
-    
-    if(current.taxon.ancestor_ids.includes(guess_obj.id)){
+
+    if (current.taxon.ancestor_ids.includes(guess_obj.id)) {
         document.getElementById("correct-button").style.display = "block";
     }
     else {
@@ -262,6 +287,7 @@ function checkAnswer() {
     }
 
     //reveal taxon
+    document.getElementById("guess-button").style.display = "none";
     document.getElementById("answer-common-name").textContent = current.taxon.preferred_common_name;
     document.getElementById("answer-scientific-name").textContent = current.taxon.name;
     document.getElementById("question").style.display = "none";

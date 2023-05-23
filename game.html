@@ -70,7 +70,9 @@
             </div>
 
             <div class="birdsong-subflex">
-                <input id="guess-input" type="text" placeholder="Write your guess">
+                <datalist id="guess-datalist"></datalist>
+                <input id="guess-input" type="text" list="guess-datalist" placeholder="Write your guess">
+
                 <button id="guess-button" class="btn-primary">Check</button>
                 <button id="correct-button" class="btn-primary">Correct! Next ></button>
                 <button id="incorrect-button" class="btn-primary">Incorrect. Next ></button>
@@ -79,8 +81,8 @@
     </div>
 
     <script src="config.js"></script>
-    <script src="add_remove_birds.js"></script>
     <script src="birdsong_game.js"></script>
+    <script src="add_remove_birds.js"></script>
     <script src="game_events.js"></script>
 
 </body>

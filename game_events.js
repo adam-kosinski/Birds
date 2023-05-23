@@ -8,6 +8,7 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     document.getElementById("birdsong-audio-0").pause();
     document.getElementById("birdsong-audio-1").pause();
 
+    //change screens
     document.getElementById("list-screen").style.display = "flex";
     document.getElementById("birdsong-screen").style.display = "none";
 
@@ -16,6 +17,10 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     taxon_obs = {};
     n_pages_by_query = {};
     current = undefined;
+    game_state = INACTIVE;
+
+    //reset datalist
+    document.getElementById("guess-datalist").innerHTML = "";
 });
 
 
@@ -37,9 +42,19 @@ bird_grid.addEventListener("click", (e) => {
 });
 
 
-//autofocus guess input
+//keypress handling
 document.addEventListener("keypress", (e) => {
-    //if typed a single letter, focus the input (avoid stuff like space or the Enter key)
+
+    if(e.key == "Enter"){
+        if(game_state === GUESSING) {
+            checkAnswer();
+        }
+        else if(game_state === ANSWER_SHOWN){
+            nextObservation();
+        }
+    }
+
+    //if typed a single letter, focus the guess input (avoid stuff like space or the Enter key)
     if(/^[a-zA-Z]$/.test(e.key) && getComputedStyle(document.getElementById("birdsong-screen")).display == "block"){
         document.getElementById("guess-input").focus();
     }

@@ -22,6 +22,7 @@ function initURLTaxa() {
 
 
 async function addBirds(taxa_id_list) {
+    if (game_state !== INACTIVE) return;
 
     //clear message about no birds selected, start loader
     document.getElementById("bird-list-message").style.display = "none";
@@ -140,6 +141,8 @@ async function addBirds(taxa_id_list) {
 
 
 function removeBird(taxon_id) {
+    if (game_state !== INACTIVE) return;
+
     //remove from HTML
     let div = document.getElementById("bird-list-" + taxon_id);
     div.parentElement.removeChild(div);
@@ -207,9 +210,13 @@ function updateAutocomplete() {
             autocomplete_list.innerHTML = "";
 
             console.log(data);
+            console.log(Math.min(data.results.length, n_autocomplete_results))
 
-            for (let k = 0; k < n_autocomplete_results; k++) { //for loop because sometimes extra results are returned
+            for (let k = 0; k < Math.min(data.results.length, n_autocomplete_results); k++) { //for loop because sometimes extra results are returned
                 let obj = data.results[k];
+
+                if(!obj.default_photo || obj.observations_count == 0) continue; //extinct species are sometimes returned
+
                 cached_bird_taxa[obj.id] = obj; //add to cache for faster adding to the list
 
                 let result = document.createElement("button");
