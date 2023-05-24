@@ -5,7 +5,7 @@ let cached_bird_taxa = []; //whenever we get taxon info from autocomplete search
 initURLTaxa();
 
 function initURLTaxa() {
-    // history.replaceState(null,"","?taxa=" + backyard_birds_ids.join(","));
+    history.replaceState(null,"","?taxa=" + backyard_birds_ids.join(","));
 
     let url = new URL(window.location.href);
     let taxa_ids = url.searchParams.get("taxa");

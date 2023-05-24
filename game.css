@@ -137,7 +137,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: min(550px, calc(100vh - 50px));
+    height: min(550px, calc(100vh - 62px)); /* 550 px for iOS search bar clearance, 62px to give 20px margin on bottom minimum, looks nice */
     justify-content: space-between;
     gap: 10px;
 }
@@ -187,6 +187,7 @@
     box-sizing: border-box;
     justify-content: center;
     grid-template-columns: repeat(auto-fill, 75px);
+    grid-template-rows: repeat(auto-fill, 75px);
     padding: 10px;
     gap: 10px;
     box-shadow: 0 4px 4px rgba(0,0,0,0.25);
