@@ -48,6 +48,7 @@
 
 #add-bird-input {
     width: 100%;
+    max-width: 350px;
     box-sizing: border-box;
     position: relative;
 }
@@ -153,6 +154,8 @@
 #birdsong-main audio {
     height: 30px;
     width: 100%;
+    max-width: 500px;
+    flex-shrink: 0;
 }
 #birdsong-audio-0 {
     margin-top: 10px;
@@ -238,6 +241,7 @@
 #guess-input {
     text-align: center;
     width: 70%;
+    max-width: 350px;
     box-sizing: border-box;
 }
 

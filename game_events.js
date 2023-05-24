@@ -23,6 +23,11 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     document.getElementById("guess-datalist").innerHTML = "";
 });
 
+//save list
+document.getElementById("save-list").addEventListener("click", () => {
+    alert("The current bird list is encoded in the URL. To save this list, copy the URL and save it somewhere. Visiting this URL will load this bird list.");
+});
+
 
 //bird selection
 let bird_grid = document.getElementById("bird-grid");
