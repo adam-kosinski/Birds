@@ -137,7 +137,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 550px;
+    height: min(550px, calc(100vh-50px));
     justify-content: space-between;
     gap: 10px;
 }

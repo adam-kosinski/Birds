@@ -20,7 +20,6 @@ function initURLTaxa() {
 }
 
 
-
 async function addBirds(taxa_id_list) {
     if (game_state !== INACTIVE) return;
 
@@ -194,7 +193,7 @@ add_bird_input.addEventListener("input", e => {
 
 
 function capitalize(str) {
-    return str.replace(/^\w|(?<=\s)\w|-\w/g, function (char) {
+    return str.replace(/^\w|\s\w|-\w/g, function (char) {
         return char.toUpperCase();
     });
 }

@@ -13,8 +13,6 @@ const GUESSING = 1;
 const ANSWER_SHOWN = 2;
 let game_state = INACTIVE;
 
-
-
 function initBirdsongGame() {
     console.log("\nINIT GAME ============================\n\n");
 
@@ -75,7 +73,6 @@ function initBirdsongGame() {
             fetchUntilThreshold(taxon_obs_threshold, 3000); //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
         });
 }
-
 
 
 
