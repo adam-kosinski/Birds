@@ -5,12 +5,40 @@
     <title>Birdsong</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans">
     <link type="text/css" rel="stylesheet" href="base.css">
+    <link type="text/css" rel="stylesheet" href="index.css">
     <meta name="viewport" content="width=device-width initial-scale=1">
     <meta charset="UTF-8">
 </head>
 
 <body>
     <img id="background-image" src="images/cloud_background.png">
+    <img id="bird-silhouette" src="images/hummingbird_silhouette.png" alt="hummingbird silhouette decoration">
+    <div id="layout">
+        <p id="title">
+            <span class="font-huge">Ca-caw!</span><br>
+            (that means hi)
+        </p>
+        <div style="height: 50px;"></div>
+        <p>
+            This is a tool to help you practice birdsong identification. The audio clips and identifications are pulled from iNaturalist.<br>
+            <br>
+            To begin, select one of the following:
+        </p>
+        <div style="height: 20px;"></div>
+        <a id="backyard-birds-link" class="app-mode-link">
+            <img src="images/main_page_backyard.png" alt="bird image">
+            <p>Common Backyard Birds</p>
+        </a>
+        <a class="app-mode-link" href="game.html">
+            <img src="images/main_page_custom.png" alt="bird image">
+            <p>Choose Birds Yourself</p>
+        </a>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        document.getElementById("backyard-birds-link").href = "game.html?taxa=" + backyard_birds_ids.join(",");
+    </script>
 </body>
 
 </html>
