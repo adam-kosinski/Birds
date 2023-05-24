@@ -276,7 +276,7 @@ function checkAnswer() {
         guess.toLowerCase() == obj.preferred_common_name.toLowerCase()
     );
 
-    if (current.taxon.ancestor_ids.includes(guess_obj.id)) {
+    if (guess_obj && current.taxon.ancestor_ids.includes(guess_obj.id)) {
         document.getElementById("correct-button").style.display = "block";
     }
     else {
