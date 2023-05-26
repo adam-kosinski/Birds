@@ -108,6 +108,7 @@ async function addBirds(taxa_id_list) {
 
         let map_icon = document.createElement("button");
         map_icon.className = "range-map-icon";
+        map_icon.dataset.id = obj.id;
         map_icon.dataset.commonName = obj.preferred_common_name;
         map_icon.dataset.scientificName = obj.name;
         map_icon.dataset.imageUrl = obj.default_photo.square_url;
@@ -242,6 +243,7 @@ function updateAutocomplete() {
 
                 let map_icon = document.createElement("button");
                 map_icon.className = "range-map-icon";
+                map_icon.dataset.id = obj.id;
                 map_icon.dataset.commonName = obj.preferred_common_name;
                 map_icon.dataset.scientificName = obj.name;
                 map_icon.dataset.imageUrl = obj.default_photo.square_url;
