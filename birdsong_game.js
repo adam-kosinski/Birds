@@ -105,7 +105,7 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "")
 
     if (n_pages === undefined) { //because wasn't in the cache
         console.log("Querying to determine n pages")
-        let data = await fetch(prefix + args + "&only_id=true&per_page=1")
+        let data = await fetch(prefix + args + "&only_id=true&per_page=0")
             .then(res => res.json());
 
         //n_pages * per_page must be strictly less than 10000, or iNaturalist will block

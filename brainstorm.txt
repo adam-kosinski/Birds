@@ -1,3 +1,6 @@
+Priority TODO
+Trying to add the same bird twice bug
+
 TODO
 Fix sidescrolling on bird list
 Fix selection box not fully covering image on iOS

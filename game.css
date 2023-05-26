@@ -288,7 +288,7 @@
 
 #range-map {
     height: 300px;
-    width: 300px;
+    width: calc(100vw - 20px);
 }
 
 #close-range-map {

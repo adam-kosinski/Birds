@@ -207,8 +207,7 @@ function updateAutocomplete() {
             let autocomplete_list = document.getElementById("taxon-autocomplete-list");
             autocomplete_list.innerHTML = "";
 
-            console.log(data);
-            console.log(Math.min(data.results.length, n_autocomplete_results))
+            console.log("autocomplete results", data);
 
             for (let k = 0; k < Math.min(data.results.length, n_autocomplete_results); k++) { //for loop because sometimes extra results are returned
                 let obj = data.results[k];
@@ -265,3 +264,15 @@ document.getElementById("taxon-autocomplete-list").addEventListener("click", e =
         document.getElementById("taxon-autocomplete-list").style.display = "none";
     }
 });
+
+//close list if click off it
+document.getElementById("list-screen").addEventListener("click", e => {
+    if(!e.target.closest("#bird-input-container")){
+        document.getElementById("taxon-autocomplete-list").style.display = "none";
+    }
+});
+
+//reopen list if click back on
+document.getElementById("add-bird-input").addEventListener("focus", e => {
+    if(e.target.value.length > 0) updateAutocomplete();
+})
