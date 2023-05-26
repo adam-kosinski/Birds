@@ -33,6 +33,7 @@ function initBirdsongGame() {
                 });
                 alert("Failed to find research grade iNaturalist sound observations for " + failed_names.join(", ") + ". Please remove from the list and try again.");
                 document.getElementById("bird-list-loader").style.display = "none";
+                game_state = INACTIVE;
                 return;
             }
 
@@ -62,7 +63,7 @@ function initBirdsongGame() {
 
             });
 
-            nextObservation(); //sets game_state
+            nextObservation(); //sets game_state FYI, but was already set in the event listener
 
             //switch screens and stop loader
             document.getElementById("list-screen").style.display = "none";

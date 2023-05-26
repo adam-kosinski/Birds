@@ -1,5 +1,7 @@
 //movement between screens
 document.getElementById("start-game-button").addEventListener("click", () => {
+    document.getElementById("add-bird-input").value = "";
+    game_state = GUESSING; //prevent adding or removing birds
     initBirdsongGame();
 });
 
