@@ -89,7 +89,6 @@ document.getElementById("birdsong-audio-0").addEventListener("ended", () => {
 //range map
 
 let range_map = L.map("range-map"); //only init once or will get an error
-let range_layer;
 let grid_layer;
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -106,8 +105,9 @@ document.addEventListener("click", e => {
 
     document.getElementById("range-map-modal").style.display = "flex"; //seems useful to do this before leaflet stuff
 
-    grid_layer = L.tileLayer('https://api.inaturalist.org/v1/grid/{z}/{x}/{y}.png?taxon_id=' + e.target.dataset.id + '&quality_grade=research&mappable=true').addTo(range_map);
-    // range_layer = L.tileLayer('https://api.inaturalist.org/v1/taxon_ranges/' + e.target.dataset.id + '/{z}/{x}/{y}.png').addTo(range_map);
+    grid_layer = L.tileLayer('https://api.inaturalist.org/v1/grid/{z}/{x}/{y}.png?taxon_id=' + e.target.dataset.id + '&quality_grade=research&mappable=true', {
+        attribution: '<a href="https://api.inaturalist.org/v1/docs/#!/Observation_Tiles/get_grid_zoom_x_y_png">iNaturalist Data</a>'
+    }).addTo(range_map);
 
     // set zoom and center based on observation extent, method based on https://jumear.github.io/stirfry/iNat_map.html
     //use out of range query if it returns bounds, else use the mappable query which should always (?) return bounds
@@ -130,8 +130,5 @@ document.getElementById("close-range-map").addEventListener("click", () => {
     document.getElementById("range-map-modal").style.display = "none";
     if (grid_layer) {
         grid_layer.remove();
-    }
-    if (range_layer) {
-        range_layer.remove();
     }
 });
