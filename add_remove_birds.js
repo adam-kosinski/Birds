@@ -91,7 +91,7 @@ async function addBirds(taxa_id_list) {
         let bird_square = document.createElement("img");
         bird_square.className = "bird-square";
         bird_square.src = obj.default_photo.square_url;
-        bird_square.alt = "Photo of " + obj.name;
+        bird_square.alt = "Photo of " + obj.preferred_common_name;
 
         let p = document.createElement("p");
         let b = document.createElement("b");
@@ -176,103 +176,164 @@ function removeBird(taxon_id) {
 
 //autocomplete list stuff
 
-let autocomplete_timeout_id;
-let add_bird_input = document.getElementById("add-bird-input");
-
-add_bird_input.addEventListener("input", e => {
-    clearTimeout(autocomplete_timeout_id); //works even if undefined
-
-    if (add_bird_input.value.length == 0) {
-        document.getElementById("taxon-autocomplete-list").style.display = "none";
-    }
-    else {
-        autocomplete_timeout_id = setTimeout(updateAutocomplete, autocomplete_delay);
-    }
-});
-
-
 function capitalize(str) {
     return str.replace(/^\w|\s\w|-\w/g, function (char) {
         return char.toUpperCase();
     });
 }
 
+initAutocomplete(
+    "add-bird-input",
+    "taxon-autocomplete-list",
+    "list-screen",
+    "https://api.inaturalist.org/v1/taxa/autocomplete?taxon_id=3&rank=species&is_active=true",
+    //result callback
+    (obj, list_option) => {
+        if (!obj.default_photo || obj.observations_count == 0) return; //extinct species are sometimes returned
 
-function updateAutocomplete() {
-    let query = add_bird_input.value;
-    fetch("https://api.inaturalist.org/v1/taxa/autocomplete?taxon_id=3&rank=species&q=" + query + "&is_active=true&per_page=" + n_autocomplete_results)
-        //TODO determine whether to only do rank species
-        .then(res => res.json())
-        .then(data => {
-            let autocomplete_list = document.getElementById("taxon-autocomplete-list");
-            autocomplete_list.innerHTML = "";
+        cached_bird_taxa[obj.id] = obj; //add to cache for faster adding to the list
 
-            console.log("autocomplete results", data);
+        list_option.dataset.taxonId = obj.id;
 
-            for (let k = 0; k < Math.min(data.results.length, n_autocomplete_results); k++) { //for loop because sometimes extra results are returned
-                let obj = data.results[k];
+        let img = document.createElement("img");
+        img.src = obj.default_photo.square_url;
 
-                if(!obj.default_photo || obj.observations_count == 0) continue; //extinct species are sometimes returned
+        let p = document.createElement("p");
+        let b = document.createElement("b");
+        let br = document.createElement("br");
+        let rank_label = document.createTextNode(capitalize(obj.rank) + " "); //for family or higher
+        let i = document.createElement("i");
+        let name_no_italics = document.createTextNode(obj.name); //for higher than family
+        b.textContent = obj.preferred_common_name;
+        if (!obj.preferred_common_name.includes(obj.matched_term) && !obj.name.includes(obj.matched_term)) {
+            b.textContent += " (" + obj.matched_term + ")";
+        }
+        i.textContent = obj.name;
 
-                cached_bird_taxa[obj.id] = obj; //add to cache for faster adding to the list
-
-                let result = document.createElement("button");
-                result.className = "autocomplete-option";
-                result.dataset.taxonId = obj.id;
-
-                let img = document.createElement("img");
-                img.src = obj.default_photo.square_url;
-
-                let p = document.createElement("p");
-                let b = document.createElement("b");
-                let br = document.createElement("br");
-                let rank_label = document.createTextNode(capitalize(obj.rank) + " "); //for family or higher
-                let i = document.createElement("i");
-                let name_no_italics = document.createTextNode(obj.name); //for higher than family
-                b.textContent = obj.preferred_common_name;
-                if (!obj.preferred_common_name.includes(obj.matched_term) && !obj.name.includes(obj.matched_term)) {
-                    b.textContent += " (" + obj.matched_term + ")";
-                }
-                i.textContent = obj.name;
-
-                p.append(b, br);
-                if (obj.rank_level >= 30) p.append(rank_label);
-                obj.rank_level <= 30 ? p.append(i) : p.append(name_no_italics);
+        p.append(b, br);
+        if (obj.rank_level >= 30) p.append(rank_label);
+        obj.rank_level <= 30 ? p.append(i) : p.append(name_no_italics);
 
 
-                let map_icon = document.createElement("button");
-                map_icon.className = "range-map-icon";
-                map_icon.dataset.id = obj.id;
-                map_icon.dataset.commonName = obj.preferred_common_name;
-                map_icon.dataset.scientificName = obj.name;
-                map_icon.dataset.imageUrl = obj.default_photo.square_url;
+        let map_icon = document.createElement("button");
+        map_icon.className = "range-map-icon";
+        map_icon.dataset.id = obj.id;
+        map_icon.dataset.commonName = obj.preferred_common_name;
+        map_icon.dataset.scientificName = obj.name;
+        map_icon.dataset.imageUrl = obj.default_photo.square_url;
 
-                result.append(img, p, map_icon);
-                autocomplete_list.append(result);
-            }
-
-            document.getElementById("taxon-autocomplete-list").style.display = "block";
-        });
-}
-
-
-document.getElementById("taxon-autocomplete-list").addEventListener("click", e => {
-    let option = e.target.closest(".autocomplete-option");
-    if (option && !e.target.classList.contains("range-map-icon")) {
-        addBirds([Number(option.dataset.taxonId)]);
-        document.getElementById("add-bird-input").value = "";
-        document.getElementById("taxon-autocomplete-list").style.display = "none";
+        list_option.append(img, p, map_icon);
+    },
+    //select callback
+    (list_option) => {
+        addBirds([Number(list_option.dataset.taxonId)]);
+        document.getElementById("bird-list").scrollTop = 0;
     }
-});
+);
 
-//close list if click off it
-document.getElementById("list-screen").addEventListener("click", e => {
-    if(!e.target.closest("#bird-input-container")){
-        document.getElementById("taxon-autocomplete-list").style.display = "none";
-    }
-});
+// let autocomplete_timeout_id;
+// let add_bird_input = document.getElementById("add-bird-input");
 
-//reopen list if click back on
-document.getElementById("add-bird-input").addEventListener("focus", e => {
-    if(e.target.value.length > 0) updateAutocomplete();
-})
+// add_bird_input.addEventListener("input", e => {
+//     clearTimeout(autocomplete_timeout_id); //works even if undefined
+
+//     if (add_bird_input.value.length == 0) {
+//         document.getElementById("taxon-autocomplete-list").style.display = "none";
+//     }
+//     else {
+//         autocomplete_timeout_id = setTimeout(updateAutocomplete, autocomplete_delay);
+//     }
+// });
+
+
+// function capitalize(str) {
+//     return str.replace(/^\w|\s\w|-\w/g, function (char) {
+//         return char.toUpperCase();
+//     });
+// }
+
+
+// function updateAutocomplete() {
+//     let query = add_bird_input.value;
+//     fetch("https://api.inaturalist.org/v1/taxa/autocomplete?taxon_id=3&rank=species&q=" + query + "&is_active=true&per_page=" + n_autocomplete_results)
+//         //TODO determine whether to only do rank species
+//         .then(res => res.json())
+//         .then(data => {
+//             let autocomplete_list = document.getElementById("taxon-autocomplete-list");
+//             autocomplete_list.innerHTML = "";
+
+//             console.log("autocomplete results", data);
+
+//             for (let k = 0; k < Math.min(data.results.length, n_autocomplete_results); k++) { //for loop because sometimes extra results are returned
+//                 let obj = data.results[k];
+
+//                 if(!obj.default_photo || obj.observations_count == 0) continue; //extinct species are sometimes returned
+
+//                 cached_bird_taxa[obj.id] = obj; //add to cache for faster adding to the list
+
+//                 let result = document.createElement("button");
+//                 result.className = "autocomplete-option";
+//                 result.dataset.taxonId = obj.id;
+
+//                 let img = document.createElement("img");
+//                 img.src = obj.default_photo.square_url;
+
+//                 let p = document.createElement("p");
+//                 let b = document.createElement("b");
+//                 let br = document.createElement("br");
+//                 let rank_label = document.createTextNode(capitalize(obj.rank) + " "); //for family or higher
+//                 let i = document.createElement("i");
+//                 let name_no_italics = document.createTextNode(obj.name); //for higher than family
+//                 b.textContent = obj.preferred_common_name;
+//                 if (!obj.preferred_common_name.includes(obj.matched_term) && !obj.name.includes(obj.matched_term)) {
+//                     b.textContent += " (" + obj.matched_term + ")";
+//                 }
+//                 i.textContent = obj.name;
+
+//                 p.append(b, br);
+//                 if (obj.rank_level >= 30) p.append(rank_label);
+//                 obj.rank_level <= 30 ? p.append(i) : p.append(name_no_italics);
+
+
+//                 let map_icon = document.createElement("button");
+//                 map_icon.className = "range-map-icon";
+//                 map_icon.dataset.id = obj.id;
+//                 map_icon.dataset.commonName = obj.preferred_common_name;
+//                 map_icon.dataset.scientificName = obj.name;
+//                 map_icon.dataset.imageUrl = obj.default_photo.square_url;
+
+//                 result.append(img, p, map_icon);
+//                 autocomplete_list.append(result);
+//             }
+
+//             document.getElementById("taxon-autocomplete-list").style.display = "block";
+//         });
+// }
+
+
+// document.getElementById("taxon-autocomplete-list").addEventListener("click", e => {
+//     let option = e.target.closest(".autocomplete-option");
+//     if (option && !e.target.classList.contains("range-map-icon")) {
+//         addBirds([Number(option.dataset.taxonId)]);
+//         document.getElementById("add-bird-input").value = "";
+//         document.getElementById("taxon-autocomplete-list").style.display = "none";
+//         document.getElementById("bird-list").scrollTop = 0;
+//     }
+// });
+
+// //close list if click off it, or press Esc
+// document.getElementById("list-screen").addEventListener("pointerdown", e => {
+//     if(!e.target.closest("#bird-input-container")){
+//         document.getElementById("taxon-autocomplete-list").style.display = "none";
+//     }
+// });
+// document.addEventListener("keydown", e => {
+//     if(e.key == "Escape"){
+//         document.getElementById("taxon-autocomplete-list").style.display = "none";
+//     }
+// });
+
+// //reopen list if click back on
+// document.getElementById("add-bird-input").addEventListener("focus", e => {
+//     if(e.target.value.length > 0) updateAutocomplete();
+// });

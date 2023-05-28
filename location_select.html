@@ -4,7 +4,19 @@
 <head>
     <title>Birdsong</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans">
+
+    <!-- leaflet, js must come after css -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
     <link type="text/css" rel="stylesheet" href="base.css">
+    <link type="text/css" rel="stylesheet" href="location_select.css">
+    <link type="text/css" rel="stylesheet" href="range_map.css">
+
     <meta name="viewport" content="width=device-width initial-scale=1">
     <meta charset="UTF-8">
 </head>
@@ -12,9 +24,45 @@
 <body>
     <img id="background-image" src="images/cloud_background.png">
     <nav>
-        <a href="index.html"><img id="birdhouse" src="images/birdhouse.png" alt="birdhouse icon">Exit</a>
+        <a href="index.html"><img class="nav-icon" src="images/birdhouse.png" alt="birdhouse icon">Exit</a>
     </nav>
-    <main></main>
+    <div id="location-screen">
+        <p class="font-large">Pick Birds by Location</p>
+        <div id="place-input-container">
+            <div id="place-autocomplete-list"></div>
+            <input id="place-input" type="text" placeholder="Search for iNaturalist Place">
+        </div>
+        <div id="map-widget">
+            <p>Or pan/zoom the map:</p>
+            <div id="map"></div>
+            <p id="map-caption"></p>
+        </div>
+        <button class="btn-primary">Search for Birds</button>
+    </div>
+
+
+    <div id="bird-screen">
+
+    </div>
+
+
+    <div id="range-map-modal">
+        <b class="font-large">Range Map</b>
+        <div id="range-map-taxon-container">
+            <img id="range-map-taxon-image" class="bird-square" src="" alt="image of taxon">
+            <p>
+                <b id="range-map-common-name"></b><br>
+                <i id="range-map-scientific-name"></i>
+            </p>
+        </div>
+        <div id="range-map"></div>
+        <button id="close-range-map" class="btn-primary">Back</button>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="autocomplete.js"></script>
+    <script src="location_select.js"></script>
+    <script src="range_map.js"></script>
 </body>
 
 </html>

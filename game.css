@@ -1,10 +1,5 @@
 /* Large containers / screens */
 
-.screen {
-   height: 100%;
-   width: 100%;
-}
-
 #list-screen {
     display: flex;
     flex-direction: column;

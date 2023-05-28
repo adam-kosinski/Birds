@@ -1,4 +1,7 @@
-let range_map = L.map("range-map"); //only init once or will get an error
+//only init once or will get an error
+let range_map = L.map("range-map", {
+    zoomSnap: 0.5
+});
 let grid_layer;
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {

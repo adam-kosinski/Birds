@@ -1,0 +1,61 @@
+/* location screen stuff */
+
+#location-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 10px;
+    text-align: center;
+}
+
+#place-input-container {
+    width: min(90%, 400px);
+    position: relative;
+    z-index: 10;
+}
+
+#place-autocomplete-list {
+    /* display: none; */
+    position: absolute;
+    transform: translateX(10px);
+    top: calc(100% - 10px);
+    padding-top: 10px;
+    width: calc(100% - 20px); /* 10px on either side of input */
+    background-color: white;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+}
+
+.autocomplete-option {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px 5px 10px;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+}
+
+#place-input {
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    text-align: center;
+}
+
+#map-widget {
+    z-index: 5;
+}
+
+#map {
+    width: min(calc(100vw - 40px), 400px);
+    height: 300px;
+    background-color: white;
+    border: 1.5px solid black;
+}
+
+/* bird screen stuff */
+
+#bird-screen {
+    display: none;
+}
