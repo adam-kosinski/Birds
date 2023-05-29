@@ -69,8 +69,8 @@ function updateAutocomplete(input_id, list_id, api_endpoint, result_callback) {
             for (let k = 0; k < Math.min(data.results.length, n_autocomplete_results); k++) { //for loop because sometimes extra results are returned
                 let list_option = document.createElement("button");
                 list_option.className = "autocomplete-option";
-                result_callback(data.results[k], list_option);
-                list.append(list_option);
+                let ignore_result = false == result_callback(data.results[k], list_option);
+                if(!ignore_result) list.append(list_option);
             }
 
             list.style.display = "block";

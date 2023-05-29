@@ -33,9 +33,14 @@
             <input id="place-input" type="text" placeholder="Search for iNaturalist Place">
         </div>
         <div id="map-widget">
-            <p>Or pan/zoom the map:</p>
-            <div id="map"></div>
-            <p id="map-caption"></p>
+            <p id="pan-zoom-instructions">Or pan/zoom the map:</p>
+            <div id="map-container"> <!-- for outlining, because leaflet hides the map outline -->
+                <div id="map"></div>
+            </div>
+            <div>
+                <p id="map-caption"></p>
+                <u id="clear-place-selection">(clear selection)</u>
+            </div>
         </div>
         <button class="btn-primary">Search for Birds</button>
     </div>

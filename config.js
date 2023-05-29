@@ -7,6 +7,10 @@ let taxon_obs_threshold = 20; //number of observations we'd like to have for eac
 let autocomplete_delay = 1000; //ms after user stops typing, to update the autocomplete
 let n_autocomplete_results = 5;
 
+let place_style = {
+    "color": "orange"
+}
+
 let backyard_birds_ids = [
     144815, //black capped chickadee
     9744,   //red winged blackbird
