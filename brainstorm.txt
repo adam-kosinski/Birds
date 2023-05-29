@@ -10,7 +10,6 @@ Process audio - https://www.youtube.com/watch?v=GYqogvHYn28
 Other audio filtering? Though current sounds are fairly good I think
 - do some experimentation listening to with photos vs without photos, and number identifications
 - and evaluate more rigorously the idea that popular recordings are better
-Perhaps clear list button on the bird list screen
 
 
 Audio filtering
