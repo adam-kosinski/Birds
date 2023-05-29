@@ -11,8 +11,8 @@ let ignore_map_move_once = false; //used when setting an iNaturalist place
 //init map ----------------------------------------
 
 map = L.map("map", {
-    center: [40.731, -96.416],
-    zoom: 2
+    center: [41, -29],
+    zoom: 1
 });
 
 //zoom snap 0 for touch interaction
