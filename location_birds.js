@@ -10,6 +10,7 @@ document.getElementById("search-for-birds").addEventListener("click", e => {
         document.getElementById("search-loader").style.display = "none";
         document.getElementById("location-screen").style.display = "none";
         document.getElementById("bird-screen").style.display = "flex";
+        document.getElementById("list").scrollTop = 0;
     });
 });
 
@@ -24,7 +25,8 @@ document.getElementById("continue-button").addEventListener("click", () => {
     document.querySelectorAll(".bird-row:has(.checkbox.checked)").forEach(el => {
         taxon_ids.push(el.dataset.taxonId);
     });
-    window.location = "game.html?taxa=" + taxon_ids.join(",");
+    let args = "?taxa=" + taxon_ids.join(",");
+    window.location = "game.html" + (taxon_ids.length > 0 ? args : "");
 });
 
 
