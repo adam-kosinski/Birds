@@ -75,6 +75,8 @@ p {
 nav {
     display: flex;
     justify-content: space-between;
+    align-self: flex-start;
+    width: 100%;
 }
 
 nav * {
@@ -102,6 +104,7 @@ nav * {
 .screen {
     width: 100%;
     height: 100%;
+    box-sizing: border-box;
 }
 
 .btn-primary {
@@ -111,6 +114,15 @@ nav * {
     padding: 2px 16px 2px 16px;
     border-radius: 15px;
     border-bottom: 3px solid var(--focus-color-shadow);
+}
+
+.btn-secondary {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: var(--light-gray);
+    padding: 2px 16px 2px 16px;
+    border-radius: 15px;
+    border-bottom: 3px solid var(--medium-gray);
 }
 
 .bird-square {
@@ -132,6 +144,9 @@ nav * {
 .loader {
     animation: rotate infinite 1s linear;
     height: 24px;
+    width: 24px;
+    background-image: url('images/loader.png');
+    background-size: contain;
 }
 
 @keyframes rotate {

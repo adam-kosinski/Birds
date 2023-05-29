@@ -1,5 +1,6 @@
 //movement between screens
-document.getElementById("start-game-button").addEventListener("click", () => {
+document.getElementById("start-game-button").addEventListener("click", e => {
+    e.target.disabled = true;
     document.getElementById("add-bird-input").value = "";
     game_state = GUESSING; //prevent adding or removing birds
     initBirdsongGame();
@@ -13,6 +14,7 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     //change screens
     document.getElementById("list-screen").style.display = "flex";
     document.getElementById("birdsong-screen").style.display = "none";
+    document.getElementById("start-game-button").removeAttribute("disabled");
 
     //reset vars
     obs = [];

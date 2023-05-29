@@ -1,3 +1,5 @@
+// FILE FOR STUFF INVOLVING THE LOCATION SELECT SCREEN
+
 //globals
 
 let place_id; //if undefined, will use map bounds
@@ -25,14 +27,6 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 clearMapPlace(); //sets initial state to use full map
 
-//bounding box selection ------------------------------
-
-//actually just do this when search for birds
-
-// map.addEventListener("move", () => {
-//     let bounds = map.getBounds();
-//     bbox_args = `nelat=${bounds.getNorth()}&nelng=${bounds.getEast()}&swlat=${bounds.getSouth()}&swlng=${bounds.getWest()}`;
-// });
 
 
 //place autocomplete / handling ----------------------------

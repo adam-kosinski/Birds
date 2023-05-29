@@ -2,7 +2,7 @@ Priority TODO
 Trying to add the same bird twice bug
 
 TODO
-Fix sidescrolling on bird list
+Fix sidescrolling on bird list, and then implement same scrollbar styling for location selection list
 Fix selection box not fully covering image on iOS
 Consider adjusting taxon_obs_threshold based on number of taxa (fewer taxa = larger threshold b/c more likely to repeat)
 Process audio - https://www.youtube.com/watch?v=GYqogvHYn28
