@@ -97,8 +97,28 @@ async function fetchSpeciesCounts() {
     }
 }
 
+
+
+//selection event handlers
+
 document.getElementById("list").addEventListener("click", e => {
-    if(e.target.classList.contains("checkbox")){
-        e.target.classList.toggle("checked");
+    let row = e.target.closest(".bird-row");
+    if(row && !e.target.classList.contains("range-map-icon")){
+        row.querySelector(".checkbox").classList.toggle("checked");
     }
+});
+
+document.getElementById("select-all").addEventListener("click", () => {
+    document.querySelectorAll(".checkbox").forEach(el => el.classList.add("checked"));
+});
+
+document.getElementById("select-none").addEventListener("click", () => {
+    document.querySelectorAll(".checkbox").forEach(el => el.classList.remove("checked"));
+});
+
+
+
+//collapse instructions
+document.getElementById("collapse-arrow").addEventListener("click", () => {
+    document.getElementById("white-container").classList.toggle("collapsed");
 });

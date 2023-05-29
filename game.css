@@ -111,12 +111,12 @@
 }
 
 .x-button {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     border-radius: 20px;
     background-color: var(--light-gray);
     color: var(--dark-gray);
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
 }
 .x-button::before {

@@ -1,7 +1,7 @@
 #bird-silhouette {
     position: absolute;
     z-index: -1;
-    opacity: 0.08;
+    opacity: 0.15;
     right: 5%;
     width: 130%;
 }

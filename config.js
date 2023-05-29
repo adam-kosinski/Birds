@@ -11,7 +11,7 @@ let place_style = {     //for place geometry
     "color": "orange"
 }
 
-let top_n_selected = 15; //for place selection
+let top_n_selected = 16; //for place selection
 
 let backyard_birds_ids = [
     144815, //black capped chickadee

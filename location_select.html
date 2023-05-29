@@ -7,11 +7,9 @@
 
     <!-- leaflet, js must come after css -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-     crossorigin=""/>
-     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin=""></script>
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <link type="text/css" rel="stylesheet" href="base.css">
     <link type="text/css" rel="stylesheet" href="location_select.css">
@@ -23,7 +21,7 @@
 
 <body>
     <img id="background-image" src="images/cloud_background.png">
-    
+
     <div id="location-screen" class="screen">
         <nav>
             <a href="index.html"><img class="nav-icon" src="images/birdhouse.png" alt="birdhouse icon">Exit</a>
@@ -42,7 +40,7 @@
             <div id="map-container"> <!-- for outlining, because leaflet hides the map outline -->
                 <div id="map"></div>
             </div>
-            
+
         </div>
         <div id="search-for-birds-container">
             <button id="search-for-birds" class="btn-primary">Search for Birds</button>
@@ -56,16 +54,25 @@
             <a href="index.html"><img class="nav-icon" src="images/birdhouse.png" alt="birdhouse icon">Exit</a>
         </nav>
         <div id="white-container">
-            <p class="font-large">Pick Birds by Location</p>
-            <p>Here you can see the number of iNaturalist sound observations in the chosen location. Select which birds you would like to practice. The <span id="top-n-selected"></span> most common are selected by default.</p>
+            <div>
+                <div id="list-title-container">
+                    <p class="font-large">Pick Birds by Location</p>
+                    <div id="collapse-arrow"></div>
+                </div>
+                <p id="checklist-instructions">Here you can see the number of iNaturalist sound observations in the
+                    chosen location. Select which birds you would like to practice. The
+                    <span id="top-n-selected"></span> most common are selected by default.
+                </p>
+            </div>
+
             <div id="button-panel">
                 <button id="back-button" class="btn-secondary">Back</button>
                 <button id="continue-button" class="btn-primary">Continue</button>
             </div>
             <div id="list-container">
                 <div id="selectors-container">
-                    <button>Select All (<span id="species-count">0</span>)</button>
-                    <button>Select None</button>
+                    <button id="select-all">Select All (<span id="species-count">0</span>)</button>
+                    <button id="select-none">Select None</button>
                 </div>
                 <div id="list"></div>
             </div>
