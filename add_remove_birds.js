@@ -21,11 +21,6 @@ function initURLTaxa() {
 async function addBirds(taxa_id_list) {
     if (game_state !== INACTIVE) return;
 
-    //clear message about no birds selected, start loader
-    document.getElementById("bird-list-message").style.display = "none";
-    document.getElementById("clear-list").style.display = "block";
-    document.getElementById("bird-list-loader").style.display = "block";
-
     //extract only taxon ids we don't have
     let ids_we_have = bird_taxa.map(obj => obj.id);
 
@@ -36,6 +31,11 @@ async function addBirds(taxa_id_list) {
         }
     });
     if (ids_to_fetch.length == 0) return;
+
+    //clear message about no birds selected, start loader
+    document.getElementById("bird-list-message").style.display = "none";
+    document.getElementById("clear-list").style.display = "block";
+    document.getElementById("bird-list-loader").style.display = "block";
 
     //update URL list, added entries will be at the top so put those first
     let args = "?taxa=" + ids_to_fetch.concat(ids_we_have).join(",");

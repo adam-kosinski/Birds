@@ -1,6 +1,3 @@
-Priority TODO
-Trying to add the same bird twice bug
-
 TODO
 Fix sidescrolling on bird list, and then implement same scrollbar styling for location selection list
 Fix selection box not fully covering image on iOS
