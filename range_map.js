@@ -1,8 +1,9 @@
 //only init once or will get an error
-let range_map = L.map("range-map", {
-    zoomSnap: 0.5
-});
+let range_map = L.map("range-map");
 let grid_layer;
+
+//zoom snap 0 for touch interaction
+document.addEventListener("touchstart", () => range_map.options.zoomSnap = 0, {once: true});
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,

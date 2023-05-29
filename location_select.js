@@ -9,10 +9,13 @@ let ignore_map_move_once = false; //used when setting an iNaturalist place
 //init map ----------------------------------------
 
 map = L.map("map", {
-    zoomSnap: 0,
     center: [40.731, -96.416],
     zoom: 2
 });
+
+//zoom snap 0 for touch interaction
+document.addEventListener("touchstart", () => map.options.zoomSnap = 0, {once: true});
+
 
 //basemap
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
