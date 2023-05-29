@@ -26,14 +26,20 @@
     box-shadow: 0 4px 4px rgba(0,0,0,0.25);
 }
 
-.autocomplete-option {
-    display: flex;
-    align-items: center;
+#place-autocomplete-list > * {
     padding: 5px 10px 5px 10px;
     text-align: left;
     width: 100%;
+}
+
+.autocomplete-option {
+    display: flex;
+    align-items: center;
     box-sizing: border-box;
-    border-bottom: 1px solid rgba(0,0,0,0.25);
+}
+
+.autocomplete-option:not(:first-child) {
+    border-top: 1px solid rgba(0,0,0,0.25);
 }
 
 #place-input {
@@ -62,9 +68,17 @@
     outline: 4px solid orange;
 }
 
+#map-caption {
+    font-weight: bold;
+}
+
 #clear-place-selection {
-    visibility: hidden;
+    display: none;
     cursor: pointer;
+}
+
+#search-for-birds {
+    margin-top: 20px;
 }
 
 

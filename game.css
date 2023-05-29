@@ -59,14 +59,20 @@
     box-shadow: 0 4px 4px rgba(0,0,0,0.25);
 }
 
+#taxon-autocomplete-list > * {
+    padding: 5px 10px 5px 10px;
+    text-align: left;
+    width: 100%;
+}
+
 .autocomplete-option {
     display: grid;
     grid-template-columns: 60px 1fr 35px; /* image, name, map icon */
     align-items: center;
-    padding: 5px 10px 5px 10px;
-    text-align: left;
-    width: 100%;
-    border-bottom: 1px solid rgba(0,0,0,0.25);
+}
+
+.autocomplete-option:not(:first-child) {
+    border-top: 1px solid rgba(0,0,0,0.25);
 }
 
 .autocomplete-option:hover {

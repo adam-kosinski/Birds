@@ -41,11 +41,13 @@ function initAutocomplete(input_id, list_id, click_off_id, api_endpoint, result_
     document.getElementById(click_off_id).addEventListener("pointerdown", e => {
         if (!e.target.closest("#" + input_id) && !e.target.closest("#" + list_id)) {
             list.style.display = "none";
+            input.blur();
         }
     });
     document.addEventListener("keydown", e => {
         if (e.key == "Escape") {
             list.style.display = "none";
+            input.blur();
         }
     });
 
@@ -71,6 +73,12 @@ function updateAutocomplete(input_id, list_id, api_endpoint, result_callback) {
                 list_option.className = "autocomplete-option";
                 let ignore_result = false == result_callback(data.results[k], list_option);
                 if(!ignore_result) list.append(list_option);
+            }
+
+            if(data.results.length == 0){
+                let p = document.createElement("p");
+                p.textContent = "No results found";
+                list.append(p);
             }
 
             list.style.display = "block";

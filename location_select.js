@@ -72,8 +72,8 @@ function setMapPlace(place) {
     place_id = place.id;
     document.getElementById("map-caption").textContent = place.display_name;
     document.getElementById("map-container").classList.remove("outlined");
-    document.getElementById("pan-zoom-instructions").style.visibility = "hidden";
-    document.getElementById("clear-place-selection").style.visibility = "visible";
+    document.getElementById("pan-zoom-instructions").style.display = "none";
+    document.getElementById("clear-place-selection").style.display = "block";
 
     //zoom to place bounds
     let bounds;
@@ -131,7 +131,6 @@ function setMapPlace(place) {
 
 
 function clearMapPlace() {
-    console.log("clear")
     place_id = undefined;
 
     if (place_layer) {
@@ -141,8 +140,8 @@ function clearMapPlace() {
 
     document.getElementById("map-container").classList.add("outlined");
     document.getElementById("map-caption").textContent = "Using Area Shown in Map";
-    document.getElementById("pan-zoom-instructions").style.visibility = "visible";
-    document.getElementById("clear-place-selection").style.visibility = "hidden";
+    document.getElementById("pan-zoom-instructions").style.display = "block";
+    document.getElementById("clear-place-selection").style.display = "none";
 }
 
 document.getElementById("clear-place-selection").addEventListener("click", clearMapPlace);

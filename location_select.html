@@ -30,19 +30,20 @@
         <p class="font-large">Pick Birds by Location</p>
         <div id="place-input-container">
             <div id="place-autocomplete-list"></div>
-            <input id="place-input" type="text" placeholder="Search for iNaturalist Place">
+            <input id="place-input" type="search" autocomplete="off" placeholder="Search for iNaturalist Place">
         </div>
+        <p id="pan-zoom-instructions">Or pan/zoom the map:</p>
         <div id="map-widget">
-            <p id="pan-zoom-instructions">Or pan/zoom the map:</p>
-            <div id="map-container"> <!-- for outlining, because leaflet hides the map outline -->
-                <div id="map"></div>
-            </div>
             <div>
                 <p id="map-caption"></p>
                 <u id="clear-place-selection">(clear selection)</u>
             </div>
+            <div id="map-container"> <!-- for outlining, because leaflet hides the map outline -->
+                <div id="map"></div>
+            </div>
+            
         </div>
-        <button class="btn-primary">Search for Birds</button>
+        <button id="search-for-birds" class="btn-primary">Search for Birds</button>
     </div>
 
 
