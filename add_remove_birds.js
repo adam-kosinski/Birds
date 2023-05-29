@@ -23,6 +23,7 @@ async function addBirds(taxa_id_list) {
 
     //clear message about no birds selected, start loader
     document.getElementById("bird-list-message").style.display = "none";
+    document.getElementById("clear-list").style.display = "block";
     document.getElementById("bird-list-loader").style.display = "block";
 
     //extract only taxon ids we don't have
@@ -116,7 +117,7 @@ async function addBirds(taxa_id_list) {
         let x_button = document.createElement("button");
         x_button.className = "x-button";
         x_button.addEventListener("click", e => {
-            removeBird(obj.id);
+            if(confirm("Remove bird from list?")) removeBird(obj.id);
         });
 
         buttons.append(map_icon, x_button);
@@ -168,8 +169,16 @@ function removeBird(taxon_id) {
     if (bird_taxa.length == 0) {
         document.getElementById("bird-list-message").style.display = "block";
         document.getElementById("start-game-button").disabled = true;
+        document.getElementById("clear-list").style.display = "none";
     }
 }
+
+document.getElementById("clear-list").addEventListener("click", () => {
+    if(!confirm("Are you sure you want to clear this bird list?")) return;
+    while(bird_taxa.length > 0){
+        removeBird(bird_taxa[0].id);
+    }
+});
 
 
 

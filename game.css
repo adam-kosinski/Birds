@@ -38,7 +38,7 @@
 
 #bird-input-container {
     position: relative;
-    margin: 10px 0 10px 0;
+    margin-top: 10px;
 }
 
 #add-bird-input {
@@ -87,6 +87,13 @@
 #bird-list-message {
     text-align: center;
     margin-top: 10px;
+    display: none;
+}
+
+#clear-list {
+    align-self: flex-end;
+    color: var(--medium-gray);
+    margin-top: 5px;
     display: none;
 }
 
