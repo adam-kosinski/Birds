@@ -288,6 +288,7 @@ function checkAnswer() {
     document.getElementById("guess-button").style.display = "none";
     document.getElementById("answer-common-name").textContent = current.taxon.preferred_common_name;
     document.getElementById("answer-scientific-name").textContent = current.taxon.name;
+    document.getElementById("answer-info-link").href = "https://www.allaboutbirds.org/guide/" + current.taxon.preferred_common_name.replace(" ", "_") + "/sounds";
     document.getElementById("question").style.display = "none";
     document.getElementById("bird-grid").style.display = "none";
     document.getElementById("answer").style.display = "flex";

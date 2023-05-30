@@ -2,12 +2,14 @@ TODO
 Fix sidescrolling on bird list, and then implement same scrollbar styling for location selection list
 Fix selection box not fully covering image on iOS
 Consider adjusting taxon_obs_threshold based on number of taxa (fewer taxa = larger threshold b/c more likely to repeat)
-Process audio - https://www.youtube.com/watch?v=GYqogvHYn28
-- tips for JS: https://stackoverflow.com/questions/22233037/how-to-apply-basic-audio-filter-using-javascript
-Other audio filtering? Though current sounds are fairly good I think
+
+Other filtering? Though current sounds are fairly good I think
 - do some experimentation listening to with photos vs without photos, and number identifications
 - and evaluate more rigorously the idea that popular recordings are better
 
+Process audio - https://www.youtube.com/watch?v=GYqogvHYn28
+- tips for JS: https://stackoverflow.com/questions/22233037/how-to-apply-basic-audio-filter-using-javascript
+- CAN'T DO THIS, BLOCKED BY SAME ORIGIN POLICY
 
 Audio filtering
 - popular observations are all very good (from a brief test)

@@ -2,7 +2,10 @@
 
 //globals
 
-let place_id; //if undefined, will use map bounds
+let place_id;
+let place_bounds; //sometimes have this (or an estimate of it) but not place_id
+//if both place_id and place_bounds are undefined, will use map bounds (see location_birds.js)
+
 let map;
 let place_layer;
 let cached_places = {}; //key = place id, value = place object from autocomplete search
@@ -16,7 +19,7 @@ map = L.map("map", {
 });
 
 //zoom snap 0 for touch interaction
-document.addEventListener("touchstart", () => map.options.zoomSnap = 0, {once: true});
+document.addEventListener("touchstart", () => map.options.zoomSnap = 0, { once: true });
 
 
 //basemap
@@ -63,7 +66,6 @@ function setMapPlace(place) {
 
     clearMapPlace();
 
-    place_id = place.id;
     document.getElementById("map-caption").textContent = place.display_name;
     document.getElementById("map-container").classList.remove("outlined");
     document.getElementById("pan-zoom-instructions").style.display = "none";
@@ -91,10 +93,14 @@ function setMapPlace(place) {
         );
         place_layer = L.rectangle(bounds, place_style).addTo(map);
     }
+    place_bounds = bounds;
     map.fitBounds(bounds.pad(0.1));
 
     //draw place outline if exists, check for bounding box geojson b/c need that for correct +360 longitude correction to have been done earlier
     if (place.geometry_geojson && place.bounding_box_geojson) {
+
+        //only set place id if it's an actual region (aka has geometry)
+        place_id = place.id;
 
         //fix geometry if needed so it is all within the correct bounds
         if (!bounds.pad(0.1).contains(L.geoJSON(place.geometry_geojson).getBounds())) {
@@ -119,13 +125,17 @@ function setMapPlace(place) {
         }
 
         //add geometry to map
-        place_layer = L.geoJSON(place.geometry_geojson, { style: place_style }).addTo(map);
+        place_layer = L.geoJSON(place.geometry_geojson, {
+            style: place_style,
+            attribution: '<a href="https://api.inaturalist.org/v1/docs/#!/Places/get_places_autocomplete">iNaturalist Data</a>'
+        }).addTo(map);
     }
 }
 
 
 function clearMapPlace() {
     place_id = undefined;
+    place_bounds = undefined;
 
     if (place_layer) {
         place_layer.remove();

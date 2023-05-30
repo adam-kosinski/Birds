@@ -41,7 +41,7 @@ async function fetchSpeciesCounts() {
         promise = fetch(base_url + "&place_id=" + place_id);
     }
     else {
-        let bounds = map.getBounds();
+        let bounds = place_bounds ? place_bounds : map.getBounds();
         bbox_args = `&nelat=${bounds.getNorth()}&nelng=${bounds.getEast()}&swlat=${bounds.getSouth()}&swlng=${bounds.getWest()}`;
         promise = fetch(base_url + bbox_args);
     }
