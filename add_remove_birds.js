@@ -37,8 +37,8 @@ async function addBirds(taxa_id_list) {
     document.getElementById("clear-list").style.display = "block";
     document.getElementById("bird-list-loader").style.display = "block";
 
-    //update URL list, added entries will be at the top so put those first
-    let args = "?taxa=" + ids_to_fetch.concat(ids_we_have).join(",");
+    //update URL list, added entries will be at the end
+    let args = "?taxa=" + ids_we_have.concat(ids_to_fetch).join(",");
     window.history.replaceState(null, "", args);
 
 
@@ -75,9 +75,6 @@ async function addBirds(taxa_id_list) {
         await Promise.all(promises);
     }
 
-    //insert before existing birds, but in order, use before() on the original first element to do this
-    let first_elem = document.getElementById("bird-list").firstElementChild;
-
     results.forEach(obj => {
 
         //add to JS list
@@ -85,14 +82,14 @@ async function addBirds(taxa_id_list) {
 
         //add to HTML list
         let link_container = document.createElement("a");
+        link_container.id = "bird-list-" + obj.id;
         link_container.href = "https://www.allaboutbirds.org/guide/" + obj.preferred_common_name.replace(" ", "_") + "/sounds";
         link_container.target = "_blank";
         link_container.addEventListener("click", e => {
-            if(e.target.tagName == "BUTTON") e.preventDefault(); //don't follow the link if clicking on range map etc.
+            if (e.target.tagName == "BUTTON") e.preventDefault(); //don't follow the link if clicking on range map etc.
         });
 
         let div = document.createElement("div");
-        div.id = "bird-list-" + obj.id;
         link_container.append(div);
 
         let birdinfo = document.createElement("div");
@@ -125,18 +122,15 @@ async function addBirds(taxa_id_list) {
         let x_button = document.createElement("button");
         x_button.className = "x-button";
         x_button.addEventListener("click", e => {
-            if(confirm("Remove bird from list?")) removeBird(obj.id);
+            if (confirm("Remove " + obj.preferred_common_name + " from list?")) removeBird(obj.id);
         });
 
         buttons.append(map_icon, x_button);
         div.append(buttons);
 
-        if (first_elem) {
-            first_elem.before(link_container);
-        }
-        else {
-            document.getElementById("bird-list").append(link_container);
-        }
+        let bird_list = document.getElementById("bird-list");
+        bird_list.append(link_container);
+        if (results.length == 1) highlightElement(link_container);
     });
 
     //enable button
@@ -151,8 +145,8 @@ function removeBird(taxon_id) {
     if (game_state !== INACTIVE) return;
 
     //remove from HTML
-    let div = document.getElementById("bird-list-" + taxon_id);
-    div.parentElement.removeChild(div);
+    let container = document.getElementById("bird-list-" + taxon_id);
+    container.parentElement.removeChild(container);
 
     //remove from JS
     for (let i = 0; i < bird_taxa.length; i++) {
@@ -182,8 +176,8 @@ function removeBird(taxon_id) {
 }
 
 document.getElementById("clear-list").addEventListener("click", () => {
-    if(!confirm("Are you sure you want to clear this bird list?")) return;
-    while(bird_taxa.length > 0){
+    if (!confirm("Are you sure you want to clear this bird list?")) return;
+    while (bird_taxa.length > 0) {
         removeBird(bird_taxa[0].id);
     }
 });
@@ -243,7 +237,20 @@ initAutocomplete(
     },
     //select callback
     (list_option) => {
-        addBirds([Number(list_option.dataset.taxonId)]);
-        document.getElementById("bird-list").scrollTop = 0;
+        let taxon_id = list_option.dataset.taxonId;
+        let found_elem = document.getElementById("bird-list-" + taxon_id);
+
+        if (found_elem) highlightElement(found_elem);
+        else addBirds([Number(taxon_id)]);
     }
 );
+
+
+
+function highlightElement(el) {
+    el.scrollIntoView({ block: "nearest" });
+    el.classList.add("just-added");
+    el.addEventListener("animationend", () => {
+        el.classList.remove("just-added");
+    }, { once: true });
+}

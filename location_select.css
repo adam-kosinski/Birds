@@ -106,7 +106,7 @@
 #white-container {
     background-color: white;
     flex-grow: 1;
-    padding: 16px 16px 0 16px;
+    padding-top: 16px;
     box-shadow: 0 4px 4px rgba(0,0,0,0.25);
 
     /* this helps somehow with the list overflow scrolling */
@@ -114,6 +114,11 @@
     gap: 8px;
     flex-direction: column;
     overflow-y: auto;
+}
+
+#white-container > :not(#list){
+    margin-left: 16px;
+    margin-right: 16px;
 }
 
 #list-title-container {
@@ -165,12 +170,6 @@
     max-width: 200px;
 }
 
-#list-container {
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-}
-
 #selectors-container {
     display: flex;
     gap: 20px;
@@ -189,16 +188,18 @@
 
 .bird-row {
     display: grid;
-    grid-template-columns: 30px 60px 1fr 35px; /* checkbox, img, info, range icon*/
+    grid-template-columns: 36px 60px 1fr 35px; /* checkbox, img, info, range icon*/
     align-items: center;
     gap: 10px;
+    padding-left: 10px;
+    padding-right: 16px;
 }
 
 .checkbox {
     box-sizing: border-box;
-    width: 30px;
-    height: 30px;
-    border-radius: 30px;
+    width: 36px;
+    height: 36px;
+    border-radius: 36px;
     border: 4px solid var(--light-gray);
     display: flex;
     align-items: center;
