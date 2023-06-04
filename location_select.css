@@ -186,6 +186,11 @@
     overflow-y: auto;
 }
 
+#list > p {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
 .bird-row {
     display: grid;
     grid-template-columns: 36px 60px 1fr 35px; /* checkbox, img, info, range icon*/

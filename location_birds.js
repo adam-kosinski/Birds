@@ -18,6 +18,7 @@ document.getElementById("back-button").addEventListener("click", () => {
     document.getElementById("search-for-birds").style.visibility = "visible";
     document.getElementById("bird-screen").style.display = "none";
     document.getElementById("location-screen").style.display = "flex";
+    map.invalidateSize(); //update sizing, since window might have been resized while the map wasn't visible
 });
 
 document.getElementById("continue-button").addEventListener("click", () => {

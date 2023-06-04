@@ -49,10 +49,7 @@ function initBirdsongGame() {
                 let button = document.createElement("button");
                 button.className = "bird-grid-option";
                 button.dataset.commonName = obj.preferred_common_name;
-
-                let img = document.createElement("img");
-                img.src = obj.default_photo.square_url;
-                button.append(img);
+                button.style.backgroundImage = "url('" + obj.default_photo.square_url + "')";
                 bird_grid.append(button);
 
                 let option_common = document.createElement("option");
@@ -60,15 +57,14 @@ function initBirdsongGame() {
                 option_common.value = obj.preferred_common_name;
                 option_scientific.value = obj.name;
                 document.getElementById("guess-datalist").append(option_common, option_scientific);
-
             });
-
-            nextObservation(); //sets game_state FYI, but was already set in the event listener
 
             //switch screens and stop loader
             document.getElementById("list-screen").style.display = "none";
             document.getElementById("birdsong-screen").style.display = "block";
             document.getElementById("bird-list-loader").style.display = "none";
+
+            nextObservation(); //sets game_state FYI, but was already set in the event listener
 
             //fetch the rest more slowly (limit to < 1 API call per sec)
             fetchUntilThreshold(taxon_obs_threshold, 3000); //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec

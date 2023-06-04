@@ -34,7 +34,7 @@ async function addBirds(taxa_id_list) {
 
     //clear message about no birds selected, start loader
     document.getElementById("bird-list-message").style.display = "none";
-    document.getElementById("clear-list").style.display = "block";
+    document.getElementById("above-list-container").style.display = "flex";
     document.getElementById("bird-list-loader").style.display = "block";
 
     //update URL list, added entries will be at the end
@@ -136,6 +136,9 @@ async function addBirds(taxa_id_list) {
     //enable button
     document.getElementById("start-game-button").removeAttribute("disabled");
 
+    //update count
+    document.getElementById("n-species-display").textContent = bird_taxa.length;
+
     //stop loader
     document.getElementById("bird-list-loader").style.display = "none";
 }
@@ -156,6 +159,9 @@ function removeBird(taxon_id) {
         }
     }
 
+    //update count
+    document.getElementById("n-species-display").textContent = bird_taxa.length;
+
     //remove from URL
     if (bird_taxa.length == 0) {
         //clear search params
@@ -171,7 +177,7 @@ function removeBird(taxon_id) {
     if (bird_taxa.length == 0) {
         document.getElementById("bird-list-message").style.display = "block";
         document.getElementById("start-game-button").disabled = true;
-        document.getElementById("clear-list").style.display = "none";
+        document.getElementById("above-list-container").style.display = "none";
     }
 }
 
