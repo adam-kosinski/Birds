@@ -116,10 +116,11 @@
     width: 100%;
     padding-left: 11px; /* plus the row's 5px padding gives 16px */
     padding-right: 11px;
+    padding-bottom: 5px;
 }
 
 #bird-list > * {
-    padding: 0 5px 10px 5px;
+    padding: 5px;
     border-radius: 12px;
 }
 
