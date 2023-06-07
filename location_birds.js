@@ -66,8 +66,8 @@ async function fetchSpeciesCounts() {
 
         let img = document.createElement("img");
         img.className = "bird-square";
-        img.src = obj.taxon.default_photo.square_url;
-        img.alt = "Photo of " + obj.taxon.preferred_common_name;
+        if (obj.taxon.default_photo) img.src = obj.taxon.default_photo.square_url;
+        img.alt = obj.taxon.preferred_common_name;
 
         let info = document.createElement("p");
         let b = document.createElement("b");
@@ -87,7 +87,7 @@ async function fetchSpeciesCounts() {
         map_icon.dataset.id = obj.taxon.id;
         map_icon.dataset.commonName = obj.taxon.preferred_common_name;
         map_icon.dataset.scientificName = obj.taxon.name;
-        map_icon.dataset.imageUrl = obj.taxon.default_photo.square_url;
+        map_icon.dataset.imageUrl = img.src;
 
         div.append(checkbox, img, info, map_icon);
         list.append(div);
