@@ -23,7 +23,10 @@
 }
 
 
-/* List screen */
+
+
+
+/* List screen ============================================== */
 
 #white-container > :not(#bird-list) {
     margin-right: 16px;
@@ -35,11 +38,66 @@
     align-items: center;
     justify-content: flex-start;
     gap: 8px;
+    white-space: nowrap;
+    margin-right: 0;
 }
 
 #bird-list-loader {
     display: none;
+    flex-shrink: 0;
 }
+
+
+
+/* mode toggle */
+
+#mode-toggle-container {
+    flex-shrink: 0;
+    margin-top: 10px;
+
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#mode-toggle {
+    width: 180px;
+    border-radius: 12px;
+    background-color: #eee;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+}
+
+#mode-toggle button {
+    padding: 6px;
+    position: relative;
+    color: var(--dark-gray);
+    -webkit-tap-highlight-color: transparent;
+}
+#mode-toggle button.selected {
+    font-weight: bold;
+    color: black;
+}
+
+#mode-highlight {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-color: #ccc;
+    border-radius: inherit;
+    left: 0%;
+    transition: left 0.25s;
+}
+
+#mode-toggle:has(#mode-visual-id.selected) #mode-highlight {
+    left: 50%;
+}
+
+
+
+
+/* Bird input and autocomplete */
 
 #bird-input-container {
     position: relative;
@@ -89,6 +147,13 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.25);
 }
 
+
+
+
+
+
+/* bird list */
+
 #bird-list-message {
     text-align: center;
     margin-top: 10px;
@@ -98,12 +163,12 @@
 #above-list-container {
     display: none; /* usually flex */
     justify-content: space-between;
-    margin-top: 8px;
-    margin-bottom: 8px;
+    align-items: center;
 }
 
 #clear-list {
     color: var(--medium-gray);
+    padding: 6px;
 }
 
 #bird-list {
@@ -155,7 +220,7 @@
 
 
 
-/* birdsong game screen */
+/* birdsong game screen ==============================================*/
 
 #back-to-list {
     margin-left: 10px;
@@ -169,6 +234,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     height: min(550px, calc(100vh - 62px)); /* 550 px for iOS search bar clearance, 62px to give 20px margin on bottom minimum, looks nice */
     justify-content: space-between;
     gap: 10px;
@@ -192,9 +258,9 @@
     margin-top: 10px;
 }
 
-#birdsong-main {
-    text-align: center;
-}
+
+
+/* answer styling */
 
 #answer {
     display: none;
@@ -231,6 +297,11 @@
     border: 10px solid white;
     box-shadow: 0 4px 4px rgba(0,0,0,0.25);
 }
+
+
+
+
+/* grid */
 
 #bird-grid {
     width: 100%;
@@ -282,6 +353,11 @@
     font-weight: bold;
     color: var(--dark-gray)
 }
+
+
+
+
+/* bottom of game screen */
 
 #guess-input {
     text-align: center;

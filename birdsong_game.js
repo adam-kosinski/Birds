@@ -13,6 +13,8 @@ const GUESSING = 1;
 const ANSWER_SHOWN = 2;
 let game_state = INACTIVE;
 
+let mode = "birdsong"; //doesn't get reset when go back to list
+
 function initBirdsongGame() {
     console.log("\nINIT GAME ============================\n\n");
 

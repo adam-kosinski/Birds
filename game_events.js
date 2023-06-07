@@ -32,6 +32,16 @@ document.getElementById("save-list").addEventListener("click", () => {
     alert("The current bird list is encoded in the URL. To save this list, copy the URL and save it somewhere. Visiting this URL will load this bird list.");
 });
 
+//switch mode
+document.getElementById("mode-toggle").addEventListener("click", e => {
+    let mode_button = e.target.closest("button");
+    if (!mode_button) return;
+
+    document.querySelectorAll("#mode-toggle button").forEach(el => el.classList.remove("selected"));
+    mode_button.classList.add("selected");
+    mode = mode_button.dataset.mode;
+});
+
 
 //bird selection
 let bird_grid = document.getElementById("bird-grid");
