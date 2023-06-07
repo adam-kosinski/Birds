@@ -98,8 +98,8 @@
 #above-list-container {
     display: none; /* usually flex */
     justify-content: space-between;
-    margin-top: 4px;
-    margin-bottom: 1px;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 #clear-list {
@@ -109,7 +109,6 @@
 #bird-list {
     display: flex;
     flex-direction: column;
-    padding-bottom: 5px;
     overflow-y: auto;
 
     /* to place scrollbar outside of content */
@@ -120,7 +119,7 @@
 }
 
 #bird-list > * {
-    padding: 5px;
+    padding: 0 5px 10px 5px;
     border-radius: 12px;
 }
 
