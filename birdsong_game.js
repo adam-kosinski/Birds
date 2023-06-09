@@ -172,6 +172,7 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
 
     let lacking_ids;
     let trying_popular = true;
+    let popular_attempts = mode == "birdsong" ? birdsong_popular_attempts : visual_id_popular_attempts;
 
     for (let attempt = 1; attempt <= max_fetch_attempts; attempt++) {
         //figure out ids with less than threshold, and check if we're done
@@ -183,9 +184,9 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
 
         //prepare fetch
         console.log("ids w < " + threshold + " obs", lacking_ids);
-        if (attempt > attempts_to_try_popular) {
+        if (attempt > popular_attempts) {
             trying_popular = false;
-            console.warn("stopped trying popular b/c attempt #" + attempt + " > " + attempts_to_try_popular);
+            console.warn("stopped trying popular b/c attempt #" + attempt + " > " + popular_attempts);
         }
         let extra_args = trying_popular ? "popular=true" : "";
 
@@ -259,7 +260,9 @@ function nextObservation() {
         document.getElementById("bird-grid").scrollTop = 0;
     }
     else if (mode == "visual_id") {
-        document.getElementById("bird-image").src = current.photos[0].url.replace("square", "medium");
+        let bird_image = document.getElementById("bird-image");
+        bird_image.src = current.photos[0].url.replace("square", "medium");
+        bird_image.addEventListener("load", e => {console.info("loaded")}, {once: true})
     }
 
     setGameState(GUESSING);

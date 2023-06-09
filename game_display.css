@@ -10,9 +10,6 @@
   display: none;
 }
 
-[data-game-state="2"] #question {
-  display: none;
-}
 [data-game-state="2"] #guess-button {
   display: none;
 }
@@ -40,13 +37,17 @@
 [data-mode=birdsong][data-game-state="2"] #bird-grid {
   display: none;
 }
-
-/* Visual ID game specific */
-[data-mode=visual_id] audio {
+[data-mode=birdsong][data-game-state="2"] #birdsong-question {
   display: none;
 }
-[data-mode=visual_id] #question {
-  margin-top: 50px;
+
+/* Visual ID game specific */
+#birdsong-main[data-mode=visual_id] {
+  padding-top: 30px;
+}
+
+[data-mode=visual_id] audio {
+  display: none;
 }
 [data-mode=visual_id] #birdsong-question {
   display: none;
@@ -56,6 +57,10 @@
 }
 
 [data-mode=visual_id][data-game-state="1"] #answer-caption {
+  display: none;
+}
+
+[data-mode=visual_id][data-game-state="2"] #visual-id-question {
   display: none;
 }
 
