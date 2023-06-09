@@ -11,7 +11,13 @@ let current; //current observation object
 const INACTIVE = 0;
 const GUESSING = 1;
 const ANSWER_SHOWN = 2;
-let game_state = INACTIVE;
+setGameState(INACTIVE);
+
+function setGameState(state) {
+    game_state = state;
+    document.getElementById("birdsong-main").dataset.gameState = state;
+}
+
 
 let mode = "birdsong"; //doesn't get reset when go back to list
 
@@ -35,7 +41,7 @@ function initBirdsongGame() {
                 });
                 alert("Failed to find research grade iNaturalist sound observations for " + failed_names.join(", ") + ". Please remove from the list and try again.");
                 document.getElementById("bird-list-loader").style.display = "none";
-                game_state = INACTIVE;
+                setGameState(INACTIVE);
                 return;
             }
 
@@ -95,7 +101,7 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "")
 
     //prep API calls
     let prefix = "https://api.inaturalist.org/v1/observations";
-    let args = "?" + extra_args + "&sounds=true&quality_grade=research&taxon_id=" + taxa_id_string + "&not_id=" + obs_ids_we_have.join(",");
+    let args = "?" + extra_args + "&" + (mode == "birdsong" ? "sounds=true" : "photos=true") + "&quality_grade=research&taxon_id=" + taxa_id_string + "&not_id=" + obs_ids_we_have.join(",");
     console.log(prefix + args);
 
     //figure out how many pages we're dealing with if we don't know -------------------
@@ -172,7 +178,7 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
         lacking_ids = Object.keys(taxon_obs).filter(id => taxon_obs[id].length < threshold);
         if (lacking_ids.length == 0) {
             console.log("THRESHOLD MET");
-            return {success: true, lacking_ids: lacking_ids};
+            return { success: true, lacking_ids: lacking_ids };
         }
 
         //prepare fetch
@@ -192,7 +198,7 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
             }
             else {
                 console.log("Not enough observations to reach threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","));
-                return {success: false, lacking_ids: lacking_ids};
+                return { success: false, lacking_ids: lacking_ids };
             }
         }
 
@@ -200,18 +206,18 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
         await new Promise(resolve => setTimeout(resolve, delay_between_attempts));
     }
     console.log("Exceeded max (3) number of attempts to fetch until threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","));
-    return {success: false, lacking_ids: lacking_ids};
+    return { success: false, lacking_ids: lacking_ids };
 }
 
 
 
 
-function nextObservation(taxon_balancing = true) {
-    //when we load an observation, it gets put into the 'current' var and removed from the data structures
+function nextObservation() {
+    //when we load an observation, it gets copied into the 'current' global var
 
     console.group("Next Observation");
 
-    //default behavior is to do taxon_balancing - each taxon is roughly equal to appear
+    //each taxon is roughly equal to appear
     let taxon_keys = Object.keys(taxon_obs);
     let next_taxon = taxon_keys[Math.floor(taxon_keys.length * Math.random())];
     console.log("Next taxon " + next_taxon);
@@ -222,19 +228,11 @@ function nextObservation(taxon_balancing = true) {
     current = options[Math.floor(options.length * Math.random())];
     console.log("current", current);
 
-    //add to HTML
+    //set taxon HTML (not necessarily displayed yet, see scss)
+    document.getElementById("answer-common-name").textContent = current.taxon.preferred_common_name;
+    document.getElementById("answer-scientific-name").textContent = current.taxon.name;
+    document.getElementById("answer-info-link").href = "https://www.allaboutbirds.org/guide/" + current.taxon.preferred_common_name.replaceAll(" ", "_") + "/sounds";
     document.getElementById("inat-link").href = current.uri;
-    document.getElementById("birdsong-audio-0").src = current.sounds[0].file_url;
-    let audio1 = document.getElementById("birdsong-audio-1");
-    if (current.sounds[1]) {
-        audio1.src = current.sounds[1].file_url;
-        audio1.style.display = "block";
-    }
-    else {
-        audio1.pause();
-        audio1.removeAttribute("src");
-        audio1.style.display = "none";
-    }
 
     //reset HTML from answer screen
     document.getElementById("guess-input").value = "";
@@ -242,19 +240,29 @@ function nextObservation(taxon_balancing = true) {
     document.getElementById("bird-grid").querySelectorAll(".bird-grid-option.selected").forEach(el => {
         el.classList.remove("selected");
     });
-    document.getElementById("question").style.display = "block";
-    document.getElementById("answer").style.display = "none";
-    document.getElementById("bird-grid").style.display = "grid";
-    document.getElementById("bird-grid").scrollTop = 0;
-    document.getElementById("correct-button").style.display = "none";
-    document.getElementById("incorrect-button").style.display = "none";
-    document.getElementById("guess-button").style.display = "block";
-    //TODO other resetting things
 
-    game_state = GUESSING;
+    //game mode specific stuff
 
-    //preload the answer image
-    document.getElementById("answer-image").src = current.taxon.default_photo.medium_url;
+    if (mode == "birdsong") {
+        //generic taxon image
+        document.getElementById("bird-image").src = current.taxon.default_photo.medium_url;
+
+        document.getElementById("birdsong-audio-0").src = current.sounds[0].file_url;
+        let audio1 = document.getElementById("birdsong-audio-1");
+        if (current.sounds[1]) {
+            audio1.src = current.sounds[1].file_url;
+        }
+        else {
+            audio1.pause();
+            audio1.removeAttribute("src");
+        }
+        document.getElementById("bird-grid").scrollTop = 0;
+    }
+    else if (mode == "visual_id") {
+        document.getElementById("bird-image").src = current.photos[0].url.replace("square", "medium");
+    }
+
+    setGameState(GUESSING);
 
     console.groupEnd();
 }
@@ -262,8 +270,6 @@ function nextObservation(taxon_balancing = true) {
 
 
 function checkAnswer() {
-    game_state = ANSWER_SHOWN;
-
     let guess_input = document.getElementById("guess-input");
     guess_input.readOnly = true;
     guess_input.blur();
@@ -275,19 +281,7 @@ function checkAnswer() {
         guess.toLowerCase() == obj.preferred_common_name.toLowerCase()
     );
 
-    if (guess_obj && current.taxon.ancestor_ids.includes(guess_obj.id)) {
-        document.getElementById("correct-button").style.display = "block";
-    }
-    else {
-        document.getElementById("incorrect-button").style.display = "block";
-    }
+    document.getElementById("birdsong-main").dataset.correct = Boolean(guess_obj && current.taxon.ancestor_ids.includes(guess_obj.id));
 
-    //reveal taxon
-    document.getElementById("guess-button").style.display = "none";
-    document.getElementById("answer-common-name").textContent = current.taxon.preferred_common_name;
-    document.getElementById("answer-scientific-name").textContent = current.taxon.name;
-    document.getElementById("answer-info-link").href = "https://www.allaboutbirds.org/guide/" + current.taxon.preferred_common_name.replace(" ", "_") + "/sounds";
-    document.getElementById("question").style.display = "none";
-    document.getElementById("bird-grid").style.display = "none";
-    document.getElementById("answer").style.display = "flex";
+    setGameState(ANSWER_SHOWN);
 }

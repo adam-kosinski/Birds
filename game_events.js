@@ -2,7 +2,7 @@
 document.getElementById("start-game-button").addEventListener("click", e => {
     e.target.disabled = true;
     document.getElementById("add-bird-input").value = "";
-    game_state = GUESSING; //prevent adding or removing birds
+    setGameState(GUESSING); //prevent adding or removing birds
     initBirdsongGame();
 });
 
@@ -21,7 +21,7 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     taxon_obs = {};
     n_pages_by_query = {};
     current = undefined;
-    game_state = INACTIVE;
+    setGameState(INACTIVE);
 
     //reset datalist
     document.getElementById("guess-datalist").innerHTML = "";
@@ -40,6 +40,7 @@ document.getElementById("mode-toggle").addEventListener("click", e => {
     document.querySelectorAll("#mode-toggle button").forEach(el => el.classList.remove("selected"));
     mode_button.classList.add("selected");
     mode = mode_button.dataset.mode;
+    document.getElementById("birdsong-main").dataset.mode = mode;
 });
 
 

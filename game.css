@@ -223,6 +223,8 @@
 
 /* birdsong game screen ==============================================*/
 
+/* note: all display none properties for the game screen are handled in game_display.scss */
+
 #back-to-list {
     margin-left: 10px;
 }
@@ -261,10 +263,9 @@
 
 
 
-/* answer styling */
+/* bird image / answer styling */
 
-#answer {
-    display: none;
+#bird-image-container {
     height: 0; /* start at 0 and then use flex-grow to take up as much space as is available*/
     flex-grow: 1;
     justify-content: center;
@@ -290,7 +291,7 @@
     justify-content: center;
 }
 
-#answer-image {
+#bird-image {
     box-sizing: border-box;
     max-width: 100%;
     max-height: 100%;
@@ -368,13 +369,11 @@
 }
 
 #correct-button {
-    display: none;
     background-color: #5bcf5b;
     border-bottom-color: #095200;
 }
 
 #incorrect-button {
-    display: none;
     background-color: #ff7d7d;
     border-bottom-color: #740000;
 }

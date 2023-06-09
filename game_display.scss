@@ -1,0 +1,59 @@
+/* Controls whether or not certain elements are visible based on the game mode and state */
+/* Easier to not miss things in css */
+/* By default everything is visible */
+/* All attributes will target #birdsong-main, but omitting that here for cleanliness */
+
+/* General stuff */
+
+[data-game-state="1"] { //guessing 
+    #correct-button {display: none;}
+    #incorrect-button {display: none;}
+}
+
+[data-game-state="2"] {
+    #question {display: none;}
+    #guess-button {display: none;}
+}
+
+[data-game-state="2"][data-correct=true] {
+    #incorrect-button {display: none;}
+}
+[data-game-state="2"]:not([data-correct=true]) {
+    #correct-button {display: none;}
+}
+
+
+
+
+
+/* Birdsong game specific */
+
+[data-mode=birdsong] {
+    audio:not([src]) {display: none;}
+    #visual-id-question {display: none;}
+}
+
+[data-mode=birdsong][data-game-state="1"] { //guessing
+    #bird-image-container {display: none;}
+}
+
+[data-mode=birdsong][data-game-state="2"] { //answer
+    #bird-grid {display: none;}
+}
+
+
+
+
+
+/* Visual ID game specific */
+
+[data-mode=visual_id]  {
+    audio {display: none;}
+    #question {margin-top: 50px;}
+    #birdsong-question {display: none;}
+    #bird-grid {display: none;}
+}
+
+[data-mode=visual_id][data-game-state="1"] { //guessing
+    #answer-caption {display: none;}
+}

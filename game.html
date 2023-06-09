@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Birdsong</title>
+    <title>Birds</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans">
 
     <!-- leaflet, js must come after css -->
@@ -15,6 +15,7 @@
 
     <link type="text/css" rel="stylesheet" href="base.css">
     <link type="text/css" rel="stylesheet" href="game.css">
+    <link type="text/css" rel="stylesheet" href="game_display.css">
     <link type="text/css" rel="stylesheet" href="range_map.css">
 
     <meta name="viewport" content="width=device-width initial-scale=1">
@@ -75,23 +76,28 @@
                     alt="external link icon">
             </a>
         </nav>
-        <div id="birdsong-main">
+        <div id="birdsong-main" data-mode="birdsong">
             <audio id="birdsong-audio-0" controls autoplay controlslist="nodownload"></audio>
             <audio id="birdsong-audio-1" controls controlslist="nodownload"></audio>
             <p id="question">
-                <span class="font-large">What bird is singing?</span><br>
-                Select a bird or write its name
+                <span id="birdsong-question">
+                    <span class="font-large">What bird is singing?</span><br>
+                    Select a bird or write its name
+                </span>
+                <span id="visual-id-question" class="font-large">
+                    What bird is this?
+                </span>
             </p>
 
-            <div id="answer" class="birdsong-subflex">
-                <div>
+            <div id="bird-image-container" class="birdsong-subflex">
+                <div id="answer-caption">
                     <div id="answer-first-line-container">
                         <b id="answer-common-name" class="font-large"></b>
                         <a id="answer-info-link" target="_blank" class="font-large">i</a>
                     </div>
                     <i id="answer-scientific-name"></i>
                 </div>
-                <img id="answer-image" src="" alt="image of answer">
+                <img id="bird-image" src="" alt="image of answer">
             </div>
 
             <div id="bird-grid">
