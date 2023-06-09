@@ -18,8 +18,9 @@ function setGameState(state) {
     document.getElementById("birdsong-main").dataset.gameState = state;
 }
 
-
 let mode = "birdsong"; //doesn't get reset when go back to list
+
+
 
 function initBirdsongGame() {
     console.log("\nINIT GAME ============================\n\n");
@@ -232,7 +233,7 @@ function nextObservation() {
     //set taxon HTML (not necessarily displayed yet, see scss)
     document.getElementById("answer-common-name").textContent = current.taxon.preferred_common_name;
     document.getElementById("answer-scientific-name").textContent = current.taxon.name;
-    document.getElementById("answer-info-link").href = "https://www.allaboutbirds.org/guide/" + current.taxon.preferred_common_name.replaceAll(" ", "_") + "/sounds";
+    document.getElementById("answer-info-link").href = getAllAboutBirdsURL(current.taxon.preferred_common_name);
     document.getElementById("inat-link").href = current.uri;
 
     //reset HTML from answer screen

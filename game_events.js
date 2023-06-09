@@ -41,6 +41,11 @@ document.getElementById("mode-toggle").addEventListener("click", e => {
     mode_button.classList.add("selected");
     mode = mode_button.dataset.mode;
     document.getElementById("birdsong-main").dataset.mode = mode;
+
+    //update links
+    document.querySelectorAll("#bird-list a").forEach(a => {
+        a.href = getAllAboutBirdsURL(a.dataset.commonName);
+    });
 });
 
 

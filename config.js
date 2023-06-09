@@ -14,6 +14,10 @@ const place_style = {     //for place geometry
 
 const top_n_selected = 16; //for place selection
 
+function getAllAboutBirdsURL(common_name){
+    return "https://www.allaboutbirds.org/guide/" + common_name.replaceAll(" ", "_") + (mode == "birdsong" ? "/sounds" : "/id");
+}
+
 
 const backyard_birds_ids = [
     9083,    //Northern Cardinal
