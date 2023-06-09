@@ -2,7 +2,7 @@
 document.getElementById("start-game-button").addEventListener("click", e => {
     e.target.disabled = true;
     document.getElementById("add-bird-input").value = "";
-    game_state = GUESSING; //prevent adding or removing birds
+    setGameState(GUESSING); //prevent adding or removing birds
     initBirdsongGame();
 });
 
@@ -21,7 +21,7 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     taxon_obs = {};
     n_pages_by_query = {};
     current = undefined;
-    game_state = INACTIVE;
+    setGameState(INACTIVE);
 
     //reset datalist
     document.getElementById("guess-datalist").innerHTML = "";
@@ -30,6 +30,17 @@ document.getElementById("back-to-list").addEventListener("click", () => {
 //save list
 document.getElementById("save-list").addEventListener("click", () => {
     alert("The current bird list is encoded in the URL. To save this list, copy the URL and save it somewhere. Visiting this URL will load this bird list.");
+});
+
+//switch mode
+document.getElementById("mode-toggle").addEventListener("click", e => {
+    let mode_button = e.target.closest("button");
+    if (!mode_button) return;
+
+    document.querySelectorAll("#mode-toggle button").forEach(el => el.classList.remove("selected"));
+    mode_button.classList.add("selected");
+    mode = mode_button.dataset.mode;
+    document.getElementById("birdsong-main").dataset.mode = mode;
 });
 
 

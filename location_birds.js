@@ -35,7 +35,7 @@ document.getElementById("continue-button").addEventListener("click", () => {
 // iNaturalist API calls and list construction
 
 async function fetchSpeciesCounts() {
-    let base_url = "https://api.inaturalist.org/v1/observations/species_counts?taxon_id=3&sounds=true&quality_grade=research";
+    let base_url = "https://api.inaturalist.org/v1/observations/species_counts?taxon_id=3&quality_grade=research";
 
     let promise;
     if (place_id) {

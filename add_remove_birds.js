@@ -83,7 +83,7 @@ async function addBirds(taxa_id_list) {
         //add to HTML list
         let link_container = document.createElement("a");
         link_container.id = "bird-list-" + obj.id;
-        link_container.href = "https://www.allaboutbirds.org/guide/" + obj.preferred_common_name.replace(" ", "_") + "/sounds";
+        link_container.href = "https://www.allaboutbirds.org/guide/" + obj.preferred_common_name.replaceAll(" ", "_") + "/sounds";
         link_container.target = "_blank";
         link_container.addEventListener("click", e => {
             if (e.target.tagName == "BUTTON") e.preventDefault(); //don't follow the link if clicking on range map etc.
