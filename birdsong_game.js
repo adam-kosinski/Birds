@@ -58,7 +58,7 @@ function initBirdsongGame() {
                 let button = document.createElement("button");
                 button.className = "bird-grid-option";
                 button.dataset.commonName = obj.preferred_common_name;
-                button.style.backgroundImage = "url('" + obj.default_photo.square_url + "')";
+                if(obj.default_photo) button.style.backgroundImage = "url('" + obj.default_photo.square_url + "')";
                 bird_grid.append(button);
 
                 let option_common = document.createElement("option");
@@ -247,7 +247,7 @@ function nextObservation() {
 
     if (mode == "birdsong") {
         //generic taxon image
-        document.getElementById("bird-image").src = current.taxon.default_photo.medium_url;
+        document.getElementById("bird-image").src = current.taxon.default_photo ? current.taxon.default_photo.medium_url : "";
 
         document.getElementById("birdsong-audio-0").src = current.sounds[0].file_url;
         let audio1 = document.getElementById("birdsong-audio-1");

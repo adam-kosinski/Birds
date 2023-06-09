@@ -97,7 +97,7 @@ async function addBirds(taxa_id_list) {
 
         let bird_square = document.createElement("img");
         bird_square.className = "bird-square";
-        bird_square.src = obj.default_photo.square_url;
+        if(obj.default_photo) bird_square.src = obj.default_photo.square_url;
         bird_square.alt = "Photo of " + obj.preferred_common_name;
 
         let p = document.createElement("p");
