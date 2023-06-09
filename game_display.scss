@@ -48,7 +48,9 @@
 /* Visual ID game specific */
 
 #birdsong-main[data-mode=visual_id] {
-    padding-top: 30px;
+    /* stop the question / caption from getting too close to the top nav */
+    padding-top: 10px;
+    box-sizing: border-box;
 }
 
 [data-mode=visual_id]  {

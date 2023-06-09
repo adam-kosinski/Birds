@@ -260,9 +260,14 @@ function nextObservation() {
         document.getElementById("bird-grid").scrollTop = 0;
     }
     else if (mode == "visual_id") {
+        let container = document.getElementById("bird-image-container");
         let bird_image = document.getElementById("bird-image");
+
+        container.style.visibility = "hidden";
         bird_image.src = current.photos[0].url.replace("square", "medium");
-        bird_image.addEventListener("load", e => {console.info("loaded")}, {once: true})
+        bird_image.addEventListener("load", e => {
+            container.style.visibility = "visible";
+        }, {once: true});
     }
 
     setGameState(GUESSING);
