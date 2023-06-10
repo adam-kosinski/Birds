@@ -27,7 +27,7 @@ function pickObservation() {
     //pick next observation object, return it. Try not to duplicate the current observation
 
     let taxon_keys = Object.keys(taxon_obs).filter(key => taxon_obs[key].length > 0);
-    if(taxon_keys.length == 0) {
+    if (taxon_keys.length == 0) {
         console.error("No observations in bird_taxa, cannot pick one");
         return;
     }
@@ -91,9 +91,20 @@ function initBirdsongGame() {
             });
 
             //switch screens and stop loader
-            document.getElementById("list-screen").style.display = "none";
-            document.getElementById("game-screen").style.display = "block";
-            document.getElementById("bird-list-loader").style.display = "none";
+            //if visual id, delay starting until the image is loaded
+            if (mode == "visual_id") {
+                document.getElementById("bird-image").addEventListener("load", () => {
+                    document.getElementById("list-screen").style.display = "none";
+                    document.getElementById("game-screen").style.display = "block";
+                    document.getElementById("bird-list-loader").style.display = "none";
+                }, { once: true });
+            }
+            else {
+                //do it immediately
+                document.getElementById("list-screen").style.display = "none";
+                document.getElementById("game-screen").style.display = "block";
+                document.getElementById("bird-list-loader").style.display = "none";
+            }
 
             next = pickObservation();
             nextObservation(); //sets game_state FYI, but was already set in the event listener
@@ -112,7 +123,7 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "")
     if (!taxa_id_string) {
         taxa_id_string = bird_taxa.map(obj => obj.id).join(",");
     }
-    console.group("FETCH " + taxa_id_string + "\nExtra args: " + extra_args);
+    console.groupCollapsed("FETCH " + taxa_id_string + "\nExtra args: " + extra_args);
 
     //figure out which observations (of the requested taxa) we have already so we don't repeat
     let obs_ids_we_have = [];
@@ -202,7 +213,7 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
         //figure out ids with less than threshold, and check if we're done
         lacking_ids = Object.keys(taxon_obs).filter(id => taxon_obs[id].length < threshold);
         if (lacking_ids.length == 0) {
-            console.log("THRESHOLD MET");
+            console.log("THRESHOLD OF " + threshold + " MET");
             return { success: true, lacking_ids: lacking_ids };
         }
 
@@ -239,8 +250,6 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
 
 function nextObservation() {
     //when we load an observation, it gets copied into the 'current' global var
-
-    console.group("Next Observation");
 
     current = next;
     next = pickObservation();
@@ -282,8 +291,6 @@ function nextObservation() {
     }
 
     setGameState(GUESSING);
-
-    console.groupEnd();
 }
 
 
@@ -300,7 +307,8 @@ function checkAnswer() {
         guess.toLowerCase() == obj.preferred_common_name.toLowerCase()
     );
 
-    document.getElementById("birdsong-main").dataset.correct = Boolean(guess_obj && current.taxon.ancestor_ids.includes(guess_obj.id));
+    let correct = Boolean(guess_obj && current.taxon.ancestor_ids.includes(guess_obj.id));
+    document.getElementById("birdsong-main").dataset.correct = guess.length > 0 ? correct : "no-guess"
 
     setGameState(ANSWER_SHOWN);
 }

@@ -92,6 +92,7 @@ document.getElementById("guess-button").addEventListener("click", checkAnswer);
 //next observation
 document.getElementById("correct-button").addEventListener("click", nextObservation);
 document.getElementById("incorrect-button").addEventListener("click", nextObservation);
+document.getElementById("neutral-next-button").addEventListener("click", nextObservation);
 
 
 //autoplay second audio when first finishes

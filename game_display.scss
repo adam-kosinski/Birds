@@ -5,23 +5,30 @@
 
 /* General stuff */
 
-[data-game-state="1"] { //guessing 
+//guessing
+[data-game-state="1"] {
     #correct-button {display: none;}
     #incorrect-button {display: none;}
+    #neutral-next-button {display: none;}
 }
 
+//answer
 [data-game-state="2"] {
     #guess-button {display: none;}
 }
 
 [data-game-state="2"][data-correct=true] {
     #incorrect-button {display: none;}
+    #neutral-next-button {display: none;}
 }
-[data-game-state="2"]:not([data-correct=true]) {
+[data-game-state="2"][data-correct=false] {
     #correct-button {display: none;}
+    #neutral-next-button {display: none;}
 }
-
-
+[data-game-state="2"][data-correct=no-guess] {
+    #correct-button {display: none;}
+    #incorrect-button {display: none;}
+}
 
 
 
