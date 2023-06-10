@@ -13,7 +13,7 @@ document.getElementById("back-to-list").addEventListener("click", () => {
 
     //change screens
     document.getElementById("list-screen").style.display = "flex";
-    document.getElementById("birdsong-screen").style.display = "none";
+    document.getElementById("game-screen").style.display = "none";
     document.getElementById("start-game-button").removeAttribute("disabled");
 
     //reset vars
@@ -80,7 +80,7 @@ document.addEventListener("keypress", (e) => {
     }
 
     //if typed a single letter, focus the guess input (avoid stuff like space or the Enter key)
-    if (/^[a-zA-Z]$/.test(e.key) && getComputedStyle(document.getElementById("birdsong-screen")).display == "block") {
+    if (/^[a-zA-Z]$/.test(e.key) && getComputedStyle(document.getElementById("game-screen")).display == "block") {
         document.getElementById("guess-input").focus();
     }
 });

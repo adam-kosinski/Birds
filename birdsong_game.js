@@ -7,6 +7,7 @@ let taxon_obs = {}; //stores lists of objects, organized by taxon id keys
 let n_pages_by_query = {}; //cache for total results queries, key is args string '?sounds=true' etc, value is n pages
 
 let current; //current observation object
+let next; //helpful for preloading
 
 const INACTIVE = 0;
 const GUESSING = 1;
@@ -22,6 +23,29 @@ let mode = "birdsong"; //doesn't get reset when go back to list
 
 
 
+function pickObservation() {
+    //pick next observation object, return it. Try not to duplicate the current observation
+
+    let taxon_keys = Object.keys(taxon_obs).filter(key => taxon_obs[key].length > 0);
+    if(taxon_keys.length == 0) {
+        console.error("No observations in bird_taxa, cannot pick one");
+        return;
+    }
+
+    //try a bunch of times to not duplicate the current observation
+    for (let i = 0; i < 5; i++) {
+        //each taxon is roughly equal to appear
+        let next_taxon = taxon_keys[Math.floor(taxon_keys.length * Math.random())];
+
+        //take a random observation from our available ones for that taxon
+        let options = taxon_obs[next_taxon];
+        let picked = options[Math.floor(options.length * Math.random())];
+        if (picked != current) return picked;
+    }
+    return picked;
+}
+
+
 function initBirdsongGame() {
     console.log("\nINIT GAME ============================\n\n");
 
@@ -29,7 +53,7 @@ function initBirdsongGame() {
     document.getElementById("bird-list-loader").style.display = "block";
 
     //init taxon_obs data structure
-    taxon_obs = []; //in case last init failed
+    taxon_obs = {}; //clear it in case last init failed and this isn't empty
     bird_taxa.forEach(obj => {
         taxon_obs[obj.id] = [];
     });
@@ -58,7 +82,7 @@ function initBirdsongGame() {
                 let button = document.createElement("button");
                 button.className = "bird-grid-option";
                 button.dataset.commonName = obj.preferred_common_name;
-                if(obj.default_photo) button.style.backgroundImage = "url('" + obj.default_photo.square_url + "')";
+                if (obj.default_photo) button.style.backgroundImage = "url('" + obj.default_photo.square_url + "')";
                 bird_grid.append(button);
 
                 let option_common = document.createElement("option");
@@ -68,9 +92,10 @@ function initBirdsongGame() {
 
             //switch screens and stop loader
             document.getElementById("list-screen").style.display = "none";
-            document.getElementById("birdsong-screen").style.display = "block";
+            document.getElementById("game-screen").style.display = "block";
             document.getElementById("bird-list-loader").style.display = "none";
 
+            next = pickObservation();
             nextObservation(); //sets game_state FYI, but was already set in the event listener
 
             //fetch the rest more slowly (limit to < 1 API call per sec)
@@ -217,15 +242,8 @@ function nextObservation() {
 
     console.group("Next Observation");
 
-    //each taxon is roughly equal to appear
-    let taxon_keys = Object.keys(taxon_obs);
-    let next_taxon = taxon_keys[Math.floor(taxon_keys.length * Math.random())];
-    console.log("Next taxon " + next_taxon);
-
-    //take a random observation from our available ones for that taxon
-    let options = taxon_obs[next_taxon];
-    console.log("options", options);
-    current = options[Math.floor(options.length * Math.random())];
+    current = next;
+    next = pickObservation();
     console.log("current", current);
 
     //set taxon HTML (not necessarily displayed yet, see scss)
@@ -259,14 +277,8 @@ function nextObservation() {
         document.getElementById("bird-grid").scrollTop = 0;
     }
     else if (mode == "visual_id") {
-        let container = document.getElementById("bird-image-container");
-        let bird_image = document.getElementById("bird-image");
-
-        container.style.visibility = "hidden";
-        bird_image.src = current.photos[0].url.replace("square", "medium");
-        bird_image.addEventListener("load", e => {
-            container.style.visibility = "visible";
-        }, {once: true});
+        document.getElementById("img-preloader").src = next.photos[0].url.replace("square", "medium");
+        document.getElementById("bird-image").src = current.photos[0].url.replace("square", "medium");
     }
 
     setGameState(GUESSING);
