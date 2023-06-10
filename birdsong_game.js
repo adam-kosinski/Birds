@@ -271,9 +271,16 @@ function nextObservation() {
     //game mode specific stuff
 
     if (mode == "birdsong") {
-        //generic taxon image
-        document.getElementById("bird-image").src = current.taxon.default_photo ? current.taxon.default_photo.medium_url : "";
+        //set answer image ahead of time so it can load
+        let bird_image = document.getElementById("bird-image");
+        if(current.photos && current.photos[0]){
+            bird_image.src = current.photos[0].url.replace("square", "medium");
+        }
+        else {
+            bird_image.src = current.taxon.default_photo ? current.taxon.default_photo.medium_url : "";
+        }
 
+        //audio and misc
         document.getElementById("birdsong-audio-0").src = current.sounds[0].file_url;
         let audio1 = document.getElementById("birdsong-audio-1");
         if (current.sounds[1]) {
