@@ -2,11 +2,12 @@ let bird_taxa = []; //list of iNaturalist taxon objects that are on the practice
 let cached_bird_taxa = []; //whenever we get taxon info from autocomplete search, add it here so we don't have to make another API call to add to the list
 
 //automatically read taxa from URL and populate the HTML and JS taxa lists
-initURLTaxa();
+initURLArgs();
 
-function initURLTaxa() {
+function initURLArgs() {
     let url = new URL(window.location.href);
     let taxa_ids = url.searchParams.get("taxa");
+    let default_mode = url.searchParams.get("mode");
 
     //if no taxa, display message
     if (taxa_ids === null) {
@@ -15,6 +16,19 @@ function initURLTaxa() {
     else {
         addBirds(taxa_ids.split(",").map(s => Number(s)));
     }
+
+    if (default_mode) {
+        setMode(default_mode);
+    }
+}
+
+
+function setURLTaxa(taxa_string){
+    //fetch current params in case there are other params besides taxa, don't want to mess with those
+    let params = new URL(window.location.href).searchParams;
+    params.delete("taxa");
+    if(taxa_string && taxa_string.length > 0) params.append("taxa", taxa_string);
+    window.history.replaceState(null, "", "?" + params.toString().replaceAll("%2C", ",")); //technically %2C is correct but comma looks so much neater and more intuitive
 }
 
 
@@ -38,8 +52,7 @@ async function addBirds(taxa_id_list) {
     document.getElementById("bird-list-loader").style.display = "block";
 
     //update URL list, added entries will be at the end
-    let args = "?taxa=" + ids_we_have.concat(ids_to_fetch).join(",");
-    window.history.replaceState(null, "", args);
+    setURLTaxa(ids_we_have.concat(ids_to_fetch).join(","));
 
 
     // Get bird data
@@ -97,7 +110,7 @@ async function addBirds(taxa_id_list) {
 
         let bird_square = document.createElement("img");
         bird_square.className = "bird-square";
-        if(obj.default_photo) bird_square.src = obj.default_photo.square_url;
+        if (obj.default_photo) bird_square.src = obj.default_photo.square_url;
         bird_square.alt = "Photo of " + obj.preferred_common_name;
 
         let p = document.createElement("p");
@@ -166,12 +179,10 @@ function removeBird(taxon_id) {
     //remove from URL
     if (bird_taxa.length == 0) {
         //clear search params
-        let pathname = new URL(window.location.href).pathname;
-        window.history.replaceState(null, "", pathname);
+        setURLTaxa("");
     }
     else {
-        let taxa_string = bird_taxa.map(obj => obj.id).join(",");
-        window.history.replaceState(null, "", "?taxa=" + taxa_string);
+        setURLTaxa(bird_taxa.map(obj => obj.id).join(","));
     }
 
     //if no birds selected, update message and button

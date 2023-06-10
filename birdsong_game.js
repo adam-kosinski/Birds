@@ -9,17 +9,31 @@ let n_pages_by_query = {}; //cache for total results queries, key is args string
 let current; //current observation object
 let next; //helpful for preloading
 
+let game_state;
 const INACTIVE = 0;
 const GUESSING = 1;
 const ANSWER_SHOWN = 2;
 setGameState(INACTIVE);
+
+let mode = "birdsong"; //doesn't get reset when go back to list
+
 
 function setGameState(state) {
     game_state = state;
     document.getElementById("birdsong-main").dataset.gameState = state;
 }
 
-let mode = "birdsong"; //doesn't get reset when go back to list
+function setMode(new_mode) {
+    document.querySelectorAll("#mode-toggle button").forEach(el => el.classList.remove("selected"));
+    document.querySelector("[data-mode=" + new_mode + "]").classList.add("selected");
+    mode = new_mode;
+    document.getElementById("birdsong-main").dataset.mode = mode;
+
+    //update links
+    document.querySelectorAll("#bird-list a").forEach(a => {
+        a.href = getAllAboutBirdsURL(a.dataset.commonName);
+    });
+}
 
 
 
