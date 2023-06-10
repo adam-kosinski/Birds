@@ -62,10 +62,8 @@ function initBirdsongGame() {
                 bird_grid.append(button);
 
                 let option_common = document.createElement("option");
-                let option_scientific = document.createElement("option");
                 option_common.value = obj.preferred_common_name;
-                option_scientific.value = obj.name;
-                document.getElementById("guess-datalist").append(option_common, option_scientific);
+                document.getElementById("guess-datalist").append(option_common);
             });
 
             //switch screens and stop loader
