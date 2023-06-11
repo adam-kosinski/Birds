@@ -23,11 +23,12 @@ function initURLArgs() {
 }
 
 
-function setURLTaxa(taxa_string){
+function setURLParam(key, value){
     //fetch current params in case there are other params besides taxa, don't want to mess with those
     let params = new URL(window.location.href).searchParams;
-    params.delete("taxa");
-    if(taxa_string && taxa_string.length > 0) params.append("taxa", taxa_string);
+    params.delete(key);
+    value = String(value); //just in case
+    if(value && value.length > 0) params.append(key, value);
     window.history.replaceState(null, "", "?" + params.toString().replaceAll("%2C", ",")); //technically %2C is correct but comma looks so much neater and more intuitive
 }
 
@@ -52,7 +53,7 @@ async function addBirds(taxa_id_list) {
     document.getElementById("bird-list-loader").style.display = "block";
 
     //update URL list, added entries will be at the end
-    setURLTaxa(ids_we_have.concat(ids_to_fetch).join(","));
+    setURLParam("taxa", ids_we_have.concat(ids_to_fetch).join(","))
 
 
     // Get bird data
@@ -179,10 +180,10 @@ function removeBird(taxon_id) {
     //remove from URL
     if (bird_taxa.length == 0) {
         //clear search params
-        setURLTaxa("");
+        setURLParam("taxa", "");
     }
     else {
-        setURLTaxa(bird_taxa.map(obj => obj.id).join(","));
+        setURLParam("taxa", bird_taxa.map(obj => obj.id).join(","));
     }
 
     //if no birds selected, update message and button

@@ -24,6 +24,7 @@ function setGameState(state) {
 }
 
 function setMode(new_mode) {
+    //update HTML and JS
     document.querySelectorAll("#mode-toggle button").forEach(el => el.classList.remove("selected"));
     document.querySelector("[data-mode=" + new_mode + "]").classList.add("selected");
     mode = new_mode;
@@ -33,6 +34,9 @@ function setMode(new_mode) {
     document.querySelectorAll("#bird-list a").forEach(a => {
         a.href = getAllAboutBirdsURL(a.dataset.commonName);
     });
+
+    //update URL
+    setURLParam("mode", mode);
 }
 
 
