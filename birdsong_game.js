@@ -127,16 +127,16 @@ function initBirdsongGame() {
             //fetch the rest more slowly (limit to < 1 API call per sec)
             //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
             fetchUntilThreshold(taxon_obs_threshold, 3000)
-            .then(result => {
-                //if some taxa had no observations at all, alert the user
-                if (!result.success && result.failure_reason == "not_enough_observations"){
-                    let no_obs_ids = result.lacking_ids.filter(id => taxon_obs[id].length == 0);
-                    let failed_names = no_obs_ids.map(id_str => {
-                        return bird_taxa.find(obj => obj.id == Number(id_str)).preferred_common_name;
-                    });
-                    alert("Failed to find research grade iNaturalist observations for " + failed_names.join(", ") + ". This doesn't break anything, just no questions will be about these birds.");
-                }
-            })
+                .then(result => {
+                    //if some taxa had no observations at all, alert the user
+                    if (!result.success && result.failure_reason == "not_enough_observations") {
+                        let no_obs_ids = result.lacking_ids.filter(id => taxon_obs[id].length == 0);
+                        let failed_names = no_obs_ids.map(id_str => {
+                            return bird_taxa.find(obj => obj.id == Number(id_str)).preferred_common_name;
+                        });
+                        alert("Failed to find research grade iNaturalist observations for " + failed_names.join(", ") + ". This doesn't break anything, just no questions will be about these birds.");
+                    }
+                })
         });
 }
 
@@ -162,7 +162,9 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "",
 
     //prep API calls
     let prefix = "https://api.inaturalist.org/v1/observations";
-    let args = "?" + extra_args + "&" + (mode == "birdsong" ? "sounds=true" : "photos=true") + "&quality_grade=research&taxon_id=" + taxa_id_string + "&not_id=" + obs_ids_we_have.join(",");
+    let args = "?" + extra_args + "&" + (mode == "birdsong" ? "sounds=true" : "photos=true")
+        + "&" + (mode == "birdsong" ? "sound_license=cc-by,cc-by-nc,cc-by-nd,cc-by-sa,cc-by-nc-nd,cc-by-nc-sa,cc0" : "photo_licensed=true")
+        + "&quality_grade=research&taxon_id=" + taxa_id_string + "&not_id=" + obs_ids_we_have.join(",");
     console.log(prefix + args);
 
     //figure out how many pages we're dealing with if we don't know -------------------
