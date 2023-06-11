@@ -76,13 +76,10 @@ function initBirdsongGame() {
         taxon_obs[obj.id] = [];
     });
 
-    fetchUntilThreshold(1)
-        .then(result => {
-            if (!result.success) {
-                let failed_names = result.lacking_ids.map(id_str => {
-                    return bird_taxa.find(obj => obj.id == Number(id_str)).preferred_common_name;
-                });
-                alert("Failed to find research grade iNaturalist sound observations for " + failed_names.join(", ") + ". Please remove from the list and try again.");
+    fetchObservationData(undefined, "", initial_per_page)
+        .then(data_was_fetched => {
+            if (!data_was_fetched) {
+                alert("Failed to find research grade iNaturalist observations for any of the chosen birds. Please try again with different birds.");
                 document.getElementById("bird-list-loader").style.display = "none";
                 setGameState(INACTIVE);
                 return;
@@ -128,13 +125,24 @@ function initBirdsongGame() {
             nextObservation(); //sets game_state FYI, but was already set in the event listener
 
             //fetch the rest more slowly (limit to < 1 API call per sec)
-            fetchUntilThreshold(taxon_obs_threshold, 3000); //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
+            //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
+            fetchUntilThreshold(taxon_obs_threshold, 3000)
+            .then(result => {
+                //if some taxa had no observations at all, alert the user
+                if (!result.success && result.failure_reason == "not_enough_observations"){
+                    let no_obs_ids = result.lacking_ids.filter(id => taxon_obs[id].length == 0);
+                    let failed_names = no_obs_ids.map(id_str => {
+                        return bird_taxa.find(obj => obj.id == Number(id_str)).preferred_common_name;
+                    });
+                    alert("Failed to find research grade iNaturalist observations for " + failed_names.join(", ") + ". This doesn't break anything, just no questions will be about these birds.");
+                }
+            })
         });
 }
 
 
 
-async function fetchObservationData(taxa_id_string = undefined, extra_args = "") {
+async function fetchObservationData(taxa_id_string = undefined, extra_args = "", per_page = default_per_page) {
     //returns a promise (b/c async) that fulfills when data has been fetched and added to data structures
     //the promise resolves to true if data was fetched, false if there was no data to fetch
 
@@ -159,22 +167,15 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "")
 
     //figure out how many pages we're dealing with if we don't know -------------------
 
-    let n_pages = n_pages_by_query[args];
+    console.log("Querying to determine n pages")
+    let n_results = await fetch(prefix + args + "&only_id=true&per_page=0")
+        .then(res => res.json())
+        .then(data => data.total_results);
 
-    if (n_pages === undefined) { //because wasn't in the cache
-        console.log("Querying to determine n pages")
-        let data = await fetch(prefix + args + "&only_id=true&per_page=0")
-            .then(res => res.json());
-
-        //n_pages * per_page must be strictly less than 10000, or iNaturalist will block
-        //per_page is a global config var
-        let quotient = Math.min(data.total_results, 10000) / per_page;
-        n_pages = Math.ceil(quotient) * per_page < 10000 ?
-            Math.ceil(quotient) : Math.floor(quotient);
-
-        // store in the cache
-        n_pages_by_query[args] = n_pages;
-    }
+    //n_pages * per_page must be strictly less than 10000, or iNaturalist will block
+    let quotient = Math.min(n_results, 10000) / per_page;
+    let n_pages = Math.ceil(quotient) * per_page < 10000 ?
+        Math.ceil(quotient) : Math.floor(quotient);
 
     console.log(n_pages + " usable pages with per_page=" + per_page);
 
@@ -206,7 +207,7 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "")
             }
         }
     });
-    console.log("DONE adding to data structures");
+    console.log("Done adding to data structures");
     console.groupEnd();
     return true;
 }
@@ -232,7 +233,7 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
         lacking_ids = Object.keys(taxon_obs).filter(id => taxon_obs[id].length < threshold);
         if (lacking_ids.length == 0) {
             console.log("THRESHOLD OF " + threshold + " MET");
-            return { success: true, lacking_ids: lacking_ids };
+            return { success: true };
         }
 
         //prepare fetch
@@ -244,7 +245,7 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
         let extra_args = trying_popular ? "popular=true" : "";
 
         //fetch data, handle if couldn't get any
-        let was_data_fetched = await fetchObservationData(lacking_ids.join(","), extra_args);
+        let was_data_fetched = await fetchObservationData(lacking_ids.join(","), extra_args, default_per_page);
         if (!was_data_fetched) {
             if (trying_popular) {
                 trying_popular = false;
@@ -252,15 +253,15 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
             }
             else {
                 console.log("Not enough observations to reach threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","));
-                return { success: false, lacking_ids: lacking_ids };
+                return { success: false, lacking_ids: lacking_ids, failure_reason: "not_enough_observations" };
             }
         }
 
         //pause for the specified duration
         await new Promise(resolve => setTimeout(resolve, delay_between_attempts));
     }
-    console.log("Exceeded max (3) number of attempts to fetch until threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","));
-    return { success: false, lacking_ids: lacking_ids };
+    console.warn("Exceeded max (" + max_fetch_attempts + ") number of attempts to fetch until threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","));
+    return { success: false, lacking_ids: lacking_ids, failure_reason: "exceeded_max_attempts" };
 }
 
 
@@ -291,7 +292,7 @@ function nextObservation() {
     if (mode == "birdsong") {
         //set answer image ahead of time so it can load
         let bird_image = document.getElementById("bird-image");
-        if(current.photos && current.photos[0]){
+        if (current.photos && current.photos[0]) {
             bird_image.src = current.photos[0].url.replace("square", "medium");
         }
         else {
