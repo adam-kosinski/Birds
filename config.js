@@ -1,10 +1,12 @@
+const max_avoid_copyright_attempts = 5;
+
 const default_per_page = 200;
 const initial_per_page = 5;
 
 const max_fetch_attempts = 15; //how many times to attempt fetching to meet threshold, before quit
 const birdsong_popular_attempts = 3; //how many times to attempt fetching popular observations before reverting to popular or not popular
 const visual_id_popular_attempts = 1;
-let taxon_obs_threshold = 30; //number of observations we'd like to have for each taxon, will stop when reach this
+let taxon_obs_threshold = 20; //number of observations we'd like to have for each taxon, will stop when reach this
 
 const autocomplete_delay = 1000; //ms after user stops typing, to update the autocomplete
 const n_autocomplete_results = 5;

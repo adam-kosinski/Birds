@@ -288,17 +288,27 @@ function nextObservation() {
     document.getElementById("bird-grid").querySelectorAll(".bird-grid-option.selected").forEach(el => {
         el.classList.remove("selected");
     });
+    document.getElementById("image-attribution").classList.remove("visible");
 
     //game mode specific stuff
+
+    let photo; //stored here for attribution later
 
     if (mode == "birdsong") {
         //set answer image ahead of time so it can load
         let bird_image = document.getElementById("bird-image");
-        if (current.photos && current.photos[0]) {
-            bird_image.src = current.photos[0].url.replace("square", "medium");
+        if (current.photos && current.photos[0] && current.photos[0].license_code !== null) {
+            photo = current.photos[0];
+            bird_image.src = photo.url.replace("square", "medium");
         }
         else {
-            bird_image.src = current.taxon.default_photo ? current.taxon.default_photo.medium_url : "";
+            if(current.taxon.default_photo){
+                photo = bird_taxa.find(obj => obj.id == current.taxon.id).default_photo; //bird taxa default photo not copyrighted, assuming I found a good solution for that
+                bird_image.src = photo.medium_url;
+            }
+            else {
+                bird_image.src = "";
+            }
         }
 
         //audio and misc
@@ -316,6 +326,13 @@ function nextObservation() {
     else if (mode == "visual_id") {
         document.getElementById("img-preloader").src = next.photos[0].url.replace("square", "medium");
         document.getElementById("bird-image").src = current.photos[0].url.replace("square", "medium");
+        photo = current.photos[0];
+    }
+
+    //image attribution
+    if(photo){
+        document.getElementById("image-attribution").textContent = photo.attribution;
+        document.getElementById("image-attribution-button").textContent = photo.license_code == "cc0" ? "CC0" : (photo.license_code === null ? "C" : "CC");
     }
 
     setGameState(GUESSING);

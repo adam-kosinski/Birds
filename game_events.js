@@ -64,9 +64,11 @@ document.addEventListener("keypress", (e) => {
 
     if (e.key == "Enter") {
         if (game_state === GUESSING) {
+            e.preventDefault();
             checkAnswer();
         }
         else if (game_state === ANSWER_SHOWN) {
+            e.preventDefault();
             nextObservation();
         }
     }
@@ -92,5 +94,17 @@ document.getElementById("birdsong-audio-0").addEventListener("ended", () => {
     let audio1 = document.getElementById("birdsong-audio-1");
     if (audio1.hasAttribute("src")) {
         audio1.play();
+    }
+});
+
+
+//image attribution
+document.addEventListener("click", e => {
+    let button = e.target.closest("#image-attribution-button");
+    if(button){
+        document.getElementById("image-attribution").classList.toggle("visible");
+    }
+    else {
+        document.getElementById("image-attribution").classList.remove("visible");
     }
 });

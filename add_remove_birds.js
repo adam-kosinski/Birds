@@ -23,12 +23,12 @@ function initURLArgs() {
 }
 
 
-function setURLParam(key, value){
+function setURLParam(key, value) {
     //fetch current params in case there are other params besides taxa, don't want to mess with those
     let params = new URL(window.location.href).searchParams;
     params.delete(key);
     value = String(value); //just in case
-    if(value && value.length > 0) params.append(key, value);
+    if (value && value.length > 0) params.append(key, value);
     window.history.replaceState(null, "", "?" + params.toString().replaceAll("%2C", ",")); //technically %2C is correct but comma looks so much neater and more intuitive
 }
 
@@ -89,6 +89,37 @@ async function addBirds(taxa_id_list) {
         await Promise.all(promises);
     }
 
+    //get licensed default photos - this method sorta works but with inconsistent results, bird not always nicely visible
+    // let copyrighted_ids = results.filter(obj => obj.default_photo && obj.default_photo.license_code === null).map(obj => obj.id);
+    // console.log("copyrighted_ids", copyrighted_ids);
+    // console.log(copyrighted_ids.map(id => results.find(obj => obj.id == id).preferred_common_name))
+
+    // for (let attempt = 0; attempt < max_avoid_copyright_attempts; attempt++) {
+    //     console.log("attempt", attempt)
+    //     let licensed_options = await fetch("https://api.inaturalist.org/v1/observations?photos=true&photo_licensed=true&order_by=votes&quality_grade=research&taxon_id=" + copyrighted_ids.join(","))
+    //         .then(res => res.json())
+    //         .then(data => data.results);
+
+    //     console.log(licensed_options)
+
+    //     for (let k = 0; k < copyrighted_ids.length; k++) {
+    //         let id = copyrighted_ids[k];
+    //         let match = licensed_options.find(obj => obj.taxon.id == id);
+    //         if (!match) continue;
+
+    //         let photo = match.photos[0];
+    //         photo.medium_url = photo.url.replace("square", "medium");
+    //         photo.square_url = photo.url;
+    //         results.find(obj => obj.id == id).default_photo = photo;
+    //         copyrighted_ids.splice(k, 1);
+    //         k--;
+    //     }
+    //     console.log("copyrighted_ids left", copyrighted_ids);
+    //     if(copyrighted_ids.length == 0) break;
+    // }
+
+
+    //add birds
     results.forEach(obj => {
 
         //add to JS list
