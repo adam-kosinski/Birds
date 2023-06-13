@@ -114,20 +114,13 @@
     gap: 10px;
 }
 
-#white-container {
-    background-color: white;
-    flex-grow: 1;
-    padding-top: 16px;
-    box-shadow: 0 4px 4px rgba(0,0,0,0.25);
 
-    /* this helps somehow with the list overflow scrolling */
-    display: flex;
+
+.white-container {
     gap: 8px;
-    flex-direction: column;
-    overflow-y: auto;
 }
 
-#white-container > :not(#list){
+.white-container > :not(#list){
     margin-left: 16px;
     margin-right: 16px;
 }
@@ -159,10 +152,10 @@
     height: 114px;
     transition: height 0.5s;
 }
-#white-container.collapsed #checklist-instructions {
+.white-container.collapsed #checklist-instructions {
     height: 0;
 }
-#white-container.collapsed #collapse-arrow::after {
+.white-container.collapsed #collapse-arrow::after {
     transform: rotate(45deg);
 }
 

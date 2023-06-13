@@ -10,25 +10,11 @@
     display: none;
 }
 
-#white-container {
-    background-color: white;
-    flex-grow: 1;
-    padding-top: 16px;
-    box-shadow: 0 4px 4px rgba(0,0,0,0.25);
-
-    /* this helps somehow with the bird list overflow scrolling */
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-}
-
-
-
 
 
 /* List screen ============================================== */
 
-#white-container > :not(#bird-list) {
+.white-container > :not(#bird-list) {
     margin-right: 16px;
     margin-left: 16px;
 }

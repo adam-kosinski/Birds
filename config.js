@@ -17,44 +17,50 @@ const place_style = {     //for place geometry
 
 const top_n_selected = 16; //for place selection
 
-function getAllAboutBirdsURL(common_name){
+function getAllAboutBirdsURL(common_name) {
     return "https://www.allaboutbirds.org/guide/" + common_name.replaceAll(" ", "_") + (mode == "birdsong" ? "/sounds" : "/id");
 }
 
-
-const backyard_birds_ids = [
-    9083,    //Northern Cardinal
-    144814,    //Carolina Chickadee
-    7513,    //Carolina Wren
-    13632,    //Tufted Titmouse
-    8021,    //American Crow
-    18205,    //Red-bellied Woodpecker
-    9424,    //Eastern Towhee
-    12727,    //American Robin
-    14886,    //Northern Mockingbird
-    8229,    //Blue Jay
-    792988,    //Downy Woodpecker
-    3454,    //Mourning Dove
-    12942,    //Eastern Bluebird
-    145310,    //American Goldfinch
-    199840,    //House Finch
-    9135,    //Chipping Sparrow
-    14801,    //White-breasted Nuthatch
-    17008,    //Eastern Phoebe
-    14850,    //European Starling
-    18236,    //Northern Flicker
-    9744,    //Red-winged Blackbird
-    10227,    //Indigo Bunting
-    9602,    //Common Grackle
-    14995,    //Gray Catbird
-    9184,    //White-throated Sparrow
-    10094,    //Dark-eyed Junco
-    145245,    //Yellow-rumped Warbler
-    1289388,    //Ruby-crowned Kinglet
-    9100,    //Song Sparrow
-    145244,    //Pine Warbler
-    14825,    //Brown-headed Nuthatch
-    13858,    //House Sparrow
-    14898,    //Brown Thrasher
-    19893    //Barred Owl
-];
+const presets = {
+    "Common Backyard Birds (Southeast US)": {
+        description: "Blah blah blah stuff about cool birds",
+        photo: "images/main_page_backyard.png",
+        mode: undefined,
+        taxa: [
+            9083,    //Northern Cardinal
+            144814,    //Carolina Chickadee
+            7513,    //Carolina Wren
+            13632,    //Tufted Titmouse
+            8021,    //American Crow
+            18205,    //Red-bellied Woodpecker
+            9424,    //Eastern Towhee
+            12727,    //American Robin
+            14886,    //Northern Mockingbird
+            8229,    //Blue Jay
+            792988,    //Downy Woodpecker
+            3454,    //Mourning Dove
+            12942,    //Eastern Bluebird
+            145310,    //American Goldfinch
+            199840,    //House Finch
+            9135,    //Chipping Sparrow
+            14801,    //White-breasted Nuthatch
+            17008,    //Eastern Phoebe
+            14850,    //European Starling
+            18236,    //Northern Flicker
+            9744,    //Red-winged Blackbird
+            10227,    //Indigo Bunting
+            9602,    //Common Grackle
+            14995,    //Gray Catbird
+            9184,    //White-throated Sparrow
+            10094,    //Dark-eyed Junco
+            145245,    //Yellow-rumped Warbler
+            1289388,    //Ruby-crowned Kinglet
+            9100,    //Song Sparrow
+            145244,    //Pine Warbler
+            14825,    //Brown-headed Nuthatch
+            13858,    //House Sparrow
+            14898,    //Brown Thrasher
+            19893    //Barred Owl
+        ]
+    }
+}

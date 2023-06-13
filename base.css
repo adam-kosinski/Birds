@@ -107,6 +107,18 @@ nav * {
     box-sizing: border-box;
 }
 
+.white-container {
+    background-color: white;
+    flex-grow: 1;
+    padding-top: 16px;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+
+    /* this helps somehow with the list overflow scrolling */
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
 .btn-primary {
     font-size: 24px;
     font-weight: bold;
@@ -123,7 +135,6 @@ nav * {
     border: 2px solid var(--light-gray);
     padding: 2px 12px 2px 12px;
     border-radius: 15px;
-    /* border-bottom: 3px solid var(--medium-gray); */
 }
 
 @media (hover: hover) {
