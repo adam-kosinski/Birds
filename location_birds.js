@@ -4,6 +4,7 @@
 
 document.getElementById("search-for-birds").addEventListener("click", e => {
     e.target.style.visibility = "hidden";
+    document.getElementById("sound-only-checkbox").disabled = true;
     document.getElementById("search-loader").style.display = "block";
 
     fetchSpeciesCounts().then(() => {
@@ -16,6 +17,7 @@ document.getElementById("search-for-birds").addEventListener("click", e => {
 
 document.getElementById("back-button").addEventListener("click", () => {
     document.getElementById("search-for-birds").style.visibility = "visible";
+    document.getElementById("sound-only-checkbox").removeAttribute("disabled");
     document.getElementById("bird-screen").style.display = "none";
     document.getElementById("location-screen").style.display = "flex";
     map.invalidateSize(); //update sizing, since window might have been resized while the map wasn't visible
@@ -35,7 +37,8 @@ document.getElementById("continue-button").addEventListener("click", () => {
 // iNaturalist API calls and list construction
 
 async function fetchSpeciesCounts() {
-    let base_url = "https://api.inaturalist.org/v1/observations/species_counts?taxon_id=3&quality_grade=research";
+    let sounds_only = document.getElementById("sound-only-checkbox").checked;
+    let base_url = "https://api.inaturalist.org/v1/observations/species_counts?taxon_id=3&quality_grade=research" + (sounds_only ? "&sounds=true" : "");
 
     let promise;
     if (place_id) {
