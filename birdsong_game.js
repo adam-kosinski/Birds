@@ -332,7 +332,7 @@ function nextObservation() {
     //image attribution
     if(photo){
         document.getElementById("image-attribution").textContent = photo.attribution;
-        document.getElementById("image-attribution-button").textContent = photo.license_code == "cc0" ? "CC0" : (photo.license_code === null ? "C" : "CC");
+        document.getElementById("image-copyright-type").textContent = photo.license_code == "cc0" ? "CC0" : (photo.license_code === null ? "C" : "CC");
     }
 
     setGameState(GUESSING);

@@ -99,6 +99,15 @@ document.getElementById("birdsong-audio-0").addEventListener("ended", () => {
 
 
 //image attribution
+
+//do this styling with javascript + hacky CSS because can't wrap the bird-image in a div or iOS goes crazy
+let image_resize_observer = new ResizeObserver((entries) => {
+    let img_width = entries[0].contentBoxSize[0].inlineSize;
+    document.getElementById("image-attribution-container").style.width = img_width + "px";
+});
+image_resize_observer.observe(document.getElementById("bird-image"));
+
+//show-hide attribution text
 document.addEventListener("click", e => {
     let button = e.target.closest("#image-attribution-button");
     if(button){
