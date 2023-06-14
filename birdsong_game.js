@@ -279,7 +279,8 @@ function nextObservation() {
     //set taxon HTML (not necessarily displayed yet, see scss)
     document.getElementById("answer-common-name").textContent = current.taxon.preferred_common_name;
     document.getElementById("answer-scientific-name").textContent = current.taxon.name;
-    document.getElementById("answer-info-link").href = getAllAboutBirdsURL(current.taxon.preferred_common_name);
+    let species_name = bird_taxa.find(obj => current.taxon.ancestor_ids.includes(obj.id)).preferred_common_name;
+    document.getElementById("answer-info-link").href = getAllAboutBirdsURL(species_name);
     document.getElementById("inat-link").href = current.uri;
 
     //reset HTML from answer screen
