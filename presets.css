@@ -13,17 +13,42 @@
 }
 
 #preset-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    padding-top: 8px;
     padding-bottom: 16px;
     overflow-y: auto;
 }
 
-.preset-title {
+.preset {
     padding-left: 16px;
+    padding-right: 16px;
 }
 
 .preset-title {
     font-weight: bold;
+    display: grid;
+    grid-template-columns: 50px 1fr 70px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.preset-title img {
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 12px;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+}
+
+.preset-title .btn-primary {
+    font-size: 16px;
+}
+
+.description a {
+    text-decoration: underline;
+    color: -webkit-link;
+}
+
+#preset-list hr {
+    margin-left: 16px;
+    margin-right: 16px;
 }

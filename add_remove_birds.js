@@ -8,6 +8,7 @@ function initURLArgs() {
     let url = new URL(window.location.href);
     let taxa_ids = url.searchParams.get("taxa");
     let default_mode = url.searchParams.get("mode");
+    let preset = url.searchParams.get("preset");
 
     //if no taxa, display message
     if (taxa_ids === null) {

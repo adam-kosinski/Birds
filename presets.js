@@ -1,17 +1,39 @@
 initPresets();
 
-function initPresets(){
+function initPresets() {
     let list = document.getElementById("preset-list");
 
-    for(const [name, obj] of Object.entries(presets)){
+    for (const [name, obj] of Object.entries(presets)) {
         let container = document.createElement("div");
         container.className = "preset";
 
-        let title = document.createElement("p");
+        let title = document.createElement("div");
         title.className = "preset-title";
-        title.textContent = name;
 
-        container.append(title);
+
+        let img = document.createElement("img");
+        img.src = obj.photo;
+        let preset_name = document.createElement("p");
+        preset_name.textContent = name;
+
+        let link = document.createElement("a");
+        link.className = "btn-primary";
+        link.textContent = "Select";
+        let params = new URLSearchParams();
+        if (obj.taxa.length > 0) params.append("taxa", obj.taxa.join(","));
+        params.append("preset", name); //signals to game.html to check for extra config settings
+        if (obj.mode) params.append("mode", obj.mode);
+        link.href = "game.html?" + params.toString();
+
+
+        title.append(img, preset_name, link);
+
+        let description = document.createElement("p");
+        description.className = "description";
+        description.innerHTML = obj.description;
+
+        container.append(title, description);
+        if (list.innerHTML) list.append(document.createElement("hr"));
         list.append(container);
     }
 }

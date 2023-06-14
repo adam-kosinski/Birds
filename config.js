@@ -23,9 +23,8 @@ function getAllAboutBirdsURL(common_name) {
 
 const presets = {
     "Common Backyard Birds (Southeast US)": {
-        description: "Blah blah blah stuff about cool birds",
+        description: "",
         photo: "images/main_page_backyard.png",
-        mode: undefined,
         taxa: [
             9083,    //Northern Cardinal
             144814,    //Carolina Chickadee
@@ -61,6 +60,25 @@ const presets = {
             13858,    //House Sparrow
             14898,    //Brown Thrasher
             19893    //Barred Owl
+        ]
+    },
+    "Bird Orders": {
+        description: "",
+        photo: "",
+        rank: "order",
+        taxa: []
+    },
+    "Tricky Trillers": {
+        description: "blah blah<br><a target='_blank' href='https://apassionforbirds.wordpress.com/2015/02/21/tricky-trillers/'>ID Tips</a>",
+        photo: "",
+        taxa: [
+            9096,   //swamp sparrow
+            145242,  //palm warbler
+            145244, //pine warbler
+            979757, //orange crowned warbler
+            10094,  //dark eyed junco
+            9135,   //chipping sparrow
+            72912  //worm eating warbler
         ]
     }
 }
