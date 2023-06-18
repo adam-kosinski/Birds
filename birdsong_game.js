@@ -368,8 +368,8 @@ function nextObservation() {
         document.getElementById("bird-grid").scrollTop = 0;
     }
     else if (mode == "visual_id") {
-        document.getElementById("img-preloader").src = next.photos[0].url.replace("square", "medium");
-        document.getElementById("bird-image").src = current.photos[0].url.replace("square", "medium");
+        document.getElementById("img-preloader").src = next.photos[0].url.replace("square", "large");
+        document.getElementById("bird-image").src = current.photos[0].url.replace("square", "large");
         photo = current.photos[0];
     }
 
