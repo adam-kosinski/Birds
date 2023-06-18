@@ -19,9 +19,16 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     //reset vars
     obs = [];
     taxon_obs = {};
+    taxon_queues = {};
+    taxon_bag = [];
     n_pages_by_query = {};
     current = undefined;
     setGameState(INACTIVE);
+
+    //kill ongoing fetch until threshold
+    for (let i=0; i<kill_fetch_until_threshold.length; i++){
+        kill_fetch_until_threshold[i] = true;
+    }
 
     //reset datalist
     document.getElementById("guess-datalist").innerHTML = "";

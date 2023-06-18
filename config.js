@@ -8,6 +8,8 @@ const birdsong_popular_attempts = 3; //how many times to attempt fetching popula
 const visual_id_popular_attempts = 1;
 let taxon_obs_threshold = 20; //number of observations we'd like to have for each taxon, will stop when reach this
 
+const max_taxon_bag_copies = 5; //number of times a taxon can be in the taxon bag, min is 1
+
 const autocomplete_delay = 1000; //ms after user stops typing, to update the autocomplete
 const n_autocomplete_results = 5;
 

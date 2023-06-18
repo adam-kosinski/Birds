@@ -1,10 +1,15 @@
+let kill_fetch_until_threshold = []; //when fetchUntilThreshold is called, it appends "false", and kills itself if the "false" at that index gets changed to "true"
+//this is used when exiting a game, to stop the fetchUntilThreshold from continuing to run
+
+
 //STATE VARIABLES - get reset when we go back to list (see game_events.js)
 
-let obs = []; //stores raw objects returned from data fetch, no ordering
 let taxon_obs = {}; //stores lists of objects, organized by taxon id keys
-//note that we can use .indexOf(obj) to find where one object is in the other data structure, if necessary
+let taxon_queues = {}; //stores lists of observation objects for each taxon in order of showing, pop from beginning of list to show and refill if empty
+let taxon_bag = []; //list of unordered taxon ids, perhaps each id in here multiple times, pick a random item to determine next taxon to show
 
 let n_pages_by_query = {}; //cache for total results queries, key is args string '?sounds=true' etc, value is n pages
+//not super useful but hey why not, doesn't hurt
 
 let current; //current observation object
 let next; //helpful for preloading
@@ -16,6 +21,10 @@ const ANSWER_SHOWN = 2;
 setGameState(INACTIVE);
 
 let mode = "birdsong"; //doesn't get reset when go back to list
+
+
+
+
 
 
 function setGameState(state) {
@@ -44,24 +53,35 @@ function setMode(new_mode) {
 function pickObservation() {
     //pick next observation object, return it. Try not to duplicate the current observation
 
-    let taxon_keys = Object.keys(taxon_obs).filter(key => taxon_obs[key].length > 0);
-    if (taxon_keys.length == 0) {
-        console.error("No observations in bird_taxa, cannot pick one");
+    let filtered_taxon_bag = taxon_bag.filter(id => taxon_obs[id].length > 0);
+    if (filtered_taxon_bag.length == 0) {
+        console.error("No observations found, cannot pick one");
         return;
     }
 
     //try a bunch of times to not duplicate the current observation
+    let picked;
     for (let i = 0; i < 5; i++) {
-        //each taxon is roughly equal to appear
-        let next_taxon = taxon_keys[Math.floor(taxon_keys.length * Math.random())];
+        //draw from taxon bag, taxa are weighted differently in there depending on how good the player is doing
+        let next_taxon_id = filtered_taxon_bag[Math.floor(filtered_taxon_bag.length * Math.random())];
 
         //take a random observation from our available ones for that taxon
-        let options = taxon_obs[next_taxon];
-        let picked = options[Math.floor(options.length * Math.random())];
+        picked = taxon_queues[next_taxon_id].shift();
+        if (taxon_queues[next_taxon_id].length == 0) resetQueue(next_taxon_id); //refill queue if it emptied
         if (picked != current) return picked;
     }
     return picked;
 }
+
+function resetQueue(taxon_id){
+    let queue = taxon_queues[taxon_id]
+    taxon_obs[taxon_id].forEach(obj => {
+        let insert_idx = Math.floor((queue.length + 1) * Math.random());
+        queue.splice(insert_idx, 0, obj);
+    });
+}
+
+
 
 
 function initBirdsongGame() {
@@ -70,11 +90,16 @@ function initBirdsongGame() {
     //start loader
     document.getElementById("bird-list-loader").style.display = "block";
 
-    //init taxon_obs data structure
+    //init taxon_obs, taxon_queues, taxon bag
     taxon_obs = {}; //clear it in case last init failed and this isn't empty
     bird_taxa.forEach(obj => {
         taxon_obs[obj.id] = [];
+        taxon_queues[obj.id] = [];
+        for(let i=0; i<max_taxon_bag_copies; i++){
+            taxon_bag.push(obj.id)
+        }
     });
+    
 
     fetchObservationData(undefined, "", initial_per_page)
         .then(data_was_fetched => {
@@ -142,13 +167,19 @@ function initBirdsongGame() {
 
 
 
-async function fetchObservationData(taxa_id_string = undefined, extra_args = "", per_page = default_per_page) {
+async function fetchObservationData(taxa_id_string = undefined, extra_args = "", per_page = undefined) {
     //returns a promise (b/c async) that fulfills when data has been fetched and added to data structures
     //the promise resolves to true if data was fetched, false if there was no data to fetch
 
     if (!taxa_id_string) {
         taxa_id_string = bird_taxa.map(obj => obj.id).join(",");
     }
+    if (!per_page) {
+        //don't try to fetch with a big per page if realistically we don't need that many observations
+        let n_obs_needed_ish = taxa_id_string.split(",").length * taxon_obs_threshold;
+        per_page = Math.min(default_per_page, 3 * n_obs_needed_ish);
+    }
+
     console.groupCollapsed("FETCH " + taxa_id_string + "\nExtra args: " + extra_args);
 
     //figure out which observations (of the requested taxa) we have already so we don't repeat
@@ -192,12 +223,11 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "",
     //get next page and fetch it
     let next_page = Math.ceil(n_pages * Math.random());
     console.log("Fetching page " + next_page);
-    let data = await fetch(prefix + args + "&per_page=" + per_page)
+    let data = await fetch(prefix + args + "&per_page=" + per_page + "&page=" + next_page)
         .then(res => res.json())
     console.log(data);
 
     //add to data structures
-    obs = obs.concat(data.results);
     data.results.forEach(obj => {
         //since observations can come from children of a taxon, try each ancestry level one by one, starting w most specific
         let ancestor_ids = obj.taxon.ancestor_ids.slice();
@@ -205,6 +235,7 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "",
             let id = ancestor_ids.pop(); //end of list is most specific taxon, starting with observation's taxon id
             if (taxon_obs.hasOwnProperty(id)) {
                 taxon_obs[id].push(obj);
+                taxon_queues[id].push(obj);
                 break;
             }
         }
@@ -225,6 +256,9 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
     //delay_between_attempts (ms) is for after we've started, be less aggressive when fetching to be nice to iNaturalist
 
     console.log("FETCH UNTIL THRESHOLD " + threshold);
+
+    let kill_index = kill_fetch_until_threshold.length;
+    kill_fetch_until_threshold.push(false);
 
     let lacking_ids;
     let trying_popular = true;
@@ -247,7 +281,7 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
         let extra_args = trying_popular ? "popular=true" : "";
 
         //fetch data, handle if couldn't get any
-        let was_data_fetched = await fetchObservationData(lacking_ids.join(","), extra_args, default_per_page);
+        let was_data_fetched = await fetchObservationData(lacking_ids.join(","), extra_args);
         if (!was_data_fetched) {
             if (trying_popular) {
                 trying_popular = false;
@@ -261,6 +295,10 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
 
         //pause for the specified duration
         await new Promise(resolve => setTimeout(resolve, delay_between_attempts));
+        if (kill_fetch_until_threshold[kill_index]) {
+            console.log("FETCH UNTIL THRESHOLD KILLED");
+            return { success: false, lacking_ids: lacking_ids, failure_reason: "fetch_until_threshold_killed" };
+        }
     }
     console.warn("Exceeded max (" + max_fetch_attempts + ") number of attempts to fetch until threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","));
     return { success: false, lacking_ids: lacking_ids, failure_reason: "exceeded_max_attempts" };
