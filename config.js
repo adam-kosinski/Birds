@@ -78,13 +78,38 @@ const presets = {
     },
     "Bird Orders (North America)": {
         description: "",
-        photo: "images/preset_bird_orders.jpg",
+        photo: "images/preset_bird_orders_america.jpg",
         mode: "visual_id",
+        place_id: 97304,    //north america
         info_url_format: "https://en.wikipedia.org/wiki/[scientific]",
         rank: "order",
         birdsong_question: "<span class='font-large'>What order is the bird in?</span><br>Select a bird order or write its name",
         visual_id_question: "What order is this bird in?",
-        taxa: []
+        taxa: [
+            7251,    //Perching Birds
+            6888,    //Waterfowl
+            67561,    //Shorebirds and Allies
+            67566,    //Pelicans, Herons, Ibises, and Allies
+            71261,    //Hawks, Eagles, Kites, and Allies
+            2708,    //Pigeons and Doves
+            17550,    //Woodpeckers, Barbets, and Allies
+            67573,    //Nightjars, Swifts, Hummingbirds, and Allies
+            4,    //Cranes, Rails, and Allies
+            573,    //Landfowl
+            71268,    //Gannets, Cormorants, and Allies
+            18874,    //Parrots
+            67570,    //Falcons and Caracaras
+            19350,    //Owls
+            2114,    //Kingfishers and Allies
+            559244,    //New World Vultures
+            67563,    //Grebes
+            1623,    //Cuckoos
+            3726,    //Storks
+            67565,    //Tubenoses
+            67562,    //Loons
+            67569,    //Flamingos
+            20715    //Trogons and Quetzals
+        ]
     },
     "Bird Orders (Global)": {
         description: "How well do you know your bird orders? Test out your knowledge with birds from all over the world!",

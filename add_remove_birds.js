@@ -1,7 +1,6 @@
 let bird_taxa = []; //list of iNaturalist taxon objects that are on the practice list
 let cached_bird_taxa = []; //whenever we get taxon info from autocomplete search, add it here so we don't have to make another API call to add to the list
-let preset_obj;
-
+let place_id;
 
 //automatically read taxa from URL and populate the HTML and JS taxa lists
 initURLArgs();
@@ -10,23 +9,13 @@ function initURLArgs() {
     let url = new URL(window.location.href);
     let taxa_ids = url.searchParams.get("taxa");
     let default_mode = url.searchParams.get("mode");
-    let preset = url.searchParams.get("preset");
+    place_id = url.searchParams.get("place_id");
 
     //if no taxa, display message
-    if (taxa_ids === null) {
-        document.getElementById("bird-list-message").style.display = "block";
-    }
-    else {
-        addBirds(taxa_ids.split(",").map(s => Number(s)));
-    }
+    if (taxa_ids === null) document.getElementById("bird-list-message").style.display = "block";
+    else addBirds(taxa_ids.split(",").map(s => Number(s)));
 
-    if (default_mode) {
-        setMode(default_mode);
-    }
-
-    if (preset) {
-        preset_obj = presets[preset];
-    }
+    if (default_mode) setMode(default_mode);
 }
 
 

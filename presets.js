@@ -20,8 +20,8 @@ function initPresets() {
         link.className = "btn-primary";
         link.textContent = "Select";
         let params = new URLSearchParams();
+        if (obj.place_id) params.append("place_id", obj.place_id)
         if (obj.taxa.length > 0) params.append("taxa", obj.taxa.join(","));
-        params.append("preset", name); //signals to game.html to check for extra config settings
         if (obj.mode) params.append("mode", obj.mode);
         link.href = "game.html?" + params.toString();
 

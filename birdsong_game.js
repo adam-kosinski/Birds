@@ -164,6 +164,8 @@ function initBirdsongGame() {
                     //if some taxa had no observations at all, alert the user
                     if (!result.success && result.failure_reason == "not_enough_observations") {
                         let no_obs_ids = result.lacking_ids.filter(id => taxon_obs[id].length == 0);
+                        if (no_obs_ids.length == 0) return;
+                        
                         let failed_names = no_obs_ids.map(id_str => {
                             return bird_taxa.find(obj => obj.id == Number(id_str)).preferred_common_name;
                         });
@@ -213,7 +215,7 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "",
 
     //prep API calls
     let prefix = "https://api.inaturalist.org/v1/observations";
-    let args = "?" + extra_args + "&" + (mode == "birdsong" ? "sounds=true" : "photos=true")
+    let args = "?" + extra_args + "&" + (mode == "birdsong" ? "sounds=true" : "photos=true") + (place_id ? "&place_id=" + place_id : "")
         + "&" + (mode == "birdsong" ? "sound_license=cc-by,cc-by-nc,cc-by-nd,cc-by-sa,cc-by-nc-nd,cc-by-nc-sa,cc0" : "photo_licensed=true")
         + "&quality_grade=research&taxon_id=" + taxa_id_string + "&not_id=" + obs_ids_we_have.join(",");
     console.log(prefix + args);
