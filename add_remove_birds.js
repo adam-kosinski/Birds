@@ -301,7 +301,5 @@ initAutocomplete(
 function highlightElement(el) {
     el.scrollIntoView({ block: "nearest" });
     el.classList.add("just-added");
-    el.addEventListener("animationend", () => {
-        el.classList.remove("just-added");
-    }, { once: true });
+    setTimeout(() => {el.classList.remove("just-added")}, 2000);
 }

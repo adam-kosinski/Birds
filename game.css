@@ -196,7 +196,7 @@
 }
 
 .just-added {
-    animation: highlight 2s;
+    animation: highlight 2s; /* should match setTimeout in add_remove_birds.js */
 }
 
 @keyframes highlight {

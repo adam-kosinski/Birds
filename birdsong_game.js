@@ -73,7 +73,7 @@ function pickObservation() {
     return picked;
 }
 
-function resetQueue(taxon_id){
+function resetQueue(taxon_id) {
     let queue = taxon_queues[taxon_id]
     taxon_obs[taxon_id].forEach(obj => {
         let insert_idx = Math.floor((queue.length + 1) * Math.random());
@@ -95,11 +95,11 @@ function initBirdsongGame() {
     bird_taxa.forEach(obj => {
         taxon_obs[obj.id] = [];
         taxon_queues[obj.id] = [];
-        for(let i=0; i<max_taxon_bag_copies; i++){
+        for (let i = 0; i < max_taxon_bag_copies; i++) {
             taxon_bag.push(obj.id)
         }
     });
-    
+
 
     fetchObservationData(undefined, "", initial_per_page)
         .then(data_was_fetched => {
@@ -166,6 +166,18 @@ function initBirdsongGame() {
 }
 
 
+function searchAncestorsForTaxonId(obj){
+    //since observations can come from children of a taxon, try each ancestry level one by one, starting w most specific
+    let ancestor_ids = obj.taxon.ancestor_ids.slice();
+    while (ancestor_ids.length > 0) {
+        let id = ancestor_ids.pop(); //end of list is most specific taxon, starting with observation's taxon id
+        if (taxon_obs.hasOwnProperty(id)) {
+            return id;
+        }
+    }
+}
+
+
 
 async function fetchObservationData(taxa_id_string = undefined, extra_args = "", per_page = undefined) {
     //returns a promise (b/c async) that fulfills when data has been fetched and added to data structures
@@ -229,16 +241,9 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "",
 
     //add to data structures
     data.results.forEach(obj => {
-        //since observations can come from children of a taxon, try each ancestry level one by one, starting w most specific
-        let ancestor_ids = obj.taxon.ancestor_ids.slice();
-        while (ancestor_ids.length > 0) {
-            let id = ancestor_ids.pop(); //end of list is most specific taxon, starting with observation's taxon id
-            if (taxon_obs.hasOwnProperty(id)) {
-                taxon_obs[id].push(obj);
-                taxon_queues[id].push(obj);
-                break;
-            }
-        }
+        let id = searchAncestorsForTaxonId(obj);
+        taxon_obs[id].push(obj);
+        taxon_queues[id].push(obj);
     });
     console.log("Done adding to data structures");
     console.groupEnd();
@@ -341,7 +346,7 @@ function nextObservation() {
             bird_image.src = photo.url.replace("square", "medium");
         }
         else {
-            if(current.taxon.default_photo){
+            if (current.taxon.default_photo) {
                 photo = bird_taxa.find(obj => obj.id == current.taxon.id).default_photo; //bird taxa default photo not copyrighted, assuming I found a good solution for that
                 bird_image.src = photo.medium_url;
             }
@@ -369,7 +374,7 @@ function nextObservation() {
     }
 
     //image attribution
-    if(photo){
+    if (photo) {
         document.getElementById("image-attribution").textContent = photo.attribution;
         document.getElementById("image-copyright-type").textContent = photo.license_code == "cc0" ? "CC0" : (photo.license_code === null ? "C" : "CC");
     }
@@ -394,5 +399,30 @@ function checkAnswer() {
     let correct = Boolean(guess_obj && current.taxon.ancestor_ids.includes(guess_obj.id));
     document.getElementById("birdsong-main").dataset.correct = guess.length > 0 ? correct : "no-guess"
 
+    //update taxon picking probabilities
+    if (correct) updateTaxonBag(guess_obj.id, -correct_remove_copies);
+    else {
+        if (guess_obj) updateTaxonBag(guess_obj.id, incorrect_add_copies);
+        updateTaxonBag(searchAncestorsForTaxonId(current), guess.length > 0 ? incorrect_add_copies : skipped_add_copies);
+    }
+
     setGameState(ANSWER_SHOWN);
+}
+
+
+
+function updateTaxonBag(taxon_id, delta) {
+    let n_copies_in_bag = taxon_bag.filter(id => id == taxon_id).length;
+    let target = Math.max(1, Math.min(max_taxon_bag_copies, n_copies_in_bag + delta))
+    let true_delta = target - n_copies_in_bag;
+    if (true_delta < 0) {
+        for (let i = 0; i < Math.abs(true_delta); i++) {
+            taxon_bag.splice(taxon_bag.indexOf(taxon_id), 1);
+        }
+    }
+    else if (true_delta > 0) {
+        for (let i = 0; i < true_delta; i++) {
+            taxon_bag.push(taxon_id);
+        }
+    }
 }

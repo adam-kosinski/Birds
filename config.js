@@ -9,6 +9,9 @@ const visual_id_popular_attempts = 1;
 let taxon_obs_threshold = 20; //number of observations we'd like to have for each taxon, will stop when reach this
 
 const max_taxon_bag_copies = 5; //number of times a taxon can be in the taxon bag, min is 1
+const correct_remove_copies = 1; //number of copies to remove from taxon_bag if the user got a question on this taxon right
+const incorrect_add_copies = 2; //same, but number to add if incorrect, for both the guess and what it actually is
+const skipped_add_copies = 1; //number to add if no guess, for what it actually is
 
 const autocomplete_delay = 1000; //ms after user stops typing, to update the autocomplete
 const n_autocomplete_results = 5;
