@@ -24,17 +24,10 @@ document.addEventListener("click", e => {
     }).addTo(range_map);
 
     // set zoom and center based on observation extent, method based on https://jumear.github.io/stirfry/iNat_map.html
-    //use out of range query if it returns bounds, else use the mappable query which should always (?) return bounds
-    let mappable_bounds = fetch("https://api.inaturalist.org/v1/observations?taxon_id=" + e.target.dataset.id + "&quality_grade=research&mappable=true&return_bounds=true&per_page=0")
+    fetch("https://api.inaturalist.org/v1/observations?taxon_id=" + e.target.dataset.id + "&quality_grade=research&mappable=true&return_bounds=true&per_page=0")
         .then(res => res.json())
-        .then(data => data.total_bounds);
-    let out_of_range_bounds = fetch("https://api.inaturalist.org/v1/observations?taxon_id=" + e.target.dataset.id + "&quality_grade=research&out_of_range=false&return_bounds=true&per_page=0")
-        .then(res => res.json())
-        .then(data => data.total_bounds);
-
-    Promise.all([mappable_bounds, out_of_range_bounds])
-        .then(boxes => {
-            let b = boxes[1] ? boxes[1] : boxes[0];
+        .then(data => {
+            let b = data.total_bounds;
             let bounds = [[b.nelat, (b.swlng < b.nelng ? b.nelng : b.nelng + 360)], [b.swlat, b.swlng]];
             range_map.fitBounds(bounds);
         });

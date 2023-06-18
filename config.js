@@ -77,10 +77,10 @@ const presets = {
         ]
     },
     "Bird Orders (North America)": {
-        description: "",
+        description: "Can you tell a falcon from a hawk? I bet you can. Maybe.",
         photo: "images/preset_bird_orders_america.jpg",
         mode: "visual_id",
-        place_id: 97304,    //north america
+        place_id: 97394,    //north america
         info_url_format: "https://en.wikipedia.org/wiki/[scientific]",
         rank: "order",
         birdsong_question: "<span class='font-large'>What order is the bird in?</span><br>Select a bird order or write its name",
@@ -112,7 +112,7 @@ const presets = {
         ]
     },
     "Bird Orders (Global)": {
-        description: "How well do you know your bird orders? Test out your knowledge with birds from all over the world!",
+        description: "Test out your knowledge on bird orders with birds from all over the world!",
         photo: "images/preset_bird_orders.jpg",
         mode: "visual_id",
         info_url_format: "https://en.wikipedia.org/wiki/[scientific]",
@@ -163,22 +163,26 @@ const presets = {
             525652    //Cuckoo-Rollers
         ]
     },
-    "Bird Families (Passeriformes)": {
+    /*
+    "North America Families (Passeriformes)": {
         description: "",
         photo: "",
         mode: "visual_id",
+        place_id: 97394,    //north america
         taxa: []
     },
-    "Bird Families (Non-Passeriformes)": {
+    "North America Families (Non-Passeriformes)": {
         description: "",
         photo: "",
         mode: "visual_id",
+        place_id: 97394,    //north america
         taxa: []
     },
-    "Bird Families (All)": {
+    "North America Families (All)": {
         description: "",
         photo: "",
         mode: "visual_id",
+        place_id: 97394,    //north america
         taxa: [
             6912,    //Ducks, Geese, and Swans
             4929,    //Herons, Egrets, and Bitterns
@@ -212,6 +216,7 @@ const presets = {
             15964    //Wrens
         ]
     },
+    */
     "Tricky Trillers": {
         description: "That's a pine warbler right? Or wait, maybe a chipping sparrow? Or a junco... hmm, tricky. See <a target='_blank' href='https://apassionforbirds.wordpress.com/2015/02/21/tricky-trillers/'>here</a> for some ID tips.",
         photo: "images/preset_trillers.jpg",
@@ -224,6 +229,32 @@ const presets = {
             10094,  //dark eyed junco
             9135,   //chipping sparrow
             72912  //worm eating warbler
+        ]
+    },
+    "Sparrows (NC)": {
+        description: "Get your magnifying glass out for these because you're going to need it.",
+        photo: "images/preset_nc_sparrows.jpg",
+        mode: "visual_id",
+        taxa: [
+            13858,    //House Sparrow
+            9100,    //Song Sparrow
+            9135,    //Chipping Sparrow
+            9096,    //Swamp Sparrow
+            9176,    //White-crowned Sparrow
+            9184,    //White-throated Sparrow
+            9981,    //Savannah Sparrow
+            9152,   //Field Sparrow
+            9092,    //Lincoln's Sparrow
+            7294,    //Horned Lark
+            9156,    //Fox Sparrow
+            13732,    //American Pipit
+            474210,    //American Tree Sparrow
+            73172,    //Bachman's Sparrow
+            10676,    //Dickcissel
+            793286,    //Nelson's Sparrow
+            793285,    //Henslow's Sparrow
+            10139,    //Grasshopper Sparrow
+            10168    //Vesper Sparrow
         ]
     }
 }
