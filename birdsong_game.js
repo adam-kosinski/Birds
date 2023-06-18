@@ -22,7 +22,6 @@ setGameState(INACTIVE);
 
 let mode = "birdsong"; //doesn't get reset when go back to list
 
-let funny_bird = document.getElementById("funny-bird");
 let funny_bird_timeout_id;
 
 
@@ -463,10 +462,11 @@ function updateTaxonBag(taxon_id, delta) {
 
 
 function scheduleFunnyBird(){
+    funny_bird = document.getElementById("funny-bird");
     if (funny_bird.dataset.clicked) return;
 
     //set next location
-    let locations = ["from-top", "from-left"];
+    let locations = ["from-top", "from-left", "from-bottom"];
     let location = locations[Math.floor(Math.random() * locations.length)];
     funny_bird.classList.remove("enable-transition");
     locations.forEach(s => funny_bird.classList.remove(s));

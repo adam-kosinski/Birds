@@ -23,9 +23,7 @@ const top_n_selected = 16; //for location selection
 
 const funny_bird_out_duration = 8000; //ms
 function getFunnyBirdDelay(){
-    let delay = 60000 + 60000*Math.random();
-    console.log("funny bird delay", Math.round(delay/1000) + "s");
-    return delay;
+    return 60000 + 60000*Math.random();
 }
 
 function getInfoURL(taxon_obj) {

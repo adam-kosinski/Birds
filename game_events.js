@@ -29,10 +29,13 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     for (let i=0; i<kill_fetch_until_threshold.length; i++){
         kill_fetch_until_threshold[i] = true;
     }
-    //stop funny bird
+    //reset funny bird
     if(funny_bird_timeout_id){
         clearTimeout(funny_bird_timeout_id);
     }
+    funny_bird.removeAttribute("data-clicked");
+    funny_bird.removeAttribute("style"); //reset the changed transition duration
+
 
     //reset datalist
     document.getElementById("guess-datalist").innerHTML = "";
@@ -132,11 +135,12 @@ document.addEventListener("click", e => {
 
 //funny bird
 let hawk_screech = new Audio("hawk_screech.mp3");
-funny_bird.addEventListener("click", () => {
+document.getElementById("funny-bird").addEventListener("click", () => {
+    let funny_bird = document.getElementById("funny-bird");
     funny_bird.dataset.clicked = "true"; //stop it from coming out again
     hawk_screech.play();
     setTimeout(() => {
         funny_bird.style.transitionDuration = "1.5s";
         funny_bird.classList.remove("out");
-    }, 500);
+    }, 750);
 });

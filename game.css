@@ -444,7 +444,7 @@
 /* funny bird */
 #funny-bird {
     display: none;
-    position: absolute;
+    position: fixed;
     height: 200px;
     animation-fill-mode: forwards;
 }
@@ -473,4 +473,14 @@
 }
 #funny-bird.from-left.out {
     left: -105px;
+}
+
+#funny-bird.from-bottom {
+    display: block;
+    bottom: -220px;
+    right: 10px;
+    transform: rotate(30deg);
+}
+#funny-bird.from-bottom.out {
+    bottom: -135px;
 }
