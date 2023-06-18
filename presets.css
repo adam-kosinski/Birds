@@ -45,7 +45,7 @@
 
 .description a {
     text-decoration: underline;
-    color: -webkit-link;
+    color: blue;
 }
 
 #preset-list hr {

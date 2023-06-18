@@ -31,7 +31,7 @@
         <div style="height: 20px;"></div>
         <div id="link-container">
             <a id="backyard-birds-link" class="app-mode-link">
-                <img src="images/main_page_backyard.png" alt="bird image">
+                <img src="images/preset_backyard.png" alt="bird image">
                 <p>Common Backyard Birds (Southeast US)</p>
             </a>
             <a class="app-mode-link" href="location_select.html">
@@ -47,7 +47,7 @@
 
     <script src="config.js"></script>
     <script>
-        document.getElementById("backyard-birds-link").href = "game.html?taxa=" + presets['Common Backyard Birds (Southeast US)'].taxa.join(",");
+        document.getElementById("backyard-birds-link").href = "game.html?preset=Common+Backyard+Birds+%28Southeast+US%29&taxa=" + presets['Common Backyard Birds (Southeast US)'].taxa.join(",");
     </script>
 </body>
 

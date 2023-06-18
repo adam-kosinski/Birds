@@ -1,5 +1,7 @@
 let bird_taxa = []; //list of iNaturalist taxon objects that are on the practice list
 let cached_bird_taxa = []; //whenever we get taxon info from autocomplete search, add it here so we don't have to make another API call to add to the list
+let preset_obj;
+
 
 //automatically read taxa from URL and populate the HTML and JS taxa lists
 initURLArgs();
@@ -20,6 +22,10 @@ function initURLArgs() {
 
     if (default_mode) {
         setMode(default_mode);
+    }
+
+    if (preset) {
+        preset_obj = presets[preset];
     }
 }
 
@@ -120,7 +126,7 @@ async function addBirds(taxa_id_list) {
     // }
 
 
-    //add birds
+    //add taxa
     results.forEach(obj => {
 
         //add to JS list
@@ -129,8 +135,8 @@ async function addBirds(taxa_id_list) {
         //add to HTML list
         let link_container = document.createElement("a");
         link_container.id = "bird-list-" + obj.id;
-        link_container.dataset.commonName = obj.preferred_common_name;
-        link_container.href = getAllAboutBirdsURL(obj.preferred_common_name);
+        link_container.dataset.taxonId = obj.id;
+        link_container.href = getInfoURL(obj);
         link_container.target = "_blank";
         link_container.addEventListener("click", e => {
             if (e.target.tagName == "BUTTON") e.preventDefault(); //don't follow the link if clicking on range map etc.
@@ -177,6 +183,8 @@ async function addBirds(taxa_id_list) {
 
         let bird_list = document.getElementById("bird-list");
         bird_list.append(link_container);
+
+        // if just added a bird manually (proxy check if only added one), highlight it
         if (results.length == 1) highlightElement(link_container);
     });
 
@@ -248,7 +256,7 @@ initAutocomplete(
     "add-bird-input",
     "taxon-autocomplete-list",
     "list-screen",
-    "https://api.inaturalist.org/v1/taxa/autocomplete?taxon_id=3&rank=species&is_active=true",
+    "https://api.inaturalist.org/v1/taxa/autocomplete?taxon_id=3&rank=species,family,order&is_active=true",
     //result callback
     (obj, list_option) => {
         if (!obj.default_photo || obj.observations_count == 0) return; //extinct species are sometimes returned
@@ -299,7 +307,7 @@ initAutocomplete(
 
 
 function highlightElement(el) {
-    el.scrollIntoView({ block: "nearest" });
+    el.scrollIntoView({ block: "center" });
     el.classList.add("just-added");
     setTimeout(() => {el.classList.remove("just-added")}, 2000);
 }

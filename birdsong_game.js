@@ -41,7 +41,9 @@ function setMode(new_mode) {
 
     //update links
     document.querySelectorAll("#bird-list a").forEach(a => {
-        a.href = getAllAboutBirdsURL(a.dataset.commonName);
+        let taxon_id = Number(a.dataset.taxonId);
+        let taxon_obj = bird_taxa.find(obj => obj.id == taxon_id)
+        a.href = getInfoURL(taxon_obj);
     });
 
     //update URL
@@ -125,9 +127,15 @@ function initBirdsongGame() {
                 if (obj.default_photo) button.style.backgroundImage = "url('" + obj.default_photo.square_url + "')";
                 bird_grid.append(button);
 
+                //datalist - only include scientific option if taxon isn't a species
                 let option_common = document.createElement("option");
                 option_common.value = obj.preferred_common_name;
                 document.getElementById("guess-datalist").append(option_common);
+                if (obj.rank != "species") {
+                    let option_scientific = document.createElement("option");
+                    option_scientific.value = obj.name;
+                    document.getElementById("guess-datalist").append(option_scientific);
+                }
             });
 
             //switch screens and stop loader
@@ -319,11 +327,14 @@ function nextObservation() {
     next = pickObservation();
     console.log("current", current);
 
+    let taxon_id = searchAncestorsForTaxonId(current);
+    let taxon_obj = bird_taxa.find(obj => obj.id == taxon_id);
+
     //set taxon HTML (not necessarily displayed yet, see scss)
-    document.getElementById("answer-common-name").textContent = current.taxon.preferred_common_name;
-    document.getElementById("answer-scientific-name").textContent = current.taxon.name;
-    let species_name = bird_taxa.find(obj => current.taxon.ancestor_ids.includes(obj.id)).preferred_common_name;
-    document.getElementById("answer-info-link").href = getAllAboutBirdsURL(species_name);
+    document.getElementById("answer-common-name").textContent = taxon_obj.preferred_common_name;
+    document.getElementById("answer-scientific-name").textContent = taxon_obj.name;
+    document.getElementById("answer-species-name-appended").textContent = taxon_obj.rank == "species" ? "" : " - " + current.taxon.preferred_common_name;
+    document.getElementById("answer-info-link").href = getInfoURL(taxon_obj);
     document.getElementById("inat-link").href = current.uri;
 
     //reset HTML from answer screen
@@ -339,6 +350,8 @@ function nextObservation() {
     let photo; //stored here for attribution later
 
     if (mode == "birdsong") {
+        document.getElementById("birdsong-question").innerHTML = taxon_obj.rank == "order" ? birdsong_question_order : taxon_obj.rank == "family" ? birdsong_question_family : birdsong_question;
+
         //set answer image ahead of time so it can load
         let bird_image = document.getElementById("bird-image");
         if (current.photos && current.photos[0] && current.photos[0].license_code !== null) {
@@ -346,9 +359,11 @@ function nextObservation() {
             bird_image.src = photo.url.replace("square", "medium");
         }
         else {
-            if (current.taxon.default_photo) {
-                photo = bird_taxa.find(obj => obj.id == current.taxon.id).default_photo; //bird taxa default photo not copyrighted, assuming I found a good solution for that
-                bird_image.src = photo.medium_url;
+            if (taxon_obj.rank == "species" && taxon_obj.default_photo) {
+                bird_image.src = taxon_obj.default_photo.medium_url;
+            }
+            else if (current.taxon.default_photo) {
+                bird_image.src = current.taxon.default_photo.medium_url;
             }
             else {
                 bird_image.src = "";
@@ -368,6 +383,8 @@ function nextObservation() {
         document.getElementById("bird-grid").scrollTop = 0;
     }
     else if (mode == "visual_id") {
+        document.getElementById("visual-id-question").innerHTML = taxon_obj.rank == "order" ? visual_id_question_order : taxon_obj.rank == "family" ? visual_id_question_family : visual_id_question;
+
         document.getElementById("img-preloader").src = next.photos[0].url.replace("square", "large");
         document.getElementById("bird-image").src = current.photos[0].url.replace("square", "large");
         photo = current.photos[0];

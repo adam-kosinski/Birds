@@ -257,10 +257,8 @@
     justify-content: center;
 }
 
-#answer-first-line-container {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
+#answer-common-name {
+    margin-right: 4px;
 }
 
 #answer-info-link {
@@ -272,9 +270,13 @@
     height: 1.25em;
     width: 1.25em;
     border-radius: 1.25em;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+#answer-species-name-appended {
+    display: inline;
 }
 
 #bird-image-div {
