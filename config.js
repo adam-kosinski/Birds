@@ -36,7 +36,7 @@ const visual_id_question_order = "What order is this bird from?";
 
 
 const presets = {
-    "Common Backyard Birds (Southeast US)": {
+    "Backyard Birds (Southeast US)": {
         description: "Your best birdy friends! Well, if you live in the southeast US at least.",
         photo: "images/preset_backyard.png",
         taxa: [

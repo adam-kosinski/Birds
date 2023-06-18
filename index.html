@@ -18,21 +18,21 @@
     <img id="background-image" src="images/cloud_background.png">
     <img id="bird-silhouette" src="images/hummingbird_silhouette.png" alt="hummingbird silhouette decoration">
     <div id="layout">
-        <p id="title">
-            <span class="font-huge">Ca-caw!</span><br>
-            (that means hi)
+        <div id="title">
+            <p id="cacaw" class="font-huge">Ca-caw!</p>
+            <p id="hi">(that means hi)</p>
+        </div>
+        <p id="info">
+            This is a tool to help you practice birdsong ID and visual bird ID. The audio clips, photos, and identifications used for the game are pulled from iNaturalist.
         </p>
-        <div style="height: 50px;"></div>
-        <p>
-            This is a tool to help you practice birdsong ID and visual bird ID. The audio clips, photos, and identifications used for the game are pulled from iNaturalist.<br>
-            <br>
-            To begin, select one of the following:
-        </p>
-        <div style="height: 20px;"></div>
         <div id="link-container">
             <a id="backyard-birds-link" class="app-mode-link">
                 <img src="images/preset_backyard.png" alt="bird image">
-                <p>Common Backyard Birds (Southeast US)</p>
+                <p>Backyard Birds (Southeast US)</p>
+            </a>
+            <a class="app-mode-link" href="presets.html">
+                <img src="images/main_page_presets.jpg" alt="bird image">
+                <p>Bird List Presets</p>
             </a>
             <a class="app-mode-link" href="location_select.html">
                 <img src="images/main_page_location.png" alt="bird image">
@@ -47,7 +47,7 @@
 
     <script src="config.js"></script>
     <script>
-        document.getElementById("backyard-birds-link").href = "game.html?preset=Common+Backyard+Birds+%28Southeast+US%29&taxa=" + presets['Common Backyard Birds (Southeast US)'].taxa.join(",");
+        document.getElementById("backyard-birds-link").href = "game.html?preset=Common+Backyard+Birds+%28Southeast+US%29&taxa=" + presets['Backyard Birds (Southeast US)'].taxa.join(",");
     </script>
 </body>
 
