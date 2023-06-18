@@ -437,3 +437,40 @@
     background-color: #ff7d7d;
     border-bottom-color: #740000;
 }
+
+
+
+
+/* funny bird */
+#funny-bird {
+    display: none;
+    position: absolute;
+    height: 200px;
+    animation-fill-mode: forwards;
+}
+
+#funny-bird.enable-transition {
+    transition-property: top, left, bottom, right;
+    transition-duration: 4s;
+    transition-timing-function: ease-in-out;
+}
+
+#funny-bird.from-top {
+    display: block;
+    top: -220px;
+    right: 70px;
+    transform: rotate(-150deg);
+}
+#funny-bird.from-top.out {
+    top: -150px;
+}
+
+#funny-bird.from-left {
+    display: block;
+    left: -220px;
+    top: 450px;
+    transform: rotate(96deg);
+}
+#funny-bird.from-left.out {
+    left: -105px;
+}

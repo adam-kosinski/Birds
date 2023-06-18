@@ -9,18 +9,24 @@ const visual_id_popular_attempts = 1;
 let taxon_obs_threshold = 20; //number of observations we'd like to have for each taxon, will stop when reach this
 
 const max_taxon_bag_copies = 5; //number of times a taxon can be in the taxon bag, min is 1
-const correct_remove_copies = 1; //number of copies to remove from taxon_bag if the user got a question on this taxon right
+const correct_remove_copies = 2; //number of copies to remove from taxon_bag if the user got a question on this taxon right
 const incorrect_add_copies = 2; //same, but number to add if incorrect, for both the guess and what it actually is
 const skipped_add_copies = 1; //number to add if no guess, for what it actually is
 
 const autocomplete_delay = 1000; //ms after user stops typing, to update the autocomplete
 const n_autocomplete_results = 5;
 
-const place_style = {     //for place geometry
+const place_style = {     //for location geometry
     "color": "orange"
 }
+const top_n_selected = 16; //for location selection
 
-const top_n_selected = 16; //for place selection
+const funny_bird_out_duration = 8000; //ms
+function getFunnyBirdDelay(){
+    let delay = 60000 + 60000*Math.random();
+    console.log("funny bird delay", Math.round(delay/1000) + "s");
+    return delay;
+}
 
 function getInfoURL(taxon_obj) {
     if (taxon_obj.rank == "species") return "https://www.allaboutbirds.org/guide/" + taxon_obj.preferred_common_name.replaceAll(" ", "_") + (mode == "birdsong" ? "/sounds" : "/id");

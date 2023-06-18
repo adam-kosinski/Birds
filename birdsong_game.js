@@ -22,6 +22,8 @@ setGameState(INACTIVE);
 
 let mode = "birdsong"; //doesn't get reset when go back to list
 
+let funny_bird = document.getElementById("funny-bird");
+let funny_bird_timeout_id;
 
 
 
@@ -156,6 +158,9 @@ function initBirdsongGame() {
 
             next = pickObservation();
             nextObservation(); //sets game_state FYI, but was already set in the event listener
+
+            //funny bird
+            scheduleFunnyBird();
 
             //fetch the rest more slowly (limit to < 1 API call per sec)
             //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
@@ -453,4 +458,29 @@ function updateTaxonBag(taxon_id, delta) {
             taxon_bag.push(taxon_id);
         }
     }
+}
+
+
+
+function scheduleFunnyBird(){
+    if (funny_bird.dataset.clicked) return;
+
+    //set next location
+    let locations = ["from-top", "from-left"];
+    let location = locations[Math.floor(Math.random() * locations.length)];
+    funny_bird.classList.remove("enable-transition");
+    locations.forEach(s => funny_bird.classList.remove(s));
+    funny_bird.classList.add(location);
+
+    //schedule when it gets shown
+    funny_bird_timeout_id = setTimeout(() => {
+        funny_bird.classList.add("enable-transition", "out");
+
+        //hide the bird after a certain duration
+        setTimeout(() => {
+            funny_bird.classList.remove("out");
+            funny_bird.addEventListener("transitionend", scheduleFunnyBird, {once: true});
+        }, funny_bird_out_duration);
+
+    }, getFunnyBirdDelay());
 }
