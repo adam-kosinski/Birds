@@ -157,29 +157,27 @@ const presets = {
             525652    //Cuckoo-Rollers
         ]
     },
-    /*
     "North America Families (Passeriformes)": {
-        description: "",
-        photo: "",
+        description: "[list not created yet]",
+        photo: "images/preset_families_passeriformes.jpg",
         mode: "visual_id",
         place_id: 97394,    //north america
         taxa: []
     },
     "North America Families (Non-Passeriformes)": {
-        description: "",
-        photo: "",
+        description: "[list not created yet]",
+        photo: "images/preset_families_non_passeriformes.jpg",
         mode: "visual_id",
         place_id: 97394,    //north america
         taxa: []
     },
     "North America Families (All)": {
-        description: "",
-        photo: "",
+        description: "[list not created yet]",
+        photo: "images/preset_families_all.jpg",
         mode: "visual_id",
         place_id: 97394,    //north america
         taxa: []
     },
-    */
     "Tricky Trillers": {
         description: "That's a pine warbler right? Or wait, maybe a chipping sparrow? Or a junco... hmm, tricky. See <a target='_blank' href='https://apassionforbirds.wordpress.com/2015/02/21/tricky-trillers/'>here</a> for some ID tips.",
         photo: "images/preset_trillers.jpg",
@@ -244,6 +242,3 @@ const presets = {
         ]
     }
 }
-
-//southern cricket is ok
-//little grass maybe not
