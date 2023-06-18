@@ -165,7 +165,7 @@ function initBirdsongGame() {
                     if (!result.success && result.failure_reason == "not_enough_observations") {
                         let no_obs_ids = result.lacking_ids.filter(id => taxon_obs[id].length == 0);
                         if (no_obs_ids.length == 0) return;
-                        
+
                         let failed_names = no_obs_ids.map(id_str => {
                             return bird_taxa.find(obj => obj.id == Number(id_str)).preferred_common_name;
                         });
@@ -176,7 +176,7 @@ function initBirdsongGame() {
 }
 
 
-function searchAncestorsForTaxonId(obj){
+function searchAncestorsForTaxonId(obj) {
     //since observations can come from children of a taxon, try each ancestry level one by one, starting w most specific
     let ancestor_ids = obj.taxon.ancestor_ids.slice();
     while (ancestor_ids.length > 0) {
@@ -352,7 +352,12 @@ function nextObservation() {
     let photo; //stored here for attribution later
 
     if (mode == "birdsong") {
-        document.getElementById("birdsong-question").innerHTML = taxon_obj.rank == "order" ? birdsong_question_order : taxon_obj.rank == "family" ? birdsong_question_family : birdsong_question;
+        console.log("taxon", taxon_obj)
+        let question = !taxon_obj.ancestor_ids.includes(3) ? birdsong_nonbird_question
+            : taxon_obj.rank == "order" ? birdsong_question_order
+                : taxon_obj.rank == "family" ? birdsong_question_family
+                    : birdsong_question;
+        document.getElementById("birdsong-question").innerHTML = question;
 
         //set answer image ahead of time so it can load
         let bird_image = document.getElementById("bird-image");
@@ -385,7 +390,11 @@ function nextObservation() {
         document.getElementById("bird-grid").scrollTop = 0;
     }
     else if (mode == "visual_id") {
-        document.getElementById("visual-id-question").innerHTML = taxon_obj.rank == "order" ? visual_id_question_order : taxon_obj.rank == "family" ? visual_id_question_family : visual_id_question;
+        let question = !taxon_obj.ancestor_ids.includes(3) ? visual_id_nonbird_question
+            : taxon_obj.rank == "order" ? visual_id_question_order
+                : taxon_obj.rank == "family" ? visual_id_question_family
+                    : visual_id_question;
+        document.getElementById("visual-id-question").innerHTML = question;
 
         document.getElementById("img-preloader").src = next.photos[0].url.replace("square", "large");
         document.getElementById("bird-image").src = current.photos[0].url.replace("square", "large");

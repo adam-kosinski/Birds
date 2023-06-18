@@ -28,6 +28,13 @@
     margin-right: 0;
 }
 
+.bird-quotes {
+    display: none;
+}
+.white-container:has([data-is-bird=false]) .bird-quotes {
+    display: initial;
+}
+
 #bird-list-loader {
     display: none;
     flex-shrink: 0;

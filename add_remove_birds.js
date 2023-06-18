@@ -126,6 +126,7 @@ async function addBirds(taxa_id_list) {
         link_container.id = "bird-list-" + obj.id;
         link_container.dataset.taxonId = obj.id;
         link_container.dataset.rank = obj.rank;
+        link_container.dataset.isBird = obj.ancestor_ids.includes(3);
         link_container.href = getInfoURL(obj);
         link_container.target = "_blank";
         link_container.addEventListener("click", e => {
@@ -265,7 +266,7 @@ initAutocomplete(
         let i = document.createElement("i");
         let name_no_italics = document.createTextNode(obj.name); //for higher than family
         b.textContent = obj.preferred_common_name;
-        if (!obj.preferred_common_name.includes(obj.matched_term) && !obj.name.includes(obj.matched_term)) {
+        if (!(obj.preferred_common_name && obj.preferred_common_name.includes(obj.matched_term)) && !obj.name.includes(obj.matched_term)) {
             b.textContent += " (" + obj.matched_term + ")";
         }
         i.textContent = obj.name;

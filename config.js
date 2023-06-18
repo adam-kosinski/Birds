@@ -30,9 +30,11 @@ function getInfoURL(taxon_obj) {
 const birdsong_question = "<span class='font-large'>What bird is singing?</span><br>Select a bird or write its name";
 const birdsong_question_family = "<span class='font-large'>What family is the bird from?</span><br>Select a family or write its name";
 const birdsong_question_order = "<span class='font-large'>What order is the bird from?</span><br>Select an order or write its name";
+const birdsong_nonbird_question = "<span class='font-large'>What fella is singing?</span><br>Select one below or write its name";
 const visual_id_question = "What bird is this?";
 const visual_id_question_family = "What family is this bird from?";
 const visual_id_question_order = "What order is this bird from?";
+const visual_id_nonbird_question = "What fella is this?";
 
 
 const presets = {
@@ -81,10 +83,6 @@ const presets = {
         photo: "images/preset_bird_orders_america.jpg",
         mode: "visual_id",
         place_id: 97394,    //north america
-        info_url_format: "https://en.wikipedia.org/wiki/[scientific]",
-        rank: "order",
-        birdsong_question: "<span class='font-large'>What order is the bird in?</span><br>Select a bird order or write its name",
-        visual_id_question: "What order is this bird in?",
         taxa: [
             7251,    //Perching Birds
             6888,    //Waterfowl
@@ -115,10 +113,6 @@ const presets = {
         description: "Test out your knowledge on bird orders with birds from all over the world!",
         photo: "images/preset_bird_orders.jpg",
         mode: "visual_id",
-        info_url_format: "https://en.wikipedia.org/wiki/[scientific]",
-        rank: "order",
-        birdsong_question: "<span class='font-large'>What bird order is the bird in?</span><br>Select a bird order or write its name",
-        visual_id_question: "What order is this bird in?",
         taxa: [
             7251,    //Perching Birds
             6888,    //Waterfowl
@@ -183,38 +177,7 @@ const presets = {
         photo: "",
         mode: "visual_id",
         place_id: 97394,    //north america
-        taxa: [
-            6912,    //Ducks, Geese, and Swans
-            4929,    //Herons, Egrets, and Bitterns
-            5067,    //Hawks, Eagles, and Kites
-            559248,    //New World Sparrows
-            2715,    //Pigeons and Doves
-            7823,    //Crows, Jays, and Magpies
-            9079,    //Finches, Euphonias, and Allies
-            4342,    //Gulls, Terns, and Skimmers
-            15977,    //Thrushes
-            17599,    //Woodpeckers
-            11989,    //New World Blackbirds and Orioles
-            71349,    //New World Warblers
-            980017,    //Tyrant Flycatchers
-            3835,    //Sandpipers and Allies
-            13547,    //Tits, Chickadees, and Titmice
-            71305,    //Cardinals and Allies
-            12704,    //Old World Flycatchers and Chats
-            5562,    //Hummingbirds
-            154,    //Rails, Gallinules, and Coots
-            13685,    //Old World Sparrows
-            11853,    //Swallows and Martins
-            4783,    //Plovers and Lapwings
-            574,    //Pheasants, Grouse, and Allies
-            4262,    //Cormorants and Shags
-            59911,    //Mockingbirds and Thrashers
-            4637,    //Falcons and Caracaras
-            14841,    //Starlings
-            71369,    //Tanagers and Allies
-            19728,    //Typical Owls
-            15964    //Wrens
-        ]
+        taxa: []
     },
     */
     "Tricky Trillers": {
@@ -256,5 +219,31 @@ const presets = {
             10139,    //Grasshopper Sparrow
             10168    //Vesper Sparrow
         ]
+    },
+    "Common Frog and Toad Sounds (NC)": {
+        description: "Don't mind us, we're definitely birds, uh... ribbit.",
+        photo: "images/preset_frogs_toads.jpg",
+        mode: "birdsong",
+        taxa: [
+            23930,    //Cope's Gray Treefrog
+            24268,    //Spring Peeper
+            24263,    //Upland Chorus Frog
+            23969,    //Green Treefrog
+            24230,    //Northern Cricket Frog
+            25078,    //Eastern Narrow-mouthed Toad
+            65982,    //Green Frog
+            65979,    //American Bullfrog
+            23873,    //Squirrel Treefrog
+            60341,    //Southern Leopard Frog
+            64968,    //American Toad
+            24233,    //Southern Cricket Frog
+            24262,    //Little Grass Frog
+            64977,    //Fowler's Toad
+            23872,    //Pine Woods Tree Frog
+            66002    //Pickerel Frog
+        ]
     }
 }
+
+//southern cricket is ok
+//little grass maybe not
