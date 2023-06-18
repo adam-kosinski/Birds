@@ -152,6 +152,13 @@
     align-items: center;
 }
 
+#species-or-taxa::after {
+    content: 'taxa';
+}
+.white-container:not(:has([data-rank]:not([data-rank=species]))) #species-or-taxa::after {
+    content: 'species';
+}
+
 #clear-list {
     color: var(--medium-gray);
     padding: 6px;

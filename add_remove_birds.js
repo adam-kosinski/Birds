@@ -136,6 +136,7 @@ async function addBirds(taxa_id_list) {
         let link_container = document.createElement("a");
         link_container.id = "bird-list-" + obj.id;
         link_container.dataset.taxonId = obj.id;
+        link_container.dataset.rank = obj.rank;
         link_container.href = getInfoURL(obj);
         link_container.target = "_blank";
         link_container.addEventListener("click", e => {

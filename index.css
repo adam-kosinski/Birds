@@ -25,6 +25,7 @@
 
 #cacaw {
     flex-shrink: 0;
+    letter-spacing: -0.015em;
 }
 #hi {
     text-align: center;
