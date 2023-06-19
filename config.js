@@ -27,7 +27,7 @@ function getFunnyBirdDelay(){
 }
 
 function getInfoURL(taxon_obj) {
-    if (taxon_obj.rank == "species") return "https://www.allaboutbirds.org/guide/" + taxon_obj.preferred_common_name.replaceAll(" ", "_") + (mode == "birdsong" ? "/sounds" : "/id");
+    if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank == "species") return "https://www.allaboutbirds.org/guide/" + taxon_obj.preferred_common_name.replaceAll(" ", "_") + (mode == "birdsong" ? "/sounds" : "/id");
     return taxon_obj.wikipedia_url;
 }
 
