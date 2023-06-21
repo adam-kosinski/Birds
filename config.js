@@ -22,8 +22,8 @@ const place_style = {     //for location geometry
 const top_n_selected = 16; //for location selection
 
 const funny_bird_out_duration = 8000; //ms
-function getFunnyBirdDelay(){
-    return 60000 + 60000*Math.random();
+function getFunnyBirdDelay() {
+    return 60000 + 60000 * Math.random();
 }
 
 function getInfoURL(taxon_obj) {
@@ -88,29 +88,29 @@ const presets = {
         mode: "visual_id",
         place_id: 97394,    //north america
         taxa: [
-            7251,    //Perching Birds
-            6888,    //Waterfowl
-            67561,    //Shorebirds and Allies
-            67566,    //Pelicans, Herons, Ibises, and Allies
-            71261,    //Hawks, Eagles, Kites, and Allies
-            2708,    //Pigeons and Doves
-            17550,    //Woodpeckers, Barbets, and Allies
-            67573,    //Nightjars, Swifts, Hummingbirds, and Allies
-            4,    //Cranes, Rails, and Allies
-            573,    //Landfowl
-            71268,    //Gannets, Cormorants, and Allies
-            18874,    //Parrots
-            67570,    //Falcons and Caracaras
-            19350,    //Owls
-            2114,    //Kingfishers and Allies
-            559244,    //New World Vultures
-            67563,    //Grebes
-            1623,    //Cuckoos
-            3726,    //Storks
-            67565,    //Tubenoses
             67562,    //Loons
+            67563,    //Grebes
+            67565,    //Tubenoses
+            67566,    //Pelicans, Herons, Ibises, and Allies
+            71268,    //Gannets, Cormorants, and Allies
+            3726,    //Storks
             67569,    //Flamingos
-            20715    //Trogons and Quetzals
+            6888,    //Waterfowl
+            559244,    //New World Vultures
+            71261,    //Hawks, Eagles, Kites, and Allies
+            67570,    //Falcons and Caracaras
+            573,    //Landfowl
+            4,    //Cranes, Rails, and Allies
+            67561,    //Shorebirds and Allies
+            2708,    //Pigeons and Doves
+            18874,    //Parrots
+            1623,    //Cuckoos
+            19350,    //Owls
+            67573,    //Nightjars, Swifts, Hummingbirds, and Allies
+            20715,    //Trogons and Quetzals
+            2114,    //Kingfishers and Allies
+            17550,    //Woodpeckers, Barbets, and Allies
+            7251    //Perching Birds
         ]
     },
     "Bird Orders (Global)": {
@@ -162,26 +162,126 @@ const presets = {
         ]
     },
     "North America Families (Passeriformes)": {
-        description: "[list not created yet]",
+        description: "Tweet twitter tweety tweet!",
         photo: "images/preset_families_passeriformes.jpg",
         mode: "visual_id",
         place_id: 97394,    //north america
-        taxa: []
+        taxa: [
+            980017,    //Tyrant Flycatchers
+            7284,    //Larks
+            11853,    //Swallows and Martins
+            7823,    //Crows, Jays, and Magpies
+            13547,    //Tits, Chickadees, and Titmice
+            71362,    //Penduline-Tits
+            7264,    //Long-tailed Tits
+            14799,    //Nuthatches
+            7448,    //Treecreepers
+            71355,    //Gnatcatchers
+            15964,    //Wrens
+            7640,    //Dippers
+            15050,  //Sylviid Warblers and Parrotbills, aka Old world warblers, kinglets, gnatcatchers
+            180354,   //Kinglets
+            200982,   //Leaf Warblers
+            12704,    //Old World Flycatchers and Chats
+            15977,    //Thrushes
+            59911,    //Mockingbirds and Thrashers
+            71339,    //Wagtails and Pipits
+            7423,    //Waxwings
+            367708,    //Silky-flycatchers
+            71351,      //Olive Warbler
+            12015,    //Shrikes
+            14841,    //Starlings
+            17354,    //Vireos, Shrike-Babblers, and Erpornis
+            71349,    //New World Warblers
+            559263,   //Yellow-breasted Chat
+            // 71369,    //Tanagers and Allies
+            71305,    //Cardinals and Allies
+            11989,    //New World Blackbirds and Orioles
+            200991,   //Longspurs and Snow Buntings
+            559248,   //New World Sparrows
+            9079,    //Finches, Euphonias, and Allies
+            13685    //Old World Sparrows
+        ]
     },
     "North America Families (Non-Passeriformes)": {
-        description: "[list not created yet]",
+        description: "Do perching birds intimidate you? Try these families instead! Not that they're any easier...",
         photo: "images/preset_families_non_passeriformes.jpg",
         mode: "visual_id",
         place_id: 97394,    //north america
-        taxa: []
+        taxa: [
+            4619,    //Loons
+            4203,    //Grebes
+            67526,    //Albatrosses
+            4020,    //Shearwaters and Petrels
+            71326,    //Northern Storm-Petrels
+            793435,   //Southern Storm Petrels
+            // 4312,    //Tropicbirds
+            3784,    //Boobies and Gannets
+            4323,    //Pelicans
+            4262,    //Cormorants and Shags
+            5059,    //Darters
+            4628,    //Frigatebirds
+            4929,    //Herons, Egrets, and Bitterns
+            3727,    //Ibises and Spoonbills
+            4730,    //Storks
+            4255,    //Flamingos
+            6912,    //Ducks, Geese, and Swans
+            71306,    //New World Vultures
+            5067,    //Hawks, Eagles, and Kites
+            200958, //Osprey
+            4637,    //Falcons and Caracaras
+            2043,    //Guans, Chachalacas, and Curassows
+            574,    //Pheasants, Grouse, and Allies
+            1278,   //New World Quails
+            154,    //Rails, Gallinules, and Coots
+            5,    //Limpkins
+            23,    //Cranes
+            4783,    //Plovers and Lapwings
+            71325,    //Oystercatchers
+            71361,    //Stilts and Avocets
+            4574,    //Jacanas
+            3835,    //Sandpipers and Allies
+            4342,    //Gulls, Terns, and Skimmers
+            71367,   //Skuas and Jaegers
+            71295,    //Auks, Murres, Guillemots, and Puffins
+            2715,    //Pigeons and Doves
+            18875,    //New World and African Parrots
+            1627,    //Cuckoos
+            20413,    //Barn-Owls
+            19728,    //Typical Owls
+            19376,    //Nightjars and Nighthawks
+            6544,    //Swifts
+            5562,    //Hummingbirds
+            20716,    //Trogons
+            2314,    //Kingfishers
+            17599    //Woodpeckers
+        ]
+        // All About Birds North America families doesn't mention:
+        // Tropicbirds (fairly rare), commenting out
+        // Flamingos (well)
+        // Jacanas (mexico and tropics)
+        // Tanagers (Thraupidae, massive family, mexico and tropics). Only two main ones according to audobon, commenting out
     },
     "North America Families (All)": {
-        description: "[list not created yet]",
+        description: "Show off your bird skills!",
         photo: "images/preset_families_all.jpg",
         mode: "visual_id",
         place_id: 97394,    //north america
-        taxa: []
+        taxa: [] //concatenated at bottom of config file
     },
+    // "Waterfowl Tribes (North America)": {
+    //     description: "Sploosh. Quack. Honk.",
+    //     photo: "",
+    //     mode: "visual_id",
+    //     place_id: 97394,    //north america
+    //     taxa: [
+    //         6890,   //whistling ducks
+    //         6913,   //swans
+    //         7006,   //grey geese
+    //         7086,   //black geese
+    //         7120,   //muscovy duck
+    //     ]
+    // },
     "Tricky Trillers": {
         description: "That's a pine warbler right? Or wait, maybe a chipping sparrow? Or a junco... hmm, tricky. See <a target='_blank' href='https://apassionforbirds.wordpress.com/2015/02/21/tricky-trillers/'>here</a> for some ID tips.",
         photo: "images/preset_trillers.jpg",
@@ -194,6 +294,51 @@ const presets = {
             10094,  //dark eyed junco
             9135,   //chipping sparrow
             72912  //worm eating warbler
+        ]
+    },
+    "Robin-Like Songs": {
+        description: "What do you mean, that's not a robin?",
+        photo: "images/preset_robinlike.jpg",
+        mode: "birdsong",
+        taxa: [
+            12727,  //american robin
+            9921,   //scarlet tanager
+            10271,  //rose breasted grosbeak
+            891704, //red eyed vireo
+            11935   //tree swallow
+        ]
+    },
+    "Finnicky Finchy Friends (East/Central US)": {
+        description: "They all sound the same, prove me wrong.",
+        photo: "images/preset_finnicky_finches.jpg",
+        mode: "birdsong",
+        taxa: [
+            17394,  //warbling vireo
+            199840, //house finch
+            199841, //purple finch
+            145310, //american goldfinch
+            73155,  //blue grosbeak
+            10227   //indigo bunting
+        ]
+    },
+    "Common Warblers (East/Central US)": {
+        description: "Tweet tweet!",
+        photo: "images/preset_warblers.jpg",
+        mode: "birdsong",
+        taxa: [
+            10286,    //Black-and-white Warbler
+            10247,    //American Redstart
+            145238,    //Yellow Warbler
+            145239,    //Chestnut-sided Warbler
+            145245,    //Yellow-rumped Warbler
+            62550,    //Ovenbird
+            9721,    //Common Yellowthroat
+            145229,    //Hooded Warbler
+            145246,    //Yellow-throated Warbler
+            73553,    //Blue-winged Warbler
+            145233,    //Northern Parula
+            145249,    //Prairie Warbler
+            145258    //Black-throated Green Warbler
         ]
     },
     "Sparrows (NC)": {
@@ -246,3 +391,6 @@ const presets = {
         ]
     }
 }
+
+
+presets['North America Families (All)'].taxa = presets['North America Families (Non-Passeriformes)'].taxa.concat(presets['North America Families (Passeriformes)'].taxa);
