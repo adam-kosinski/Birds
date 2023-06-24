@@ -160,10 +160,10 @@
 }
 
 #species-or-taxa::after {
-    content: 'taxa';
-}
-.white-container:not(:has([data-rank]:not([data-rank=species]))) #species-or-taxa::after {
     content: 'species';
+}
+.white-container:has([data-rank]:not([data-rank=species])) #species-or-taxa::after {
+    content: 'taxa';
 }
 
 #clear-list {

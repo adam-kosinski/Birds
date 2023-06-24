@@ -309,7 +309,7 @@ const presets = {
             11935   //tree swallow
         ]
     },
-    "Finnicky Finchy Friends (East/Central US)": {
+    "Finicky Finchy Friends (East/Central US)": {
         description: "They all sound the same, prove me wrong.",
         photo: "images/preset_finnicky_finches.jpg",
         mode: "birdsong",
