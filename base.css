@@ -40,7 +40,7 @@ body {
     object-fit: cover;
 }
 
-a, a:visited {
+a:not(.default-link-style), a:not(.default-link-style):visited {
     text-decoration: none;
     color: inherit;
     cursor: pointer;

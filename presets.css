@@ -43,11 +43,6 @@
     font-size: 16px;
 }
 
-.description a {
-    text-decoration: underline;
-    color: blue;
-}
-
 #preset-list hr {
     margin-left: 16px;
     margin-right: 16px;
