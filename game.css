@@ -94,6 +94,7 @@
 
 #bird-input-container {
     position: relative;
+    z-index: 5;
     margin-top: 10px;
 }
 
@@ -107,6 +108,7 @@
 #taxon-autocomplete-list {
     display: none;
     position: absolute;
+    z-index: -1;
     transform: translateX(10px);
     top: calc(100% - 10px);
     padding-top: 10px;
@@ -154,8 +156,8 @@
 }
 
 #above-list-container {
-    display: none; /* usually flex */
-    justify-content: space-between;
+    display: none; /* usually grid */
+    grid-template-columns: 1fr auto 80px;
     align-items: center;
 }
 
@@ -166,15 +168,27 @@
     content: 'taxa';
 }
 
-#clear-list {
+#above-list-container button {
     color: var(--medium-gray);
     padding: 6px;
+}
+
+#clear-selection {
+    display: none;
+    text-align: right;
+}
+.white-container:has(#bird-list .selected) #clear-selection {
+    display: block;
+}
+#clear-list {
+    grid-column-start: 3; /* so it's in the right place no matter if the clear selection button is visible or not */
 }
 
 #bird-list {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    position: relative; /* for aligning '+' pseudo elements*/
 
     /* to place scrollbar outside of content */
     box-sizing: border-box;
@@ -218,6 +232,27 @@
     to {background-color: transparent;}
 }
 
+
+#bird-list:has(.selected) > :not(.selected) {
+    opacity: 0.4;
+}
+#bird-list .plus-sign {
+    display: none;
+}
+#bird-list:has(.selected) > :not(.selected) .plus-sign {
+    content: '+';
+    font-size: 60px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 4px 4px black;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 28.5px;
+}
 
 
 

@@ -18,6 +18,7 @@ document.getElementById("back-to-list").addEventListener("click", () => {
 
     //reset vars
     obs = [];
+    taxa_to_use = []; //probably don't need to reset, but just in case
     taxon_obs = {};
     taxon_queues = {};
     taxon_bag = [];
@@ -70,6 +71,13 @@ bird_grid.addEventListener("click", (e) => {
         //update text input
         document.getElementById("guess-input").value = originally_selected ? "" : bird_grid_option.dataset.commonName;
     }
+});
+
+//bird list bird selection
+document.getElementById("clear-selection").addEventListener("click", () => {
+    document.querySelectorAll("#bird-list .selected").forEach(el => {
+        el.classList.remove("selected");
+    });
 });
 
 

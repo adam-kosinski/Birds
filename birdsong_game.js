@@ -42,7 +42,8 @@ function setMode(new_mode) {
 
     //update links
     document.querySelectorAll("#bird-list a").forEach(a => {
-        let taxon_id = Number(a.dataset.taxonId);
+        let container = a.closest(".bird-list-item");
+        let taxon_id = Number(container.dataset.taxonId);
         let taxon_obj = bird_taxa.find(obj => obj.id == taxon_id)
         a.href = getInfoURL(taxon_obj);
     });
@@ -93,9 +94,17 @@ function initBirdsongGame() {
     //start loader
     document.getElementById("bird-list-loader").style.display = "block";
 
+    //get taxa_to_use
+    taxa_to_use = Array.from(document.querySelectorAll("#bird-list .selected")).map(el => {
+        let id = el.dataset.taxonId;
+        return bird_taxa.find(obj => obj.id == id);
+    });
+    if (taxa_to_use.length == 0) taxa_to_use = bird_taxa;
+    console.log("taxa to use", taxa_to_use)
+
     //init taxon_obs, taxon_queues, taxon bag
     taxon_obs = {}; //clear it in case last init failed and this isn't empty
-    bird_taxa.forEach(obj => {
+    taxa_to_use.forEach(obj => {
         taxon_obs[obj.id] = [];
         taxon_queues[obj.id] = [];
         for (let i = 0; i < max_taxon_bag_copies; i++) {
@@ -120,7 +129,7 @@ function initBirdsongGame() {
                 el.parentElement.removeChild(el);
             });
             //add taxa
-            bird_taxa.forEach(obj => {
+            taxa_to_use.forEach(obj => {
                 //HTML
                 let button = document.createElement("button");
                 button.className = "bird-grid-option";
@@ -198,7 +207,7 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "",
     //the promise resolves to true if data was fetched, false if there was no data to fetch
 
     if (!taxa_id_string) {
-        taxa_id_string = bird_taxa.map(obj => obj.id).join(",");
+        taxa_id_string = taxa_to_use.map(obj => obj.id).join(",");
     }
     if (!per_page) {
         //don't try to fetch with a big per page if realistically we don't need that many observations
@@ -334,7 +343,7 @@ function nextObservation() {
     console.log("current", current);
 
     let taxon_id = searchAncestorsForTaxonId(current);
-    let taxon_obj = bird_taxa.find(obj => obj.id == taxon_id);
+    let taxon_obj = taxa_to_use.find(obj => obj.id == taxon_id);
 
     //set taxon HTML (not necessarily displayed yet, see scss)
     document.getElementById("answer-common-name").textContent = taxon_obj.preferred_common_name;

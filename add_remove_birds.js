@@ -1,4 +1,5 @@
 let bird_taxa = []; //list of iNaturalist taxon objects that are on the practice list
+let taxa_to_use = []; //subset of bird_taxa being used this game, initialized at game init based on the selected birds
 let cached_bird_taxa = []; //whenever we get taxon info from autocomplete search, add it here so we don't have to make another API call to add to the list
 let place_id;
 
@@ -45,7 +46,7 @@ async function addBirds(taxa_id_list) {
 
     //clear message about no birds selected, start loader
     document.getElementById("bird-list-message").style.display = "none";
-    document.getElementById("above-list-container").style.display = "flex";
+    document.getElementById("above-list-container").style.display = "grid";
     document.getElementById("bird-list-loader").style.display = "block";
 
     //update URL list, added entries will be at the end
@@ -122,37 +123,50 @@ async function addBirds(taxa_id_list) {
         bird_taxa.push(obj);
 
         //add to HTML list
-        let link_container = document.createElement("a");
-        link_container.id = "bird-list-" + obj.id;
-        link_container.dataset.taxonId = obj.id;
-        link_container.dataset.rank = obj.rank;
-        link_container.dataset.isBird = obj.ancestor_ids.includes(3);
-        link_container.href = getInfoURL(obj);
-        link_container.target = "_blank";
-        link_container.addEventListener("click", e => {
-            if (e.target.tagName == "BUTTON") e.preventDefault(); //don't follow the link if clicking on range map etc.
-        });
+        // let link_container = document.createElement("a");
+        
+        // link_container.href = getInfoURL(obj);
+        // link_container.target = "_blank";
+        // link_container.addEventListener("click", e => {
+        //     if (e.target.tagName == "BUTTON" || e.target.tagName == "IMG" || e.classList.contains("plus-icon")) e.preventDefault(); //don't follow the link if clicking on range map etc.
+        // });
 
-        let div = document.createElement("div");
-        link_container.append(div);
+        let container = document.createElement("div");
+        container.id = "bird-list-" + obj.id;
+        container.className = "bird-list-item";
+        container.dataset.taxonId = obj.id;
+        container.dataset.rank = obj.rank;
+        container.dataset.isBird = obj.ancestor_ids.includes(3);
 
         let birdinfo = document.createElement("div");
+        birdinfo.addEventListener("click", e => {
+            if (!(e.target.classList.contains("plus-sign") || e.target.classList.contains("bird-square"))) return;
+            container.classList.toggle("selected");
+            document.getElementById("n-selected").textContent = document.querySelectorAll("#bird-list .selected").length;
+        });
+
+        let plus_sign = document.createElement("div");
+        plus_sign.className = "plus-sign";
+        plus_sign.textContent = "+";
 
         let bird_square = document.createElement("img");
         bird_square.className = "bird-square";
         if (obj.default_photo) bird_square.src = obj.default_photo.square_url;
         bird_square.alt = "Photo of " + obj.preferred_common_name;
 
-        let p = document.createElement("p");
+        let link = document.createElement("a");
+        link.href = getInfoURL(obj);
+        link.target = "_blank";
+
         let b = document.createElement("b");
         let i = document.createElement("i");
         let br = document.createElement("br");
         b.textContent = obj.preferred_common_name;
         i.textContent = obj.name;
-        p.append(b, br, i);
+        link.append(b, br, i);
 
-        birdinfo.append(bird_square, p);
-        div.append(birdinfo);
+        birdinfo.append(plus_sign, bird_square, link);
+        container.append(birdinfo);
 
         let buttons = document.createElement("div");
 
@@ -170,13 +184,13 @@ async function addBirds(taxa_id_list) {
         });
 
         buttons.append(map_icon, x_button);
-        div.append(buttons);
+        container.append(buttons);
 
         let bird_list = document.getElementById("bird-list");
-        bird_list.append(link_container);
+        bird_list.append(container);
 
         // if just added a bird manually (proxy check if only added one), highlight it
-        if (results.length == 1) highlightElement(link_container);
+        if (results.length == 1) highlightElement(container);
     });
 
     //enable button
