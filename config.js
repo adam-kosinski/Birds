@@ -35,6 +35,8 @@ function getInfoURL(taxon_obj) {
     return taxon_obj.wikipedia_url;
 }
 
+const bird_image_zoom_factor = 4;
+
 const birdsong_question = "<span class='font-large'>What bird is singing?</span><br>Select a bird or write its name";
 const birdsong_question_family = "<span class='font-large'>What family is the bird from?</span><br>Select a family or write its name";
 const birdsong_question_order = "<span class='font-large'>What order is the bird from?</span><br>Select an order or write its name";

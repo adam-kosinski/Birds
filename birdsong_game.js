@@ -432,7 +432,11 @@ function nextObservation() {
     setGameState(GUESSING);
 }
 
-
+let bird_image = document.getElementById("bird-image")
+bird_image.addEventListener("load", () => {
+    console.log("natural", bird_image.naturalWidth, bird_image.naturalHeight)
+    document.getElementById("bird-image-parent-div").style.aspectRatio = bird_image.naturalWidth + " / " + bird_image.naturalHeight;
+})
 
 function checkAnswer() {
     let guess_input = document.getElementById("guess-input");

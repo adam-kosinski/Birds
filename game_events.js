@@ -121,15 +121,6 @@ document.getElementById("birdsong-audio-0").addEventListener("ended", () => {
 });
 
 
-//image attribution
-
-//do this styling with javascript + hacky CSS because can't wrap the bird-image in a div or iOS goes crazy
-let image_resize_observer = new ResizeObserver((entries) => {
-    let img_width = entries[0].contentBoxSize[0].inlineSize;
-    document.getElementById("image-attribution-container").style.width = img_width + "px";
-});
-image_resize_observer.observe(document.getElementById("bird-image"));
-
 //show-hide attribution text
 document.addEventListener("click", e => {
     let button = e.target.closest("#image-attribution-button");
@@ -140,6 +131,37 @@ document.addEventListener("click", e => {
         document.getElementById("image-attribution").classList.remove("visible");
     }
 });
+
+//desktop hover effect
+document.addEventListener("mousemove", e => {
+    //disable zoom on mobile
+    if(!matchMedia("(hover: hover)").matches) return;
+
+    let transform = "initial";
+    if(e.target.id == "bird-image"){
+        let parent = document.getElementById("bird-image-parent-div");
+        let rect = parent.getBoundingClientRect()
+
+        //get content rect (client rect includes border)
+        let border_size = Number(getComputedStyle(parent).borderWidth.split("px")[0])
+        let content = {
+            x: rect.x - border_size,
+            y: rect.y - border_size,
+            width: rect.width - 2*border_size,
+            height: rect.height - 2*border_size
+        }
+        let fracX = (e.clientX - content.x) / content.width;
+        let fracY = (e.clientY - content.y) / content.height;
+        fracX = Math.max(0, Math.min(1, fracX)) //sometimes it goes slightly negative, probably a rounding error
+        fracY = Math.max(0, Math.min(1, fracY))
+
+        let x_range = content.width * bird_image_zoom_factor - content.width;
+        let y_range = content.height * bird_image_zoom_factor - content.height;
+        transform = `translate(${-(fracX-0.5) * x_range}px, ${-(fracY-0.5) * y_range}px) scale(${bird_image_zoom_factor})`
+    }
+    document.getElementById("bird-image").style.transform = transform;
+});
+// alert()
 
 
 //funny bird
