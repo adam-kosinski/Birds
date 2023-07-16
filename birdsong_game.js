@@ -113,7 +113,7 @@ function initBirdsongGame() {
     taxa_to_use.forEach(obj => {
         taxon_obs[obj.id] = [];
         taxon_queues[obj.id] = [];
-        for (let i = 0; i < max_taxon_bag_copies; i++) {
+        for (let i = 0; i < start_taxon_bag_copies; i++) {
             taxon_bag.push(obj.id)
         }
     });
@@ -452,7 +452,6 @@ function checkAnswer() {
 
     //update taxon picking probabilities
     if(!current.is_squirrel_intruder){
-        console.log("updating bag")
         if (correct) updateTaxonBag(guess_obj.id, -correct_remove_copies);
         else {
             if (guess_obj) updateTaxonBag(guess_obj.id, incorrect_add_copies);
