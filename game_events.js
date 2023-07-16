@@ -137,6 +137,9 @@ document.addEventListener("mousemove", e => {
     //disable zoom on mobile
     if(!matchMedia("(hover: hover)").matches) return;
 
+    //only do this for visual id
+    if(mode != "visual_id") return;
+
     let transform = "initial";
     if(e.target.id == "bird-image"){
         let parent = document.getElementById("bird-image-parent-div");
