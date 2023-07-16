@@ -8,11 +8,11 @@ const birdsong_popular_attempts = 3; //how many times to attempt fetching popula
 const visual_id_popular_attempts = 1;
 let taxon_obs_threshold = 20; //number of observations we'd like to have for each taxon, will stop when reach this
 
-const max_taxon_bag_copies = 7; //number of times a taxon can be in the taxon bag, min is 1
+const max_taxon_bag_copies = 9; //number of times a taxon can be in the taxon bag, min is 1
 const start_taxon_bag_copies = 3;
-const correct_remove_copies = 2; //number of copies to remove from taxon_bag if the user got a question on this taxon right
+const correct_remove_copies = 1; //number of copies to remove from taxon_bag if the user got a question on this taxon right
 const incorrect_add_copies = 2; //same, but number to add if incorrect, for both the guess and what it actually is
-const skipped_add_copies = 1; //number to add if no guess, for what it actually is
+const skipped_add_copies = 0; //number to add if no guess, for what it actually is
 
 const autocomplete_delay = 1000; //ms after user stops typing, to update the autocomplete
 const n_autocomplete_results = 5;
@@ -30,7 +30,7 @@ function getFunnyBirdDelay() {
 const squirrel_probability = 0.05
 
 function getInfoURL(taxon_obj) {
-    if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank == "species") return "https://www.allaboutbirds.org/guide/" + taxon_obj.preferred_common_name.replaceAll(" ", "_") + (mode == "birdsong" ? "/sounds" : "/id");
+    if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank == "species") return "https://www.allaboutbirds.org/guide/" + taxon_obj.preferred_common_name.replaceAll(" ", "_").replaceAll("'", "") + (mode == "birdsong" ? "/sounds" : "/id");
     if (taxon_obj.ancestor_ids.includes(20979) && taxon_obj.rank == "species") return "https://herpsofnc.org/?s=" + taxon_obj.preferred_common_name.replaceAll(" ", "+");
     return taxon_obj.wikipedia_url;
 }

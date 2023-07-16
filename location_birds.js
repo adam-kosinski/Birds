@@ -126,5 +126,5 @@ document.getElementById("select-none").addEventListener("click", () => {
 
 //collapse instructions
 document.getElementById("collapse-arrow").addEventListener("click", () => {
-    document.getElementById("white-container").classList.toggle("collapsed");
+    document.querySelector(".white-container").classList.toggle("collapsed");
 });
