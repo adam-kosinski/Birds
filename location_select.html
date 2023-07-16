@@ -78,6 +78,7 @@
                 <button id="continue-button" class="btn-primary">CONTINUE</button>
             </div>
             <div id="selectors-container">
+                <p><span id="n-selected"></span> selected</p>
                 <button id="select-all">SELECT ALL (<span id="species-count">0</span>)</button>
                 <button id="select-none">SELECT NONE</button>
             </div>
@@ -105,7 +106,10 @@
     <script src="location_birds.js"></script>
     <script src="range_map.js"></script>
 
-    <script>document.getElementById("top-n-selected").textContent = top_n_selected;</script>
+    <script>
+        document.getElementById("top-n-selected").textContent = top_n_selected;
+        document.getElementById("n-selected").textContent = top_n_selected;
+    </script>
 </body>
 
 </html>

@@ -176,6 +176,7 @@
 
 #selectors-container {
     display: flex;
+    align-items: baseline;
     gap: 20px;
     font-size: 12px;
 }
@@ -200,6 +201,7 @@
     gap: 10px;
     padding-left: 10px;
     padding-right: 16px;
+    cursor: pointer;
 }
 
 .checkbox {

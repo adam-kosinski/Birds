@@ -111,17 +111,23 @@ document.getElementById("list").addEventListener("click", e => {
     let row = e.target.closest(".bird-row");
     if(row && !e.target.classList.contains("range-map-icon")){
         row.querySelector(".checkbox").classList.toggle("checked");
+        updateNSelectedDisplay()
     }
 });
 
 document.getElementById("select-all").addEventListener("click", () => {
     document.querySelectorAll(".checkbox").forEach(el => el.classList.add("checked"));
+    updateNSelectedDisplay()
 });
 
 document.getElementById("select-none").addEventListener("click", () => {
     document.querySelectorAll(".checkbox").forEach(el => el.classList.remove("checked"));
+    updateNSelectedDisplay()
 });
 
+function updateNSelectedDisplay(){
+    document.getElementById("n-selected").textContent = document.querySelectorAll(".bird-row .checked").length;
+}
 
 
 //collapse instructions
