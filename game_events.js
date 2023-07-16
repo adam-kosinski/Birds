@@ -34,6 +34,7 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     if(funny_bird_timeout_id){
         clearTimeout(funny_bird_timeout_id);
     }
+    funny_bird.removeEventListener("transitionend", scheduleFunnyBird);
     funny_bird.removeAttribute("data-clicked");
     funny_bird.removeAttribute("style"); //reset the changed transition duration
 

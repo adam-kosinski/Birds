@@ -22,7 +22,7 @@ const place_style = {     //for location geometry
 }
 const top_n_selected = 16; //for location selection
 
-const funny_bird_out_duration = 8000; //ms
+const funny_bird_leave_delay = 8000; //ms
 function getFunnyBirdDelay() {
     return 60000 + 60000 * Math.random();
 }

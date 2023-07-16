@@ -501,7 +501,7 @@ function scheduleFunnyBird(){
         setTimeout(() => {
             funny_bird.classList.remove("out");
             funny_bird.addEventListener("transitionend", scheduleFunnyBird, {once: true});
-        }, funny_bird_out_duration);
+        }, funny_bird_leave_delay);
 
     }, getFunnyBirdDelay());
 }
