@@ -27,11 +27,11 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     setGameState(INACTIVE);
 
     //kill ongoing fetch until threshold
-    for (let i=0; i<kill_fetch_until_threshold.length; i++){
+    for (let i = 0; i < kill_fetch_until_threshold.length; i++) {
         kill_fetch_until_threshold[i] = true;
     }
     //reset funny bird
-    if(funny_bird_timeout_id){
+    if (funny_bird_timeout_id) {
         clearTimeout(funny_bird_timeout_id);
     }
     funny_bird.removeEventListener("transitionend", scheduleFunnyBird);
@@ -121,10 +121,17 @@ document.getElementById("birdsong-audio-0").addEventListener("ended", () => {
 });
 
 
+//bird image parent aspect ratio resizing
+let bird_image = document.getElementById("bird-image")
+bird_image.addEventListener("load", () => {
+    document.getElementById("bird-image-parent-div").style.aspectRatio = bird_image.naturalWidth + " / " + bird_image.naturalHeight;
+})
+
+
 //show-hide attribution text
 document.addEventListener("click", e => {
     let button = e.target.closest("#image-attribution-button");
-    if(button){
+    if (button) {
         document.getElementById("image-attribution").classList.toggle("visible");
     }
     else {
@@ -132,16 +139,27 @@ document.addEventListener("click", e => {
     }
 });
 
-//desktop hover effect
-document.addEventListener("mousemove", e => {
+
+//desktop hover zoom
+let bird_image_zoom_factor = 1;
+
+document.addEventListener("mousemove", updateBirdImageZoom);
+
+document.getElementById("bird-image").addEventListener("wheel", e => {
+    let new_zoom = bird_image_zoom_factor - e.deltaY / 200
+    bird_image_zoom_factor = Math.max(1, Math.min(max_bird_image_zoom_factor, new_zoom));
+    updateBirdImageZoom(e)
+})
+
+function updateBirdImageZoom(e) {
     //disable zoom on mobile
-    if(!matchMedia("(hover: hover)").matches) return;
+    if (!matchMedia("(hover: hover)").matches) return;
 
     //only do this for visual id
-    if(mode != "visual_id") return;
+    if (mode != "visual_id") return;
 
     let transform = "initial";
-    if(e.target.id == "bird-image"){
+    if (e.target.id == "bird-image") {
         let parent = document.getElementById("bird-image-parent-div");
         let rect = parent.getBoundingClientRect()
 
@@ -150,8 +168,8 @@ document.addEventListener("mousemove", e => {
         let content = {
             x: rect.x - border_size,
             y: rect.y - border_size,
-            width: rect.width - 2*border_size,
-            height: rect.height - 2*border_size
+            width: rect.width - 2 * border_size,
+            height: rect.height - 2 * border_size
         }
         let fracX = (e.clientX - content.x) / content.width;
         let fracY = (e.clientY - content.y) / content.height;
@@ -160,11 +178,14 @@ document.addEventListener("mousemove", e => {
 
         let x_range = content.width * bird_image_zoom_factor - content.width;
         let y_range = content.height * bird_image_zoom_factor - content.height;
-        transform = `translate(${-(fracX-0.5) * x_range}px, ${-(fracY-0.5) * y_range}px) scale(${bird_image_zoom_factor})`
+        transform = `translate(${-(fracX - 0.5) * x_range}px, ${-(fracY - 0.5) * y_range}px) scale(${bird_image_zoom_factor})`
+    }
+    else {
+        //if not targeting the bird image
+        bird_image_zoom_factor = 1; //reset
     }
     document.getElementById("bird-image").style.transform = transform;
-});
-// alert()
+}
 
 
 //funny bird

@@ -37,6 +37,7 @@
 [data-mode=birdsong] {
     audio:not([src]) {display: none;}
     #visual-id-question {display: none;}
+    #scroll-to-zoom-instructions {display: none;}
 }
 
 [data-mode=birdsong][data-game-state="1"] { //guessing

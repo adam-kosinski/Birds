@@ -45,6 +45,9 @@
 [data-mode=birdsong] #visual-id-question {
   display: none;
 }
+[data-mode=birdsong] #scroll-to-zoom-instructions {
+  display: none;
+}
 
 [data-mode=birdsong][data-game-state="1"] #bird-image-container {
   display: none;

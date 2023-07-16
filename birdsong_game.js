@@ -429,14 +429,13 @@ function nextObservation() {
         document.getElementById("image-copyright-type").textContent = photo.license_code == "cc0" ? "CC0" : (photo.license_code === null ? "C" : "CC");
     }
 
+    //reset zoom (don't want it to be zoomed in by default)
+    bird_image_zoom_factor = 1;
+    document.getElementById("bird-image").style.transform = "initial";
+
     setGameState(GUESSING);
 }
 
-let bird_image = document.getElementById("bird-image")
-bird_image.addEventListener("load", () => {
-    console.log("natural", bird_image.naturalWidth, bird_image.naturalHeight)
-    document.getElementById("bird-image-parent-div").style.aspectRatio = bird_image.naturalWidth + " / " + bird_image.naturalHeight;
-})
 
 function checkAnswer() {
     let guess_input = document.getElementById("guess-input");

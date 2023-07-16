@@ -348,7 +348,6 @@
     max-height: 100%;
 }
 
-
 #image-attribution-container {
     position: absolute;
     bottom: 0;
@@ -393,6 +392,12 @@
 }
 #image-attribution.visible {
     display: block;
+}
+
+@media (hover: none) {
+    #scroll-to-zoom-instructions {
+        display: none;
+    }
 }
 
 
