@@ -123,13 +123,6 @@ async function addBirds(taxa_id_list) {
         bird_taxa.push(obj);
 
         //add to HTML list
-        // let link_container = document.createElement("a");
-        
-        // link_container.href = getInfoURL(obj);
-        // link_container.target = "_blank";
-        // link_container.addEventListener("click", e => {
-        //     if (e.target.tagName == "BUTTON" || e.target.tagName == "IMG" || e.classList.contains("plus-icon")) e.preventDefault(); //don't follow the link if clicking on range map etc.
-        // });
 
         let container = document.createElement("div");
         container.id = "bird-list-" + obj.id;

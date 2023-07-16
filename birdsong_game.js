@@ -57,6 +57,12 @@ function setMode(new_mode) {
 function pickObservation() {
     //pick next observation object, return it. Try not to duplicate the current observation
 
+    //squirrel intruder
+    if(mode == "birdsong" && Math.random() < squirrel_probability){
+        return squirrel_obs[Math.floor(Math.random() * squirrel_obs.length)]
+    }
+
+    //filter to get taxa we currently have observations for
     let filtered_taxon_bag = taxon_bag.filter(id => taxon_obs[id].length > 0);
     if (filtered_taxon_bag.length == 0) {
         console.error("No observations found, cannot pick one");
@@ -344,6 +350,9 @@ function nextObservation() {
 
     let taxon_id = searchAncestorsForTaxonId(current);
     let taxon_obj = taxa_to_use.find(obj => obj.id == taxon_id);
+    if(current.is_squirrel_intruder){
+        taxon_obj = squirrel_taxon_obj;
+    }
 
     //set taxon HTML (not necessarily displayed yet, see scss)
     document.getElementById("answer-common-name").textContent = taxon_obj.preferred_common_name;
@@ -365,11 +374,11 @@ function nextObservation() {
     let photo; //stored here for attribution later
 
     if (mode == "birdsong") {
-        console.log("taxon", taxon_obj)
         let question = !taxon_obj.ancestor_ids.includes(3) ? birdsong_nonbird_question
             : taxon_obj.rank == "order" ? birdsong_question_order
                 : taxon_obj.rank == "family" ? birdsong_question_family
                     : birdsong_question;
+        if(current.is_squirrel_intruder) question = birdsong_question; //definitely a bird... ;)
         document.getElementById("birdsong-question").innerHTML = question;
 
         //set answer image ahead of time so it can load
@@ -432,19 +441,23 @@ function checkAnswer() {
     let guess = guess_input.value;
 
     //find taxon object that matches the guess, if it exists
-    let guess_obj = bird_taxa.find(obj =>
+    //concat with the squirrel taxon to check for correctness of squirrel intruder
+    let guess_obj = bird_taxa.concat([squirrel_taxon_obj]).find(obj =>
         guess.toLowerCase() == obj.name.toLowerCase() ||
         guess.toLowerCase() == obj.preferred_common_name.toLowerCase()
     );
 
-    let correct = Boolean(guess_obj && current.taxon.ancestor_ids.includes(guess_obj.id));
+    let correct = Boolean(guess_obj && (current.taxon.id == guess_obj.id || current.taxon.ancestor_ids.includes(guess_obj.id)));
     document.getElementById("birdsong-main").dataset.correct = guess.length > 0 ? correct : "no-guess"
 
     //update taxon picking probabilities
-    if (correct) updateTaxonBag(guess_obj.id, -correct_remove_copies);
-    else {
-        if (guess_obj) updateTaxonBag(guess_obj.id, incorrect_add_copies);
-        updateTaxonBag(searchAncestorsForTaxonId(current), guess.length > 0 ? incorrect_add_copies : skipped_add_copies);
+    if(!current.is_squirrel_intruder){
+        console.log("updating bag")
+        if (correct) updateTaxonBag(guess_obj.id, -correct_remove_copies);
+        else {
+            if (guess_obj) updateTaxonBag(guess_obj.id, incorrect_add_copies);
+            updateTaxonBag(searchAncestorsForTaxonId(current), guess.length > 0 ? incorrect_add_copies : skipped_add_copies);
+        }
     }
 
     setGameState(ANSWER_SHOWN);
