@@ -27,7 +27,7 @@ function getFunnyBirdDelay() {
     return 60000 + 60000 * Math.random();
 }
 
-const squirrel_probability = 0.01
+const squirrel_probability = 0.02
 
 function getInfoURL(taxon_obj) {
     if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank == "species") return "https://www.allaboutbirds.org/guide/" + taxon_obj.preferred_common_name.replaceAll(" ", "_").replaceAll("'", "") + (mode == "birdsong" ? "/sounds" : "/id");
