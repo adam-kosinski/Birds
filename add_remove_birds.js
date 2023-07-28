@@ -1,6 +1,5 @@
 let bird_taxa = []; //list of iNaturalist taxon objects that are on the practice list
 let taxa_to_use = []; //subset of bird_taxa being used this game, initialized at game init based on the selected birds
-let cached_bird_taxa = []; //whenever we get taxon info from autocomplete search, add it here so we don't have to make another API call to add to the list
 let place_id;
 
 //automatically read taxa from URL and populate the HTML and JS taxa lists
@@ -57,34 +56,29 @@ async function addBirds(taxa_id_list) {
 
     let results = new Array(ids_to_fetch.length); //array of undefined, will check if array includes undefined to tell if all arrived
 
-    // If cached and only one bird (from the autocomplete basically), use that, else ask iNaturalist
-    if (ids_to_fetch.length == 1 && cached_bird_taxa.hasOwnProperty(ids_to_fetch[0])) {
-        results = [cached_bird_taxa[ids_to_fetch[0]]];
+    //fetch 30 taxa at a time (iNaturalist limit)
+    //only when they've all arrived add them to the list (so ensure same order as in id list)
+    let promises = [];
+    let start_idx = 0; //for indexing ids_to_fetch
+
+    while (start_idx < ids_to_fetch.length) {
+        let ids = ids_to_fetch.slice(start_idx, start_idx + 30);
+        start_idx += 30;
+
+        promises.push(fetch("https://api.inaturalist.org/v1/taxa/" + ids.join(","))
+            .then(res => res.json())
+            .then(data => {
+                //insert into correct location in results array
+                let offset = ids_to_fetch.indexOf(data.results[0].id);
+                for (let i = 0; i < data.results.length; i++) {
+                    results[i + offset] = data.results[i];
+                }
+            })
+        );
     }
-    else {
-        //fetch 30 taxa at a time (iNaturalist limit)
-        //only when they've all arrived add them to the list (so ensure same order as in id list)
-        let promises = [];
-        let start_idx = 0; //for indexing ids_to_fetch
 
-        while (start_idx < ids_to_fetch.length) {
-            let ids = ids_to_fetch.slice(start_idx, start_idx + 30);
-            start_idx += 30;
-
-            promises.push(fetch("https://api.inaturalist.org/v1/taxa/" + ids.join(","))
-                .then(res => res.json())
-                .then(data => {
-                    //insert into correct location in results array
-                    let offset = ids_to_fetch.indexOf(data.results[0].id);
-                    for (let i = 0; i < data.results.length; i++) {
-                        results[i + offset] = data.results[i];
-                    }
-                })
-            );
-        }
-
-        await Promise.all(promises);
-    }
+    await Promise.all(promises);
+    
 
 
     //add taxa
@@ -235,8 +229,6 @@ initAutocomplete(
     //result callback
     (obj, list_option) => {
         if (!obj.default_photo || obj.observations_count == 0) return; //extinct species are sometimes returned
-
-        cached_bird_taxa[obj.id] = obj; //add to cache for faster adding to the list
 
         list_option.dataset.taxonId = obj.id;
 
