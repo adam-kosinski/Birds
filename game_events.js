@@ -166,8 +166,8 @@ function updateBirdImageZoom(e) {
         //get content rect (client rect includes border)
         let border_size = Number(getComputedStyle(parent).borderWidth.split("px")[0])
         let content = {
-            x: rect.x - border_size,
-            y: rect.y - border_size,
+            x: rect.x + border_size,
+            y: rect.y + border_size,
             width: rect.width - 2 * border_size,
             height: rect.height - 2 * border_size
         }

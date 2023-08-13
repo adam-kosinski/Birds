@@ -373,6 +373,21 @@ const presets = {
             10168    //Vesper Sparrow
         ]
     },
+    "Woodpeckers (Eastern US)": {
+        description: "Peck peck... peck peck peck.",
+        photo: "images/preset_woodpeckers.jpg",
+        mode: "birdsong",
+        taxa: [
+            792988,    //Downy Woodpecker
+            18205,    //Red-bellied Woodpecker
+            18236,    //Northern Flicker
+            17855,    //Pileated Woodpecker
+            18463,    //Yellow-bellied Sapsucker
+            18204,    //Red-headed Woodpecker
+            792990,    //Hairy Woodpecker
+            792993    //Red-cockaded Woodpecker
+        ]
+    },
     "Common Frog and Toad Sounds (NC)": {
         description: "Don't mind us, we're definitely birds, uh... ribbit.",
         photo: "images/preset_frogs_toads.jpg",
