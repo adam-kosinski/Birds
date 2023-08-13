@@ -373,7 +373,7 @@ const presets = {
             10168    //Vesper Sparrow
         ]
     },
-    "Woodpeckers (Eastern US)": {
+    "Woodpeckers (East/Central US)": {
         description: "Peck peck... peck peck peck.",
         photo: "images/preset_woodpeckers.jpg",
         mode: "birdsong",
