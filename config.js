@@ -344,7 +344,8 @@ const presets = {
             73553,    //Blue-winged Warbler
             145233,    //Northern Parula
             145249,    //Prairie Warbler
-            145258    //Black-throated Green Warbler
+            145258,    //Black-throated Green Warbler
+            73148       //Louisiana waterthrush
         ]
     },
     "Sparrows (NC)": {
