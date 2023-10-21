@@ -143,11 +143,11 @@ function initBirdsongGame() {
                 if (obj.default_photo) button.style.backgroundImage = "url('" + obj.default_photo.square_url + "')";
                 bird_grid.append(button);
 
-                //datalist - only include scientific option if taxon isn't a species
+                //datalist - only include scientific option if taxon isn't a species, OR if taxon is a plant
                 let option_common = document.createElement("option");
                 option_common.value = obj.preferred_common_name;
                 document.getElementById("guess-datalist").append(option_common);
-                if (obj.rank != "species") {
+                if (obj.rank != "species" || obj.ancestor_ids.includes(47126)) {
                     let option_scientific = document.createElement("option");
                     option_scientific.value = obj.name;
                     document.getElementById("guess-datalist").append(option_scientific);
