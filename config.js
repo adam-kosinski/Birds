@@ -310,7 +310,7 @@ const presets = {
         ]
     },
     "North America Families (Passeriformes)": {
-        description: "We be perching.",
+        description: "We be perching, yes we do.",
         photo: "images/preset_families_passeriformes.jpg",
         mode: "visual_id",
         place_id: 97394,    //north america
@@ -491,7 +491,7 @@ const presets = {
         ]
     },
     "Insect Orders (NC)": {
-        description: "Honestly at this point, why not.",
+        description: "Honestly at this point, why not learn insects too.",
         photo: "images/preset_insects.jpg",
         mode: "visual_id",
         place_id: 30,   // north carolina
