@@ -310,7 +310,7 @@ const presets = {
         ]
     },
     "North America Families (Passeriformes)": {
-        description: "Tweet twitter tweety tweet!",
+        description: "We be perching.",
         photo: "images/preset_families_passeriformes.jpg",
         mode: "visual_id",
         place_id: 97394,    //north america
