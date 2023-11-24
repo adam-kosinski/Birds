@@ -30,9 +30,36 @@ function getFunnyBirdDelay() {
 const squirrel_probability = 0.02   //hee hee :)
 
 function getInfoURL(taxon_obj) {
-    if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank == "species") return "https://www.allaboutbirds.org/guide/" + taxon_obj.preferred_common_name.replaceAll(" ", "_").replaceAll("'", "") + (mode == "birdsong" ? "/sounds" : "/id");
-    if (taxon_obj.ancestor_ids.includes(20979) && taxon_obj.rank == "species") return "https://herpsofnc.org/?s=" + taxon_obj.preferred_common_name.replaceAll(" ", "+");
-    return taxon_obj.wikipedia_url;
+    if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank == "species"){
+        return "https://www.allaboutbirds.org/guide/" + taxon_obj.preferred_common_name.replaceAll(" ", "_").replaceAll("'", "") + (mode == "birdsong" ? "/sounds" : "/id");
+    }
+    //Amphibians and Reptiles
+    if ((taxon_obj.ancestor_ids.includes(20978) || taxon_obj.ancestor_ids.includes(26036)) && taxon_obj.rank == "species"){
+        return "https://herpsofnc.org/?s=" + taxon_obj.name.replaceAll(" ", "+");
+    }
+
+    //Bryophytes
+    //Use ohiomosslichen.org for mosses, good pictures, simple, and thorough
+    //illinoiswildflowers.info is more detailed for some mosses but less thorough, and maybe a bit of an info dump
+    if(taxon_obj.ancestor_ids.includes(311249) && taxon_obj.rank == "species") {
+        if(taxon_obj.id == 1138520) return "https://ohiomosslichen.org/moss-anomodon-attenuatus/";
+        if(taxon_obj.id == 164650) return "https://ohiomosslichen.org/moss-leucobryum-glaucum/"; //other species of same genus, v similar and article mentions how to tell apart
+        if(taxon_obj.id == 1278022) return "https://ohiomosslichen.org/moss-hypnum-imponens/";
+        return "https://ohiomosslichen.org/moss-" + taxon_obj.name.toLowerCase().replaceAll(" ", "-");
+    }
+
+    //Wikipedia is standard default
+    if (taxon_obj.wikipedia_url) return taxon_obj.wikipedia_url;
+
+    //Deal with name changes / weird taxa that haven't been synchronized with wikipedia in the iNaturalist database
+    if(taxon_obj.id == 1238700) return "https://en.wikipedia.org/wiki/Armillaria_tabescens";
+    if(taxon_obj.id == 1125679) return "https://en.wikipedia.org/wiki/Aureoboletus_betula";
+    if(taxon_obj.id == 972793) return "https://en.wikipedia.org/wiki/Apioperdon";
+    if(taxon_obj.id == 787944) return "https://en.wikipedia.org/wiki/Inonotus_dryadeus";
+    if(taxon_obj.id == 786918) return "https://en.wikipedia.org/wiki/Trametes_betulina";
+
+    //Final default is the iNaturalist page for this taxa, which must exist
+    return "https://www.inaturalist.org/taxa/" + taxon_obj.id;
 }
 
 const max_bird_image_zoom_factor = 6;
@@ -413,31 +440,148 @@ const presets = {
             66002    //Pickerel Frog
         ]
     },
-    "Insect Orders (NC)": {
+    "Salamanders of the NC Piedmont": {
         description: "If the frogs can be here we can too.",
+        photo: "images/preset_salamanders.jpeg",
+        mode: "visual_id",
+        taxa: [
+            26736,    //Marbled Salamander
+            27093,    //Southern Two-lined Salamander
+            27188,    //White-spotted Slimy Salamander
+            27805,    //Eastern Newt
+            26790,    //Spotted Salamander
+            27420,    //Northern Dusky Salamander
+            27186,    //Eastern Red-backed Salamander
+            27107,    //Three-lined Salamander
+            27486,    //Red Salamander
+            27652,    //Four-toed Salamander
+            27095    //Chamberlain's Dwarf Salamander
+        ]
+    },
+    "Snakes of the NC Piedmont": {
+        description: "If those wriggly salamanders can be here we can too.",
+        photo: "images/preset_snakes.jpg",
+        mode: "visual_id",
+        taxa: [
+            28562,    //DeKay's Brownsnake
+            59644,    //Eastern Ratsnake
+            29305,    //Common Watersnake
+            912622,    //Eastern Copperhead
+            27388,    //Eastern Worm Snake
+            29200,    //Rough Greensnake
+            27137,    //North American Racer
+            28557,    //Red-bellied Snake
+            539765,    //Rough Earthsnake
+            28362,    //Common Garter Snake
+            26575,    //ring-necked snake
+            29813,    //Eastern Kingsnake
+            29328,    //Plain-bellied Watersnake
+            28850,    //Queensnake
+            146718,    //Smooth Earthsnake
+            1304769,    //Mole Kingsnake
+            29925,    //Eastern Hognose Snake
+            28516,    //Southeastern Crowned Snake
+            30746,    //Timber Rattlesnake
+            73887,    //Corn Snake
+            29304,    //Brown Watersnake
+            558951,    //Common Ribbon Snake
+            29793,    //Scarlet Kingsnake
+            904170,    //Northern Cottonmouth
+            515419    //Eastern Milksnake
+        ]
+    },
+    "Insect Orders (NC)": {
+        description: "Honestly at this point, why not.",
         photo: "images/preset_insects.jpg",
         mode: "visual_id",
         place_id: 30,   // north carolina
         taxa: [
             47157,    //Butterflies and Moths
             47208,    //Beetles
-            47822,    //Flies
             47201,    //Ants, Bees, Wasps, and Sawflies
             47744,    //True Bugs, Hoppers, Aphids, and allies
-            48011,    //Mayflies
-            81769,    //Cockroaches and Termites
-            48112,    //Mantises
-            62164,    //Caddisflies
-            83187,    //Barklice, Booklice, and Parasitic Lice
-            47651,    //Grasshoppers, Crickets, and Katydids
-            47793,    //Earwigs
+            47822,    //Flies
             47792,    //Dragonflies and Damselflies
-            47504,    //Stoneflies
+            47651,    //Grasshoppers, Crickets, and Katydids
+            48112,    //Mantises
             48763,    //Antlions, Lacewings, and Allies
-            461443,    //Bristletails
-            83201,    //Thrips
+            81769,    //Cockroaches and Termites
+            62164,    //Caddisflies
+            48011,    //Mayflies
             47198,    //Stick Insects
-            83204    //Fleas
+            47793,    //Earwigs
+            83187,    //Barklice, Booklice, and Parasitic Lice
+            47504,    //Stoneflies
+            47864,    //Alderflies, Dobsonflies, and Fishflies
+            49369,    //Scorpionflies, Hangingflies, and Allies
+            48301    //Silverfishes
+        ]
+    },
+    "Common Piedmont Fungi and Lichens (NC)": {
+        description: "Okay these aren't even animals. But are cool.",
+        photo: "images/preset_mushrooms.jpg",
+        mode: "visual_id",
+        taxa: [
+            1238700,    //Ringless Honey Mushroom
+            54134,    //turkey-tail
+            1125679,    //shaggy-stalked bolete
+            143393,    //Red Chanterelle
+            120951,    //indigo milk cap
+            204589,    //Jackson's slender Caesar
+            49158,    //lion's-mane mushroom
+            500030,    //False Caesar's Mushroom
+            121687,    //juniper-apple rust
+            972793,    //Pear-shaped Puffball
+            125738,    //Black-staining Polypore
+            487301,    //White-pored Chicken of the Woods
+            125743,    //Ravenel's stinkhorn
+            144013,    //Honeydew Eater
+            787944,    //oak bracket
+            126831,    //Eastern American jack-o'-lantern
+            786918,    //Gilled Polypore
+            54573,    //splitgill mushroom
+            121176,    //Bushy beard lichen
+            84271,    //devil's dipstick
+            58709,    //devil's urn
+            48494,    //Oyster Mushroom
+            196842,    //crowded parchment
+            117308,    //green-spored parasol
+            352462,    //Old-man-of-the-woods
+            334704,    //crown-tipped coral fungus
+            793759,    //Wrinkly Stinkhorn
+            117943,    //common greenshield lichen
+            85398,    //flowerpot parasol
+            48443,    //common puffball
+            48529,      //witch's butter, less common but super cool looking
+            155091    //powdered ruffle lichen, 3rd most common lichen in NC piedmont and looks similar to greenshield lichen
+        ]
+    },
+    "Common Piedmont Mosses (NC)": {
+        description: "So floofy!",
+        photo: "images/preset_mosses.jpg",
+        mode: "visual_id",
+        taxa: [
+            159499,    //Bryoandersonia illecebra
+            169738,    //Thuidium delicatulum
+            154195,    //Physcomitrium pyriforme
+            320575,    //Bartramia pomiformis
+            128029,    //Entodon seductrix
+            120000,    //Funaria hygrometrica
+            122658,    //Leucobryum glaucum
+            163550,    //Hedwigia ciliata
+            123134,    //Dicranum scoparium
+            161971,    //Ditrichum pallidum
+            141535,    //Plagiomnium cuspidatum
+            56156,    //Atrichum angustatum
+            123390,    //Bryum argenteum
+            125668,    //Climacium americanum
+            1138520,    //Pseudanomodon attenuatus
+            68293,    //Polytrichum commune
+            164650,    //Leucobryum albidum
+            164653,    //Leucodon julaceus
+            1278022,    //Callicladium imponens
+            167808,    //Rhodobryum ontariense
+            169216      //Sphagnum lescurii, less common but here to represent the iconic Sphagnum genus
         ]
     }
 }

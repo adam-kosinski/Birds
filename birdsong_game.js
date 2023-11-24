@@ -44,7 +44,7 @@ function setMode(new_mode) {
     document.querySelectorAll("#bird-list a").forEach(a => {
         let container = a.closest(".bird-list-item");
         let taxon_id = Number(container.dataset.taxonId);
-        let taxon_obj = bird_taxa.find(obj => obj.id == taxon_id)
+        let taxon_obj = bird_taxa.find(obj => obj.id == taxon_id);
         a.href = getInfoURL(taxon_obj);
     });
 
