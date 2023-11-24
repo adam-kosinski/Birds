@@ -27,7 +27,7 @@ function getFunnyBirdDelay() {
     return 60000 + 60000 * Math.random();
 }
 
-const squirrel_probability = 0.02
+const squirrel_probability = 0.02   //hee hee :)
 
 function getInfoURL(taxon_obj) {
     if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank == "species") return "https://www.allaboutbirds.org/guide/" + taxon_obj.preferred_common_name.replaceAll(" ", "_").replaceAll("'", "") + (mode == "birdsong" ? "/sounds" : "/id");
@@ -86,6 +86,121 @@ const presets = {
             13858,    //House Sparrow
             14898,    //Brown Thrasher
             19893    //Barred Owl
+        ]
+    },
+    
+    // "Waterfowl Tribes (North America)": {
+    //     description: "Sploosh. Quack. Honk.",
+    //     photo: "",
+    //     mode: "visual_id",
+    //     place_id: 97394,    //north america
+    //     taxa: [
+    //         6890,   //whistling ducks
+    //         6913,   //swans
+    //         7006,   //grey geese
+    //         7086,   //black geese
+    //         7120,   //muscovy duck
+    //     ]
+    // },
+    "Tricky Trillers": {
+        description: "That's a pine warbler right? Or wait, maybe a chipping sparrow? Or a junco... hmm, tricky. See <a class='default-link-style' target='_blank' href='https://apassionforbirds.wordpress.com/2015/02/21/tricky-trillers/'>here</a> for some ID tips.",
+        photo: "images/preset_trillers.jpg",
+        mode: "birdsong",
+        taxa: [
+            9096,   //swamp sparrow
+            145242,  //palm warbler
+            145244, //pine warbler
+            979757, //orange crowned warbler
+            10094,  //dark eyed junco
+            9135,   //chipping sparrow
+            72912  //worm eating warbler
+        ]
+    },
+    "Robin-Like Songs": {
+        description: "What do you mean, that's not a robin?",
+        photo: "images/preset_robinlike.jpg",
+        mode: "birdsong",
+        taxa: [
+            12727,  //american robin
+            9921,   //scarlet tanager
+            10271,  //rose breasted grosbeak
+            891704, //red eyed vireo
+            11935   //tree swallow
+        ]
+    },
+    "Finicky Finchy Friends (East/Central US)": {
+        description: "They all sound the same, prove me wrong.",
+        photo: "images/preset_finnicky_finches.jpg",
+        mode: "birdsong",
+        taxa: [
+            17394,  //warbling vireo
+            199840, //house finch
+            199841, //purple finch
+            145310, //american goldfinch
+            73155,  //blue grosbeak
+            10227   //indigo bunting
+        ]
+    },
+    "Common Warblers (East/Central US)": {
+        description: "Tweet tweet!",
+        photo: "images/preset_warblers.jpg",
+        mode: "birdsong",
+        taxa: [
+            10286,    //Black-and-white Warbler
+            10247,    //American Redstart
+            145238,    //Yellow Warbler
+            145239,    //Chestnut-sided Warbler
+            145245,    //Yellow-rumped Warbler
+            62550,    //Ovenbird
+            9721,    //Common Yellowthroat
+            145229,    //Hooded Warbler
+            145246,    //Yellow-throated Warbler
+            73553,    //Blue-winged Warbler
+            145233,    //Northern Parula
+            145249,    //Prairie Warbler
+            145258,    //Black-throated Green Warbler
+            73148       //Louisiana waterthrush
+        ]
+    },
+    "Sparrows (NC)": {
+        description: "Get your magnifying glass out for these because you're going to need it.",
+        photo: "images/preset_nc_sparrows.jpg",
+        mode: "visual_id",
+        taxa: [
+            13858,    //House Sparrow
+            9100,    //Song Sparrow
+            9135,    //Chipping Sparrow
+            9096,    //Swamp Sparrow
+            9176,    //White-crowned Sparrow
+            9184,    //White-throated Sparrow
+            9981,    //Savannah Sparrow
+            9152,   //Field Sparrow
+            9092,    //Lincoln's Sparrow
+            7294,    //Horned Lark
+            9156,    //Fox Sparrow
+            13732,    //American Pipit
+            474210,    //American Tree Sparrow
+            73172,    //Bachman's Sparrow
+            10676,    //Dickcissel
+            793286,    //Nelson's Sparrow
+            793285,    //Henslow's Sparrow
+            10139,    //Grasshopper Sparrow
+            10168    //Vesper Sparrow
+        ]
+    },
+    "Woodpeckers (East/Central US)": {
+        description: "Peck peck... peck peck peck.",
+        photo: "images/preset_woodpeckers.jpg",
+        mode: "birdsong",
+        taxa: [
+            792988,    //Downy Woodpecker
+            18205,    //Red-bellied Woodpecker
+            18236,    //Northern Flicker
+            17855,    //Pileated Woodpecker
+            18463,    //Yellow-bellied Sapsucker
+            18204,    //Red-headed Woodpecker
+            792990,    //Hairy Woodpecker
+            792993    //Red-cockaded Woodpecker
         ]
     },
     "Bird Orders (North America)": {
@@ -275,120 +390,6 @@ const presets = {
         place_id: 97394,    //north america
         taxa: [] //concatenated at bottom of config file
     },
-    // "Waterfowl Tribes (North America)": {
-    //     description: "Sploosh. Quack. Honk.",
-    //     photo: "",
-    //     mode: "visual_id",
-    //     place_id: 97394,    //north america
-    //     taxa: [
-    //         6890,   //whistling ducks
-    //         6913,   //swans
-    //         7006,   //grey geese
-    //         7086,   //black geese
-    //         7120,   //muscovy duck
-    //     ]
-    // },
-    "Tricky Trillers": {
-        description: "That's a pine warbler right? Or wait, maybe a chipping sparrow? Or a junco... hmm, tricky. See <a class='default-link-style' target='_blank' href='https://apassionforbirds.wordpress.com/2015/02/21/tricky-trillers/'>here</a> for some ID tips.",
-        photo: "images/preset_trillers.jpg",
-        mode: "birdsong",
-        taxa: [
-            9096,   //swamp sparrow
-            145242,  //palm warbler
-            145244, //pine warbler
-            979757, //orange crowned warbler
-            10094,  //dark eyed junco
-            9135,   //chipping sparrow
-            72912  //worm eating warbler
-        ]
-    },
-    "Robin-Like Songs": {
-        description: "What do you mean, that's not a robin?",
-        photo: "images/preset_robinlike.jpg",
-        mode: "birdsong",
-        taxa: [
-            12727,  //american robin
-            9921,   //scarlet tanager
-            10271,  //rose breasted grosbeak
-            891704, //red eyed vireo
-            11935   //tree swallow
-        ]
-    },
-    "Finicky Finchy Friends (East/Central US)": {
-        description: "They all sound the same, prove me wrong.",
-        photo: "images/preset_finnicky_finches.jpg",
-        mode: "birdsong",
-        taxa: [
-            17394,  //warbling vireo
-            199840, //house finch
-            199841, //purple finch
-            145310, //american goldfinch
-            73155,  //blue grosbeak
-            10227   //indigo bunting
-        ]
-    },
-    "Common Warblers (East/Central US)": {
-        description: "Tweet tweet!",
-        photo: "images/preset_warblers.jpg",
-        mode: "birdsong",
-        taxa: [
-            10286,    //Black-and-white Warbler
-            10247,    //American Redstart
-            145238,    //Yellow Warbler
-            145239,    //Chestnut-sided Warbler
-            145245,    //Yellow-rumped Warbler
-            62550,    //Ovenbird
-            9721,    //Common Yellowthroat
-            145229,    //Hooded Warbler
-            145246,    //Yellow-throated Warbler
-            73553,    //Blue-winged Warbler
-            145233,    //Northern Parula
-            145249,    //Prairie Warbler
-            145258,    //Black-throated Green Warbler
-            73148       //Louisiana waterthrush
-        ]
-    },
-    "Sparrows (NC)": {
-        description: "Get your magnifying glass out for these because you're going to need it.",
-        photo: "images/preset_nc_sparrows.jpg",
-        mode: "visual_id",
-        taxa: [
-            13858,    //House Sparrow
-            9100,    //Song Sparrow
-            9135,    //Chipping Sparrow
-            9096,    //Swamp Sparrow
-            9176,    //White-crowned Sparrow
-            9184,    //White-throated Sparrow
-            9981,    //Savannah Sparrow
-            9152,   //Field Sparrow
-            9092,    //Lincoln's Sparrow
-            7294,    //Horned Lark
-            9156,    //Fox Sparrow
-            13732,    //American Pipit
-            474210,    //American Tree Sparrow
-            73172,    //Bachman's Sparrow
-            10676,    //Dickcissel
-            793286,    //Nelson's Sparrow
-            793285,    //Henslow's Sparrow
-            10139,    //Grasshopper Sparrow
-            10168    //Vesper Sparrow
-        ]
-    },
-    "Woodpeckers (East/Central US)": {
-        description: "Peck peck... peck peck peck.",
-        photo: "images/preset_woodpeckers.jpg",
-        mode: "birdsong",
-        taxa: [
-            792988,    //Downy Woodpecker
-            18205,    //Red-bellied Woodpecker
-            18236,    //Northern Flicker
-            17855,    //Pileated Woodpecker
-            18463,    //Yellow-bellied Sapsucker
-            18204,    //Red-headed Woodpecker
-            792990,    //Hairy Woodpecker
-            792993    //Red-cockaded Woodpecker
-        ]
-    },
     "Common Frog and Toad Sounds (NC)": {
         description: "Don't mind us, we're definitely birds, uh... ribbit.",
         photo: "images/preset_frogs_toads.jpg",
@@ -410,6 +411,33 @@ const presets = {
             64977,    //Fowler's Toad
             23872,    //Pine Woods Tree Frog
             66002    //Pickerel Frog
+        ]
+    },
+    "Insect Orders (NC)": {
+        description: "If the frogs can be here we can too.",
+        photo: "images/preset_insects.jpg",
+        mode: "visual_id",
+        place_id: 30,   // north carolina
+        taxa: [
+            47157,    //Butterflies and Moths
+            47208,    //Beetles
+            47822,    //Flies
+            47201,    //Ants, Bees, Wasps, and Sawflies
+            47744,    //True Bugs, Hoppers, Aphids, and allies
+            48011,    //Mayflies
+            81769,    //Cockroaches and Termites
+            48112,    //Mantises
+            62164,    //Caddisflies
+            83187,    //Barklice, Booklice, and Parasitic Lice
+            47651,    //Grasshoppers, Crickets, and Katydids
+            47793,    //Earwigs
+            47792,    //Dragonflies and Damselflies
+            47504,    //Stoneflies
+            48763,    //Antlions, Lacewings, and Allies
+            461443,    //Bristletails
+            83201,    //Thrips
+            47198,    //Stick Insects
+            83204    //Fleas
         ]
     }
 }

@@ -357,7 +357,7 @@ function nextObservation() {
     //set taxon HTML (not necessarily displayed yet, see scss)
     document.getElementById("answer-common-name").textContent = taxon_obj.preferred_common_name;
     document.getElementById("answer-scientific-name").textContent = taxon_obj.name;
-    document.getElementById("answer-species-name-appended").textContent = taxon_obj.rank == "species" ? "" : " - " + current.taxon.preferred_common_name;
+    document.getElementById("answer-species-name-appended").textContent = taxon_obj.rank == "species" ? "" : (current.taxon.preferred_common_name ? " - " + current.taxon.preferred_common_name : "");
     document.getElementById("answer-info-link").href = getInfoURL(taxon_obj);
     document.getElementById("inat-link").href = current.uri;
 
