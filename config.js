@@ -67,9 +67,20 @@ function getInfoURL(taxon_obj) {
         return "https://bugguide.net/node/view/" + bugguide_mapping[taxon_obj.id];
     }
 
+    //Fungi - mushroomexpert.com
+    //check if fungus and not lichen since the iNaturalist fungi taxon includes lichens
+    let not_on_mushroom_expert = [144013];
+    if (taxon_obj.ancestor_ids.includes(47170) && !taxon_obj.ancestor_ids.includes(54743) && taxon_obj.rank == "species" && !not_on_mushroom_expert.includes(taxon_obj.id)){
+        if(taxon_obj.id == 1238700) return "https://www.mushroomexpert.com/Armillaria_tabescens.html";
+        if(taxon_obj.id == 972793) return "https://www.mushroomexpert.com/lycoperdon_pyriforme.html";
+        if(taxon_obj.id == 786918) return "https://www.mushroomexpert.com/lenzites_betulina.html";
+        if(taxon_obj.id == 352462) return "https://www.mushroomexpert.com/strobilomyces_floccopus.html";
+        return "https://www.mushroomexpert.com/" + taxon_obj.name.toLowerCase().replaceAll(" ", "_") + ".html"
+    }
+
     //Bryophytes
-    //Use ohiomosslichen.org for mosses, good pictures, simple, and thorough
-    //illinoiswildflowers.info is more detailed for some mosses but less thorough, and maybe a bit of an info dump
+    //Use ohiomosslichen.org for mosses, good pictures, simple, and comprehensive
+    //illinoiswildflowers.info is more detailed for some mosses but less comprehensive, and maybe a bit of an info dump
     if(taxon_obj.ancestor_ids.includes(311249) && taxon_obj.rank == "species") {
         if(taxon_obj.id == 1138520) return "https://ohiomosslichen.org/moss-anomodon-attenuatus/";
         if(taxon_obj.id == 164650) return "https://ohiomosslichen.org/moss-leucobryum-glaucum/"; //other species of same genus, v similar and article mentions how to tell apart
