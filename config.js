@@ -41,6 +41,31 @@ function getInfoURL(taxon_obj) {
     if ((taxon_obj.ancestor_ids.includes(20978) || taxon_obj.ancestor_ids.includes(26036)) && taxon_obj.rank == "species"){
         return "https://herpsofnc.org/?s=" + taxon_obj.name.replaceAll(" ", "+");
     }
+    //Insect orders
+    let bugguide_mapping = {
+        47157: 57,    //Butterflies and Moths
+        47208: 60,    //Beetles
+        47201: 59,    //Ants, Bees, Wasps, and Sawflies
+        47744: 63,    //True Bugs, Hoppers, Aphids, and allies
+        47822: 55,    //Flies
+        47792: 191,    //Dragonflies and Damselflies
+        47651: 73,    //Grasshoppers, Crickets, and Katydids
+        48112: 342391,    //Mantises
+        48763: 61,    //Antlions, Lacewings, and Allies
+        81769: 342386,    //Cockroaches and Termites
+        62164: 5233,    //Caddisflies
+        48011: 78,    //Mayflies
+        47198: 74,    //Stick Insects
+        47793: 2709,    //Earwigs
+        83187: 67,    //Barklice, Booklice, and Parasitic Lice
+        47504: 76,    //Stoneflies
+        47864: 233428,    //Alderflies, Dobsonflies, and Fishflies
+        49369: 56,    //Scorpionflies, Hangingflies, and Allies
+        48301: 79    //Silverfishes
+    }
+    if (taxon_obj.ancestor_ids.includes(47158) && taxon_obj.rank == "order"){
+        return "https://bugguide.net/node/view/" + bugguide_mapping[taxon_obj.id];
+    }
 
     //Bryophytes
     //Use ohiomosslichen.org for mosses, good pictures, simple, and thorough
@@ -511,7 +536,7 @@ const presets = {
         ]
     },
     "Insect Orders (NC)": {
-        description: "Honestly at this point, why not learn insects too.",
+        description: "Honestly at this point, why not learn insects too. Tips <a class='default-link-style' target='_blank' href='https://bugguide.net/'>here</a>.",
         photo: "images/preset_insects.jpg",
         mode: "visual_id",
         place_id: 30,   // north carolina
