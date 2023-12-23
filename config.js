@@ -29,6 +29,10 @@ function getFunnyBirdDelay() {
 
 const squirrel_probability = 0.02   //hee hee :)
 
+const max_bird_image_zoom_factor = 6;
+
+
+
 function getInfoURL(taxon_obj) {
     if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank == "species"){
         return "https://www.allaboutbirds.org/guide/" + taxon_obj.preferred_common_name.replaceAll(" ", "_").replaceAll("'", "") + (mode == "birdsong" ? "/sounds" : "/id");
@@ -62,16 +66,32 @@ function getInfoURL(taxon_obj) {
     return "https://www.inaturalist.org/taxa/" + taxon_obj.id;
 }
 
-const max_bird_image_zoom_factor = 6;
 
-const birdsong_question = "<span class='font-large'>What bird is singing?</span><br>Select a bird or write its name";
-const birdsong_question_family = "<span class='font-large'>What family is the bird from?</span><br>Select a family or write its name";
-const birdsong_question_order = "<span class='font-large'>What order is the bird from?</span><br>Select an order or write its name";
-const birdsong_nonbird_question = "<span class='font-large'>What fella is singing?</span><br>Select one below or write its name";
-const visual_id_question = "What bird is this?";
-const visual_id_question_family = "What family is this bird from?";
-const visual_id_question_order = "What order is this bird from?";
-const visual_id_nonbird_question = "What fella is this?";
+function getQuestionHTML(mode, taxon_obj, is_squirrel_intruder=false){
+    let rank = taxon_obj.rank;
+    let is_bird = taxon_obj.ancestor_ids.includes(3);
+    if(is_squirrel_intruder) is_bird = true; // definitely a bird ;)
+    let is_animal = taxon_obj.ancestor_ids.includes(1);
+    let entity_name = is_bird ? "bird " : (is_animal ? "fella " : ""); //appending a space if not blank to make questions work out
+
+    if(mode == "birdsong"){
+        if (rank == "species") {
+            return `<span class='font-large'>What ${entity_name}is singing?</span><br>Select one below or write its name`;
+        }
+        else {
+            let rank_article = /a|e|i|o|u/.test(rank[0].toLowerCase()) ? "an" : "a";
+            return `<span class='font-large'>What ${rank} is this ${entity_name}from?</span><br>Select ${rank_article} ${rank} or write its name`
+        }
+    }
+    else if(mode == "visual_id") {
+        if (rank == "species") {
+            return `What ${entity_name}is this?`
+        }
+        else {
+            return `What ${rank} is this ${entity_name}from?`;
+        }
+    }
+}
 
 
 const presets = {

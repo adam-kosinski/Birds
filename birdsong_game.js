@@ -374,12 +374,7 @@ function nextObservation() {
     let photo; //stored here for attribution later
 
     if (mode == "birdsong") {
-        let question = !taxon_obj.ancestor_ids.includes(3) ? birdsong_nonbird_question
-            : taxon_obj.rank == "order" ? birdsong_question_order
-                : taxon_obj.rank == "family" ? birdsong_question_family
-                    : birdsong_question;
-        if(current.is_squirrel_intruder) question = birdsong_question; //definitely a bird... ;)
-        document.getElementById("birdsong-question").innerHTML = question;
+        document.getElementById("birdsong-question").innerHTML = getQuestionHTML(mode, taxon_obj, current.is_squirrel_intruder); // see config.js
 
         //set answer image ahead of time so it can load
         let bird_image = document.getElementById("bird-image");
@@ -398,7 +393,6 @@ function nextObservation() {
                 bird_image.src = "";
             }
         }
-
         //audio and misc
         document.getElementById("birdsong-audio-0").src = current.sounds[0].file_url;
         let audio1 = document.getElementById("birdsong-audio-1");
@@ -411,17 +405,15 @@ function nextObservation() {
         }
         document.getElementById("bird-grid").scrollTop = 0;
     }
+
     else if (mode == "visual_id") {
-        let question = !taxon_obj.ancestor_ids.includes(3) ? visual_id_nonbird_question
-            : taxon_obj.rank == "order" ? visual_id_question_order
-                : taxon_obj.rank == "family" ? visual_id_question_family
-                    : visual_id_question;
-        document.getElementById("visual-id-question").innerHTML = question;
+        document.getElementById("visual-id-question").innerHTML = getQuestionHTML(mode, taxon_obj); // see config.js
 
         document.getElementById("img-preloader").src = next.photos[0].url.replace("square", "large");
         document.getElementById("bird-image").src = current.photos[0].url.replace("square", "large");
         photo = current.photos[0];
     }
+
 
     //image attribution
     if (photo) {
