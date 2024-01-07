@@ -34,11 +34,11 @@ const max_bird_image_zoom_factor = 6;
 
 
 function getInfoURL(taxon_obj) {
-    if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank == "species"){
+    if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank == "species") {
         return "https://www.allaboutbirds.org/guide/" + taxon_obj.preferred_common_name.replaceAll(" ", "_").replaceAll("'", "") + (mode == "birdsong" ? "/sounds" : "/id");
     }
     //Amphibians and Reptiles
-    if ((taxon_obj.ancestor_ids.includes(20978) || taxon_obj.ancestor_ids.includes(26036)) && taxon_obj.rank == "species"){
+    if ((taxon_obj.ancestor_ids.includes(20978) || taxon_obj.ancestor_ids.includes(26036)) && taxon_obj.rank == "species") {
         return "https://herpsofnc.org/?s=" + taxon_obj.name.replaceAll(" ", "+");
     }
     //Insect orders
@@ -63,28 +63,28 @@ function getInfoURL(taxon_obj) {
         49369: 56,    //Scorpionflies, Hangingflies, and Allies
         48301: 79    //Silverfishes
     }
-    if (taxon_obj.ancestor_ids.includes(47158) && taxon_obj.rank == "order"){
+    if (taxon_obj.ancestor_ids.includes(47158) && taxon_obj.rank == "order") {
         return "https://bugguide.net/node/view/" + bugguide_mapping[taxon_obj.id];
     }
 
     //Fungi - mushroomexpert.com
     //check if fungus and not lichen since the iNaturalist fungi taxon includes lichens
     let not_on_mushroom_expert = [144013];
-    if (taxon_obj.ancestor_ids.includes(47170) && !taxon_obj.ancestor_ids.includes(54743) && taxon_obj.rank == "species" && !not_on_mushroom_expert.includes(taxon_obj.id)){
-        if(taxon_obj.id == 1238700) return "https://www.mushroomexpert.com/Armillaria_tabescens.html";
-        if(taxon_obj.id == 972793) return "https://www.mushroomexpert.com/lycoperdon_pyriforme.html";
-        if(taxon_obj.id == 786918) return "https://www.mushroomexpert.com/lenzites_betulina.html";
-        if(taxon_obj.id == 352462) return "https://www.mushroomexpert.com/strobilomyces_floccopus.html";
+    if (taxon_obj.ancestor_ids.includes(47170) && !taxon_obj.ancestor_ids.includes(54743) && taxon_obj.rank == "species" && !not_on_mushroom_expert.includes(taxon_obj.id)) {
+        if (taxon_obj.id == 1238700) return "https://www.mushroomexpert.com/Armillaria_tabescens.html";
+        if (taxon_obj.id == 972793) return "https://www.mushroomexpert.com/lycoperdon_pyriforme.html";
+        if (taxon_obj.id == 786918) return "https://www.mushroomexpert.com/lenzites_betulina.html";
+        if (taxon_obj.id == 352462) return "https://www.mushroomexpert.com/strobilomyces_floccopus.html";
         return "https://www.mushroomexpert.com/" + taxon_obj.name.toLowerCase().replaceAll(" ", "_") + ".html"
     }
 
     //Bryophytes
     //Use ohiomosslichen.org for mosses, good pictures, simple, and comprehensive
     //illinoiswildflowers.info is more detailed for some mosses but less comprehensive, and maybe a bit of an info dump
-    if(taxon_obj.ancestor_ids.includes(311249) && taxon_obj.rank == "species") {
-        if(taxon_obj.id == 1138520) return "https://ohiomosslichen.org/moss-anomodon-attenuatus/";
-        if(taxon_obj.id == 164650) return "https://ohiomosslichen.org/moss-leucobryum-glaucum/"; //other species of same genus, v similar and article mentions how to tell apart
-        if(taxon_obj.id == 1278022) return "https://ohiomosslichen.org/moss-hypnum-imponens/";
+    if (taxon_obj.ancestor_ids.includes(311249) && taxon_obj.rank == "species") {
+        if (taxon_obj.id == 1138520) return "https://ohiomosslichen.org/moss-anomodon-attenuatus/";
+        if (taxon_obj.id == 164650) return "https://ohiomosslichen.org/moss-leucobryum-glaucum/"; //other species of same genus, v similar and article mentions how to tell apart
+        if (taxon_obj.id == 1278022) return "https://ohiomosslichen.org/moss-hypnum-imponens/";
         return "https://ohiomosslichen.org/moss-" + taxon_obj.name.toLowerCase().replaceAll(" ", "-");
     }
 
@@ -92,25 +92,21 @@ function getInfoURL(taxon_obj) {
     if (taxon_obj.wikipedia_url) return taxon_obj.wikipedia_url;
 
     //Deal with name changes / weird taxa that haven't been synchronized with wikipedia in the iNaturalist database
-    if(taxon_obj.id == 1238700) return "https://en.wikipedia.org/wiki/Armillaria_tabescens";
-    if(taxon_obj.id == 1125679) return "https://en.wikipedia.org/wiki/Aureoboletus_betula";
-    if(taxon_obj.id == 972793) return "https://en.wikipedia.org/wiki/Apioperdon";
-    if(taxon_obj.id == 787944) return "https://en.wikipedia.org/wiki/Inonotus_dryadeus";
-    if(taxon_obj.id == 786918) return "https://en.wikipedia.org/wiki/Trametes_betulina";
+    if (taxon_obj.id == 1363728) return "https://en.wikipedia.org/wiki/Grouper";
 
     //Final default is the iNaturalist page for this taxa, which must exist
     return "https://www.inaturalist.org/taxa/" + taxon_obj.id;
 }
 
 
-function getQuestionHTML(mode, taxon_obj, is_squirrel_intruder=false){
+function getQuestionHTML(mode, taxon_obj, is_squirrel_intruder = false) {
     let rank = taxon_obj.rank;
     let is_bird = taxon_obj.ancestor_ids.includes(3);
-    if(is_squirrel_intruder) is_bird = true; // definitely a bird ;)
+    if (is_squirrel_intruder) is_bird = true; // definitely a bird ;)
     let is_animal = taxon_obj.ancestor_ids.includes(1);
     let entity_name = is_bird ? "bird " : (is_animal ? "fella " : ""); //appending a space if not blank to make questions work out
 
-    if(mode == "birdsong"){
+    if (mode == "birdsong") {
         if (rank == "species") {
             return `<span class='font-large'>What ${entity_name}is singing?</span><br>Select one below or write its name`;
         }
@@ -119,7 +115,7 @@ function getQuestionHTML(mode, taxon_obj, is_squirrel_intruder=false){
             return `<span class='font-large'>What ${rank} is this ${entity_name}from?</span><br>Select ${rank_article} ${rank} or write its name`
         }
     }
-    else if(mode == "visual_id") {
+    else if (mode == "visual_id") {
         if (rank == "species") {
             return `What ${entity_name}is this?`
         }
@@ -171,7 +167,7 @@ const presets = {
             19893    //Barred Owl
         ]
     },
-    
+
     // "Waterfowl Tribes (North America)": {
     //     description: "Sploosh. Quack. Honk.",
     //     photo: "",
@@ -638,6 +634,60 @@ const presets = {
             1278022,    //Callicladium imponens
             167808,    //Rhodobryum ontariense
             169216      //Sphagnum lescurii, less common but here to represent the iconic Sphagnum genus
+        ]
+    },
+    "Fish Families of the Great Barrier Reef": {
+        description: "Sploosh. I sense something fishy... <a class='default-link-style' target='_blank' href='https://fishesofaustralia.net.au/key/family'>Here</a> is a key to help you out.",
+        photo: "images/preset_great_barrier_reef.jpg",
+        mode: "visual_id",
+        place_id: 131021,   //great barrier reef
+        taxa: [
+            49284,    //Wrasses and Parrotfishes    n_obs: 6797
+            48313,    //Damselfishes    n_obs: 5565
+            47318,    //Butterflyfishes    n_obs: 3615
+            1363728,    //Groupers    n_obs: 1929
+            47295,    //Snappers    n_obs: 1886
+            47619,    //Surgeonfishes, Tangs, and Unicornfishes    n_obs: 1775
+            84096,    //Rabbitfishes    n_obs: 994
+            47237,    //Angelfishes    n_obs: 905
+            49263,    //Grunts    n_obs: 789
+            47308,    //Gobies    n_obs: 724
+            55207,    //Emperor Breams    n_obs: 670
+            47232,    //Jacks    n_obs: 644
+            49612,    //Triggerfishes    n_obs: 591
+            51095,    //Threadfin Breams    n_obs: 580
+            118620,    //Goatfishes    n_obs: 504
+            49390,    //Combtooth Blennies    n_obs: 498
+            49266,    //Pufferfishes    n_obs: 484
+            49317,    //Spadefishes    n_obs: 421
+            49423,    //Sandperches    n_obs: 280
+            47285,    //Scorpionfishes    n_obs: 244
+            83291,    //Moorish Idols    n_obs: 230
+            47580,    //Hawkfishes    n_obs: 209
+            47264,    //Barracudas    n_obs: 205
+            85594,    //Cardinalfishes    n_obs: 204
+            47313,    //Morays    n_obs: 200
+            49628,    //Squirrelfishes and Soldierfishes    n_obs: 189
+            47529,    //Boxfishes    n_obs: 170
+            47244,    //Trumpetfishes    n_obs: 127
+            47176,    //Filefishes    n_obs: 120
+            1359791,    //Anthiases    n_obs: 115
+            49410,    //Lizardfishes    n_obs: 113
+            49688,    //Sea Chubs    n_obs: 108
+            47249,    //Cornetfishes    n_obs: 88
+            49106,    //Pipefishes, Seahorses, and Seadragons    n_obs: 84
+            47266,    //Mackerels, Tunas, and Bonitos    n_obs: 82
+            54661,    //Mullets    n_obs: 78
+            85894,    //Wormfishes and Dartfishes    n_obs: 73
+            86099,    //Grunters    n_obs: 65
+            82142,    //Dottybacks    n_obs: 63
+            48842,    //Remoras    n_obs: 55
+            49270,    //Porcupinefishes    n_obs: 45
+            47355,    //Lates Perches    n_obs: 43
+            86057,    //Scats    n_obs: 41
+            86105,    //Archerfishes    n_obs: 37
+            52461,    //Needlefishes    n_obs: 34
+            64483    //Roundheads    n_obs: 32
         ]
     }
 }
