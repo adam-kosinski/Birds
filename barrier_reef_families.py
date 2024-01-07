@@ -1,6 +1,5 @@
 import requests
 import time
-import json
 
 # great barrier reef
 place_id = 131021

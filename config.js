@@ -93,6 +93,7 @@ function getInfoURL(taxon_obj) {
 
     //Deal with name changes / weird taxa that haven't been synchronized with wikipedia in the iNaturalist database
     if (taxon_obj.id == 1363728) return "https://en.wikipedia.org/wiki/Grouper";
+    if (taxon_obj.id == 1359791) return "https://en.wikipedia.org/wiki/Anthiinae";
 
     //Final default is the iNaturalist page for this taxa, which must exist
     return "https://www.inaturalist.org/taxa/" + taxon_obj.id;
