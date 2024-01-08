@@ -25,7 +25,7 @@ document.getElementById("back-button").addEventListener("click", () => {
 
 document.getElementById("continue-button").addEventListener("click", () => {
     let taxon_ids = [];
-    document.querySelectorAll(".bird-row:has(.checkbox.checked)").forEach(el => {
+    document.querySelectorAll(".bird-option.selected").forEach(el => {
         taxon_ids.push(el.dataset.taxonId);
     });
     let args = "?taxa=" + taxon_ids.join(",");
@@ -60,12 +60,15 @@ async function fetchSpeciesCounts() {
         let obj = data.results[k];
 
         let div = document.createElement("div");
-        div.className = "bird-row";
+        div.className = "bird-option";
         div.dataset.taxonId = obj.taxon.id;
 
         let checkbox = document.createElement("div");
         checkbox.className = "checkbox";
-        if (k < top_n_selected) checkbox.classList.add("checked");
+
+        if (k < top_n_selected){
+            div.classList.add("selected");
+        }
 
         let img = document.createElement("img");
         img.className = "bird-square";
@@ -108,29 +111,23 @@ async function fetchSpeciesCounts() {
 //selection event handlers
 
 document.getElementById("list").addEventListener("click", e => {
-    let row = e.target.closest(".bird-row");
-    if(row && !e.target.classList.contains("range-map-icon")){
-        row.querySelector(".checkbox").classList.toggle("checked");
+    let bird_option = e.target.closest(".bird-option");
+    if(bird_option && !e.target.classList.contains("range-map-icon")){
+        bird_option.classList.toggle("selected");
         updateNSelectedDisplay()
     }
 });
 
 document.getElementById("select-all").addEventListener("click", () => {
-    document.querySelectorAll(".checkbox").forEach(el => el.classList.add("checked"));
+    document.querySelectorAll(".bird-option").forEach(el => el.classList.add("selected"));
     updateNSelectedDisplay()
 });
 
 document.getElementById("select-none").addEventListener("click", () => {
-    document.querySelectorAll(".checkbox").forEach(el => el.classList.remove("checked"));
+    document.querySelectorAll(".bird-option").forEach(el => el.classList.remove("selected"));
     updateNSelectedDisplay()
 });
 
 function updateNSelectedDisplay(){
-    document.getElementById("n-selected").textContent = document.querySelectorAll(".bird-row .checked").length;
+    document.getElementById("n-selected").textContent = document.querySelectorAll(".bird-option.selected").length;
 }
-
-
-//collapse instructions
-document.getElementById("collapse-arrow").addEventListener("click", () => {
-    document.querySelector(".white-container").classList.toggle("collapsed");
-});

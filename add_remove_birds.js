@@ -93,7 +93,9 @@ async function addBirds(taxa_id_list) {
         //add to JS list
         bird_taxa.push(obj);
 
-        //add to HTML list
+        //add to HTML list ----------------
+
+        //create container
 
         let container = document.createElement("div");
         container.id = "bird-list-" + obj.id;
@@ -102,12 +104,13 @@ async function addBirds(taxa_id_list) {
         container.dataset.rank = obj.rank;
         container.dataset.isBird = obj.ancestor_ids.includes(3);
 
-        let birdinfo = document.createElement("div");
-        birdinfo.addEventListener("click", e => {
+        container.addEventListener("click", e => {
             if (!(e.target.classList.contains("plus-sign") || e.target.classList.contains("bird-square"))) return;
             container.classList.toggle("selected");
             document.getElementById("n-selected").textContent = document.querySelectorAll("#bird-list .selected").length;
         });
+
+        //create elements in container
 
         let plus_sign = document.createElement("div");
         plus_sign.className = "plus-sign";
@@ -118,21 +121,16 @@ async function addBirds(taxa_id_list) {
         if (obj.default_photo) bird_square.src = obj.default_photo.square_url;
         bird_square.alt = "Photo of " + obj.preferred_common_name;
 
-        let link = document.createElement("a");
-        link.href = getInfoURL(obj);
-        link.target = "_blank";
+        let linked_name = document.createElement("a");
+        linked_name.href = getInfoURL(obj);
+        linked_name.target = "_blank";
 
         let b = document.createElement("b");
         let i = document.createElement("i");
         let br = document.createElement("br");
         b.textContent = obj.preferred_common_name;
         i.textContent = obj.name;
-        link.append(b, br, i);
-
-        birdinfo.append(plus_sign, bird_square, link);
-        container.append(birdinfo);
-
-        let buttons = document.createElement("div");
+        linked_name.append(b, br, i);
 
         let map_icon = document.createElement("button");
         map_icon.className = "range-map-icon";
@@ -147,11 +145,9 @@ async function addBirds(taxa_id_list) {
             if (confirm("Remove " + obj.preferred_common_name + " from list?")) removeBird(obj.id);
         });
 
-        buttons.append(map_icon, x_button);
-        container.append(buttons);
-
-        let bird_list = document.getElementById("bird-list");
-        bird_list.append(container);
+        //append
+        container.append(plus_sign, bird_square, linked_name, map_icon, x_button);
+        document.getElementById("bird-list").append(container);
 
         // if just added a bird manually (proxy check if only added one), highlight it
         if (results.length == 1) highlightElement(container);

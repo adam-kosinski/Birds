@@ -125,7 +125,8 @@
 
 .autocomplete-option {
     display: grid;
-    grid-template-columns: 60px 1fr 35px; /* image, name, map icon */
+    grid-template-columns: min-content 1fr min-content; /* image, name, map icon */
+    gap: 10px;
     align-items: center;
 }
 
@@ -185,8 +186,8 @@
 }
 
 #bird-list {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
     overflow-y: auto;
     position: relative; /* for aligning '+' pseudo elements*/
 
@@ -198,16 +199,14 @@
     padding-bottom: 5px;
 }
 
-#bird-list > * {
+.bird-list-item {
+    display: grid;
+    grid-template-columns: min-content 1fr min-content min-content;
+    align-items: center;
+    gap: 10px;
     padding: 5px;
     border-radius: 12px;
-}
-
-#bird-list div {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: space-between;
+    max-width: 350px;
 }
 
 .bird-square, .plus-sign {

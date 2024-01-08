@@ -19,6 +19,7 @@
 }
 
 .preset {
+    max-width: 800px;
     padding-left: 16px;
     padding-right: 16px;
 }
@@ -44,6 +45,7 @@
 }
 
 #preset-list hr {
+    max-width: 800px;
     margin-left: 16px;
     margin-right: 16px;
 }

@@ -130,40 +130,10 @@
     justify-content: space-between;
 }
 
-#collapse-arrow {
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-#collapse-arrow::after {
-    content: '';
-    width: 12px;
-    height: 12px;
-    border-bottom: 3px solid var(--medium-gray);
-    border-right: 3px solid var(--medium-gray);
-    transform: translateY(6px) rotate(-135deg);
-    transition: transform 0.5s;
-}
-#checklist-instructions {
-    flex-shrink: 0;
-    overflow: hidden;
-    height: 114px;
-    transition: height 0.5s;
-}
-.white-container.collapsed #checklist-instructions {
-    height: 0;
-}
-.white-container.collapsed #collapse-arrow::after {
-    transform: rotate(45deg);
-}
-
 
 #button-panel {
     display: flex;
     gap: 10px;
-    justify-content: center;
     padding-bottom: 10px;
     border-bottom: 1px solid black;
 }
@@ -182,11 +152,13 @@
 }
 
 #list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding-bottom: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 345px);
+    row-gap: 5px;
     overflow-y: auto;
+    padding-left: 11px; /* plus the row's 5px padding gives 16px */
+    padding-right: 11px;
+    padding-bottom: 5px;
 }
 
 #list > p {
@@ -194,17 +166,25 @@
     padding-right: 16px;
 }
 
-.bird-row {
+.bird-option {
     display: grid;
-    grid-template-columns: 36px 60px 1fr 35px; /* checkbox, img, info, range icon*/
+    grid-template-columns: min-content min-content 1fr min-content min-content;
     align-items: center;
     gap: 10px;
-    padding-left: 10px;
-    padding-right: 16px;
+    padding: 5px;
+    border-top: 1px solid var(--light-gray);
+    max-width: 330px;
     cursor: pointer;
+}
+.bird-option.selected {
+    background-color: #eee;
+    border-color: #eee;
+    border-radius: 12px;
 }
 
 .checkbox {
+    display: none;
+
     box-sizing: border-box;
     width: 36px;
     height: 36px;
@@ -215,10 +195,10 @@
     justify-content: center;
     position: relative;
 }
-.checkbox.checked {
+.bird-option.selected .checkbox {
     background-color: var(--light-gray);
 }
-.checkbox.checked::after {
+.bird-option.selected .checkbox::after {
     content: '';
     border-bottom: 4px solid var(--dark-gray);
     border-right: 4px solid var(--dark-gray);
@@ -228,10 +208,10 @@
     height: 12px;
 }
 
-.bird-row .bird-square {
-    width: 100%;
+.bird-option .bird-square {
+    width: 60px;
 }
 
-.bird-row b {
+.bird-option b {
     font-size: 14px;
 }
