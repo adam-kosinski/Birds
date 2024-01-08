@@ -345,6 +345,7 @@
 #bird-image {
     max-width: 100%;
     max-height: 100%;
+    cursor: zoom-in;
 }
 
 #image-attribution-container {
