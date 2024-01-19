@@ -346,7 +346,7 @@
 #bird-image {
     max-width: 100%;
     max-height: 100%;
-    cursor: zoom-in;
+    /* cursor: zoom-in; is set by javascript if doing visual id */
 }
 
 #image-attribution-container {

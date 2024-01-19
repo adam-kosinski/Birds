@@ -20,7 +20,7 @@ const GUESSING = 1;
 const ANSWER_SHOWN = 2;
 setGameState(INACTIVE);
 
-let mode = "birdsong"; //doesn't get reset when go back to list
+let mode = "birdsong";
 
 let funny_bird_timeout_id;
 
@@ -39,6 +39,7 @@ function setMode(new_mode) {
     document.querySelector("[data-mode=" + new_mode + "]").classList.add("selected");
     mode = new_mode;
     document.getElementById("birdsong-main").dataset.mode = mode;
+    document.getElementById("bird-image").style.cursor = new_mode == "visual_id" ? "zoom-in" : "default";
 
     //update links
     document.querySelectorAll("#bird-list a").forEach(a => {
@@ -58,7 +59,7 @@ function pickObservation() {
     //pick next observation object, return it. Try not to duplicate the current observation
 
     //squirrel intruder
-    if(mode == "birdsong" && Math.random() < squirrel_probability){
+    if (mode == "birdsong" && Math.random() < squirrel_probability) {
         return squirrel_obs[Math.floor(Math.random() * squirrel_obs.length)]
     }
 
@@ -119,7 +120,7 @@ function initBirdsongGame() {
     });
 
 
-    fetchObservationData(undefined, "", initial_per_page)
+    fetchObservationData(undefined, mode == "birdsong" ? "photos=false" : "", initial_per_page)
         .then(data_was_fetched => {
             if (!data_was_fetched) {
                 alert("Failed to find research grade iNaturalist observations for any of the chosen birds. Please try again with different birds.");
@@ -271,8 +272,12 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "",
     //add to data structures
     data.results.forEach(obj => {
         let id = searchAncestorsForTaxonId(obj);
-        taxon_obs[id].push(obj);
-        taxon_queues[id].push(obj);
+        if(taxon_obs.hasOwnProperty(id)){   // need to check for this in case game was ended while we were fetching
+            taxon_obs[id].push(obj);
+        }
+        if(taxon_queues.hasOwnProperty(id)){
+            taxon_queues[id].push(obj);
+        }
     });
     console.log("Done adding to data structures");
     console.groupEnd();
@@ -296,6 +301,7 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
 
     let lacking_ids;
     let trying_popular = true;
+    let trying_no_photos = mode == "birdsong";
     let popular_attempts = mode == "birdsong" ? birdsong_popular_attempts : visual_id_popular_attempts;
 
     for (let attempt = 1; attempt <= max_fetch_attempts; attempt++) {
@@ -308,18 +314,24 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
 
         //prepare fetch
         console.log("ids w < " + threshold + " obs", lacking_ids);
-        if (attempt > popular_attempts) {
+        if (trying_popular && attempt > popular_attempts) {
             trying_popular = false;
             console.warn("stopped trying popular b/c attempt #" + attempt + " > " + popular_attempts);
         }
-        let extra_args = trying_popular ? "popular=true" : "";
+        let extra_args = [];
+        if (trying_popular) extra_args.push("popular=true");
+        if (trying_no_photos) extra_args.push("photos=false");
 
         //fetch data, handle if couldn't get any
-        let was_data_fetched = await fetchObservationData(lacking_ids.join(","), extra_args);
+        let was_data_fetched = await fetchObservationData(lacking_ids.join(","), extra_args.join("&"));
         if (!was_data_fetched) {
             if (trying_popular) {
                 trying_popular = false;
                 console.warn("stopped trying popular because no data fetched");
+            }
+            else if (trying_no_photos) {
+                trying_no_photos = false;
+                console.warn("stopped trying no photos because no data fetched");
             }
             else {
                 console.log("Not enough observations to reach threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","));
@@ -350,7 +362,7 @@ function nextObservation() {
 
     let taxon_id = searchAncestorsForTaxonId(current);
     let taxon_obj = taxa_to_use.find(obj => obj.id == taxon_id);
-    if(current.is_squirrel_intruder){
+    if (current.is_squirrel_intruder) {
         taxon_obj = squirrel_taxon_obj;
     }
 
@@ -446,7 +458,7 @@ function checkAnswer() {
     document.getElementById("birdsong-main").dataset.correct = guess.length > 0 ? correct : "no-guess"
 
     //update taxon picking probabilities
-    if(!current.is_squirrel_intruder){
+    if (!current.is_squirrel_intruder) {
         if (correct) updateTaxonBag(guess_obj.id, -correct_remove_copies);
         else {
             if (guess_obj) updateTaxonBag(guess_obj.id, incorrect_add_copies);
@@ -477,7 +489,7 @@ function updateTaxonBag(taxon_id, delta) {
 
 
 
-function scheduleFunnyBird(){
+function scheduleFunnyBird() {
     funny_bird = document.getElementById("funny-bird");
     if (funny_bird.dataset.clicked) return;
 
@@ -495,7 +507,7 @@ function scheduleFunnyBird(){
         //hide the bird after a certain duration
         setTimeout(() => {
             funny_bird.classList.remove("out");
-            funny_bird.addEventListener("transitionend", scheduleFunnyBird, {once: true});
+            funny_bird.addEventListener("transitionend", scheduleFunnyBird, { once: true });
         }, funny_bird_leave_delay);
 
     }, getFunnyBirdDelay());

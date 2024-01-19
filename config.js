@@ -218,7 +218,8 @@ const presets = {
             199841, //purple finch
             145310, //american goldfinch
             73155,  //blue grosbeak
-            10227   //indigo bunting
+            10227,   //indigo bunting
+            145304  //pine siskin
         ]
     },
     "Common Warblers (East/Central US)": {
@@ -243,7 +244,7 @@ const presets = {
         ]
     },
     "Sparrows (NC)": {
-        description: "Get your magnifying glass out for these because you're going to need it.",
+        description: "Get your high-powered binoculars out for these because you're going to need them.",
         photo: "images/preset_nc_sparrows.jpg",
         mode: "visual_id",
         taxa: [
