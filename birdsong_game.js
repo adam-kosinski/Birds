@@ -7,12 +7,16 @@ let kill_fetch_until_threshold = []; //when fetchUntilThreshold is called, it ap
 let taxon_obs = {}; //stores lists of objects, organized by taxon id keys
 let taxon_queues = {}; //stores lists of observation objects for each taxon in order of showing, pop from beginning of list to show and refill if empty
 let taxon_bag = []; //list of unordered taxon ids, perhaps each id in here multiple times, pick a random item to determine next taxon to show
+let rejected_ids = []; //list of observation ids that we didn't like (probably because too long audio), these will not be fetched
 
 let n_pages_by_query = {}; //cache for total results queries, key is args string '?sounds=true' etc, value is n pages
 //not super useful but hey why not, doesn't hurt
 
 let current; //current observation object
 let next; //helpful for preloading
+
+const audio_preloader = new Audio();
+audio_preloader.addEventListener("loadedmetadata", checkNextAudioDuration);
 
 let game_state;
 const INACTIVE = 0;
@@ -55,8 +59,33 @@ function setMode(new_mode) {
 
 
 
+// try a different observation if the audio is too long
+
+let n_short_audio_retries_left = max_short_audio_retries;
+setInterval(function () {
+    n_short_audio_retries_left = Math.min(n_short_audio_retries_left + 1, max_short_audio_retries);
+}, time_to_replenish_a_short_audio_retry);
+
+function checkNextAudioDuration(e) {
+    // this is an event handler for when the next observation's audio's metadata loads
+    // if the audio is too long, try again
+    if (audio_preloader.duration <= max_preferred_audio_duration) return;
+    if (n_short_audio_retries_left > 0) {
+        console.log(`next audio too long (${audio_preloader.duration}s > ${max_preferred_audio_duration}s) retrying`);
+        next = pickObservation();
+        audio_preloader.src = next.sounds[0].file_url;
+        n_short_audio_retries_left--;
+    }
+    else {
+        console.log("ran out of retries to pick a shorter audio clip");
+    }
+}
+
+
+
 function pickObservation() {
     //pick next observation object, return it. Try not to duplicate the current observation
+    //use the taxon_queues to ensure each observation gets a chance to be seen before recycling
 
     //squirrel intruder
     if (mode == "birdsong" && Math.random() < squirrel_probability) {
@@ -83,6 +112,7 @@ function pickObservation() {
     }
     return picked;
 }
+
 
 function resetQueue(taxon_id) {
     let queue = taxon_queues[taxon_id]
@@ -212,6 +242,8 @@ function searchAncestorsForTaxonId(obj) {
 async function fetchObservationData(taxa_id_string = undefined, extra_args = "", per_page = undefined) {
     //returns a promise (b/c async) that fulfills when data has been fetched and added to data structures
     //the promise resolves to true if data was fetched, false if there was no data to fetch
+    //audio missing a url will be filtered out
+    //long audio will be filtered out, but at least one audio will always be let through even if long, to not break other code
 
     if (!taxa_id_string) {
         taxa_id_string = taxa_to_use.map(obj => obj.id).join(",");
@@ -228,16 +260,17 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "",
     let obs_ids_we_have = [];
     for (let taxon_id in taxon_obs) {
         if (taxa_id_string.includes(taxon_id)) {
-            let obs_ids_for_taxon = taxon_obs[taxon_id].map(obj => obj.id);
-            obs_ids_we_have = obs_ids_we_have.concat(obs_ids_for_taxon);
+            let obs_ids_we_have_for_taxon = taxon_obs[taxon_id].map(obj => obj.id);
+            obs_ids_we_have = obs_ids_we_have.concat(obs_ids_we_have_for_taxon); //appending
         }
     }
+    let obs_ids_to_not_fetch = obs_ids_we_have.concat(rejected_ids);
 
     //prep API calls
     let prefix = "https://api.inaturalist.org/v1/observations";
     let args = "?" + extra_args + "&" + (mode == "birdsong" ? "sounds=true" : "photos=true") + (place_id ? "&place_id=" + place_id : "")
         + "&" + (mode == "birdsong" ? "sound_license=cc-by,cc-by-nc,cc-by-nd,cc-by-sa,cc-by-nc-nd,cc-by-nc-sa,cc0" : "photo_licensed=true")
-        + "&quality_grade=research&taxon_id=" + taxa_id_string + "&not_id=" + obs_ids_we_have.join(",");
+        + "&quality_grade=research&taxon_id=" + taxa_id_string + "&not_id=" + obs_ids_to_not_fetch.join(",");
     console.log(prefix + args);
 
     //figure out how many pages we're dealing with if we don't know -------------------
@@ -269,16 +302,25 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "",
         .then(res => res.json())
     console.log(data);
 
+
     //add to data structures
-    data.results.forEach(obj => {
+    for (let i = 0; i < data.results.length; i++) {
+        const obj = data.results[i];
+
+        //make sure audio has a working url (not always the case)
+        if (mode == "birdsong" && !obj.sounds[0].file_url) {
+            rejected_ids.push(obj.id);
+            continue;
+        }
+
         let id = searchAncestorsForTaxonId(obj);
-        if(taxon_obs.hasOwnProperty(id)){   // need to check for this in case game was ended while we were fetching
+        if (taxon_obs.hasOwnProperty(id)) {   // need to check for this in case game was ended while we were fetching
             taxon_obs[id].push(obj);
         }
-        if(taxon_queues.hasOwnProperty(id)){
+        if (taxon_queues.hasOwnProperty(id)) {
             taxon_queues[id].push(obj);
         }
-    });
+    }
     console.log("Done adding to data structures");
     console.groupEnd();
     return true;
@@ -416,6 +458,10 @@ function nextObservation() {
             audio1.removeAttribute("src");
         }
         document.getElementById("bird-grid").scrollTop = 0;
+
+        //start loading the next observation's audio
+        //the event listener on the preloader will try to change the choice for 'next' if the audio is too long
+        audio_preloader.src = next.sounds[0].file_url;
     }
 
     else if (mode == "visual_id") {

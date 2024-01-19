@@ -6,7 +6,11 @@ const initial_per_page = 5;
 const max_fetch_attempts = 15; //how many times to attempt fetching to meet threshold, before quit
 const birdsong_popular_attempts = 3; //how many times to attempt fetching popular observations before reverting to popular or not popular
 const visual_id_popular_attempts = 1;
-let taxon_obs_threshold = 20; //number of observations we'd like to have for each taxon, will stop when reach this
+const taxon_obs_threshold = 20; //number of observations we'd like to have for each taxon, will stop when reach this
+
+const max_preferred_audio_duration = 15; //seconds, if the next observation's sound is longer, try to pick a different next one
+const max_short_audio_retries = 3; //max number of tries to pick a shorter audio (to limit requests / possible infinite looping)
+const time_to_replenish_a_short_audio_retry = 1000; //ms, retries replenish over time
 
 const max_taxon_bag_copies = 9; //number of times a taxon can be in the taxon bag, min is 1
 const start_taxon_bag_copies = 3;

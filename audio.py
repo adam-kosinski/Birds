@@ -8,7 +8,7 @@ from pydub import AudioSegment # pydub relies on ffmpeg, which can be installed 
 
 
 
-def get_duration_and_loudness(audio_url):
+def get_duration_and_loudness(audio_url, taxon_id, id):
 
     response = requests.get(audio_url)
 
@@ -20,6 +20,11 @@ def get_duration_and_loudness(audio_url):
 
     # read with pydub
     audio = AudioSegment.from_file(download_filename)
+
+    # write to permanent file, standardized format (birdnet model likes wav)
+    os.makedirs(os.path.join("bird_audio_files", taxon_id), exist_ok=True)
+    filename = os.path.join("bird_audio_files", taxon_id, f"{id}.wav")
+    audio.export(filename, format="wav")
 
     # remove temp file and return
     os.remove(download_filename)
@@ -75,7 +80,7 @@ for i, taxon_id in enumerate(url_data):
             if any(id_matches):
                 continue
 
-        duration, loudness = get_duration_and_loudness(observation['sound_url'])
+        duration, loudness = get_duration_and_loudness(observation['sound_url'], taxon_id, observation['id'])
         print(f"    {k+1}/{len(url_data[taxon_id])} - duration: {duration}, loudness: {loudness}")
         output_json[taxon_id].append({
             'id': observation['id'],
