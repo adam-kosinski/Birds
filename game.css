@@ -278,7 +278,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    height: min(550px, calc(100vh - 62px)); /* 550 px for iOS search bar clearance, 62px to give 20px margin on bottom minimum, looks nice */
+    height: min(650px, 100dvh - 60px); /* dvh to deal with annoying iOS search bar */
     justify-content: space-between;
     gap: 10px;
 }
@@ -407,7 +407,8 @@
 
 #bird-grid {
     width: 100%;
-    height: 325px;
+    max-width: 800px;
+    height: calc(round(down, 100vh - 275px, 85px) + 25px); /* so it grows, but you always realize you can scroll down b/c bird squares overlap the fold*/
     overflow-y: auto;
     background-color: white;
     display: grid;
