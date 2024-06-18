@@ -438,9 +438,11 @@ function nextObservation() {
         }
         else {
             if (taxon_obj.rank == "species" && taxon_obj.default_photo) {
+                photo = taxon_obj.default_photo;
                 bird_image.src = taxon_obj.default_photo.medium_url;
             }
             else if (current.taxon.default_photo) {
+                photo = current.taxon.default_photo;
                 bird_image.src = current.taxon.default_photo.medium_url;
             }
             else {
