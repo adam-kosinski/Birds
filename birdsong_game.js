@@ -527,8 +527,6 @@ function checkAnswer() {
         if (!(id in removed_counts)) removed_counts[id] = start_taxon_bag_copies; // if haven't seen any yet, assume all removed
         removed_counts[id] = Math.max(0, removed_counts[id] - 1);
     });
-    console.log(taxon_bag)
-    console.log(removed_counts)
     const n_taxa = Object.keys(removed_counts).length;
     if (n_taxa > 0) {  // avoid divide by 0
         const max_possible_removed = n_taxa * (start_taxon_bag_copies - 1);
