@@ -15,8 +15,8 @@ const time_to_replenish_a_short_audio_retry = 1000; //ms, retries replenish over
 const max_taxon_bag_copies = 9; //number of times a taxon can be in the taxon bag, min is 1
 const start_taxon_bag_copies = 3;
 const correct_remove_copies = 1; //number of copies to remove from taxon_bag if the user got a question on this taxon right
-const incorrect_add_copies = 2; //same, but number to add if incorrect, for both the guess and what it actually is
-const skipped_add_copies = 0; //number to add if no guess, for what it actually is
+const incorrect_add_copies = 2; //number of copies to add if incorrect, for both the guess and what it actually is
+const skipped_add_copies = 0; //number of copies to add to bag if no guess
 
 const autocomplete_delay = 1000; //ms after user stops typing, to update the autocomplete
 const n_autocomplete_results = 5;
