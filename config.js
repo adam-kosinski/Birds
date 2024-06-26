@@ -12,11 +12,15 @@ const max_preferred_audio_duration = 15; //seconds, if the next observation's so
 const max_short_audio_retries = 3; //max number of tries to pick a shorter audio (to limit requests / possible infinite looping)
 const time_to_replenish_a_short_audio_retry = 1000; //ms, retries replenish over time
 
-const max_taxon_bag_copies = 9; //number of times a taxon can be in the taxon bag, min is 1
-const start_taxon_bag_copies = 3;
-const correct_remove_copies = 1; //number of copies to remove from taxon_bag if the user got a question on this taxon right
-const incorrect_add_copies = 2; //number of copies to add if incorrect, for both the guess and what it actually is
-const skipped_add_copies = 0; //number of copies to add to bag if no guess
+const max_taxon_bag_copies = 11; //number of times a taxon can be in the taxon bag, min is 1
+const start_taxon_bag_copies = 7;
+const correct_remove_copies = 2; //number of copies to remove from taxon_bag if the user got a question on this taxon right
+const incorrect_add_copies = 3; //number of copies to add if incorrect, for both the guess and what it actually is
+const skipped_add_copies = 0; //number of copies to add to bag if no guess - 0 seems okay, since some recordings/images are v bad
+// note that how the taxon bag works affects the progress bar:
+// the progress bar is keeping track of how many fewer times the taxon appears in the taxon bag than when we started
+// so if you get several wrong, you have to get several right to get the # copies back under start_taxon_bag_copies
+// so probably don't set max_taxon_bag_copies too high, or this will never get back down enough
 
 const autocomplete_delay = 1000; //ms after user stops typing, to update the autocomplete
 const n_autocomplete_results = 5;

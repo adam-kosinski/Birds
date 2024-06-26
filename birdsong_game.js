@@ -7,7 +7,7 @@ let kill_fetch_until_threshold = []; //when fetchUntilThreshold is called, it ap
 let taxon_obs = {}; //stores lists of objects, organized by taxon id keys
 let taxon_queues = {}; //stores lists of observation objects for each taxon in order of showing, pop from beginning of list to show and refill if empty
 let taxon_bag = []; //list of unordered taxon ids, perhaps each id in here multiple times, pick a random item to determine next taxon to show
-let rejected_ids = []; //list of observation ids that we didn't like (probably because too long audio), these will not be fetched
+let rejected_ids = []; //list of observation ids that we didn't like (because missing audio, might add other reasons in future), these will not be fetched
 
 let n_pages_by_query = {}; //cache for total results queries, key is args string '?sounds=true' etc, value is n pages
 //not super useful but hey why not, doesn't hurt
@@ -158,6 +158,9 @@ function initBirdsongGame() {
                 setGameState(INACTIVE);
                 return;
             }
+
+            // reset previous progress bar
+            document.getElementById("progress").value = 0;
 
             //populate bird grid
             let bird_grid = document.getElementById("bird-grid");
@@ -512,6 +515,26 @@ function checkAnswer() {
             if (guess_obj) updateTaxonBag(guess_obj.id, incorrect_add_copies);
             updateTaxonBag(searchAncestorsForTaxonId(current), guess.length > 0 ? incorrect_add_copies : skipped_add_copies);
         }
+    }
+
+    //update progress bar
+    const progress_bar = document.getElementById("progress");
+    // for each taxon, count how many copies have been removed from the taxon bag compared to the start
+    // if there are more copies of a taxon in the bag than we started with, consider this having removed 0 copies
+    // 100% progress = max copies removed (only 1 of each taxon remains)
+    const removed_counts = {};
+    taxon_bag.forEach(id => {
+        if (!(id in removed_counts)) removed_counts[id] = start_taxon_bag_copies; // if haven't seen any yet, assume all removed
+        removed_counts[id] = Math.max(0, removed_counts[id] - 1);
+    });
+    console.log(taxon_bag)
+    console.log(removed_counts)
+    const n_taxa = Object.keys(removed_counts).length;
+    if (n_taxa > 0) {  // avoid divide by 0
+        const max_possible_removed = n_taxa * (start_taxon_bag_copies - 1);
+        let total_removed = 0;
+        Object.values(removed_counts).forEach(count => total_removed += count);
+        progress_bar.value = total_removed / max_possible_removed;
     }
 
     setGameState(ANSWER_SHOWN);
