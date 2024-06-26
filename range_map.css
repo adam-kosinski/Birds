@@ -23,7 +23,7 @@
 }
 
 #range-map {
-    height: min(650px, 100dvh - 60px);
+    height: calc(100dvh - 325px);
     width: min(800px, calc(100vw - 20px));
 }
 
