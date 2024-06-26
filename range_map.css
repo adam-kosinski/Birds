@@ -23,8 +23,8 @@
 }
 
 #range-map {
-    height: 300px;
-    width: calc(100vw - 20px);
+    height: min(650px, 100dvh - 60px);
+    width: min(800px, calc(100vw - 20px));
 }
 
 #close-range-map {
