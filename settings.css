@@ -17,7 +17,12 @@
 
 #settings-container {
     background-color: #e8e8e8;
-    height: calc(100dvh - 325px);
+    height: 80dvh;
     width: min(800px, 80vw);
-    padding: 0 20px;
+    padding: 0 20px 40px 20px;
+    overflow-y: auto;
+}
+
+#settings-container > * {
+    /* margin-bottom: 24px; */
 }

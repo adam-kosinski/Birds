@@ -163,8 +163,24 @@
     <div id="settings-modal">
         <div id="settings-container">
             <h2>Settings</h2>
-            <input id="allow-all-taxa" type="checkbox">
-            <label for="allow-all-taxa">Include all iNaturalist taxa in search results (default is birds only).</label>
+            <p>Note: Settings are persistent when you reload or revisit this site.</p>
+            <hr>
+            <div>
+                <input id="allow-all-taxa" type="checkbox">
+                <label for="allow-all-taxa">Include all iNaturalist taxa in search results (default is birds only).</label>
+            </div>
+            <hr>
+            <div>
+                <input id="store-progress" type="checkbox">
+                <label for="store-progress">Store learning progress on your device. As you use the program, your recent accuracy at identifying each species will be stored on your device, and displayed as a progress meter below each image in the main list. This is used to:
+                    <ul>
+                        <li>More frequently show you species that you've struggled with in the past.</li>
+                        <li>Help you choose what to practice next.</li>
+                        <li>Give you a sense of accomplishment to see your progress over time.</li>
+                    </ul>
+                    Unchecking this setting or clearing your browsing data will remove this data from your device.
+                </label>
+            </div>
         </div>
         <button id="close-settings" class="btn-primary">BACK</button>
     </div>
