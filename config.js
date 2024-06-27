@@ -37,7 +37,7 @@ const SQUIRREL_PROBABILITY = 0.02   //hee hee :)
 
 const MAX_BIRD_IMAGE_ZOOM_FACTOR = 6;
 
-const N_ANSWERS_T0_STORE = 10;
+const N_ANSWERS_TO_STORE = 10;
 // we store recent proficiency in local storage (if setting checked), this is how far back to remember
 // - affects stability of proficiency measurement
 // - also, when starting out, we assume that this many previous questions were all answered incorrectly
