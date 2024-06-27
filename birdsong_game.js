@@ -55,6 +55,11 @@ function setMode(new_mode) {
 
     //update URL
     setURLParam("mode", mode);
+
+    //update proficiency display
+    bird_taxa.forEach(obj => {
+        refreshTaxonProficiencyDisplay(obj.id, new_mode);
+    });
 }
 
 

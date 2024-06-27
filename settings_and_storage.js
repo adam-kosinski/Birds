@@ -22,7 +22,6 @@ document.getElementById("store-progress").addEventListener("change", (e) => {
         // clear taxon info
         // TODO
     }
-
     localStorage.setItem("setting:store-progress", e.target.checked);
     applySetting("store-progress", e.target.checked);
 })
@@ -33,23 +32,36 @@ function applySetting(name, value) {
         document.getElementById("add-bird-input").placeholder = `Search for ${value ? 'taxon' : 'bird'} to add`;
     }
     if (name === "store-progress") {
+        // show progress bars on main list
+        // note: setting the values of the progress bars is done in add_remove_birds.js once the birds have been loaded
         const bird_list = document.getElementById("bird-list");
-        if(value) bird_list.classList.add("show-taxa-progress");
+        if (value) bird_list.classList.add("show-taxa-progress");
         else bird_list.classList.remove("show-taxa-progress");
     }
 }
 
 
-function updateTaxonProficiency(taxon_id, mode, answered_correctly){
+function refreshTaxonProficiencyDisplay(taxon_id, mode) {
+    const progress_bar = document.querySelector(`#bird-list-${taxon_id} .taxon-progress`);
+    const proficiency = loadProficiency(taxon_id, mode);
+    const full_progress_width = getComputedStyle(progress_bar).getPropertyValue("--width");
+    progress_bar.style.borderLeftWidth = `calc(${proficiency} * ${full_progress_width})`;
+}
+
+
+function updateTaxonProficiency(taxon_id, mode, answered_correctly) {
     // don't store anything if the user doesn't want us to
-    if(!loadBooleanSetting("store-progress", false)) return;
+    if (!loadBooleanSetting("store-progress", false)) return;
 
     const prev_answers = loadProficiency(taxon_id, mode, true);
     prev_answers.push(answered_correctly ? 1 : 0);
     // remove old answers we don't care about anymore
-    while(prev_answers.length > N_ANSWERS_TO_STORE) prev_answers.shift();
+    while (prev_answers.length > N_ANSWERS_TO_STORE) prev_answers.shift();
     // store
     localStorage.setItem(`taxon-${taxon_id}-${mode}`, JSON.stringify(prev_answers));
+    
+    // update display
+    refreshTaxonProficiencyDisplay(taxon_id, mode);
 }
 
 
@@ -61,17 +73,17 @@ function loadBooleanSetting(name, default_value) {
     }
 }
 
-function loadProficiency(taxon_id, mode, return_array=false){
+function loadProficiency(taxon_id, mode, return_array = false) {
     let prev_answers = [];
     const storage_string = localStorage.getItem(`taxon-${taxon_id}-${mode}`);
-    if(storage_string !== null) prev_answers = JSON.parse(storage_string);
+    if (storage_string !== null) prev_answers = JSON.parse(storage_string);
 
     // return raw data if that's what we want
-    if(return_array) return prev_answers;
+    if (return_array) return prev_answers;
 
     // return average correctness - correct answer is 1 and incorrect is 0
     // assume if fewer than N_ANSWERS_TO_STORE questions were answered, all remaining ones were "wrong" (so the user has to build up from 0 proficiency)
-    while(prev_answers.length < N_ANSWERS_TO_STORE) prev_answers.push(0);
+    while (prev_answers.length < N_ANSWERS_TO_STORE) prev_answers.push(0);
     return prev_answers.reduce((accumulator, current) => accumulator + current, 0) / prev_answers.length;
 }
 

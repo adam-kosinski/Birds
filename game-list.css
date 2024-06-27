@@ -24,9 +24,11 @@
 .taxa-to-practice-title {
     display: none;
 }
+
 .white-container:has([data-is-bird=false]) .taxa-to-practice-title {
     display: block;
 }
+
 .white-container:has([data-is-bird=false]) .birds-to-practice-title {
     display: none;
 }
@@ -280,19 +282,24 @@
 
 .taxon-progress {
     display: none;
-}
-#bird-list.show-taxa-progress .taxon-progress {
-    display: block;
     position: absolute;
-    width: 75px;
+
+    /* store width as variable so javascript can access */
+    --width: 75px;
+    width: var(--width);
     height: 12px;
     /* 5px offsets to account for padding */
     left: 5px;
     bottom: 5px;
+
     background-color: rgba(255, 255, 255, 0.5);
     border-left: 0 solid #00bf00;
     box-sizing: border-box;
     /* round the bottom to match the bird image */
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
+}
+
+#bird-list.show-taxa-progress .taxon-progress {
+    display: block;
 }

@@ -154,6 +154,9 @@ async function addBirds(taxa_id_list) {
         container.append(plus_sign, progress_bar, bird_square, linked_name, map_icon, x_button);
         document.getElementById("bird-list").append(container);
 
+        //load proficiency display (nothing will show if not storing data)
+        refreshTaxonProficiencyDisplay(obj.id, mode);
+
         // if just added a bird manually (proxy check if only added one), highlight it
         if (results.length == 1) highlightElement(container);
     });
