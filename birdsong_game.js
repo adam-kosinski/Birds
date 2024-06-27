@@ -150,7 +150,7 @@ function initBirdsongGame() {
     });
 
 
-    fetchObservationData(undefined, mode == "birdsong" ? "photos=false" : "", initial_per_page)
+    fetchObservationData(undefined, mode == "birdsong" ? "photos=false" : "", INITIAL_PER_PAGE)
         .then(data_was_fetched => {
             if (!data_was_fetched) {
                 alert("Failed to find research grade iNaturalist observations for any of the chosen birds. Please try again with different birds.");
@@ -209,7 +209,7 @@ function initBirdsongGame() {
 
             //fetch the rest more slowly (limit to < 1 API call per sec)
             //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
-            fetchUntilThreshold(taxon_obs_threshold, 3000)
+            fetchUntilThreshold(TAXON_OBS_THRESHOLD, 3000)
                 .then(result => {
                     //if some taxa had no observations at all, alert the user
                     if (!result.success && result.failure_reason == "not_enough_observations") {
@@ -250,8 +250,8 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "",
     }
     if (!per_page) {
         //don't try to fetch with a big per page if realistically we don't need that many observations
-        let n_obs_needed_ish = taxa_id_string.split(",").length * taxon_obs_threshold;
-        per_page = Math.min(default_per_page, 3 * n_obs_needed_ish);
+        let n_obs_needed_ish = taxa_id_string.split(",").length * TAXON_OBS_THRESHOLD;
+        per_page = Math.min(DEFAULT_PER_PAGE, 3 * n_obs_needed_ish);
     }
 
     console.groupCollapsed("FETCH " + taxa_id_string + "\nExtra args: " + extra_args);
@@ -344,9 +344,9 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
     let lacking_ids;
     let trying_popular = true;
     let trying_no_photos = mode == "birdsong";
-    let popular_attempts = mode == "birdsong" ? birdsong_popular_attempts : visual_id_popular_attempts;
+    let popular_attempts = mode == "birdsong" ? BIRDSONG_POPULAR_ATTEMPTS : VISUAL_ID_POPULAR_ATTEMPTS;
 
-    for (let attempt = 1; attempt <= max_fetch_attempts; attempt++) {
+    for (let attempt = 1; attempt <= MAX_FETCH_ATTEMPTS; attempt++) {
         //figure out ids with less than threshold, and check if we're done
         lacking_ids = Object.keys(taxon_obs).filter(id => taxon_obs[id].length < threshold);
         if (lacking_ids.length == 0) {
@@ -388,7 +388,7 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
             return { success: false, lacking_ids: lacking_ids, failure_reason: "fetch_until_threshold_killed" };
         }
     }
-    console.warn("Exceeded max (" + max_fetch_attempts + ") number of attempts to fetch until threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","));
+    console.warn("Exceeded max (" + MAX_FETCH_ATTEMPTS + ") number of attempts to fetch until threshold of " + threshold + "\nTaxon ids remaining: " + lacking_ids.join(","));
     return { success: false, lacking_ids: lacking_ids, failure_reason: "exceeded_max_attempts" };
 }
 

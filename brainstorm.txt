@@ -1,4 +1,4 @@
-Consider adjusting taxon_obs_threshold based on number of taxa (fewer taxa = larger threshold b/c more likely to repeat)
+Consider adjusting TAXON_OBS_THRESHOLD based on number of taxa (fewer taxa = larger threshold b/c more likely to repeat)
 
 Other filtering? Though current sounds are fairly good I think
 - do some experimentation listening to with photos vs without photos, and number identifications
