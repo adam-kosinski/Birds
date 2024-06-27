@@ -1,5 +1,3 @@
-const max_avoid_copyright_attempts = 5;
-
 const default_per_page = 200;
 const initial_per_page = 5;
 
@@ -38,6 +36,12 @@ function getFunnyBirdDelay() {
 const squirrel_probability = 0.02   //hee hee :)
 
 const max_bird_image_zoom_factor = 6;
+
+const n_answers_to_store = 10;
+// we store recent proficiency in local storage (if setting checked), this is how far back to remember
+// - affects stability of proficiency measurement
+// - also, when starting out, we assume that this many previous questions were all answered incorrectly
+//   (so the user has to build up from 0 proficiency), so this affects how fast that can happen
 
 
 

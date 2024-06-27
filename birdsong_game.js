@@ -24,7 +24,7 @@ const GUESSING = 1;
 const ANSWER_SHOWN = 2;
 setGameState(INACTIVE);
 
-let mode = "birdsong";
+let mode = "birdsong"; // or "visual_id"
 
 let funny_bird_timeout_id;
 
@@ -505,12 +505,26 @@ function checkAnswer() {
     let correct = Boolean(guess_obj && (current.taxon.id == guess_obj.id || current.taxon.ancestor_ids.includes(guess_obj.id)));
     document.getElementById("birdsong-main").dataset.correct = guess.length > 0 ? correct : "no-guess"
 
-    //update taxon picking probabilities
+    //update taxon picking probabilities and user data (if storing)
+    //don't do anything if squirrel intruder, those are jokes
     if (!current.is_squirrel_intruder) {
-        if (correct) updateTaxonBag(guess_obj.id, -correct_remove_copies);
-        else {
-            if (guess_obj) updateTaxonBag(guess_obj.id, incorrect_add_copies);
-            updateTaxonBag(searchAncestorsForTaxonId(current), guess.length > 0 ? incorrect_add_copies : skipped_add_copies);
+        if (correct) {
+            updateTaxonBag(guess_obj.id, -correct_remove_copies);
+            updateTaxonProficiency(guess_obj.id, mode, true);
+        }
+        else { // incorrect or skipped
+            const correct_id = searchAncestorsForTaxonId(current);
+            if (guess_obj){
+                // incorrect
+                updateTaxonBag(guess_obj.id, incorrect_add_copies);
+                updateTaxonBag(correct_id, incorrect_add_copies);
+                updateTaxonProficiency(guess_obj.id, mode, false);
+                updateTaxonProficiency(correct_id, mode, false);
+            }
+            else {
+                // skipped
+                updateTaxonBag(correct_id, skipped_add_copies);
+            }
         }
     }
 
