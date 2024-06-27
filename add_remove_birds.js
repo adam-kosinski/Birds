@@ -1,7 +1,6 @@
 let bird_taxa = []; //list of iNaturalist taxon objects that are on the practice list
 let taxa_to_use = []; //subset of bird_taxa being used this game, initialized at game init based on the selected birds
 let place_id;
-let only_search_for_birds = true; // see settings.js for how this is altered
 
 //automatically read taxa from URL and populate the HTML and JS taxa lists
 initURLArgs();
@@ -106,9 +105,10 @@ async function addBirds(taxa_id_list) {
         container.dataset.isBird = obj.ancestor_ids.includes(3);  // used for css styling
 
         container.addEventListener("click", e => {
-            if (!(e.target.classList.contains("plus-sign") || e.target.classList.contains("bird-square"))) return;
-            container.classList.toggle("selected");
-            document.getElementById("n-selected").textContent = document.querySelectorAll("#bird-list .selected").length;
+            if (e.target.classList.contains("bird-square") || e.target.classList.contains("plus-sign") || e.target.classList.contains("taxon-progress")){
+                container.classList.toggle("selected");
+                document.getElementById("n-selected").textContent = document.querySelectorAll("#bird-list .selected").length;
+            }
         });
 
         //create elements in container
@@ -116,6 +116,10 @@ async function addBirds(taxa_id_list) {
         let plus_sign = document.createElement("div");
         plus_sign.className = "plus-sign";
         plus_sign.textContent = "+";
+
+        let progress_bar = document.createElement("div");
+        progress_bar.className = "taxon-progress";
+        progress_bar.title = "Your recent proficiency";
 
         let bird_square = document.createElement("img");
         bird_square.className = "bird-square";
@@ -147,7 +151,7 @@ async function addBirds(taxa_id_list) {
         });
 
         //append
-        container.append(plus_sign, bird_square, linked_name, map_icon, x_button);
+        container.append(plus_sign, progress_bar, bird_square, linked_name, map_icon, x_button);
         document.getElementById("bird-list").append(container);
 
         // if just added a bird manually (proxy check if only added one), highlight it
@@ -222,7 +226,10 @@ initAutocomplete(
     "add-bird-input",
     "taxon-autocomplete-list",
     "list-screen",
-    () => `https://api.inaturalist.org/v1/taxa/autocomplete?${only_search_for_birds ? 'taxon_id=3&' : ''}rank=species,family,order&is_active=true`,
+    () => {
+        let allow_all_taxa = loadBooleanSetting("allow-all-taxa", false);
+        return `https://api.inaturalist.org/v1/taxa/autocomplete?${allow_all_taxa ? '' : 'taxon_id=3&'}rank=species,family,order&is_active=true`
+    },
     //result callback
     (obj, list_option) => {
         if (!obj.default_photo || obj.observations_count == 0) return; //extinct species are sometimes returned

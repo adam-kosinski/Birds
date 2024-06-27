@@ -38,9 +38,11 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     funny_bird.removeAttribute("data-clicked");
     funny_bird.removeAttribute("style"); //reset the changed transition duration
 
-
     //reset datalist
     document.getElementById("guess-datalist").innerHTML = "";
+
+    // reset progress bar
+    document.getElementById("game-progress").value = 0;
 });
 
 //save list

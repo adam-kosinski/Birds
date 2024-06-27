@@ -159,9 +159,6 @@ function initBirdsongGame() {
                 return;
             }
 
-            // reset previous progress bar
-            document.getElementById("progress").value = 0;
-
             //populate bird grid
             let bird_grid = document.getElementById("bird-grid");
             //clear previous grid
@@ -518,7 +515,7 @@ function checkAnswer() {
     }
 
     //update progress bar
-    const progress_bar = document.getElementById("progress");
+    const progress_bar = document.getElementById("game-progress");
     // for each taxon, count how many copies have been removed from the taxon bag compared to the start
     // if there are more copies of a taxon in the bag than we started with, consider this having removed 0 copies
     // 100% progress = max copies removed (only 1 of each taxon remains)

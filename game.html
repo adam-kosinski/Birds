@@ -12,6 +12,7 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <link type="text/css" rel="stylesheet" href="base.css">
+    <link type="text/css" rel="stylesheet" href="game-list.css">
     <link type="text/css" rel="stylesheet" href="game.css">
     <link type="text/css" rel="stylesheet" href="game_display.css">
     <link type="text/css" rel="stylesheet" href="range_map.css">
@@ -136,8 +137,8 @@
             </div>
 
             <div>
-                <label for="progress">Competency</label>
-                <progress id="progress" max="1" value="0"></progress>
+                <label for="game-progress">Proficiency</label>
+                <progress id="game-progress" max="1" value="0"></progress>
             </div>
 
             <img id="img-preloader" src="" style="display: none;">
@@ -172,7 +173,7 @@
             <hr>
             <div>
                 <input id="store-progress" type="checkbox">
-                <label for="store-progress">Store learning progress on your device. As you use the program, your recent accuracy at identifying each species will be stored on your device, and displayed as a progress meter below each image in the main list. This is used to:
+                <label for="store-progress">Store learning progress on your device. As you use the program, your recent proficiency at identifying each species will be stored on your device, and displayed as a progress meter below each image in the main list. This is used to:
                     <ul>
                         <li>More frequently show you species that you've struggled with in the past.</li>
                         <li>Help you choose what to practice next.</li>
