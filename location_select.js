@@ -25,7 +25,7 @@ document.addEventListener("touchstart", () => map.options.zoomSnap = 0, { once: 
 //basemap
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
 }).addTo(map);
 
 clearMapPlace(); //sets initial state to use full map
@@ -38,7 +38,7 @@ initAutocomplete(
     "place-input",
     "place-autocomplete-list",
     "location-screen",
-    "https://api.inaturalist.org/v1/places/autocomplete?",
+    () => "https://api.inaturalist.org/v1/places/autocomplete?",
     //result callback
     (obj, list_option) => {
         //to process the place, need either the bounding box, or a location and bounding box area (can estimate bounding box from that)

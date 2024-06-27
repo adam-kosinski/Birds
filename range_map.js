@@ -7,7 +7,7 @@ document.addEventListener("touchstart", () => range_map.options.zoomSnap = 0, {o
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
 }).addTo(range_map);
 
 document.addEventListener("click", e => {

@@ -15,6 +15,7 @@
     <link type="text/css" rel="stylesheet" href="game.css">
     <link type="text/css" rel="stylesheet" href="game_display.css">
     <link type="text/css" rel="stylesheet" href="range_map.css">
+    <link type="text/css" rel="stylesheet" href="settings.css">
 
     <meta name="viewport" content="width=device-width initial-scale=1">
     <meta charset="UTF-8">
@@ -32,11 +33,15 @@
         <nav>
             <a href="index.html"><img class="nav-icon" src="images/birdhouse.png" alt="birdhouse icon">Exit</a>
             <button id="save-list"><img class="nav-icon" src="images/list_icon.png" alt="list icon">Save List</button>
+            <button class="settings-button">
+                <img class="nav-icon" src="images/settings.svg" alt="settings icon">
+            </button>
         </nav>
         <div class="white-container">
             <div id="list-title">
                 <p class="font-large">
-                    <span class="bird-quotes">"</span>Birds<span class="bird-quotes">"</span> to Practice
+                    <span class="birds-to-practice-title">Birds to Practice</span>
+                    <span class="taxa-to-practice-title">Taxa to Practice</span>
                 </p>
                 <button id="start-game-button" disabled class="btn-primary">START</button>
                 <div id="bird-list-loader" class="loader"></div>
@@ -46,7 +51,7 @@
                 Game Mode
                 <div id="mode-toggle">
                     <div id="mode-highlight"></div>
-                    <button id="mode-birdsong" data-mode="birdsong" class="selected">Birdsong</button>
+                    <button id="mode-birdsong" data-mode="birdsong" class="selected">Sound</button>
                     <button id="mode-visual-id" data-mode="visual_id">Visual ID</button>
                 </div>
             </div>
@@ -77,11 +82,15 @@
                 <button id="back-to-list"><img class="nav-icon" src="images/list_icon.png" alt="list icon">Back to
                     List</button>
             </div>
-            <a id="inat-link" class="font-small" target="_blank" href="">
-                <div>iNaturalist<br>Observation</div><img class="nav-icon" src="images/external_link.png"
-                    alt="external link icon">
-            </a>
-            <!-- <button><img class="nav-icon" src="images/settings.svg" alt="settings icon"></button> -->
+            <div>
+                <a id="inat-link" class="font-small" target="_blank" href="">
+                    <div>iNaturalist<br>Observation</div><img class="nav-icon" src="images/external_link.png"
+                        alt="external link icon">
+                </a>
+                <button class="settings-button">
+                    <img class="nav-icon" src="images/settings.svg" alt="settings icon" style="margin-left: 10px;">
+                </button>
+            </div>
         </nav>
         <div id="birdsong-main" data-mode="birdsong">
             <audio id="birdsong-audio-0" controls autoplay controlslist="nodownload"></audio>
@@ -151,6 +160,16 @@
     </div>
 
 
+    <div id="settings-modal">
+        <div id="settings-container">
+            <h2>Settings</h2>
+            <input id="allow-searching-all-taxa" type="checkbox">
+            <label for="allow-searching-all-taxa">Include all iNaturalist taxa in search results (default is birds only).</label>
+        </div>
+        <button id="close-settings" class="btn-primary">BACK</button>
+    </div>
+
+
     <script src="config.js"></script>
     <script src="squirrels.js"></script>
 
@@ -159,6 +178,7 @@
     <script src="add_remove_birds.js"></script>
     <script src="game_events.js"></script>
     <script src="range_map.js"></script>
+    <script src="settings.js"></script>
 
 </body>
 

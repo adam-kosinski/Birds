@@ -1,8 +1,9 @@
 //autocomplete list stuff
 
-function initAutocomplete(input_id, list_id, click_off_id, api_endpoint, result_callback, select_callback) {
+function initAutocomplete(input_id, list_id, click_off_id, get_api_endpoint, result_callback, select_callback) {
     /*
     click_off_id is the parent element, which if we click in it (not counting the autocomplete input and list), we should hide the autocomplete list
+    get_api_endpoint is a function that returns the api endpoint when called - need a function b/c the endpoint can change based on user settings
     result_callback is a function to call for each result object,
     - arguments of result_object, list_option element (will be class autocomplete-option)
     select_callback is a function to call when a user clicks an autocomplete option
@@ -22,7 +23,7 @@ function initAutocomplete(input_id, list_id, click_off_id, api_endpoint, result_
         }
         else {
             autocomplete_timeout_id = setTimeout(() => {
-                updateAutocomplete(input_id, list_id, api_endpoint, result_callback);
+                updateAutocomplete(input_id, list_id, get_api_endpoint, result_callback);
             }, autocomplete_delay);
         }
     });
@@ -53,14 +54,15 @@ function initAutocomplete(input_id, list_id, click_off_id, api_endpoint, result_
 
     //reopen list if click back on
     input.addEventListener("focus", e => {
-        if (input.value.length > 0) updateAutocomplete(input_id, list_id, api_endpoint, result_callback);
+        if (input.value.length > 0) updateAutocomplete(input_id, list_id, get_api_endpoint, result_callback);
     });
 }
 
 
-function updateAutocomplete(input_id, list_id, api_endpoint, result_callback) {
+function updateAutocomplete(input_id, list_id, get_api_endpoint, result_callback) {
+    console.log(get_api_endpoint())
     let query = document.getElementById(input_id).value;
-    fetch(api_endpoint + "&q=" + query + "&per_page=" + n_autocomplete_results)
+    fetch(get_api_endpoint() + "&q=" + query + "&per_page=" + n_autocomplete_results)
         .then(res => res.json())
         .then(data => {
             console.log("autocomplete results", data);

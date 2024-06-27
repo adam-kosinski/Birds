@@ -45,7 +45,8 @@ document.getElementById("back-to-list").addEventListener("click", () => {
 
 //save list
 document.getElementById("save-list").addEventListener("click", () => {
-    alert("The current bird list is encoded in the URL. To save this list, copy the URL and save it somewhere. Visiting this URL will load this bird list.");
+    navigator.clipboard.writeText(window.location.href);
+    alert("The current list is encoded in the URL, which has been copied to your clipboard. To save this list, save this URL somewhere. Visiting this URL will load this list. You can also bookmark this page.");
 });
 
 //switch mode
