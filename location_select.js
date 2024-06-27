@@ -91,7 +91,7 @@ function setMapPlace(place) {
             [center[0] + 0.5 * side, center[1] + 0.5 * side],   //ne
             [center[0] - 0.5 * side, center[1] - 0.5 * side]    //sw
         );
-        place_layer = L.rectangle(bounds, place_style).addTo(map);
+        place_layer = L.rectangle(bounds, PLACE_STYLE).addTo(map);
     }
     place_bounds = bounds;
     map.fitBounds(bounds.pad(0.1));
@@ -126,7 +126,7 @@ function setMapPlace(place) {
 
         //add geometry to map
         place_layer = L.geoJSON(place.geometry_geojson, {
-            style: place_style,
+            style: PLACE_STYLE,
             attribution: '<a href="https://api.inaturalist.org/v1/docs/#!/Places/get_places_autocomplete">iNaturalist Data</a>'
         }).addTo(map);
     }

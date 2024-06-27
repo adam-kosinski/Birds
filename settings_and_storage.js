@@ -47,7 +47,7 @@ function updateTaxonProficiency(taxon_id, mode, answered_correctly){
     const prev_answers = loadProficiency(taxon_id, mode, true);
     prev_answers.push(answered_correctly ? 1 : 0);
     // remove old answers we don't care about anymore
-    while(prev_answers.length > n_answers_to_store) prev_answers.shift();
+    while(prev_answers.length > N_ANSWERS_T0_STORE) prev_answers.shift();
     // store
     localStorage.setItem(`taxon-${taxon_id}-${mode}`, JSON.stringify(prev_answers));
 }
@@ -70,8 +70,8 @@ function loadProficiency(taxon_id, mode, return_array=false){
     if(return_array) return prev_answers;
 
     // return average correctness - correct answer is 1 and incorrect is 0
-    // assume if fewer than n_answers_to_store questions were answered, all remaining ones were "wrong" (so the user has to build up from 0 proficiency)
-    while(prev_answers.length < n_answers_to_store) prev_answers.push(0);
+    // assume if fewer than N_ANSWERS_T0_STORE questions were answered, all remaining ones were "wrong" (so the user has to build up from 0 proficiency)
+    while(prev_answers.length < N_ANSWERS_T0_STORE) prev_answers.push(0);
     return prev_answers.reduce((accumulator, current) => accumulator + current, 0) / prev_answers.length;
 }
 

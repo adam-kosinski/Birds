@@ -3,7 +3,7 @@ initPresets();
 function initPresets() {
     let list = document.getElementById("preset-list");
 
-    for (const [name, obj] of Object.entries(presets)) {
+    for (const [name, obj] of Object.entries(PRESETS)) {
         let container = document.createElement("div");
         container.className = "preset";
 

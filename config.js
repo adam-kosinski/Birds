@@ -6,38 +6,38 @@ const BIRDSONG_POPULAR_ATTEMPTS = 3; //how many times to attempt fetching popula
 const VISUAL_ID_POPULAR_ATTEMPTS = 1;
 const TAXON_OBS_THRESHOLD = 20; //number of observations we'd like to have for each taxon, will stop when reach this
 
-const max_preferred_audio_duration = 15; //seconds, if the next observation's sound is longer, try to pick a different next one
-const max_short_audio_retries = 3; //max number of tries to pick a shorter audio (to limit requests / possible infinite looping)
-const time_to_replenish_a_short_audio_retry = 1000; //ms, retries replenish over time
+const MAX_PREFERRED_AUDIO_DURATION = 15; //seconds, if the next observation's sound is longer, try to pick a different next one
+const MAX_SHORT_AUDIO_RETRIES = 3; //max number of tries to pick a shorter audio (to limit requests / possible infinite looping)
+const TIME_TO_REPLENISH_A_SHORT_AUDIO_RETRY = 1000; //ms, retries replenish over time
 
-const max_taxon_bag_copies = 11; //number of times a taxon can be in the taxon bag, min is 1
-const start_taxon_bag_copies = 7;
-const correct_remove_copies = 2; //number of copies to remove from taxon_bag if the user got a question on this taxon right
-const incorrect_add_copies = 3; //number of copies to add if incorrect, for both the guess and what it actually is
-const skipped_add_copies = 0; //number of copies to add to bag if no guess - 0 seems okay, since some recordings/images are v bad
+const MAX_TAXON_BAG_COPIES = 11; //number of times a taxon can be in the taxon bag, min is 1
+const START_TAXON_BAG_COPIES = 7;
+const CORRECT_REMOVE_COPIES = 2; //number of copies to remove from taxon_bag if the user got a question on this taxon right
+const INCORRECT_ADD_COPIES = 3; //number of copies to add if incorrect, for both the guess and what it actually is
+const SKIPPED_ADD_COPIES = 0; //number of copies to add to bag if no guess - 0 seems okay, since some recordings/images are v bad
 // note that how the taxon bag works affects the progress bar:
 // the progress bar is keeping track of how many fewer times the taxon appears in the taxon bag than when we started
-// so if you get several wrong, you have to get several right to get the # copies back under start_taxon_bag_copies
-// so probably don't set max_taxon_bag_copies too high, or this will never get back down enough
+// so if you get several wrong, you have to get several right to get the # copies back under START_TAXON_BAG_COPIES
+// so probably don't set MAX_TAXON_BAG_COPIES too high, or this will never get back down enough
 
-const autocomplete_delay = 1000; //ms after user stops typing, to update the autocomplete
-const n_autocomplete_results = 5;
+const AUTOCOMPLETE_DELAY = 1000; //ms after user stops typing, to update the autocomplete
+const N_AUTOCOMPLETE_RESULTS = 5;
 
-const place_style = {     //for location geometry
+const PLACE_STYLE = {     //for location geometry
     "color": "orange"
 }
-const top_n_selected = 16; //for location selection
+const TOP_N_SELECTED = 16; //for location selection
 
-const funny_bird_leave_delay = 8000; //ms
+const FUNNY_BIRD_LEAVE_DELAY = 8000; //ms
 function getFunnyBirdDelay() {
     return 60000 + 60000 * Math.random();
 }
 
-const squirrel_probability = 0.02   //hee hee :)
+const SQUIRREL_PROBABILITY = 0.02   //hee hee :)
 
-const max_bird_image_zoom_factor = 6;
+const MAX_BIRD_IMAGE_ZOOM_FACTOR = 6;
 
-const n_answers_to_store = 10;
+const N_ANSWERS_T0_STORE = 10;
 // we store recent proficiency in local storage (if setting checked), this is how far back to remember
 // - affects stability of proficiency measurement
 // - also, when starting out, we assume that this many previous questions were all answered incorrectly
@@ -139,7 +139,7 @@ function getQuestionHTML(mode, taxon_obj, is_squirrel_intruder = false) {
 }
 
 
-const presets = {
+const PRESETS = {
     "Backyard Birds (Southeast US)": {
         description: "Your best birdy friends! Well, if you live in the southeast US at least.",
         photo: "images/preset_backyard.png",
@@ -714,4 +714,4 @@ const presets = {
 }
 
 
-presets['North America Families (All)'].taxa = presets['North America Families (Non-Passeriformes)'].taxa.concat(presets['North America Families (Passeriformes)'].taxa);
+PRESETS['North America Families (All)'].taxa = PRESETS['North America Families (Non-Passeriformes)'].taxa.concat(PRESETS['North America Families (Passeriformes)'].taxa);

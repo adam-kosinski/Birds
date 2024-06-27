@@ -66,7 +66,7 @@ async function fetchSpeciesCounts() {
         let checkbox = document.createElement("div");
         checkbox.className = "checkbox";
 
-        if (k < top_n_selected){
+        if (k < TOP_N_SELECTED){
             div.classList.add("selected");
         }
 

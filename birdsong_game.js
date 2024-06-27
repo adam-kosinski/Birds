@@ -61,17 +61,17 @@ function setMode(new_mode) {
 
 // try a different observation if the audio is too long
 
-let n_short_audio_retries_left = max_short_audio_retries;
+let n_short_audio_retries_left = MAX_SHORT_AUDIO_RETRIES;
 setInterval(function () {
-    n_short_audio_retries_left = Math.min(n_short_audio_retries_left + 1, max_short_audio_retries);
-}, time_to_replenish_a_short_audio_retry);
+    n_short_audio_retries_left = Math.min(n_short_audio_retries_left + 1, MAX_SHORT_AUDIO_RETRIES);
+}, TIME_TO_REPLENISH_A_SHORT_AUDIO_RETRY);
 
 function checkNextAudioDuration(e) {
     // this is an event handler for when the next observation's audio's metadata loads
     // if the audio is too long, try again
-    if (audio_preloader.duration <= max_preferred_audio_duration) return;
+    if (audio_preloader.duration <= MAX_PREFERRED_AUDIO_DURATION) return;
     if (n_short_audio_retries_left > 0) {
-        console.log(`next audio too long (${audio_preloader.duration}s > ${max_preferred_audio_duration}s) retrying`);
+        console.log(`next audio too long (${audio_preloader.duration}s > ${MAX_PREFERRED_AUDIO_DURATION}s) retrying`);
         next = pickObservation();
         audio_preloader.src = next.sounds[0].file_url;
         n_short_audio_retries_left--;
@@ -88,7 +88,7 @@ function pickObservation() {
     //use the taxon_queues to ensure each observation gets a chance to be seen before recycling
 
     //squirrel intruder
-    if (mode == "birdsong" && Math.random() < squirrel_probability) {
+    if (mode == "birdsong" && Math.random() < SQUIRREL_PROBABILITY) {
         return squirrel_obs[Math.floor(Math.random() * squirrel_obs.length)]
     }
 
@@ -144,7 +144,7 @@ function initBirdsongGame() {
     taxa_to_use.forEach(obj => {
         taxon_obs[obj.id] = [];
         taxon_queues[obj.id] = [];
-        for (let i = 0; i < start_taxon_bag_copies; i++) {
+        for (let i = 0; i < START_TAXON_BAG_COPIES; i++) {
             taxon_bag.push(obj.id)
         }
     });
@@ -509,21 +509,21 @@ function checkAnswer() {
     //don't do anything if squirrel intruder, those are jokes
     if (!current.is_squirrel_intruder) {
         if (correct) {
-            updateTaxonBag(guess_obj.id, -correct_remove_copies);
+            updateTaxonBag(guess_obj.id, -CORRECT_REMOVE_COPIES);
             updateTaxonProficiency(guess_obj.id, mode, true);
         }
         else { // incorrect or skipped
             const correct_id = searchAncestorsForTaxonId(current);
             if (guess_obj){
                 // incorrect
-                updateTaxonBag(guess_obj.id, incorrect_add_copies);
-                updateTaxonBag(correct_id, incorrect_add_copies);
+                updateTaxonBag(guess_obj.id, INCORRECT_ADD_COPIES);
+                updateTaxonBag(correct_id, INCORRECT_ADD_COPIES);
                 updateTaxonProficiency(guess_obj.id, mode, false);
                 updateTaxonProficiency(correct_id, mode, false);
             }
             else {
                 // skipped
-                updateTaxonBag(correct_id, skipped_add_copies);
+                updateTaxonBag(correct_id, SKIPPED_ADD_COPIES);
             }
         }
     }
@@ -535,12 +535,12 @@ function checkAnswer() {
     // 100% progress = max copies removed (only 1 of each taxon remains)
     const removed_counts = {};
     taxon_bag.forEach(id => {
-        if (!(id in removed_counts)) removed_counts[id] = start_taxon_bag_copies; // if haven't seen any yet, assume all removed
+        if (!(id in removed_counts)) removed_counts[id] = START_TAXON_BAG_COPIES; // if haven't seen any yet, assume all removed
         removed_counts[id] = Math.max(0, removed_counts[id] - 1);
     });
     const n_taxa = Object.keys(removed_counts).length;
     if (n_taxa > 0) {  // avoid divide by 0
-        const max_possible_removed = n_taxa * (start_taxon_bag_copies - 1);
+        const max_possible_removed = n_taxa * (START_TAXON_BAG_COPIES - 1);
         let total_removed = 0;
         Object.values(removed_counts).forEach(count => total_removed += count);
         progress_bar.value = total_removed / max_possible_removed;
@@ -553,7 +553,7 @@ function checkAnswer() {
 
 function updateTaxonBag(taxon_id, delta) {
     let n_copies_in_bag = taxon_bag.filter(id => id == taxon_id).length;
-    let target = Math.max(1, Math.min(max_taxon_bag_copies, n_copies_in_bag + delta))
+    let target = Math.max(1, Math.min(MAX_TAXON_BAG_COPIES, n_copies_in_bag + delta))
     let true_delta = target - n_copies_in_bag;
     if (true_delta < 0) {
         for (let i = 0; i < Math.abs(true_delta); i++) {
@@ -588,7 +588,7 @@ function scheduleFunnyBird() {
         setTimeout(() => {
             funny_bird.classList.remove("out");
             funny_bird.addEventListener("transitionend", scheduleFunnyBird, { once: true });
-        }, funny_bird_leave_delay);
+        }, FUNNY_BIRD_LEAVE_DELAY);
 
     }, getFunnyBirdDelay());
 }

@@ -24,7 +24,7 @@ function initAutocomplete(input_id, list_id, click_off_id, get_api_endpoint, res
         else {
             autocomplete_timeout_id = setTimeout(() => {
                 updateAutocomplete(input_id, list_id, get_api_endpoint, result_callback);
-            }, autocomplete_delay);
+            }, AUTOCOMPLETE_DELAY);
         }
     });
 
@@ -62,7 +62,7 @@ function initAutocomplete(input_id, list_id, click_off_id, get_api_endpoint, res
 function updateAutocomplete(input_id, list_id, get_api_endpoint, result_callback) {
     console.log(get_api_endpoint())
     let query = document.getElementById(input_id).value;
-    fetch(get_api_endpoint() + "&q=" + query + "&per_page=" + n_autocomplete_results)
+    fetch(get_api_endpoint() + "&q=" + query + "&per_page=" + N_AUTOCOMPLETE_RESULTS)
         .then(res => res.json())
         .then(data => {
             console.log("autocomplete results", data);
@@ -70,7 +70,7 @@ function updateAutocomplete(input_id, list_id, get_api_endpoint, result_callback
             let list = document.getElementById(list_id);
             list.innerHTML = "";
 
-            for (let k = 0; k < Math.min(data.results.length, n_autocomplete_results); k++) { //for loop because sometimes extra results are returned
+            for (let k = 0; k < Math.min(data.results.length, N_AUTOCOMPLETE_RESULTS); k++) { //for loop because sometimes extra results are returned
                 let list_option = document.createElement("button");
                 list_option.className = "autocomplete-option";
                 let ignore_result = false == result_callback(data.results[k], list_option);

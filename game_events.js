@@ -150,13 +150,13 @@ document.addEventListener("mousemove", updateBirdImageZoom);
 
 document.getElementById("bird-image").addEventListener("wheel", e => {
     let new_zoom = bird_image_zoom_factor - e.deltaY / 200
-    bird_image_zoom_factor = Math.max(1, Math.min(max_bird_image_zoom_factor, new_zoom));
+    bird_image_zoom_factor = Math.max(1, Math.min(MAX_BIRD_IMAGE_ZOOM_FACTOR, new_zoom));
     updateBirdImageZoom(e);
 });
 
 document.getElementById("bird-image").addEventListener("click", e => {
     let cursor = getComputedStyle(document.getElementById("bird-image")).cursor;
-    bird_image_zoom_factor = cursor == "zoom-in" ? max_bird_image_zoom_factor : 1;
+    bird_image_zoom_factor = cursor == "zoom-in" ? MAX_BIRD_IMAGE_ZOOM_FACTOR : 1;
     updateBirdImageZoom(e);
 });
 
@@ -194,7 +194,7 @@ function updateBirdImageZoom(e) {
         bird_image_zoom_factor = 1; //reset
     }
     document.getElementById("bird-image").style.transform = transform;
-    document.getElementById("bird-image").style.cursor = bird_image_zoom_factor == max_bird_image_zoom_factor ? "zoom-out" : "zoom-in";
+    document.getElementById("bird-image").style.cursor = bird_image_zoom_factor == MAX_BIRD_IMAGE_ZOOM_FACTOR ? "zoom-out" : "zoom-in";
 }
 
 
