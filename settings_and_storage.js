@@ -37,6 +37,20 @@ function applySetting(name, value) {
         const bird_list = document.getElementById("bird-list");
         if (value) bird_list.classList.add("show-taxa-progress");
         else bird_list.classList.remove("show-taxa-progress");
+
+        // clear out data if no longer storing progress
+        if (!value) {
+            const keys = Object.keys(localStorage);
+            for(let key of keys){
+                if(key.startsWith("taxon")){
+                    localStorage.removeItem(key);
+                }
+            }
+            // set displays back to 0 so if we re-enable the setting old data isn't showing
+            document.querySelectorAll(".taxon-progress").forEach(el => {
+                el.style.borderLeftWidth = 0;
+            });
+        }
     }
 }
 
