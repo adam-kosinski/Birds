@@ -238,17 +238,24 @@ const presets = {
             10286,    //Black-and-white Warbler
             10247,    //American Redstart
             145238,    //Yellow Warbler
+            145244,     //Pine Warbler
+            145242,    //Palm Warbler
             145239,    //Chestnut-sided Warbler
             145245,    //Yellow-rumped Warbler
             62550,    //Ovenbird
             9721,    //Common Yellowthroat
             145229,    //Hooded Warbler
             145246,    //Yellow-throated Warbler
-            73553,    //Blue-winged Warbler
+            10729,      //Prothonotary Warbler
             145233,    //Northern Parula
             145249,    //Prairie Warbler
+            199916,     //Black-throated Blue Warbler
             145258,    //Black-throated Green Warbler
-            73148       //Louisiana waterthrush
+            73148,       //Louisiana waterthrush
+            73553,    //Blue-winged Warbler
+            145231,     //Cape May Warbler
+            145235,     //Magnolia Warbler
+            145240     //Blackpoll Warbler
         ]
     },
     "Sparrows (NC)": {
