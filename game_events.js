@@ -60,7 +60,7 @@ document.getElementById("mode-toggle").addEventListener("click", e => {
 
 
 
-//bird selection
+// bird selection during the game
 let bird_grid = document.getElementById("bird-grid");
 bird_grid.addEventListener("click", (e) => {
 
@@ -78,7 +78,10 @@ bird_grid.addEventListener("click", (e) => {
 
 });
 
+
+
 //bird list bird selection
+
 function toggleListSelection(taxon_id){
     const bird_list_item = document.getElementById("bird-list-" + taxon_id);
     bird_list_item.classList.toggle("selected");

@@ -19,11 +19,13 @@ document.getElementById("store-progress").addEventListener("change", (e) => {
             e.target.checked = true;
             return;
         }
-        // clear taxon info
-        // TODO
     }
     localStorage.setItem("setting:store-progress", e.target.checked);
     applySetting("store-progress", e.target.checked);
+});
+document.getElementById("auto-select-recommended").addEventListener("change", (e) => {
+    localStorage.setItem("setting:auto-select-recommended", e.target.checked);
+    applySetting("auto-select-recommended", e.target.checked);
 });
 
 
@@ -41,6 +43,7 @@ function applySetting(name, value) {
         // clear out data if no longer storing progress
         if (!value) clearData();
     }
+    // nothing special needs to be done for auto-select-recommended, the relevant code will just read from localstorage
 }
 
 
@@ -113,13 +116,17 @@ function loadLocalStorage() {
     let store_progress = loadBooleanSetting("store-progress", false);
     document.getElementById("store-progress").checked = store_progress;
     applySetting("store-progress", store_progress);
+
+    let auto_select_recommended = loadBooleanSetting("auto-select-recommended", false);
+    document.getElementById("auto-select-recommended").checked = auto_select_recommended;
+    applySetting("auto-select-recommended", auto_select_recommended);
 }
 
 loadLocalStorage();
 
 
 
-// transferring data to another device
+// transferring data to another device utility functions
 
 function getTaxonStorageString() {
     const taxon_data = Object.entries(localStorage).filter(a => a[0].startsWith("taxon"));

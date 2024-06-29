@@ -166,6 +166,11 @@ async function addBirds(taxa_id_list) {
     //update count
     document.getElementById("n-species-display").textContent = bird_taxa.length;
 
+    //select recommended automatically if setting is enabled, now that taxa have loaded
+    if(loadBooleanSetting("auto-select-recommended", false)){
+        selectRecommended();
+    }
+
     //stop loader
     document.getElementById("bird-list-loader").style.display = "none";
 }

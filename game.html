@@ -185,20 +185,32 @@
                     Unchecking this setting or clearing your browsing data will remove this data from your device.
                 </label>
             </div>
+            <hr>
+            <div>
+                <input id="auto-select-recommended" type="checkbox">
+                <label for="auto-select-recommended">Automatically select recommended species whenever you load a species list (instead of needing to manually click the "SELECT RECOMMENDED" button).
+                    <ul>
+                        <li>Note that without storing progress on your device (see setting above), recommendations will be much less useful.</li>
+                    </ul>
+                </label>
+            </div>
         </div>
         <button id="close-settings" class="btn-primary">BACK</button>
     </div>
 
+    <!-- script order is important so function declarations work properly -->
 
     <script src="config.js"></script>
     <script src="squirrels.js"></script>
 
-    <script src="autocomplete.js"></script>
-    <script src="birdsong_game.js"></script>
-    <script src="add_remove_birds.js"></script>
-    <script src="game_events.js"></script>
-    <script src="range_map.js"></script>
     <script src="settings_and_storage.js"></script>
+
+    <script src="birdsong_game.js"></script>
+    <script src="game_events.js"></script>
+
+    <script src="autocomplete.js"></script>
+    <script src="add_remove_birds.js"></script>
+    <script src="range_map.js"></script>
 
 </body>
 

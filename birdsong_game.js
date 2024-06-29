@@ -60,6 +60,11 @@ function setMode(new_mode) {
     bird_taxa.forEach(obj => {
         refreshTaxonProficiencyDisplay(obj.id, new_mode);
     });
+
+    //update auto-selection if setting is enabled
+    if(loadBooleanSetting("auto-select-recommended", false)){
+        selectRecommended();
+    }
 }
 
 
