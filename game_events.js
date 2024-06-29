@@ -16,6 +16,11 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     document.getElementById("game-screen").style.display = "none";
     document.getElementById("start-game-button").removeAttribute("disabled");
 
+    //update auto-selection if setting is enabled
+    if(loadBooleanSetting("auto-select-recommended", false)){
+        selectRecommended();
+    }
+
     //reset vars
     obs = [];
     taxa_to_use = []; //probably don't need to reset, but just in case
