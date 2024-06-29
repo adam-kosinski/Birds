@@ -186,6 +186,9 @@
 .white-container:has(#bird-list .selected) #clear-selection {
     display: block;
 }
+.white-container:has(#bird-list .selected) #select-recommended {
+    display: none;
+}
 
 #clear-list {
     grid-column-start: 3;

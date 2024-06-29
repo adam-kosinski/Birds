@@ -82,32 +82,31 @@ async function addBirds(taxa_id_list) {
 
 
     //add taxa
-    results.forEach(obj => {
+    results.forEach(taxon => {
         
         //make sure we use default photos that are licensed
-        if(obj.default_photo && obj.default_photo.license_code === null){
-            let licensed_photo_obj = obj.taxon_photos.find(photo_obj => photo_obj.photo.license_code !== null)
-            if (licensed_photo_obj) obj.default_photo = licensed_photo_obj.photo;
+        if(taxon.default_photo && taxon.default_photo.license_code === null){
+            let licensed_photo_obj = taxon.taxon_photos.find(photo_obj => photo_obj.photo.license_code !== null)
+            if (licensed_photo_obj) taxon.default_photo = licensed_photo_obj.photo;
         }
 
         //add to JS list
-        bird_taxa.push(obj);
+        bird_taxa.push(taxon);
 
         //add to HTML list ----------------
 
         //create container
 
         let container = document.createElement("div");
-        container.id = "bird-list-" + obj.id;
+        container.id = "bird-list-" + taxon.id;
         container.className = "bird-list-item";
-        container.dataset.taxonId = obj.id;
-        container.dataset.rank = obj.rank;
-        container.dataset.isBird = obj.ancestor_ids.includes(3);  // used for css styling
+        container.dataset.taxonId = taxon.id;
+        container.dataset.rank = taxon.rank;
+        container.dataset.isBird = taxon.ancestor_ids.includes(3);  // used for css styling
 
         container.addEventListener("click", e => {
             if (e.target.classList.contains("bird-square") || e.target.classList.contains("plus-sign") || e.target.classList.contains("taxon-progress")){
-                container.classList.toggle("selected");
-                document.getElementById("n-selected").textContent = document.querySelectorAll("#bird-list .selected").length;
+                toggleListSelection(taxon.id);
             }
         });
 
@@ -123,31 +122,31 @@ async function addBirds(taxa_id_list) {
 
         let bird_square = document.createElement("img");
         bird_square.className = "bird-square";
-        if (obj.default_photo) bird_square.src = obj.default_photo.square_url;
-        bird_square.alt = "Photo of " + obj.preferred_common_name;
+        if (taxon.default_photo) bird_square.src = taxon.default_photo.square_url;
+        bird_square.alt = "Photo of " + taxon.preferred_common_name;
 
         let linked_name = document.createElement("a");
-        linked_name.href = getInfoURL(obj);
+        linked_name.href = getInfoURL(taxon);
         linked_name.target = "_blank";
 
         let b = document.createElement("b");
         let i = document.createElement("i");
         let br = document.createElement("br");
-        b.textContent = obj.preferred_common_name;
-        i.textContent = obj.name;
+        b.textContent = taxon.preferred_common_name;
+        i.textContent = taxon.name;
         linked_name.append(b, br, i);
 
         let map_icon = document.createElement("button");
         map_icon.className = "range-map-icon";
-        map_icon.dataset.id = obj.id;
-        map_icon.dataset.commonName = obj.preferred_common_name;
-        map_icon.dataset.scientificName = obj.name;
-        map_icon.dataset.imageUrl = obj.default_photo.square_url;
+        map_icon.dataset.id = taxon.id;
+        map_icon.dataset.commonName = taxon.preferred_common_name;
+        map_icon.dataset.scientificName = taxon.name;
+        map_icon.dataset.imageUrl = taxon.default_photo.square_url;
 
         let x_button = document.createElement("button");
         x_button.className = "x-button";
         x_button.addEventListener("click", e => {
-            if (confirm("Remove " + obj.preferred_common_name + " from list?")) removeBird(obj.id);
+            if (confirm("Remove " + taxon.preferred_common_name + " from list?")) removeBird(taxon.id);
         });
 
         //append
@@ -155,7 +154,7 @@ async function addBirds(taxa_id_list) {
         document.getElementById("bird-list").append(container);
 
         //load proficiency display (nothing will show if not storing data)
-        refreshTaxonProficiencyDisplay(obj.id, mode);
+        refreshTaxonProficiencyDisplay(taxon.id, mode);
 
         // if just added a bird manually (proxy check if only added one), highlight it
         if (results.length == 1) highlightElement(container);

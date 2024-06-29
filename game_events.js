@@ -65,24 +65,72 @@ let bird_grid = document.getElementById("bird-grid");
 bird_grid.addEventListener("click", (e) => {
 
     let bird_grid_option = e.target.closest(".bird-grid-option");
-    if (bird_grid_option) {
-        let originally_selected = bird_grid_option.classList.contains("selected");
-        bird_grid.querySelectorAll(".bird-grid-option.selected").forEach(el => {
-            el.classList.remove("selected");
-        });
-        if (!originally_selected) bird_grid_option.classList.add("selected");
+    if (!bird_grid_option) return;
 
-        //update text input
-        document.getElementById("guess-input").value = originally_selected ? "" : bird_grid_option.dataset.commonName;
-    }
+    let originally_selected = bird_grid_option.classList.contains("selected");
+    bird_grid.querySelectorAll(".bird-grid-option.selected").forEach(el => {
+        el.classList.remove("selected");
+    });
+    if (!originally_selected) bird_grid_option.classList.add("selected");
+
+    //update text input
+    document.getElementById("guess-input").value = originally_selected ? "" : bird_grid_option.dataset.commonName;
+
 });
 
 //bird list bird selection
-document.getElementById("clear-selection").addEventListener("click", () => {
+function toggleListSelection(taxon_id){
+    const bird_list_item = document.getElementById("bird-list-" + taxon_id);
+    bird_list_item.classList.toggle("selected");
+    document.getElementById("n-selected").textContent = document.querySelectorAll("#bird-list .selected").length;
+}
+function clearListSelection(){
     document.querySelectorAll("#bird-list .selected").forEach(el => {
         el.classList.remove("selected");
     });
-});
+}
+document.getElementById("clear-selection").addEventListener("click", clearListSelection);
+document.getElementById("select-recommended").addEventListener("click", selectRecommended);
+
+function selectRecommended() {
+    if (bird_taxa.length === 0) return;
+
+    let recommended_ids = [];
+
+    if (loadBooleanSetting("store-progress", false)) {
+        // recommend based on proficiency level
+        const proficiencies = []; // each element is [taxon_id, proficiency]
+        bird_taxa.forEach(taxon => proficiencies.push([taxon.id, loadProficiency(taxon.id, mode)]));
+        // sort ascending
+        proficiencies.sort(([id1, a], [id2, b]) => a - b);
+        // if any low proficiency, recommend 4 so they can learn in a simple setting
+        if (proficiencies[0][1] < MEDIUM_PROFICIENCY_THRESHOLD) {
+            recommended_ids = proficiencies.slice(0, 4).map(([id, value]) => id);
+        }
+        // if all medium or above, recommend 8 to strengthen
+        else if (proficiencies[0][1] < HIGH_PROFICIENCY_THRESHOLD) {
+            recommended_ids = proficiencies.slice(0, 8).map(([id, value]) => id);
+        }
+        // if all high proficiency, do the whole set
+        else {
+            recommended_ids = proficiencies.map(([id, value]) => id);
+        }
+    }
+    else {
+        // not storing proficiencies, just pick a random 4
+
+    }
+    // select
+    clearListSelection();
+    recommended_ids.forEach(id => toggleListSelection(id));
+    // show the user what we selected by moving them to the top and highlighting
+    const bird_list = document.getElementById("bird-list");
+    recommended_ids.toReversed().forEach(id => {
+        const bird_list_item = document.getElementById("bird-list-" + id);
+        bird_list.prepend(bird_list_item);
+        highlightElement(bird_list_item);
+    });
+}
 
 
 //keypress handling

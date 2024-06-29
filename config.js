@@ -43,6 +43,9 @@ const N_ANSWERS_TO_STORE = 10;
 // - also, when starting out, we assume that this many previous questions were all answered incorrectly
 //   (so the user has to build up from 0 proficiency), so this affects how fast that can happen
 
+// min proficiency to be considered medium or high - used for select recommended algorithm
+const MEDIUM_PROFICIENCY_THRESHOLD = 0.4;
+const HIGH_PROFICIENCY_THRESHOLD = 0.7;
 
 
 function getInfoURL(taxon_obj) {
