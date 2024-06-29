@@ -590,7 +590,7 @@ function updateProgressBar() {
 
         if(progress_value === 1 && !already_notified_full_progress_bar) {
             already_notified_full_progress_bar = true;
-            setTimeout(() => alert("Wow, you're doing amazing at this! Consider trying a different set of species, since you seem to have this set down?"), 750);
+            setTimeout(() => alert("Wow, you're doing amazing at this! Consider trying a different set of species, since you seem to have this set down?"), 300);
         }
     }
 }
