@@ -118,7 +118,11 @@ function selectRecommended() {
     }
     else {
         // not storing proficiencies, just pick a random 4
-
+        const taxon_ids = bird_taxa.map(taxon => taxon.id);
+        for(let i=0; i<4; i++){
+            const idx = Math.floor(taxon_ids.length * Math.random());
+            recommended_ids.push(taxon_ids.splice(idx, 1)[0]);
+        }
     }
     // select
     clearListSelection();
