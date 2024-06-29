@@ -24,7 +24,7 @@ document.getElementById("store-progress").addEventListener("change", (e) => {
     }
     localStorage.setItem("setting:store-progress", e.target.checked);
     applySetting("store-progress", e.target.checked);
-})
+});
 
 
 function applySetting(name, value) {
@@ -39,19 +39,22 @@ function applySetting(name, value) {
         else bird_list.classList.remove("show-taxa-progress");
 
         // clear out data if no longer storing progress
-        if (!value) {
-            const keys = Object.keys(localStorage);
-            for(let key of keys){
-                if(key.startsWith("taxon")){
-                    localStorage.removeItem(key);
-                }
-            }
-            // set displays back to 0 so if we re-enable the setting old data isn't showing
-            document.querySelectorAll(".taxon-progress").forEach(el => {
-                el.style.borderLeftWidth = 0;
-            });
+        if (!value) clearData();
+    }
+}
+
+
+function clearData(){
+    const keys = Object.keys(localStorage);
+    for(let key of keys){
+        if(key.startsWith("taxon")){
+            localStorage.removeItem(key);
         }
     }
+    // set displays back to 0 so if we re-enable the setting old data isn't showing
+    document.querySelectorAll(".taxon-progress").forEach(el => {
+        el.style.borderLeftWidth = 0;
+    });
 }
 
 
@@ -113,3 +116,21 @@ function loadLocalStorage() {
 }
 
 loadLocalStorage();
+
+
+
+// transferring data to another device
+
+function getTaxonStorageString() {
+    const taxon_data = Object.entries(localStorage).filter(a => a[0].startsWith("taxon"));
+    return JSON.stringify(taxon_data);
+}
+function loadTaxonStorageString(s) {
+    clearData();
+    const taxon_data = JSON.parse(s);
+    for(const [k, v] of taxon_data){
+        localStorage[k] = v;
+    }
+    // reload to update the progress bars
+    window.location = window.location;
+}

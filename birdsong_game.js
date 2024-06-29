@@ -149,10 +149,16 @@ function initBirdsongGame() {
     taxa_to_use.forEach(obj => {
         taxon_obs[obj.id] = [];
         taxon_queues[obj.id] = [];
-        for (let i = 0; i < START_TAXON_BAG_COPIES; i++) {
-            taxon_bag.push(obj.id)
+        // determine how many to add to taxon bag, based on previous proficiency
+        // should range from 2 to START_TAXON_BAG_COPIES (never 1 b/c we don't want them to start at full proficiency meter)
+        const n_copies = Math.ceil(2 + (START_TAXON_BAG_COPIES - 2) * (1-loadProficiency(obj.id, mode)));
+        console.log(obj.preferred_common_name, n_copies)
+        // add to taxon_bag
+        for (let i = 0; i < n_copies; i++) {
+            taxon_bag.push(obj.id);
         }
     });
+    updateProgressBar();
 
 
     fetchObservationData(undefined, mode == "birdsong" ? "photos=false" : "", INITIAL_PER_PAGE)
@@ -519,7 +525,7 @@ function checkAnswer() {
         }
         else { // incorrect or skipped
             const correct_id = searchAncestorsForTaxonId(current);
-            if (guess_obj){
+            if (guess_obj) {
                 // incorrect
                 updateTaxonBag(guess_obj.id, INCORRECT_ADD_COPIES);
                 updateTaxonBag(correct_id, INCORRECT_ADD_COPIES);
@@ -531,24 +537,6 @@ function checkAnswer() {
                 updateTaxonBag(correct_id, SKIPPED_ADD_COPIES);
             }
         }
-    }
-
-    //update progress bar
-    const progress_bar = document.getElementById("game-progress");
-    // for each taxon, count how many copies have been removed from the taxon bag compared to the start
-    // if there are more copies of a taxon in the bag than we started with, consider this having removed 0 copies
-    // 100% progress = max copies removed (only 1 of each taxon remains)
-    const removed_counts = {};
-    taxon_bag.forEach(id => {
-        if (!(id in removed_counts)) removed_counts[id] = START_TAXON_BAG_COPIES; // if haven't seen any yet, assume all removed
-        removed_counts[id] = Math.max(0, removed_counts[id] - 1);
-    });
-    const n_taxa = Object.keys(removed_counts).length;
-    if (n_taxa > 0) {  // avoid divide by 0
-        const max_possible_removed = n_taxa * (START_TAXON_BAG_COPIES - 1);
-        let total_removed = 0;
-        Object.values(removed_counts).forEach(count => total_removed += count);
-        progress_bar.value = total_removed / max_possible_removed;
     }
 
     setGameState(ANSWER_SHOWN);
@@ -569,6 +557,29 @@ function updateTaxonBag(taxon_id, delta) {
         for (let i = 0; i < true_delta; i++) {
             taxon_bag.push(taxon_id);
         }
+    }
+
+    updateProgressBar();
+}
+
+
+function updateProgressBar() {
+    // update proficiency progress bar, which is based on the taxon bag
+    const progress_bar = document.getElementById("game-progress");
+    // for each taxon, count how many copies have been removed from the taxon bag compared to the start
+    // if there are more copies of a taxon in the bag than we started with, consider this having removed 0 copies
+    // 100% progress = max copies removed (only 1 of each taxon remains)
+    const removed_counts = {};
+    taxon_bag.forEach(id => {
+        if (!(id in removed_counts)) removed_counts[id] = START_TAXON_BAG_COPIES; // if haven't seen any yet, assume all removed
+        removed_counts[id] = Math.max(0, removed_counts[id] - 1);
+    });
+    const n_taxa = Object.keys(removed_counts).length;
+    if (n_taxa > 0) {  // avoid divide by 0
+        const max_possible_removed = n_taxa * (START_TAXON_BAG_COPIES - 1);
+        let total_removed = 0;
+        Object.values(removed_counts).forEach(count => total_removed += count);
+        progress_bar.value = total_removed / max_possible_removed;
     }
 }
 
