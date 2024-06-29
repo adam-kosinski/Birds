@@ -28,6 +28,7 @@ let mode = "birdsong"; // or "visual_id"
 
 let funny_bird_timeout_id;
 
+let already_notified_full_progress_bar = false;
 
 
 
@@ -584,7 +585,13 @@ function updateProgressBar() {
         const max_possible_removed = n_taxa * (START_TAXON_BAG_COPIES - 1);
         let total_removed = 0;
         Object.values(removed_counts).forEach(count => total_removed += count);
-        progress_bar.value = total_removed / max_possible_removed;
+        const progress_value = total_removed / max_possible_removed;
+        progress_bar.value = progress_value;
+
+        if(progress_value === 1 && !already_notified_full_progress_bar) {
+            already_notified_full_progress_bar = true;
+            setTimeout(() => alert("Wow, you're doing amazing at this! Consider trying a different set of species, since you seem to have this set down?"), 750);
+        }
     }
 }
 

@@ -24,6 +24,7 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     taxon_bag = [];
     n_pages_by_query = {};
     current = undefined;
+    already_notified_full_progress_bar = false;
     setGameState(INACTIVE);
 
     //kill ongoing fetch until threshold
