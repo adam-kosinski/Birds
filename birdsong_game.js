@@ -63,7 +63,7 @@ function setMode(new_mode) {
     });
 
     //update auto-selection if setting is enabled
-    if(loadBooleanSetting("auto-select-recommended", false)){
+    if (loadBooleanSetting("auto-select-recommended", false)) {
         selectRecommended();
     }
 }
@@ -157,7 +157,7 @@ function initBirdsongGame() {
         taxon_queues[obj.id] = [];
         // determine how many to add to taxon bag, based on previous proficiency
         // should range from 2 to START_TAXON_BAG_COPIES (never 1 b/c we don't want them to start at full proficiency meter)
-        const n_copies = Math.ceil(2 + (START_TAXON_BAG_COPIES - 2) * (1-loadProficiency(obj.id, mode)));
+        const n_copies = Math.ceil(2 + (START_TAXON_BAG_COPIES - 2) * (1 - loadTaxonData(obj.id, mode).proficiency));
         console.log(obj.preferred_common_name, n_copies)
         // add to taxon_bag
         for (let i = 0; i < n_copies; i++) {
@@ -566,7 +566,7 @@ function updateTaxonBag(taxon_id, delta) {
         }
     }
     // if reached one copy, this species has been passed at the current difficulty
-    if (target === 1){
+    if (target === 1) {
         updateTaxonDifficultyAchieved(taxon_id, mode, taxa_to_use.length);
     }
 
@@ -593,7 +593,7 @@ function updateProgressBar() {
         const progress_value = total_removed / max_possible_removed;
         progress_bar.value = progress_value;
 
-        if(progress_value === 1 && !already_notified_full_progress_bar) {
+        if (progress_value === 1 && !already_notified_full_progress_bar) {
             already_notified_full_progress_bar = true;
             setTimeout(() => alert("Wow, you're doing amazing at this! Consider trying a different set of species, since you seem to have this set down?"), 300);
         }
@@ -624,4 +624,15 @@ function scheduleFunnyBird() {
         }, FUNNY_BIRD_LEAVE_DELAY);
 
     }, getFunnyBirdDelay());
+}
+
+
+
+function instaSucceed(){
+    while(taxon_bag.length > taxa_to_use.length){
+        const guess_input = document.getElementById("guess-input");
+        guess_input.value = current.taxon.preferred_common_name;
+        checkAnswer();
+        nextObservation();
+    }
 }

@@ -43,9 +43,10 @@ const N_ANSWERS_TO_STORE = 10;
 // - also, when starting out, we assume that this many previous questions were all answered incorrectly
 //   (so the user has to build up from 0 proficiency), so this affects how fast that can happen
 
-// min proficiency to be considered medium or high - used for select recommended algorithm
-const MEDIUM_PROFICIENCY_THRESHOLD = 0.4;
-const HIGH_PROFICIENCY_THRESHOLD = 0.7;
+const RECOMMENDED_SUBSET_SIZES = [16, 8, 4]; // needs to be descending
+const HOURS_SINCE_REVIEWED_THRESHOLD = 24; // if time since reviewed is greater than this, species needs review
+const FRACTION_RESERVED_FOR_REVIEW = 0.25; // this fraction of recommended subsets will consist of species needing review
+
 
 
 function getInfoURL(taxon_obj) {

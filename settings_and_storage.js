@@ -47,10 +47,10 @@ function applySetting(name, value) {
 }
 
 
-function clearData(){
+function clearData() {
     const keys = Object.keys(localStorage);
-    for(let key of keys){
-        if(key.startsWith("taxon")){
+    for (let key of keys) {
+        if (key.startsWith("taxon")) {
             localStorage.removeItem(key);
         }
     }
@@ -63,11 +63,10 @@ function clearData(){
 
 function refreshTaxonProficiencyDisplay(taxon_id, mode) {
     const progress_bar = document.querySelector(`#bird-list-${taxon_id} .taxon-progress`);
-    const proficiency = loadProficiency(taxon_id, mode);
+    const proficiency = loadTaxonData(taxon_id, mode).proficiency;
     const full_progress_width = getComputedStyle(progress_bar).getPropertyValue("--width");
     progress_bar.style.borderLeftWidth = `calc(${proficiency} * ${full_progress_width})`;
 }
-
 
 
 function loadBooleanSetting(name, default_value) {
@@ -78,29 +77,35 @@ function loadBooleanSetting(name, default_value) {
     }
 }
 
-function loadTaxonData(taxon_id, mode) {
-    const storage_string = localStorage.getItem(`taxon-${taxon_id}-${mode}`);
-    if (storage_string === null) return {};
-    return JSON.parse(storage_string);
-}
 
-function loadProficiency(taxon_id, mode) {
-    let prev_answers = loadTaxonData(taxon_id, mode).prev_answers;
-    if (!prev_answers) return 0;
-    // return average correctness - correct answer is 1 and incorrect is 0
+function loadTaxonData(taxon_id, mode, raw = false) {
+    // if raw=false, also calculates proficiency, time since reviewed, and default values if missing,
+    // since when we call this function we usually want to know these things,
+    // and helps avoid redundant reading of localstorage
+
+    let data = {};
+    const storage_string = localStorage.getItem(`taxon-${taxon_id}-${mode}`);
+    if (storage_string !== null) data = JSON.parse(storage_string);
+
+    if (raw) return data;
+
+    // default values
+    data.taxon_id = taxon_id; // useful to keep this tied to the data
+    if (!data.prev_answers) { data.prev_answers = [] }
+    if (!data.difficulty_achieved) { data.difficulty_achieved = 0 }
+    if (!data.reviewed_timestamp) { data.reviewed_timestamp = Date.now() } // if never started this taxon, make it so time since reviewed is 0 so it doesn't get chosen to review
+
+    // calculate proficiency
+    const prev_answers = data.prev_answers.slice(); // slice so we don't mutate this
+    // calculate average correctness - correct answer is 1 and incorrect is 0
     // assume if fewer than N_ANSWERS_TO_STORE questions were answered, all remaining ones were "wrong" (so the user has to build up from 0 proficiency)
     while (prev_answers.length < N_ANSWERS_TO_STORE) prev_answers.push(0);
-    return prev_answers.reduce((accumulator, current) => accumulator + current, 0) / prev_answers.length;
-}
+    data.proficiency = prev_answers.reduce((accumulator, current) => accumulator + current, 0) / prev_answers.length;
+    
+    // calculate time since reviewed
+    data.hours_since_reviewed = (Date.now() - data.reviewed_timestamp) / (60 * 60 * 1000);
 
-function loadDifficultyAchieved(taxon_id, mode) {
-    const data = loadTaxonData(taxon_id, mode);
-    return Number(data.difficulty_achieved) || 0;  // Number(undefined) is NaN, NaN || 0 is 0, and 0 || 0 is 0 so this works fine
-}
-
-function loadReviewedTimestamp(taxon_id, mode) {
-    const data = loadTaxonData(taxon_id, mode);
-    return Number(data.reviewed_timestamp) || Date.now();  // if never started this taxon, make it so time since reviewed is 0 so it doesn't get chosen to review
+    return data;
 }
 
 
@@ -108,28 +113,30 @@ function updateTaxonProficiency(taxon_id, mode, answered_correctly) {
     // don't store anything if the user doesn't want us to
     if (!loadBooleanSetting("store-progress", false)) return;
 
-    const data = loadTaxonData(taxon_id, mode);
+    const data = loadTaxonData(taxon_id, mode, true);
     const prev_answers = data.prev_answers || [];
     prev_answers.push(answered_correctly ? 1 : 0);
     // remove old answers we don't care about anymore
     while (prev_answers.length > N_ANSWERS_TO_STORE) prev_answers.shift();
+
     // store
     data.prev_answers = prev_answers;
     localStorage.setItem(`taxon-${taxon_id}-${mode}`, JSON.stringify(data));
-    
+
     // update display
     refreshTaxonProficiencyDisplay(taxon_id, mode);
 }
 
+
 function updateTaxonDifficultyAchieved(taxon_id, mode, difficulty) {
-    const data = loadTaxonData(taxon_id, mode);
+    const data = loadTaxonData(taxon_id, mode, true);
     data.difficulty_achieved = difficulty;
     localStorage.setItem(`taxon-${taxon_id}-${mode}`, JSON.stringify(data));
 }
 
 function updateTaxonReviewedTimestamp(taxon_id, mode) {
     // time is now
-    const data = loadTaxonData(taxon_id, mode);
+    const data = loadTaxonData(taxon_id, mode, true);
     data.reviewed_timestamp = Date.now();
     localStorage.setItem(`taxon-${taxon_id}-${mode}`, JSON.stringify(data));
 }
@@ -164,7 +171,7 @@ function getTaxonStorageString() {
 function loadTaxonStorageString(s) {
     clearData();
     const taxon_data = JSON.parse(s);
-    for(const [k, v] of taxon_data){
+    for (const [k, v] of taxon_data) {
         localStorage[k] = v;
     }
     // reload to update the progress bars

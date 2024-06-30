@@ -17,7 +17,7 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     document.getElementById("start-game-button").removeAttribute("disabled");
 
     //update auto-selection if setting is enabled
-    if(loadBooleanSetting("auto-select-recommended", false)){
+    if (loadBooleanSetting("auto-select-recommended", false)) {
         selectRecommended();
     }
 
@@ -88,12 +88,12 @@ bird_grid.addEventListener("click", (e) => {
 
 //bird list bird selection
 
-function toggleListSelection(taxon_id){
+function toggleListSelection(taxon_id) {
     const bird_list_item = document.getElementById("bird-list-" + taxon_id);
     bird_list_item.classList.toggle("selected");
     document.getElementById("n-selected").textContent = document.querySelectorAll("#bird-list .selected").length;
 }
-function clearListSelection(){
+function clearListSelection() {
     document.querySelectorAll("#bird-list .selected").forEach(el => {
         el.classList.remove("selected");
     });
@@ -107,35 +107,81 @@ function selectRecommended() {
     let recommended_ids = [];
 
     if (loadBooleanSetting("store-progress", false)) {
-        // recommend based on proficiency level
-        const proficiencies = []; // each element is [taxon_id, proficiency]
-        bird_taxa.forEach(taxon => proficiencies.push([taxon.id, loadProficiency(taxon.id, mode)]));
-        // sort ascending
-        proficiencies.sort(([id1, a], [id2, b]) => a - b);
-        // if any low proficiency, recommend 4 so they can learn in a simple setting
-        if (proficiencies[0][1] < MEDIUM_PROFICIENCY_THRESHOLD) {
-            recommended_ids = proficiencies.slice(0, 4).map(([id, value]) => id);
+        console.log("Generating recommendation:");
+
+        const taxa_data = [];
+        bird_taxa.forEach(taxon => taxa_data.push(loadTaxonData(taxon.id, mode)));
+
+        // method:
+        // "level" = category of taxa where their difficulty achieved is between two subset sizes defined by RECOMMENDED_SUBSET_SIZES
+        // try to upgrade difficulty achieved (aka subset size) by one level if there's enough of the next lower level
+        // prioritize making a larger subset when doing this, so we get something like the pattern:
+        // - learn 4 (A), learn 4 (B), learn 8 (A+B), learn 4 (C), learn4 (D), learn 8 (C+D), learn 16 (A+B+C+D)
+        // if there aren't enough taxa left, we will need to make mixed sets, where only some of them come from the next lower level, and others come from higher levels
+        // but in general we want to avoid making mixed sets, because allowing that from the beginning would lead to:
+        // - learn 4 (A), learn 4 (B), learn 8 (A+B), learn 4 (C), learn 8 (C + 4 from A+B) -- we would like to do learn 4 (D) before moving C up
+        // - this is especially an issue if you have just one taxa in a level and the ones above are all mastered - would like to learn new taxa instead of recommending
+
+        // organize taxa into levels: key = min difficulty achieved to belong
+        const levels = { 0: [] };
+        RECOMMENDED_SUBSET_SIZES.forEach(size => levels[size] = []);
+        bird_taxa.forEach(taxon => {
+            const data = loadTaxonData(taxon.id, mode);
+            for (let size of RECOMMENDED_SUBSET_SIZES) {
+                if (data.difficulty_achieved >= size) {
+                    levels[size].push(data);
+                    return;
+                }
+            }
+            levels[0].push(data);
+        });
+        // sort levels by proficiency
+        Object.values(levels).forEach(list => list.sort((a, b) => a.proficiency - b.proficiency));
+
+        console.log("levels", levels);
+        
+        // try to make pure sets, prioritizing largest subset size
+        for (let i = 0; i < RECOMMENDED_SUBSET_SIZES.length; i++) {
+            const size = RECOMMENDED_SUBSET_SIZES[i];
+            const level_key = RECOMMENDED_SUBSET_SIZES[i + 1] || 0; // if i out of range will pick 0
+            const level = levels[level_key];
+            console.log(`trying to make a set of size ${size} using ${level.length} taxa from level ${level_key}`);
+            if (level.length < size) continue;
+
+            // this will work - grab most proficient in the level to make the subset (helps w level 0, to focus on ones they've started learning)
+            recommended_ids = level.slice(-size).map(data => data.taxon_id);
+            break;
         }
-        // if all medium or above, recommend 8 to strengthen
-        else if (proficiencies[0][1] < HIGH_PROFICIENCY_THRESHOLD) {
-            recommended_ids = proficiencies.slice(0, 8).map(([id, value]) => id);
-        }
-        // if all high proficiency, do the whole set
-        else {
-            recommended_ids = proficiencies.map(([id, value]) => id);
+
+        // if failed to make a pure set, make a mixed set
+        if (recommended_ids.length === 0) {
+            // concatenate levels into one big list, and pick from the front
+            const big_list = [0, ...RECOMMENDED_SUBSET_SIZES.toReversed()].flatMap(size => levels[size]);
+            // difficulty level of the first item will determine the subset size (want to level that one up by one)
+            let subset_size = big_list.length; // if we don't find a smaller size, use everything
+            for (let size of RECOMMENDED_SUBSET_SIZES.toReversed()) {
+                if (big_list[0].difficulty_achieved < size) {
+                    subset_size = size;
+                    break;
+                }
+            }
+            console.log("making a mixed set of size " + subset_size);
+            recommended_ids = big_list.slice(0, subset_size).map(data => data.taxon_id);
         }
     }
     else {
-        // not storing proficiencies, just pick a random 4
+        // not storing proficiencies, just pick a random set of the smallest subset size
         const taxon_ids = bird_taxa.map(taxon => taxon.id);
-        for(let i=0; i<4; i++){
+        for (let i = 0; i < RECOMMENDED_SUBSET_SIZES.slice(-1); i++) {
             const idx = Math.floor(taxon_ids.length * Math.random());
             recommended_ids.push(taxon_ids.splice(idx, 1)[0]);
         }
     }
+
     // select
     clearListSelection();
     recommended_ids.forEach(id => toggleListSelection(id));
+
     // show the user what we selected by moving them to the top and highlighting
     const bird_list = document.getElementById("bird-list");
     recommended_ids.toReversed().forEach(id => {
@@ -144,6 +190,7 @@ function selectRecommended() {
         highlightElement(bird_list_item);
     });
 }
+
 
 
 //keypress handling
