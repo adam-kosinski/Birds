@@ -135,11 +135,10 @@ function selectRecommended() {
             }
             levels[0].push(data);
         });
-        // sort levels by proficiency
-        Object.values(levels).forEach(list => list.sort((a, b) => a.proficiency - b.proficiency));
-
+        // sort levels by decreasing proficiency (and otherwise maintains original order) will take from front when making pure sets
+        Object.values(levels).forEach(list => list.sort((a, b) => b.proficiency - a.proficiency));
         console.log("levels", levels);
-        
+
         // try to make pure sets, prioritizing largest subset size
         for (let i = 0; i < RECOMMENDED_SUBSET_SIZES.length; i++) {
             const size = RECOMMENDED_SUBSET_SIZES[i];
@@ -149,13 +148,18 @@ function selectRecommended() {
             if (level.length < size) continue;
 
             // this will work - grab most proficient in the level to make the subset (helps w level 0, to focus on ones they've started learning)
-            recommended_ids = level.slice(-size).map(data => data.taxon_id);
+            recommended_ids = level.slice(0, size).map(data => data.taxon_id);
             break;
         }
 
         // if failed to make a pure set, make a mixed set
         if (recommended_ids.length === 0) {
             // concatenate levels into one big list, and pick from the front
+            // sort ascending by proficiency and otherwise in original order - have to do this second sort b/c now proficiency should be going in the same direction as the original taxon list
+            Object.values(levels).forEach(list => list.sort((a, b) => {
+                const taxon_order = bird_taxa.map(taxon => taxon.id);
+                return a.proficiency - b.proficiency || taxon_order.indexOf(a.taxon_id) - taxon_order.indexOf(b.taxon_id);
+            }));
             const big_list = [0, ...RECOMMENDED_SUBSET_SIZES.toReversed()].flatMap(size => levels[size]);
             // difficulty level of the first item will determine the subset size (want to level that one up by one)
             let subset_size = big_list.length; // if we don't find a smaller size, use everything

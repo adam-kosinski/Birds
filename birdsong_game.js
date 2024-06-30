@@ -627,7 +627,7 @@ function scheduleFunnyBird() {
 }
 
 
-
+// for debugging / testing
 function instaSucceed(){
     while(taxon_bag.length > taxa_to_use.length){
         const guess_input = document.getElementById("guess-input");
