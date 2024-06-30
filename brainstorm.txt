@@ -1,3 +1,14 @@
+TODO
+
+Review feature for recommendations
+
+Remove clear list button - never used
+Instead, always show recommend and clear selection ("DESELECT ALL")
+Show selection checkboxes, by default all are selected - if user wants to practice 4, they can deselect all and then tap those to practice
+Disable start button if none are selected
+
+----
+
 Consider adjusting TAXON_OBS_THRESHOLD based on number of taxa (fewer taxa = larger threshold b/c more likely to repeat)
 
 Other filtering? Though current sounds are fairly good I think
