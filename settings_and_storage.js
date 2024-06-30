@@ -69,21 +69,6 @@ function refreshTaxonProficiencyDisplay(taxon_id, mode) {
 }
 
 
-function updateTaxonProficiency(taxon_id, mode, answered_correctly) {
-    // don't store anything if the user doesn't want us to
-    if (!loadBooleanSetting("store-progress", false)) return;
-
-    const prev_answers = loadProficiency(taxon_id, mode, true);
-    prev_answers.push(answered_correctly ? 1 : 0);
-    // remove old answers we don't care about anymore
-    while (prev_answers.length > N_ANSWERS_TO_STORE) prev_answers.shift();
-    // store
-    localStorage.setItem(`taxon-${taxon_id}-${mode}`, JSON.stringify(prev_answers));
-    
-    // update display
-    refreshTaxonProficiencyDisplay(taxon_id, mode);
-}
-
 
 function loadBooleanSetting(name, default_value) {
     switch (localStorage.getItem(`setting:${name}`)) {
@@ -93,19 +78,63 @@ function loadBooleanSetting(name, default_value) {
     }
 }
 
-function loadProficiency(taxon_id, mode, return_array = false) {
-    let prev_answers = [];
+function loadTaxonData(taxon_id, mode) {
     const storage_string = localStorage.getItem(`taxon-${taxon_id}-${mode}`);
-    if (storage_string !== null) prev_answers = JSON.parse(storage_string);
+    if (storage_string === null) return {};
+    return JSON.parse(storage_string);
+}
 
-    // return raw data if that's what we want
-    if (return_array) return prev_answers;
-
+function loadProficiency(taxon_id, mode) {
+    let prev_answers = loadTaxonData(taxon_id, mode).prev_answers;
+    if (!prev_answers) return 0;
     // return average correctness - correct answer is 1 and incorrect is 0
     // assume if fewer than N_ANSWERS_TO_STORE questions were answered, all remaining ones were "wrong" (so the user has to build up from 0 proficiency)
     while (prev_answers.length < N_ANSWERS_TO_STORE) prev_answers.push(0);
     return prev_answers.reduce((accumulator, current) => accumulator + current, 0) / prev_answers.length;
 }
+
+function loadDifficultyAchieved(taxon_id, mode) {
+    const data = loadTaxonData(taxon_id, mode);
+    return Number(data.difficulty_achieved) || 0;  // Number(undefined) is NaN, NaN || 0 is 0, and 0 || 0 is 0 so this works fine
+}
+
+function loadReviewedTimestamp(taxon_id, mode) {
+    const data = loadTaxonData(taxon_id, mode);
+    return Number(data.reviewed_timestamp) || Date.now();  // if never started this taxon, make it so time since reviewed is 0 so it doesn't get chosen to review
+}
+
+
+function updateTaxonProficiency(taxon_id, mode, answered_correctly) {
+    // don't store anything if the user doesn't want us to
+    if (!loadBooleanSetting("store-progress", false)) return;
+
+    const data = loadTaxonData(taxon_id, mode);
+    const prev_answers = data.prev_answers || [];
+    prev_answers.push(answered_correctly ? 1 : 0);
+    // remove old answers we don't care about anymore
+    while (prev_answers.length > N_ANSWERS_TO_STORE) prev_answers.shift();
+    // store
+    data.prev_answers = prev_answers;
+    localStorage.setItem(`taxon-${taxon_id}-${mode}`, JSON.stringify(data));
+    
+    // update display
+    refreshTaxonProficiencyDisplay(taxon_id, mode);
+}
+
+function updateTaxonDifficultyAchieved(taxon_id, mode, difficulty) {
+    const data = loadTaxonData(taxon_id, mode);
+    data.difficulty_achieved = difficulty;
+    localStorage.setItem(`taxon-${taxon_id}-${mode}`, JSON.stringify(data));
+}
+
+function updateTaxonReviewedTimestamp(taxon_id, mode) {
+    // time is now
+    const data = loadTaxonData(taxon_id, mode);
+    data.reviewed_timestamp = Date.now();
+    localStorage.setItem(`taxon-${taxon_id}-${mode}`, JSON.stringify(data));
+}
+
+
 
 
 function loadLocalStorage() {

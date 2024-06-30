@@ -528,6 +528,7 @@ function checkAnswer() {
         if (correct) {
             updateTaxonBag(guess_obj.id, -CORRECT_REMOVE_COPIES);
             updateTaxonProficiency(guess_obj.id, mode, true);
+            updateTaxonReviewedTimestamp(guess_obj.id, mode);
         }
         else { // incorrect or skipped
             const correct_id = searchAncestorsForTaxonId(current);
@@ -563,6 +564,10 @@ function updateTaxonBag(taxon_id, delta) {
         for (let i = 0; i < true_delta; i++) {
             taxon_bag.push(taxon_id);
         }
+    }
+    // if reached one copy, this species has been passed at the current difficulty
+    if (target === 1){
+        updateTaxonDifficultyAchieved(taxon_id, mode, taxa_to_use.length);
     }
 
     updateProgressBar();
