@@ -130,7 +130,7 @@ function updateTaxonProficiency(taxon_id, mode, answered_correctly) {
 
 function updateTaxonDifficultyAchieved(taxon_id, mode, difficulty) {
     const data = loadTaxonData(taxon_id, mode, true);
-    data.difficulty_achieved = difficulty;
+    data.difficulty_achieved = Math.max(data.difficulty_achieved, difficulty);
     localStorage.setItem(`taxon-${taxon_id}-${mode}`, JSON.stringify(data));
 }
 

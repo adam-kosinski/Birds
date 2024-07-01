@@ -109,9 +109,6 @@ function selectRecommended() {
     if (loadBooleanSetting("store-progress", false)) {
         console.log("Generating recommendation:");
 
-        const taxa_data = [];
-        bird_taxa.forEach(taxon => taxa_data.push(loadTaxonData(taxon.id, mode)));
-
         // method:
         // "level" = category of taxa where their difficulty achieved is between two subset sizes defined by RECOMMENDED_SUBSET_SIZES
         // try to upgrade difficulty achieved (aka subset size) by one level if there's enough of the next lower level
@@ -122,11 +119,16 @@ function selectRecommended() {
         // - learn 4 (A), learn 4 (B), learn 8 (A+B), learn 4 (C), learn 8 (C + 4 from A+B) -- we would like to do learn 4 (D) before moving C up
         // - this is especially an issue if you have just one taxa in a level and the ones above are all mastered - would like to learn new taxa instead of recommending
 
+        const taxa_to_review = [];
+
         // organize taxa into levels: key = min difficulty achieved to belong
         const levels = { 0: [] };
         RECOMMENDED_SUBSET_SIZES.forEach(size => levels[size] = []);
         bird_taxa.forEach(taxon => {
             const data = loadTaxonData(taxon.id, mode);
+            if(data.hours_since_reviewed > HOURS_SINCE_REVIEWED_THRESHOLD){
+                taxa_to_review.push(data);
+            }
             for (let size of RECOMMENDED_SUBSET_SIZES) {
                 if (data.difficulty_achieved >= size) {
                     levels[size].push(data);
@@ -172,6 +174,15 @@ function selectRecommended() {
             console.log("making a mixed set of size " + subset_size);
             recommended_ids = big_list.slice(0, subset_size).map(data => data.taxon_id);
         }
+
+        // overwrite some with taxa needing review if they exist
+        // sort so that longest-ago-reviewed taxa come first
+        taxa_to_review.sort((a, b) => b.hours_since_reviewed - a.hours_since_reviewed);
+        const n_review_spots = Math.min(taxa_to_review.length, Math.ceil(FRACTION_RESERVED_FOR_REVIEW * recommended_ids.length));
+        const reviewing = taxa_to_review.slice(0, n_review_spots)
+        console.log("Reviewing:", reviewing);
+        // overwrite the last spots
+        recommended_ids.splice.apply(recommended_ids, [-n_review_spots, n_review_spots, ...reviewing.map(x => x.taxon_id)]);
     }
     else {
         // not storing proficiencies, just pick a random set of the smallest subset size
