@@ -231,6 +231,19 @@ document.addEventListener("keypress", (e) => {
 
 //check answer
 document.getElementById("guess-button").addEventListener("click", checkAnswer);
+document.getElementById("skip-button").addEventListener("click", (e) => {
+    e.target.style.visibility = "hidden";
+    const loader = document.getElementById("skip-loader");
+    const page_disabler = document.getElementById("page-disabler");
+    loader.style.visibility = "visible";
+    page_disabler.style.display = "block";
+    setTimeout(() => {
+        e.target.style.visibility = "visible";
+        loader.style.visibility = "hidden";
+        page_disabler.style.display = "none";
+        nextObservation();
+    }, 500);
+});
 
 //next observation
 document.getElementById("correct-button").addEventListener("click", nextObservation);

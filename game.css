@@ -232,7 +232,29 @@
     border-bottom-color: #740000;
 }
 
+#guess-and-skip-buttons {
+    display: flex;
+    gap: 15px;
+}
+#skip-button {
+    color: var(--dark-gray);
+}
+#skip-loader {
+    position: absolute;
+    visibility: hidden;
+}
+#skip-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+#page-disabler {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.25);
+}
 
 
 /* funny bird */

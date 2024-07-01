@@ -13,7 +13,7 @@
   display: none;
 }
 
-[data-game-state="2"] #guess-button {
+[data-game-state="2"] #guess-and-skip-buttons {
   display: none;
 }
 

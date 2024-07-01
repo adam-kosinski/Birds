@@ -133,7 +133,14 @@
                 <input id="guess-input" type="text" autocomplete="off" list="guess-datalist"
                     placeholder="Write your guess">
 
-                <button id="guess-button" class="btn-primary">REVEAL</button>
+                <div id="guess-and-skip-buttons">
+                    <div id="skip-button-container">
+                        <button id="skip-button" class="btn-secondary">SKIP</button>
+                        <div id="skip-loader" class="loader"></div>
+                    </div>
+                    <button id="guess-button" class="btn-primary">REVEAL</button>
+                </div>
+                
                 <button id="correct-button" class="btn-primary">CORRECT! NEXT ></button>
                 <button id="incorrect-button" class="btn-primary">INCORRECT, NEXT ></button>
                 <button id="neutral-next-button" class="btn-primary">NO GUESS, NEXT ></button>
@@ -143,6 +150,9 @@
                 <label for="game-progress">Proficiency</label>
                 <progress id="game-progress" max="1" value="0"></progress>
             </div>
+
+            <!-- used while skipping -->
+            <div id="page-disabler"></div>
 
             <img id="img-preloader" src="" style="display: none;">
             <img id="funny-bird" src="images/funny_hawk_transparent.png">

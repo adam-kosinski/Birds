@@ -14,7 +14,7 @@
 
 //answer
 [data-game-state="2"] {
-    #guess-button {display: none;}
+    #guess-and-skip-buttons {display: none;}
 }
 
 [data-game-state="2"][data-correct=true] {
