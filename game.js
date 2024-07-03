@@ -136,7 +136,7 @@ function resetQueue(taxon_id) {
 
 
 
-function initBirdsongGame() {
+function initGame() {
     console.log("\nINIT GAME ============================\n\n");
 
     //start loader

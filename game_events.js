@@ -3,7 +3,7 @@ document.getElementById("start-game-button").addEventListener("click", e => {
     e.target.disabled = true;
     document.getElementById("add-bird-input").value = "";
     setGameState(GUESSING); //prevent adding or removing birds
-    initBirdsongGame();
+    initGame();
 });
 
 document.getElementById("back-to-list").addEventListener("click", () => {

@@ -140,7 +140,7 @@
                     </div>
                     <button id="guess-button" class="btn-primary">REVEAL</button>
                 </div>
-                
+
                 <button id="correct-button" class="btn-primary">CORRECT! NEXT ></button>
                 <button id="incorrect-button" class="btn-primary">INCORRECT, NEXT ></button>
                 <button id="neutral-next-button" class="btn-primary">NO GUESS, NEXT ></button>
@@ -181,14 +181,18 @@
             <hr>
             <div>
                 <input id="allow-all-taxa" type="checkbox">
-                <label for="allow-all-taxa">Include all iNaturalist taxa in search results (default is birds only).</label>
+                <label for="allow-all-taxa">Include all iNaturalist taxa in search results (default is birds
+                    only).</label>
             </div>
             <hr>
             <div>
                 <input id="store-progress" type="checkbox">
-                <label for="store-progress">Store learning progress on your device. As you use the program, your recent proficiency at identifying each species will be stored on your device, and displayed as a progress meter below each image in the main list. This is used to:
+                <label for="store-progress">Store learning progress on your device. As you use the program, your recent
+                    proficiency at identifying each species will be stored on your device, and displayed as a progress
+                    meter below each image in the main list. This is used to:
                     <ul>
-                        <li>Show less of species that you are proficient at, so you can focus on ones you need practice with.</li>
+                        <li>Show less of species that you are proficient at, so you can focus on ones you need practice
+                            with.</li>
                         <li>Help you choose what to practice next.</li>
                         <li>Give you a sense of accomplishment to see your progress over time.</li>
                     </ul>
@@ -198,9 +202,11 @@
             <hr>
             <div>
                 <input id="auto-select-recommended" type="checkbox">
-                <label for="auto-select-recommended">Automatically select recommended species whenever you load a species list (instead of needing to manually click the "SELECT RECOMMENDED" button).
+                <label for="auto-select-recommended">Automatically select recommended species whenever you load a
+                    species list (instead of needing to manually click the "SELECT RECOMMENDED" button).
                     <ul>
-                        <li>Note that without storing progress on your device (see setting above), recommendations will be much less useful.</li>
+                        <li>Note that without storing progress on your device (see setting above), recommendations will
+                            be much less useful.</li>
                     </ul>
                 </label>
             </div>
@@ -213,9 +219,13 @@
     <script src="config.js"></script>
     <script src="squirrels.js"></script>
 
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="firebase.js"></script>
+
     <script src="settings_and_storage.js"></script>
 
-    <script src="birdsong_game.js"></script>
+    <script src="game.js"></script>
     <script src="game_events.js"></script>
 
     <script src="autocomplete.js"></script>
