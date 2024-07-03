@@ -42,6 +42,8 @@ async function setBadIds(bad_ids, mode) {
     // reconcile and write
     const collection = db.collection(`bad-observations-${mode}`);
     for (let [taxon_id, ids] of Object.entries(bad_ids)) {
+        if(ids.length === 0) continue;
+
         // remove any duplicates
         const set = new Set(ids);
         ids = Array.from(set);

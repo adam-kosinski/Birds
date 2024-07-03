@@ -167,6 +167,9 @@ async function initGame() {
     });
     updateProgressBar();
 
+    // get bad observations (do before initial fetch, b/c fetchObservationData() can add to bad_ids)
+    bad_ids = await getBadIds(taxa_to_use.map(obj => obj.id), mode);
+
     // get initial data
     const data_was_fetched = await fetchObservationData(undefined, mode == "birdsong" ? "photos=false" : "", INITIAL_PER_PAGE)
     if (!data_was_fetched) {
