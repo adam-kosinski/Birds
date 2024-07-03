@@ -69,6 +69,11 @@ function setMode(new_mode) {
     }
 }
 
+function markAsBadId(taxon_id, id){
+    if(!(taxon_id in bad_ids)) bad_ids[taxon_id] = [];
+    bad_ids[taxon_id].push(id);
+    bad_ids[taxon_id].dirty = true; // so we know we changed something
+}
 
 
 // try a different observation if the audio is too long
@@ -327,7 +332,7 @@ async function fetchObservationData(taxa_ids = undefined, extra_args = "", per_p
 
         //make sure audio has a working url (not always the case)
         if (mode == "birdsong" && !obj.sounds[0].file_url) {
-            bad_ids[obj.taxon.id].push(obj.id);
+            if(!current.is_squirrel_intruder) markAsBadId(obj.taxon.id, obj.id);
             continue;
         }
 

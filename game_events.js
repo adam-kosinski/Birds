@@ -21,12 +21,16 @@ document.getElementById("back-to-list").addEventListener("click", () => {
         selectRecommended();
     }
 
+    //send bad ids to firebase before resetting them
+    setBadIds(bad_ids, mode);
+
     //reset vars
     obs = [];
     taxa_to_use = []; //probably don't need to reset, but just in case
     taxon_obs = {};
     taxon_queues = {};
     taxon_bag = [];
+    bad_ids = {};
     n_pages_by_query = {};
     current = undefined;
     already_notified_full_progress_bar = false;
@@ -126,7 +130,7 @@ function selectRecommended() {
         RECOMMENDED_SUBSET_SIZES.forEach(size => levels[size] = []);
         bird_taxa.forEach(taxon => {
             const data = loadTaxonData(taxon.id, mode);
-            if(data.hours_since_reviewed > HOURS_SINCE_REVIEWED_THRESHOLD){
+            if (data.hours_since_reviewed > HOURS_SINCE_REVIEWED_THRESHOLD) {
                 taxa_to_review.push(data);
             }
             for (let size of RECOMMENDED_SUBSET_SIZES) {
@@ -232,6 +236,9 @@ document.addEventListener("keypress", (e) => {
 //check answer
 document.getElementById("guess-button").addEventListener("click", checkAnswer);
 document.getElementById("skip-button").addEventListener("click", (e) => {
+    // mark as bad
+    markAsBadId(current.taxon.id, current.id);
+    // show a loader so the user knows something is happening (if we transition instantly, it looks like nothing happened)
     e.target.style.visibility = "hidden";
     const loader = document.getElementById("skip-loader");
     const page_disabler = document.getElementById("page-disabler");
@@ -241,6 +248,7 @@ document.getElementById("skip-button").addEventListener("click", (e) => {
         e.target.style.visibility = "visible";
         loader.style.visibility = "hidden";
         page_disabler.style.display = "none";
+        // transition
         nextObservation();
     }, 500);
 });
@@ -345,3 +353,20 @@ document.getElementById("funny-bird").addEventListener("click", () => {
         funny_bird.classList.remove("out");
     }, 750);
 });
+
+
+
+//leaving the page
+//use visibilitychange for mobile
+
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+        // update firebase with bad ids from this game
+        setBadIds(bad_ids, mode);
+    }
+})
+window.addEventListener("beforeunload", e => {
+    // update firebase with bad ids from this game
+    // e.preventDefault();
+    setBadIds(bad_ids, mode);
+})

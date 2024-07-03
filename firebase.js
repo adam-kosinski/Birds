@@ -35,23 +35,31 @@ async function getBadIds(taxa, mode) {
 
 async function setBadIds(bad_ids, mode) {
     // bad_ids is an object, key is taxon id, value is array of iNaturalist observation ids
+    // the array will have a property dirty=true if we changed it since getting it from firebase
+
+    // filter bad_ids so we only update firebase if we have something to add
+    const taxa_to_update = [];
+    for (let taxon_id in bad_ids) {
+        if(bad_ids[taxon_id].length === 0) continue;
+        if(!bad_ids[taxon_id].dirty) continue;
+        taxa_to_update.push(taxon_id);
+    }
 
     // get data again, in case it changed
-    const firebase_bad_ids = await getBadIds(Object.keys(bad_ids), mode);
+    let firebase_bad_ids = await getBadIds(taxa_to_update, mode);
 
     // reconcile and write
     const collection = db.collection(`bad-observations-${mode}`);
-    for (let [taxon_id, ids] of Object.entries(bad_ids)) {
-        if(ids.length === 0) continue;
-
+    for (let taxon_id of taxa_to_update) {
         // remove any duplicates
-        const set = new Set(ids);
-        ids = Array.from(set);
+        const set = new Set(bad_ids[taxon_id]);
+        const ids = Array.from(set);
 
         // add any new ids from firebase to my id list
         firebase_bad_ids[taxon_id].forEach(id => { if (!set.has(id)) ids.push(id) });
 
         // write
         collection.doc(String(taxon_id)).set({ ids: ids });
+        bad_ids[taxon_id].dirty = false;
     }
 }
