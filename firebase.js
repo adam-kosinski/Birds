@@ -63,3 +63,20 @@ async function setBadIds(bad_ids, mode) {
         bad_ids[taxon_id].dirty = false;
     }
 }
+
+
+// to send a request when closing the page, we need to use navigator.sendBeacon(), or fetch() with keepalive specified
+// sendBeacon() is probably most appropriate
+// but we need to send an HTTP request
+// so can use the firebase api
+
+// here is a GET
+// await (await fetch("https://firestore.googleapis.com/v1beta1/projects/birds-bbabb/databases/(default)/documents/bad-observations-birdsong/9083?key=AIzaSyDZT6ZnYnrOvWjN3__u2vz7M3gmFS8hX2A")).json()
+
+// problem: we want to fetch the current data and then send a POST with the reconciled data
+
+// hmmm... seems we can do this with one function, maybe we can do this with one HTTP request too then:
+// https://firebase.google.com/docs/firestore/manage-data/add-data#update_elements_in_an_array
+// YES WE CAN!
+// https://firebase.google.com/docs/firestore/reference/rest/v1beta1/projects.databases.documents/batchWrite
+// https://firebase.google.com/docs/firestore/reference/rest/v1beta1/Write#FieldTransform
