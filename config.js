@@ -4,7 +4,7 @@ const INITIAL_PER_PAGE = 5;
 const MAX_FETCH_ATTEMPTS = 15; //how many times to attempt fetching to meet threshold, before quit
 const BIRDSONG_POPULAR_ATTEMPTS = 3; //how many times to attempt fetching popular observations before reverting to popular or not popular
 const VISUAL_ID_POPULAR_ATTEMPTS = 1;
-const TAXON_OBS_THRESHOLD = 20; //number of observations we'd like to have for each taxon, will stop when reach this
+const N_OBS_PER_TAXON = 20; //number of observations we'd like to have for each taxon, will stop when reach this
 
 const MAX_PREFERRED_AUDIO_DURATION = 15; //seconds, if the next observation's sound is longer, try to pick a different next one
 const MAX_SHORT_AUDIO_RETRIES = 3; //max number of tries to pick a shorter audio (to limit requests / possible infinite looping)

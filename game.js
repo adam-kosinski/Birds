@@ -8,6 +8,7 @@ let taxon_obs = {}; //stores lists of objects, organized by taxon id keys
 let taxon_queues = {}; //stores lists of observation objects for each taxon in order of showing, pop from beginning of list to show and refill if empty
 let taxon_bag = []; //list of unordered taxon ids, perhaps each id in here multiple times, pick a random item to determine next taxon to show
 let rejected_ids = []; //list of observation ids that we didn't like (because missing audio, might add other reasons in future), these will not be fetched
+let bad_ids = {}; // object (taxon_id: [array of iNaturalist ids]) that records ids that were skipped before or are otherwise bad (e.g. missing audio). This coordinates w firebase
 
 let n_pages_by_query = {}; //cache for total results queries, key is args string '?sounds=true' etc, value is n pages
 //not super useful but hey why not, doesn't hurt
@@ -226,7 +227,7 @@ function initGame() {
 
             //fetch the rest more slowly (limit to < 1 API call per sec)
             //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
-            fetchUntilThreshold(TAXON_OBS_THRESHOLD, 3000)
+            fetchUntilThreshold(N_OBS_PER_TAXON, 3000)
                 .then(result => {
                     //if some taxa had no observations at all, alert the user
                     if (!result.success && result.failure_reason == "not_enough_observations") {
@@ -256,20 +257,21 @@ function searchAncestorsForTaxonId(obj) {
 
 
 
-async function fetchObservationData(taxa_id_string = undefined, extra_args = "", per_page = undefined) {
+async function fetchObservationData(taxa_ids = undefined, extra_args = "", per_page = undefined) {
     //returns a promise (b/c async) that fulfills when data has been fetched and added to data structures
     //the promise resolves to true if data was fetched, false if there was no data to fetch
     //audio missing a url will be filtered out
     //long audio will be filtered out, but at least one audio will always be let through even if long, to not break other code
 
-    if (!taxa_id_string) {
-        taxa_id_string = taxa_to_use.map(obj => obj.id).join(",");
+    if (!taxa_ids) {
+        taxa_ids = taxa_to_use.map(obj => obj.id);
     }
     if (!per_page) {
         //don't try to fetch with a big per page if realistically we don't need that many observations
-        let n_obs_needed_ish = taxa_id_string.split(",").length * TAXON_OBS_THRESHOLD;
+        let n_obs_needed_ish = taxa_ids.length * N_OBS_PER_TAXON;
         per_page = Math.min(DEFAULT_PER_PAGE, 3 * n_obs_needed_ish);
     }
+    const taxa_id_string = taxa_ids.join(",");
 
     console.groupCollapsed("FETCH " + taxa_id_string + "\nExtra args: " + extra_args);
 
@@ -326,7 +328,7 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "",
 
         //make sure audio has a working url (not always the case)
         if (mode == "birdsong" && !obj.sounds[0].file_url) {
-            rejected_ids.push(obj.id);
+            bad_ids[obj.taxon.id].push(obj.id);
             continue;
         }
 
@@ -382,7 +384,7 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
         if (trying_no_photos) extra_args.push("photos=false");
 
         //fetch data, handle if couldn't get any
-        let was_data_fetched = await fetchObservationData(lacking_ids.join(","), extra_args.join("&"));
+        let was_data_fetched = await fetchObservationData(lacking_ids, extra_args.join("&"));
         if (!was_data_fetched) {
             if (trying_popular) {
                 trying_popular = false;
