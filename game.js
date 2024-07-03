@@ -137,7 +137,7 @@ function resetQueue(taxon_id) {
 
 
 
-function initGame() {
+async function initGame() {
     console.log("\nINIT GAME ============================\n\n");
 
     //start loader
@@ -167,80 +167,76 @@ function initGame() {
     });
     updateProgressBar();
 
+    // get initial data
+    const data_was_fetched = await fetchObservationData(undefined, mode == "birdsong" ? "photos=false" : "", INITIAL_PER_PAGE)
+    if (!data_was_fetched) {
+        alert("Failed to find research grade iNaturalist observations for any of the chosen birds. Please try again with different birds.");
+        document.getElementById("bird-list-loader").style.display = "none";
+        setGameState(INACTIVE);
+        return;
+    }
 
-    fetchObservationData(undefined, mode == "birdsong" ? "photos=false" : "", INITIAL_PER_PAGE)
-        .then(data_was_fetched => {
-            if (!data_was_fetched) {
-                alert("Failed to find research grade iNaturalist observations for any of the chosen birds. Please try again with different birds.");
-                document.getElementById("bird-list-loader").style.display = "none";
-                setGameState(INACTIVE);
-                return;
-            }
+    //populate bird grid
+    let bird_grid = document.getElementById("bird-grid");
+    //clear previous grid
+    bird_grid.querySelectorAll(".bird-grid-option:not(#other-option").forEach(el => {
+        el.parentElement.removeChild(el);
+    });
+    //add taxa
+    taxa_to_use.forEach(obj => {
+        //HTML
+        let button = document.createElement("button");
+        button.className = "bird-grid-option";
+        button.dataset.commonName = obj.preferred_common_name;
+        if (obj.default_photo) button.style.backgroundImage = "url('" + obj.default_photo.square_url + "')";
+        bird_grid.append(button);
 
-            //populate bird grid
-            let bird_grid = document.getElementById("bird-grid");
-            //clear previous grid
-            bird_grid.querySelectorAll(".bird-grid-option:not(#other-option").forEach(el => {
-                el.parentElement.removeChild(el);
-            });
-            //add taxa
-            taxa_to_use.forEach(obj => {
-                //HTML
-                let button = document.createElement("button");
-                button.className = "bird-grid-option";
-                button.dataset.commonName = obj.preferred_common_name;
-                if (obj.default_photo) button.style.backgroundImage = "url('" + obj.default_photo.square_url + "')";
-                bird_grid.append(button);
+        //datalist - only include scientific option if taxon isn't a species, OR if taxon is a plant
+        let option_common = document.createElement("option");
+        option_common.value = obj.preferred_common_name;
+        document.getElementById("guess-datalist").append(option_common);
+        if (obj.rank != "species" || obj.ancestor_ids.includes(47126)) {
+            let option_scientific = document.createElement("option");
+            option_scientific.value = obj.name;
+            document.getElementById("guess-datalist").append(option_scientific);
+        }
+    });
 
-                //datalist - only include scientific option if taxon isn't a species, OR if taxon is a plant
-                let option_common = document.createElement("option");
-                option_common.value = obj.preferred_common_name;
-                document.getElementById("guess-datalist").append(option_common);
-                if (obj.rank != "species" || obj.ancestor_ids.includes(47126)) {
-                    let option_scientific = document.createElement("option");
-                    option_scientific.value = obj.name;
-                    document.getElementById("guess-datalist").append(option_scientific);
-                }
-            });
+    //switch screens and stop loader
+    //if visual id, delay starting until the image is loaded
+    if (mode == "visual_id") {
+        document.getElementById("bird-image").addEventListener("load", () => {
+            document.getElementById("list-screen").style.display = "none";
+            document.getElementById("game-screen").style.display = "block";
+            document.getElementById("bird-list-loader").style.display = "none";
+        }, { once: true });
+    }
+    else {
+        //do it immediately
+        document.getElementById("list-screen").style.display = "none";
+        document.getElementById("game-screen").style.display = "block";
+        document.getElementById("bird-list-loader").style.display = "none";
+    }
 
-            //switch screens and stop loader
-            //if visual id, delay starting until the image is loaded
-            if (mode == "visual_id") {
-                document.getElementById("bird-image").addEventListener("load", () => {
-                    document.getElementById("list-screen").style.display = "none";
-                    document.getElementById("game-screen").style.display = "block";
-                    document.getElementById("bird-list-loader").style.display = "none";
-                }, { once: true });
-            }
-            else {
-                //do it immediately
-                document.getElementById("list-screen").style.display = "none";
-                document.getElementById("game-screen").style.display = "block";
-                document.getElementById("bird-list-loader").style.display = "none";
-            }
+    next = pickObservation();
+    nextObservation(); //sets game_state FYI, but was already set in the event listener
 
-            next = pickObservation();
-            nextObservation(); //sets game_state FYI, but was already set in the event listener
+    //funny bird
+    scheduleFunnyBird();
 
-            //funny bird
-            scheduleFunnyBird();
+    //fetch the rest more slowly (limit to < 1 API call per sec)
+    //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
+    const result = await fetchUntilThreshold(N_OBS_PER_TAXON, 3000)
+    //if some taxa had no observations at all, alert the user
+    if (!result.success && result.failure_reason == "not_enough_observations") {
+        let no_obs_ids = result.lacking_ids.filter(id => taxon_obs[id].length == 0);
+        if (no_obs_ids.length == 0) return;
 
-            //fetch the rest more slowly (limit to < 1 API call per sec)
-            //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
-            fetchUntilThreshold(N_OBS_PER_TAXON, 3000)
-                .then(result => {
-                    //if some taxa had no observations at all, alert the user
-                    if (!result.success && result.failure_reason == "not_enough_observations") {
-                        let no_obs_ids = result.lacking_ids.filter(id => taxon_obs[id].length == 0);
-                        if (no_obs_ids.length == 0) return;
-
-                        let failed_names = no_obs_ids.map(id_str => {
-                            return bird_taxa.find(obj => obj.id == Number(id_str)).preferred_common_name;
-                        });
-                        alert("Failed to find research grade iNaturalist observations for " + failed_names.join(", ") + ". This doesn't break anything, just no questions will be about these birds.");
-                    }
-                })
+        let failed_names = no_obs_ids.map(id_str => {
+            return bird_taxa.find(obj => obj.id == Number(id_str)).preferred_common_name;
         });
+        alert("Failed to find research grade iNaturalist observations for " + failed_names.join(", ") + ". This doesn't break anything, just no questions will be about these birds.");
+    }
 }
 
 
@@ -630,8 +626,8 @@ function scheduleFunnyBird() {
 
 
 // for debugging / testing
-function instaSucceed(){
-    while(taxon_bag.length > taxa_to_use.length){
+function instaSucceed() {
+    while (taxon_bag.length > taxa_to_use.length) {
         const guess_input = document.getElementById("guess-input");
         guess_input.value = current.taxon.preferred_common_name;
         checkAnswer();
