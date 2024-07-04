@@ -4,17 +4,17 @@ const INITIAL_PER_PAGE = 5;
 const MAX_FETCH_ATTEMPTS = 15; //how many times to attempt fetching to meet threshold, before quit
 const BIRDSONG_POPULAR_ATTEMPTS = 3; //how many times to attempt fetching popular observations before reverting to popular or not popular
 const VISUAL_ID_POPULAR_ATTEMPTS = 1;
-const TAXON_OBS_THRESHOLD = 20; //number of observations we'd like to have for each taxon, will stop when reach this
+const N_OBS_PER_TAXON = 20; //number of observations we'd like to have for each taxon, will stop when reach this
 
 const MAX_PREFERRED_AUDIO_DURATION = 15; //seconds, if the next observation's sound is longer, try to pick a different next one
 const MAX_SHORT_AUDIO_RETRIES = 3; //max number of tries to pick a shorter audio (to limit requests / possible infinite looping)
 const TIME_TO_REPLENISH_A_SHORT_AUDIO_RETRY = 1000; //ms, retries replenish over time
 
 const MAX_TAXON_BAG_COPIES = 11; //number of times a taxon can be in the taxon bag, min is 1
-const START_TAXON_BAG_COPIES = 7; //may add fewer copies for taxa that the user is very proficient at - see birdsong_game.js, initBirdsongGame()
+const START_TAXON_BAG_COPIES = 7; //may add fewer copies for taxa that the user is very proficient at - see game.js, initGame()
 const CORRECT_REMOVE_COPIES = 2; //number of copies to remove from taxon_bag if the user got a question on this taxon right
 const INCORRECT_ADD_COPIES = 3; //number of copies to add if incorrect, for both the guess and what it actually is
-const SKIPPED_ADD_COPIES = 0; //number of copies to add to bag if no guess - 0 seems okay, since some recordings/images are v bad
+const NO_GUESS_ADD_COPIES = 0; //number of copies to add to bag if no guess - 0 seems okay, since some recordings/images are v bad
 // note that how the taxon bag works affects the progress bar:
 // the progress bar is keeping track of how many fewer times the taxon appears in the taxon bag than when we started
 // so if you get several wrong, you have to get several right to get the # copies back under START_TAXON_BAG_COPIES

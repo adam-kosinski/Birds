@@ -3,15 +3,10 @@ let kill_fetch_until_threshold = []; //when fetchUntilThreshold is called, it ap
 
 
 //STATE VARIABLES - get reset when we go back to list (see game_events.js)
-
 let taxon_obs = {}; //stores lists of objects, organized by taxon id keys
-let taxon_queues = {}; //stores lists of observation objects for each taxon in order of showing, pop from beginning of list to show and refill if empty
+let taxon_queues = {}; //stores lists of observation objects for each taxon in order of showing, pop from beginning of list to show and refill if empty, helps with not repeating observations frequently
 let taxon_bag = []; //list of unordered taxon ids, perhaps each id in here multiple times, pick a random item to determine next taxon to show
-let rejected_ids = []; //list of observation ids that we didn't like (because missing audio, might add other reasons in future), these will not be fetched
-
-let n_pages_by_query = {}; //cache for total results queries, key is args string '?sounds=true' etc, value is n pages
-//not super useful but hey why not, doesn't hurt
-
+let bad_ids = {}; // object (taxon_id: [array of iNaturalist ids]) that records ids that were skipped before or are otherwise bad (e.g. missing audio). This coordinates w firebase
 let current; //current observation object
 let next; //helpful for preloading
 
@@ -35,7 +30,7 @@ let already_notified_full_progress_bar = false;
 
 function setGameState(state) {
     game_state = state;
-    document.getElementById("birdsong-main").dataset.gameState = state;
+    document.getElementById("game-main").dataset.gameState = state;
 }
 
 function setMode(new_mode) {
@@ -43,7 +38,7 @@ function setMode(new_mode) {
     document.querySelectorAll("#mode-toggle button").forEach(el => el.classList.remove("selected"));
     document.querySelector("[data-mode=" + new_mode + "]").classList.add("selected");
     mode = new_mode;
-    document.getElementById("birdsong-main").dataset.mode = mode;
+    document.getElementById("game-main").dataset.mode = mode;
     document.getElementById("bird-image").style.cursor = new_mode == "visual_id" ? "zoom-in" : "default";
 
     //update links
@@ -67,7 +62,6 @@ function setMode(new_mode) {
         selectRecommended();
     }
 }
-
 
 
 // try a different observation if the audio is too long
@@ -107,6 +101,7 @@ function pickObservation() {
     let filtered_taxon_bag = taxon_bag.filter(id => taxon_obs[id].length > 0);
     if (filtered_taxon_bag.length == 0) {
         console.error("No observations found, cannot pick one");
+        alert("Error: Cannot pick the next observation because no observations were found. This could be because:\n-Data is still being fetched\n-All iNaturalist observations are either not research grade or marked as 'Don't Show Again'\n-Some other error.\n\nPlease reload the page and try again.");
         return;
     }
 
@@ -126,7 +121,7 @@ function pickObservation() {
 
 
 function resetQueue(taxon_id) {
-    let queue = taxon_queues[taxon_id]
+    let queue = taxon_queues[taxon_id];
     taxon_obs[taxon_id].forEach(obj => {
         let insert_idx = Math.floor((queue.length + 1) * Math.random());
         queue.splice(insert_idx, 0, obj);
@@ -136,7 +131,7 @@ function resetQueue(taxon_id) {
 
 
 
-function initBirdsongGame() {
+async function initGame() {
     console.log("\nINIT GAME ============================\n\n");
 
     //start loader
@@ -158,7 +153,7 @@ function initBirdsongGame() {
         // determine how many to add to taxon bag, based on previous proficiency
         // should range from 2 to START_TAXON_BAG_COPIES (never 1 b/c we don't want them to start at full proficiency meter)
         const n_copies = Math.ceil(2 + (START_TAXON_BAG_COPIES - 2) * (1 - loadTaxonData(obj.id, mode).proficiency));
-        console.log(obj.preferred_common_name, n_copies)
+        console.log(obj.preferred_common_name, n_copies, "copies in taxon bag");
         // add to taxon_bag
         for (let i = 0; i < n_copies; i++) {
             taxon_bag.push(obj.id);
@@ -166,80 +161,79 @@ function initBirdsongGame() {
     });
     updateProgressBar();
 
+    // get bad observations (do before initial fetch, b/c fetchObservationData() can add to bad_ids)
+    bad_ids = await getBadIds(taxa_to_use.map(obj => obj.id), mode);
 
-    fetchObservationData(undefined, mode == "birdsong" ? "photos=false" : "", INITIAL_PER_PAGE)
-        .then(data_was_fetched => {
-            if (!data_was_fetched) {
-                alert("Failed to find research grade iNaturalist observations for any of the chosen birds. Please try again with different birds.");
-                document.getElementById("bird-list-loader").style.display = "none";
-                setGameState(INACTIVE);
-                return;
-            }
+    // get initial data
+    const data_was_fetched = await fetchObservationData(undefined, "", INITIAL_PER_PAGE);
+    if (!data_was_fetched) {
+        alert("Failed to find research grade iNaturalist observations for any of the chosen birds. Please try again with different birds.");
+        document.getElementById("bird-list-loader").style.display = "none";
+        resetAndExitGame();
+        return;
+    }
 
-            //populate bird grid
-            let bird_grid = document.getElementById("bird-grid");
-            //clear previous grid
-            bird_grid.querySelectorAll(".bird-grid-option:not(#other-option").forEach(el => {
-                el.parentElement.removeChild(el);
-            });
-            //add taxa
-            taxa_to_use.forEach(obj => {
-                //HTML
-                let button = document.createElement("button");
-                button.className = "bird-grid-option";
-                button.dataset.commonName = obj.preferred_common_name;
-                if (obj.default_photo) button.style.backgroundImage = "url('" + obj.default_photo.square_url + "')";
-                bird_grid.append(button);
+    //populate bird grid
+    let bird_grid = document.getElementById("bird-grid");
+    //clear previous grid
+    bird_grid.querySelectorAll(".bird-grid-option:not(#other-option").forEach(el => {
+        el.parentElement.removeChild(el);
+    });
+    //add taxa
+    taxa_to_use.forEach(obj => {
+        //HTML
+        let button = document.createElement("button");
+        button.className = "bird-grid-option";
+        button.dataset.commonName = obj.preferred_common_name;
+        if (obj.default_photo) button.style.backgroundImage = "url('" + obj.default_photo.square_url + "')";
+        bird_grid.append(button);
 
-                //datalist - only include scientific option if taxon isn't a species, OR if taxon is a plant
-                let option_common = document.createElement("option");
-                option_common.value = obj.preferred_common_name;
-                document.getElementById("guess-datalist").append(option_common);
-                if (obj.rank != "species" || obj.ancestor_ids.includes(47126)) {
-                    let option_scientific = document.createElement("option");
-                    option_scientific.value = obj.name;
-                    document.getElementById("guess-datalist").append(option_scientific);
-                }
-            });
+        //datalist - only include scientific option if taxon isn't a species, OR if taxon is a plant
+        let option_common = document.createElement("option");
+        option_common.value = obj.preferred_common_name;
+        document.getElementById("guess-datalist").append(option_common);
+        if (obj.rank != "species" || obj.ancestor_ids.includes(47126)) {
+            let option_scientific = document.createElement("option");
+            option_scientific.value = obj.name;
+            document.getElementById("guess-datalist").append(option_scientific);
+        }
+    });
 
-            //switch screens and stop loader
-            //if visual id, delay starting until the image is loaded
-            if (mode == "visual_id") {
-                document.getElementById("bird-image").addEventListener("load", () => {
-                    document.getElementById("list-screen").style.display = "none";
-                    document.getElementById("game-screen").style.display = "block";
-                    document.getElementById("bird-list-loader").style.display = "none";
-                }, { once: true });
-            }
-            else {
-                //do it immediately
-                document.getElementById("list-screen").style.display = "none";
-                document.getElementById("game-screen").style.display = "block";
-                document.getElementById("bird-list-loader").style.display = "none";
-            }
+    //switch screens and stop loader
+    //if visual id, delay starting until the image is loaded
+    if (mode == "visual_id") {
+        document.getElementById("bird-image").addEventListener("load", () => {
+            document.getElementById("list-screen").style.display = "none";
+            document.getElementById("game-screen").style.display = "block";
+            document.getElementById("bird-list-loader").style.display = "none";
+        }, { once: true });
+    }
+    else {
+        //do it immediately
+        document.getElementById("list-screen").style.display = "none";
+        document.getElementById("game-screen").style.display = "block";
+        document.getElementById("bird-list-loader").style.display = "none";
+    }
 
-            next = pickObservation();
-            nextObservation(); //sets game_state FYI, but was already set in the event listener
+    next = pickObservation();
+    nextObservation(); //sets game_state FYI, but was already set in the event listener
 
-            //funny bird
-            scheduleFunnyBird();
+    //funny bird
+    scheduleFunnyBird();
 
-            //fetch the rest more slowly (limit to < 1 API call per sec)
-            //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
-            fetchUntilThreshold(TAXON_OBS_THRESHOLD, 3000)
-                .then(result => {
-                    //if some taxa had no observations at all, alert the user
-                    if (!result.success && result.failure_reason == "not_enough_observations") {
-                        let no_obs_ids = result.lacking_ids.filter(id => taxon_obs[id].length == 0);
-                        if (no_obs_ids.length == 0) return;
+    //fetch the rest more slowly (limit to < 1 API call per sec)
+    //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
+    const result = await fetchUntilThreshold(N_OBS_PER_TAXON, 3000)
+    //if some taxa had no observations at all, alert the user
+    if (!result.success && result.failure_reason == "not_enough_observations") {
+        let no_obs_ids = result.lacking_ids.filter(id => taxon_obs[id].length == 0);
+        if (no_obs_ids.length == 0) return;
 
-                        let failed_names = no_obs_ids.map(id_str => {
-                            return bird_taxa.find(obj => obj.id == Number(id_str)).preferred_common_name;
-                        });
-                        alert("Failed to find research grade iNaturalist observations for " + failed_names.join(", ") + ". This doesn't break anything, just no questions will be about these birds.");
-                    }
-                })
+        let failed_names = no_obs_ids.map(id_str => {
+            return bird_taxa.find(obj => obj.id == Number(id_str)).preferred_common_name;
         });
+        alert("Failed to find research grade iNaturalist observations for " + failed_names.join(", ") + ". This doesn't break anything, just no questions will be about these species.");
+    }
 }
 
 
@@ -256,50 +250,56 @@ function searchAncestorsForTaxonId(obj) {
 
 
 
-async function fetchObservationData(taxa_id_string = undefined, extra_args = "", per_page = undefined) {
+async function fetchObservationData(taxa_ids = undefined, extra_args = "", per_page = undefined) {
     //returns a promise (b/c async) that fulfills when data has been fetched and added to data structures
     //the promise resolves to true if data was fetched, false if there was no data to fetch
     //audio missing a url will be filtered out
     //long audio will be filtered out, but at least one audio will always be let through even if long, to not break other code
 
-    if (!taxa_id_string) {
-        taxa_id_string = taxa_to_use.map(obj => obj.id).join(",");
+    if (!taxa_ids) {
+        taxa_ids = taxa_to_use.map(obj => obj.id);
     }
     if (!per_page) {
         //don't try to fetch with a big per page if realistically we don't need that many observations
-        let n_obs_needed_ish = taxa_id_string.split(",").length * TAXON_OBS_THRESHOLD;
+        let n_obs_needed_ish = taxa_ids.length * N_OBS_PER_TAXON;
         per_page = Math.min(DEFAULT_PER_PAGE, 3 * n_obs_needed_ish);
     }
+    const taxa_id_string = taxa_ids.join(",");
 
     console.groupCollapsed("FETCH " + taxa_id_string + "\nExtra args: " + extra_args);
 
     //figure out which observations (of the requested taxa) we have already so we don't repeat
     let obs_ids_we_have = [];
-    for (let taxon_id in taxon_obs) {
+    for (const taxon_id in taxon_obs) {
         if (taxa_id_string.includes(taxon_id)) {
-            let obs_ids_we_have_for_taxon = taxon_obs[taxon_id].map(obj => obj.id);
-            obs_ids_we_have = obs_ids_we_have.concat(obs_ids_we_have_for_taxon); //appending
+            obs_ids_we_have = obs_ids_we_have.concat(
+                taxon_obs[taxon_id].map(obj => obj.id)
+            );
         }
     }
-    let obs_ids_to_not_fetch = obs_ids_we_have.concat(rejected_ids);
+    //get list of bad observation ids for just the taxa we are fetching
+    let bad_obs_ids = [];
+    taxa_ids.forEach(taxon_id => {
+        bad_obs_ids = bad_obs_ids.concat(bad_ids[taxon_id]);
+    });
 
     //prep API calls
-    let prefix = "https://api.inaturalist.org/v1/observations";
-    let args = "?" + extra_args + "&" + (mode == "birdsong" ? "sounds=true" : "photos=true") + (place_id ? "&place_id=" + place_id : "")
+    const prefix = "https://api.inaturalist.org/v1/observations";
+    const args = "?" + extra_args + "&" + (mode == "birdsong" ? "sounds=true" : "photos=true") + (place_id ? "&place_id=" + place_id : "")
         + "&" + (mode == "birdsong" ? "sound_license=cc-by,cc-by-nc,cc-by-nd,cc-by-sa,cc-by-nc-nd,cc-by-nc-sa,cc0" : "photo_licensed=true")
-        + "&quality_grade=research&taxon_id=" + taxa_id_string + "&not_id=" + obs_ids_to_not_fetch.join(",");
+        + "&quality_grade=research&taxon_id=" + taxa_id_string + "&not_id=" + [...obs_ids_we_have, ...bad_obs_ids].join(",");
     console.log(prefix + args);
 
     //figure out how many pages we're dealing with if we don't know -------------------
 
     console.log("Querying to determine n pages")
-    let n_results = await fetch(prefix + args + "&only_id=true&per_page=0")
+    const n_results = await fetch(prefix + args + "&only_id=true&per_page=0")
         .then(res => res.json())
         .then(data => data.total_results);
 
     //n_pages * per_page must be strictly less than 10000, or iNaturalist will block
-    let quotient = Math.min(n_results, 10000) / per_page;
-    let n_pages = Math.ceil(quotient) * per_page < 10000 ?
+    const quotient = Math.min(n_results, 10000) / per_page;
+    const n_pages = Math.ceil(quotient) * per_page < 10000 ?
         Math.ceil(quotient) : Math.floor(quotient);
 
     console.log(n_pages + " usable pages with per_page=" + per_page);
@@ -313,9 +313,9 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "",
         return false;
     }
     //get next page and fetch it
-    let next_page = Math.ceil(n_pages * Math.random());
+    const next_page = Math.ceil(n_pages * Math.random());
     console.log("Fetching page " + next_page);
-    let data = await fetch(prefix + args + "&per_page=" + per_page + "&page=" + next_page)
+    const data = await fetch(prefix + args + "&per_page=" + per_page + "&page=" + next_page)
         .then(res => res.json())
     console.log(data);
 
@@ -326,11 +326,11 @@ async function fetchObservationData(taxa_id_string = undefined, extra_args = "",
 
         //make sure audio has a working url (not always the case)
         if (mode == "birdsong" && !obj.sounds[0].file_url) {
-            rejected_ids.push(obj.id);
+            if (!current.is_squirrel_intruder) addBadId(obj.taxon.id, obj.id, mode); //firebase.js
             continue;
         }
 
-        let id = searchAncestorsForTaxonId(obj);
+        const id = searchAncestorsForTaxonId(obj);
         if (taxon_obs.hasOwnProperty(id)) {   // need to check for this in case game was ended while we were fetching
             taxon_obs[id].push(obj);
         }
@@ -382,7 +382,7 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
         if (trying_no_photos) extra_args.push("photos=false");
 
         //fetch data, handle if couldn't get any
-        let was_data_fetched = await fetchObservationData(lacking_ids.join(","), extra_args.join("&"));
+        let was_data_fetched = await fetchObservationData(lacking_ids, extra_args.join("&"));
         if (!was_data_fetched) {
             if (trying_popular) {
                 trying_popular = false;
@@ -439,6 +439,7 @@ function nextObservation() {
         el.classList.remove("selected");
     });
     document.getElementById("image-attribution").classList.remove("visible");
+    document.querySelectorAll(".mark-as-bad-button").forEach(el => el.classList.remove("marked"));
 
     //game mode specific stuff
 
@@ -520,7 +521,7 @@ function checkAnswer() {
     );
 
     let correct = Boolean(guess_obj && (current.taxon.id == guess_obj.id || current.taxon.ancestor_ids.includes(guess_obj.id)));
-    document.getElementById("birdsong-main").dataset.correct = guess.length > 0 ? correct : "no-guess"
+    document.getElementById("game-main").dataset.correct = guess.length > 0 ? correct : "no-guess"
 
     //update taxon picking probabilities and user data (if storing)
     //don't do anything if squirrel intruder, those are jokes
@@ -540,8 +541,8 @@ function checkAnswer() {
                 updateTaxonProficiency(correct_id, mode, false);
             }
             else {
-                // skipped
-                updateTaxonBag(correct_id, SKIPPED_ADD_COPIES);
+                // no guess
+                updateTaxonBag(correct_id, NO_GUESS_ADD_COPIES);
             }
         }
     }
@@ -628,8 +629,8 @@ function scheduleFunnyBird() {
 
 
 // for debugging / testing
-function instaSucceed(){
-    while(taxon_bag.length > taxa_to_use.length){
+function instaSucceed() {
+    while (taxon_bag.length > taxa_to_use.length) {
         const guess_input = document.getElementById("guess-input");
         guess_input.value = current.taxon.preferred_common_name;
         checkAnswer();

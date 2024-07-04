@@ -1,7 +1,7 @@
 /* Controls whether or not certain elements are visible based on the game mode and state */
 /* Easier to not miss things in css */
 /* By default everything is visible */
-/* All attributes will target #birdsong-main, but omitting that here for cleanliness */
+/* All attributes will target #game-main, but omitting that here for cleanliness */
 
 /* General stuff */
 
@@ -38,6 +38,7 @@
     audio:not([src]) {display: none;}
     #visual-id-question {display: none;}
     #scroll-to-zoom-instructions {display: none;}
+    #bird-image-container .mark-as-bad-button {display: none;}
 }
 
 [data-mode=birdsong][data-game-state="1"] { //guessing
@@ -52,17 +53,16 @@
 
 
 
-
 /* Visual ID game specific */
 
-#birdsong-main[data-mode=visual_id] {
+#game-main[data-mode=visual_id] {
     /* stop the question / caption from getting too close to the top nav */
     padding-top: 10px;
     box-sizing: border-box;
 }
 
 [data-mode=visual_id]  {
-    audio {display: none;}
+    #audio-container {display: none;}
     #birdsong-question {display: none;}
     #bird-grid {display: none;}
 }

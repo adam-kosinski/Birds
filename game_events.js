@@ -3,10 +3,12 @@ document.getElementById("start-game-button").addEventListener("click", e => {
     e.target.disabled = true;
     document.getElementById("add-bird-input").value = "";
     setGameState(GUESSING); //prevent adding or removing birds
-    initBirdsongGame();
+    initGame();
 });
 
-document.getElementById("back-to-list").addEventListener("click", () => {
+document.getElementById("back-to-list").addEventListener("click", resetAndExitGame);
+
+function resetAndExitGame() {
     //don't keep playing the birdsong
     document.getElementById("birdsong-audio-0").pause();
     document.getElementById("birdsong-audio-1").pause();
@@ -27,6 +29,7 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     taxon_obs = {};
     taxon_queues = {};
     taxon_bag = [];
+    bad_ids = {};
     n_pages_by_query = {};
     current = undefined;
     already_notified_full_progress_bar = false;
@@ -40,6 +43,7 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     if (funny_bird_timeout_id) {
         clearTimeout(funny_bird_timeout_id);
     }
+    const funny_bird = document.getElementById("funny-bird");
     funny_bird.removeEventListener("transitionend", scheduleFunnyBird);
     funny_bird.removeAttribute("data-clicked");
     funny_bird.removeAttribute("style"); //reset the changed transition duration
@@ -49,7 +53,8 @@ document.getElementById("back-to-list").addEventListener("click", () => {
 
     // reset progress bar
     document.getElementById("game-progress").value = 0;
-});
+}
+
 
 //save list
 document.getElementById("save-list").addEventListener("click", () => {
@@ -126,7 +131,7 @@ function selectRecommended() {
         RECOMMENDED_SUBSET_SIZES.forEach(size => levels[size] = []);
         bird_taxa.forEach(taxon => {
             const data = loadTaxonData(taxon.id, mode);
-            if(data.hours_since_reviewed > HOURS_SINCE_REVIEWED_THRESHOLD){
+            if (data.hours_since_reviewed > HOURS_SINCE_REVIEWED_THRESHOLD) {
                 taxa_to_review.push(data);
             }
             for (let size of RECOMMENDED_SUBSET_SIZES) {
@@ -176,7 +181,8 @@ function selectRecommended() {
         }
 
         // overwrite some with taxa needing review if they exist
-        // sort so that longest-ago-reviewed taxa come first
+        // sort so that longest-ago-reviewed taxa come 
+        taxa_to_review.filter(obj => !recommended_ids.contains(obj.taxon_id));
         taxa_to_review.sort((a, b) => b.hours_since_reviewed - a.hours_since_reviewed);
         const n_review_spots = Math.min(taxa_to_review.length, Math.ceil(FRACTION_RESERVED_FOR_REVIEW * recommended_ids.length));
         const reviewing = taxa_to_review.slice(0, n_review_spots)
@@ -208,6 +214,36 @@ function selectRecommended() {
 
 
 
+//marking observation as bad
+document.querySelectorAll(".mark-as-bad-button").forEach(el => {
+    el.addEventListener("click", () => {
+        // show marked
+        el.classList.add("marked");
+
+        // tell firebase and store in my local copy too
+        addBadId(current.taxon.id, current.id, mode);
+        bad_ids[current.taxon.id].push(current.id);
+
+        // remove from my observations, including the queue
+        taxon_obs[current.taxon.id] = taxon_obs[current.taxon.id].filter(obj => obj.id !== current.id);
+        taxon_queues[current.taxon.id] = taxon_queues[current.taxon.id].filter(obj => obj.id !== current.id);
+        if (next.id === current.id) next = pickObservation();
+
+        // refill observations if running low
+        if (taxon_obs[current.taxon.id].length < N_OBS_PER_TAXON) {
+            const current_taxon_id = current.taxon.id; // freeze this since it could change during the async fetches
+            fetchUntilThreshold(N_OBS_PER_TAXON, 3000).then(result => {
+                if (!result.success && taxon_obs[current_taxon_id].length === 0 && result.failure_reason == "not_enough_observations") {
+                    const common_name = bird_taxa.find(obj => obj.id == current_taxon_id).preferred_common_name;
+                    alert("Failed to find research grade iNaturalist observations for " + common_name + ". This doesn't break anything (unless no other species exist), just no questions will be about these species.");
+                }
+            })
+        }
+    });
+})
+
+
+
 //keypress handling
 document.addEventListener("keypress", (e) => {
 
@@ -232,6 +268,7 @@ document.addEventListener("keypress", (e) => {
 //check answer
 document.getElementById("guess-button").addEventListener("click", checkAnswer);
 document.getElementById("skip-button").addEventListener("click", (e) => {
+    // show a loader so the user knows something is happening (if we transition instantly, it looks like nothing happened)
     e.target.style.visibility = "hidden";
     const loader = document.getElementById("skip-loader");
     const page_disabler = document.getElementById("page-disabler");
@@ -241,6 +278,7 @@ document.getElementById("skip-button").addEventListener("click", (e) => {
         e.target.style.visibility = "visible";
         loader.style.visibility = "hidden";
         page_disabler.style.display = "none";
+        // transition
         nextObservation();
     }, 500);
 });

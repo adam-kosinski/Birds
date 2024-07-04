@@ -14,7 +14,7 @@
     text-align: right;
 }
 
-#birdsong-main {
+#game-main {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,7 +25,7 @@
     gap: 10px;
 }
 
-#birdsong-main>.birdsong-subflex {
+#game-main>.birdsong-subflex {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -33,17 +33,35 @@
     width: 100%;
 }
 
-#birdsong-main audio {
+#audio-container {
+    display: grid;
+    grid-template-columns: 1fr 60px;
+    gap: 10px;
+    width: min(100%, 550px);
+    align-items: center;
+}
+
+#game-main audio {
     height: 30px;
     width: 100%;
-    max-width: 500px;
-    flex-shrink: 0;
 }
 
 #birdsong-audio-0 {
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 
+.mark-as-bad-button {
+    font-size: 10px;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 2px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    padding: 2px;
+}
+.mark-as-bad-button.marked {
+    background-color: #f88;
+}
 
 
 /* bird image / answer styling */
