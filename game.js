@@ -165,7 +165,7 @@ async function initGame() {
     bad_ids = await getBadIds(taxa_to_use.map(obj => obj.id), mode);
 
     // get initial data
-    const data_was_fetched = await fetchObservationData(undefined, mode == "birdsong" ? "photos=false" : "", INITIAL_PER_PAGE)
+    const data_was_fetched = await fetchObservationData(undefined, "", INITIAL_PER_PAGE);
     if (!data_was_fetched) {
         alert("Failed to find research grade iNaturalist observations for any of the chosen birds. Please try again with different birds.");
         document.getElementById("bird-list-loader").style.display = "none";

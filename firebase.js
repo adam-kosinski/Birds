@@ -28,12 +28,11 @@ async function getBadIds(taxa, mode) {
 
 function addBadId(taxon_id, iNaturalist_id, mode) {
     const doc = db.collection(`bad-observations-${mode}`).doc(String(taxon_id));
-    try {
-        doc.update({ ids: firebase.firestore.FieldValue.arrayUnion((iNaturalist_id)) });
-    } catch {
-        // doc probably doesn't exist, create it
+    doc.update({
+        ids: firebase.firestore.FieldValue.arrayUnion((iNaturalist_id))
+    }).catch(error => {
         doc.set({ ids: [iNaturalist_id] });
-    }
+    });
 }
 
 
