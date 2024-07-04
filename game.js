@@ -3,16 +3,10 @@ let kill_fetch_until_threshold = []; //when fetchUntilThreshold is called, it ap
 
 
 //STATE VARIABLES - get reset when we go back to list (see game_events.js)
-
 let taxon_obs = {}; //stores lists of objects, organized by taxon id keys
 let taxon_queues = {}; //stores lists of observation objects for each taxon in order of showing, pop from beginning of list to show and refill if empty
 let taxon_bag = []; //list of unordered taxon ids, perhaps each id in here multiple times, pick a random item to determine next taxon to show
-let rejected_ids = []; //list of observation ids that we didn't like (because missing audio, might add other reasons in future), these will not be fetched
 let bad_ids = {}; // object (taxon_id: [array of iNaturalist ids]) that records ids that were skipped before or are otherwise bad (e.g. missing audio). This coordinates w firebase
-
-let n_pages_by_query = {}; //cache for total results queries, key is args string '?sounds=true' etc, value is n pages
-//not super useful but hey why not, doesn't hurt
-
 let current; //current observation object
 let next; //helpful for preloading
 
@@ -158,7 +152,7 @@ async function initGame() {
         // determine how many to add to taxon bag, based on previous proficiency
         // should range from 2 to START_TAXON_BAG_COPIES (never 1 b/c we don't want them to start at full proficiency meter)
         const n_copies = Math.ceil(2 + (START_TAXON_BAG_COPIES - 2) * (1 - loadTaxonData(obj.id, mode).proficiency));
-        console.log(obj.preferred_common_name, n_copies)
+        console.log(obj.preferred_common_name, n_copies, "copies in taxon bag");
         // add to taxon_bag
         for (let i = 0; i < n_copies; i++) {
             taxon_bag.push(obj.id);
@@ -275,31 +269,36 @@ async function fetchObservationData(taxa_ids = undefined, extra_args = "", per_p
 
     //figure out which observations (of the requested taxa) we have already so we don't repeat
     let obs_ids_we_have = [];
-    for (let taxon_id in taxon_obs) {
+    for (const taxon_id in taxon_obs) {
         if (taxa_id_string.includes(taxon_id)) {
-            let obs_ids_we_have_for_taxon = taxon_obs[taxon_id].map(obj => obj.id);
-            obs_ids_we_have = obs_ids_we_have.concat(obs_ids_we_have_for_taxon); //appending
+            obs_ids_we_have = obs_ids_we_have.concat(
+                taxon_obs[taxon_id].map(obj => obj.id)
+            );
         }
     }
-    let obs_ids_to_not_fetch = obs_ids_we_have.concat(rejected_ids);
+    //get list of bad observation ids for just the taxa we are fetching
+    let bad_obs_ids = [];
+    taxa_ids.forEach(taxon_id => {
+        bad_obs_ids = bad_obs_ids.concat(bad_ids[taxon_id]);
+    });
 
     //prep API calls
-    let prefix = "https://api.inaturalist.org/v1/observations";
-    let args = "?" + extra_args + "&" + (mode == "birdsong" ? "sounds=true" : "photos=true") + (place_id ? "&place_id=" + place_id : "")
+    const prefix = "https://api.inaturalist.org/v1/observations";
+    const args = "?" + extra_args + "&" + (mode == "birdsong" ? "sounds=true" : "photos=true") + (place_id ? "&place_id=" + place_id : "")
         + "&" + (mode == "birdsong" ? "sound_license=cc-by,cc-by-nc,cc-by-nd,cc-by-sa,cc-by-nc-nd,cc-by-nc-sa,cc0" : "photo_licensed=true")
-        + "&quality_grade=research&taxon_id=" + taxa_id_string + "&not_id=" + obs_ids_to_not_fetch.join(",");
+        + "&quality_grade=research&taxon_id=" + taxa_id_string + "&not_id=" + [...obs_ids_we_have, ...bad_obs_ids].join(",");
     console.log(prefix + args);
 
     //figure out how many pages we're dealing with if we don't know -------------------
 
     console.log("Querying to determine n pages")
-    let n_results = await fetch(prefix + args + "&only_id=true&per_page=0")
+    const n_results = await fetch(prefix + args + "&only_id=true&per_page=0")
         .then(res => res.json())
         .then(data => data.total_results);
 
     //n_pages * per_page must be strictly less than 10000, or iNaturalist will block
-    let quotient = Math.min(n_results, 10000) / per_page;
-    let n_pages = Math.ceil(quotient) * per_page < 10000 ?
+    const quotient = Math.min(n_results, 10000) / per_page;
+    const n_pages = Math.ceil(quotient) * per_page < 10000 ?
         Math.ceil(quotient) : Math.floor(quotient);
 
     console.log(n_pages + " usable pages with per_page=" + per_page);
@@ -313,9 +312,9 @@ async function fetchObservationData(taxa_ids = undefined, extra_args = "", per_p
         return false;
     }
     //get next page and fetch it
-    let next_page = Math.ceil(n_pages * Math.random());
+    const next_page = Math.ceil(n_pages * Math.random());
     console.log("Fetching page " + next_page);
-    let data = await fetch(prefix + args + "&per_page=" + per_page + "&page=" + next_page)
+    const data = await fetch(prefix + args + "&per_page=" + per_page + "&page=" + next_page)
         .then(res => res.json())
     console.log(data);
 
@@ -326,11 +325,11 @@ async function fetchObservationData(taxa_ids = undefined, extra_args = "", per_p
 
         //make sure audio has a working url (not always the case)
         if (mode == "birdsong" && !obj.sounds[0].file_url) {
-            if(!current.is_squirrel_intruder) addBadId(obj.taxon.id, obj.id, mode); //firebase.js
+            if (!current.is_squirrel_intruder) addBadId(obj.taxon.id, obj.id, mode); //firebase.js
             continue;
         }
 
-        let id = searchAncestorsForTaxonId(obj);
+        const id = searchAncestorsForTaxonId(obj);
         if (taxon_obs.hasOwnProperty(id)) {   // need to check for this in case game was ended while we were fetching
             taxon_obs[id].push(obj);
         }
