@@ -220,8 +220,9 @@ document.querySelectorAll(".mark-as-bad-button").forEach(el => {
         // show marked
         el.classList.add("marked");
 
-        // tell firebase
-        // addBadId(current.taxon.id, current.id, mode);
+        // tell firebase and store in my local copy too
+        addBadId(current.taxon.id, current.id, mode);
+        bad_ids[current.taxon.id].push(current.id);
 
         // remove from my observations, including the queue
         taxon_obs[current.taxon.id] = taxon_obs[current.taxon.id].filter(obj => obj.id !== current.id);
@@ -229,7 +230,15 @@ document.querySelectorAll(".mark-as-bad-button").forEach(el => {
         if (next.id === current.id) next = pickObservation();
 
         // refill observations if running low
-
+        if (taxon_obs[current.taxon.id].length < N_OBS_PER_TAXON) {
+            const current_taxon_id = current.taxon.id; // freeze this since it could change during the async fetches
+            fetchUntilThreshold(N_OBS_PER_TAXON, 3000).then(result => {
+                if (!result.success && taxon_obs[current_taxon_id].length === 0 && result.failure_reason == "not_enough_observations") {
+                    const common_name = bird_taxa.find(obj => obj.id == current_taxon_id).preferred_common_name;
+                    alert("Failed to find research grade iNaturalist observations for " + common_name + ". This doesn't break anything (unless no other species exist), just no questions will be about these species.");
+                }
+            })
+        }
     });
 })
 

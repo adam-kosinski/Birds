@@ -101,6 +101,7 @@ function pickObservation() {
     let filtered_taxon_bag = taxon_bag.filter(id => taxon_obs[id].length > 0);
     if (filtered_taxon_bag.length == 0) {
         console.error("No observations found, cannot pick one");
+        alert("Error: Cannot pick the next observation because no observations were found. This could be because:\n-Data is still being fetched\n-All iNaturalist observations are either not research grade or marked as 'Don't Show Again'\n-Some other error.\n\nPlease reload the page and try again.");
         return;
     }
 
@@ -231,7 +232,7 @@ async function initGame() {
         let failed_names = no_obs_ids.map(id_str => {
             return bird_taxa.find(obj => obj.id == Number(id_str)).preferred_common_name;
         });
-        alert("Failed to find research grade iNaturalist observations for " + failed_names.join(", ") + ". This doesn't break anything, just no questions will be about these birds.");
+        alert("Failed to find research grade iNaturalist observations for " + failed_names.join(", ") + ". This doesn't break anything, just no questions will be about these species.");
     }
 }
 
