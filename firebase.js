@@ -31,6 +31,7 @@ function addBadId(taxon_id, iNaturalist_id, mode) {
     doc.update({
         ids: firebase.firestore.FieldValue.arrayUnion((iNaturalist_id))
     }).catch(error => {
+        // document probably doesn't exist for this taxon, create it
         doc.set({ ids: [iNaturalist_id] });
     });
 }
