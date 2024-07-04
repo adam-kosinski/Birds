@@ -6,7 +6,9 @@ document.getElementById("start-game-button").addEventListener("click", e => {
     initGame();
 });
 
-document.getElementById("back-to-list").addEventListener("click", () => {
+document.getElementById("back-to-list").addEventListener("click", resetAndExitGame);
+
+function resetAndExitGame() {
     //don't keep playing the birdsong
     document.getElementById("birdsong-audio-0").pause();
     document.getElementById("birdsong-audio-1").pause();
@@ -41,6 +43,7 @@ document.getElementById("back-to-list").addEventListener("click", () => {
     if (funny_bird_timeout_id) {
         clearTimeout(funny_bird_timeout_id);
     }
+    const funny_bird = document.getElementById("funny-bird");
     funny_bird.removeEventListener("transitionend", scheduleFunnyBird);
     funny_bird.removeAttribute("data-clicked");
     funny_bird.removeAttribute("style"); //reset the changed transition duration
@@ -50,7 +53,8 @@ document.getElementById("back-to-list").addEventListener("click", () => {
 
     // reset progress bar
     document.getElementById("game-progress").value = 0;
-});
+}
+
 
 //save list
 document.getElementById("save-list").addEventListener("click", () => {
@@ -210,6 +214,27 @@ function selectRecommended() {
 
 
 
+//marking observation as bad
+document.querySelectorAll(".mark-as-bad-button").forEach(el => {
+    el.addEventListener("click", () => {
+        // show marked
+        el.classList.add("marked");
+
+        // tell firebase
+        // addBadId(current.taxon.id, current.id, mode);
+
+        // remove from my observations, including the queue
+        taxon_obs[current.taxon.id] = taxon_obs[current.taxon.id].filter(obj => obj.id !== current.id);
+        taxon_queues[current.taxon.id] = taxon_queues[current.taxon.id].filter(obj => obj.id !== current.id);
+        if (next.id === current.id) next = pickObservation();
+
+        // refill observations if running low
+
+    });
+})
+
+
+
 //keypress handling
 document.addEventListener("keypress", (e) => {
 
@@ -234,8 +259,6 @@ document.addEventListener("keypress", (e) => {
 //check answer
 document.getElementById("guess-button").addEventListener("click", checkAnswer);
 document.getElementById("skip-button").addEventListener("click", (e) => {
-    // mark as bad
-    addBadId(current.taxon.id, current.id, mode);
     // show a loader so the user knows something is happening (if we transition instantly, it looks like nothing happened)
     e.target.style.visibility = "hidden";
     const loader = document.getElementById("skip-loader");

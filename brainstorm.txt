@@ -1,5 +1,6 @@
 TODO
 
+Only show squirrels if all taxa are birds
 Remove clear list button - never used
 Instead, always show recommend and clear selection ("DESELECT ALL")
 Show selection checkboxes, by default all are selected - if user wants to practice 4, they can deselect all and then tap those to practice

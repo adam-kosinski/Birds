@@ -4,7 +4,7 @@ let kill_fetch_until_threshold = []; //when fetchUntilThreshold is called, it ap
 
 //STATE VARIABLES - get reset when we go back to list (see game_events.js)
 let taxon_obs = {}; //stores lists of objects, organized by taxon id keys
-let taxon_queues = {}; //stores lists of observation objects for each taxon in order of showing, pop from beginning of list to show and refill if empty
+let taxon_queues = {}; //stores lists of observation objects for each taxon in order of showing, pop from beginning of list to show and refill if empty, helps with not repeating observations frequently
 let taxon_bag = []; //list of unordered taxon ids, perhaps each id in here multiple times, pick a random item to determine next taxon to show
 let bad_ids = {}; // object (taxon_id: [array of iNaturalist ids]) that records ids that were skipped before or are otherwise bad (e.g. missing audio). This coordinates w firebase
 let current; //current observation object
@@ -30,7 +30,7 @@ let already_notified_full_progress_bar = false;
 
 function setGameState(state) {
     game_state = state;
-    document.getElementById("birdsong-main").dataset.gameState = state;
+    document.getElementById("game-main").dataset.gameState = state;
 }
 
 function setMode(new_mode) {
@@ -38,7 +38,7 @@ function setMode(new_mode) {
     document.querySelectorAll("#mode-toggle button").forEach(el => el.classList.remove("selected"));
     document.querySelector("[data-mode=" + new_mode + "]").classList.add("selected");
     mode = new_mode;
-    document.getElementById("birdsong-main").dataset.mode = mode;
+    document.getElementById("game-main").dataset.mode = mode;
     document.getElementById("bird-image").style.cursor = new_mode == "visual_id" ? "zoom-in" : "default";
 
     //update links
@@ -120,7 +120,7 @@ function pickObservation() {
 
 
 function resetQueue(taxon_id) {
-    let queue = taxon_queues[taxon_id]
+    let queue = taxon_queues[taxon_id];
     taxon_obs[taxon_id].forEach(obj => {
         let insert_idx = Math.floor((queue.length + 1) * Math.random());
         queue.splice(insert_idx, 0, obj);
@@ -168,7 +168,7 @@ async function initGame() {
     if (!data_was_fetched) {
         alert("Failed to find research grade iNaturalist observations for any of the chosen birds. Please try again with different birds.");
         document.getElementById("bird-list-loader").style.display = "none";
-        setGameState(INACTIVE);
+        resetAndExitGame();
         return;
     }
 
@@ -438,6 +438,7 @@ function nextObservation() {
         el.classList.remove("selected");
     });
     document.getElementById("image-attribution").classList.remove("visible");
+    document.querySelectorAll(".mark-as-bad-button").forEach(el => el.classList.remove("marked"));
 
     //game mode specific stuff
 
@@ -519,7 +520,7 @@ function checkAnswer() {
     );
 
     let correct = Boolean(guess_obj && (current.taxon.id == guess_obj.id || current.taxon.ancestor_ids.includes(guess_obj.id)));
-    document.getElementById("birdsong-main").dataset.correct = guess.length > 0 ? correct : "no-guess"
+    document.getElementById("game-main").dataset.correct = guess.length > 0 ? correct : "no-guess"
 
     //update taxon picking probabilities and user data (if storing)
     //don't do anything if squirrel intruder, those are jokes

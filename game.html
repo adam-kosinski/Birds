@@ -96,9 +96,15 @@
                 </button>
             </div>
         </nav>
-        <div id="birdsong-main" data-mode="birdsong">
-            <audio id="birdsong-audio-0" controls autoplay controlslist="nodownload"></audio>
-            <audio id="birdsong-audio-1" controls controlslist="nodownload"></audio>
+        <div id="game-main" data-mode="birdsong">
+            <div id="audio-container">
+                <div>
+                    <audio id="birdsong-audio-0" controls autoplay controlslist="nodownload"></audio>
+                    <audio id="birdsong-audio-1" controls controlslist="nodownload"></audio>
+                </div>
+                <button class="mark-as-bad-button">Don't Show Again</button>
+            </div>
+
             <p id="birdsong-question"></p>
 
             <div id="bird-image-container" class="birdsong-subflex">
@@ -122,6 +128,7 @@
                 </div>
                 <!-- zoom instructions, only visible for media (hover: hover), see game.css -->
                 <p id="scroll-to-zoom-instructions" class="font-small">(scroll or click image to zoom)</p>
+                <button class="mark-as-bad-button">Don't Show Again</button>
             </div>
 
             <div id="bird-grid">
