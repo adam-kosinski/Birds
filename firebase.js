@@ -27,57 +27,26 @@ async function getBadIds(taxa, mode) {
 }
 
 function addBadId(taxon_id, iNaturalist_id, mode) {
-    const taxon_ref = db.collection(`bad-observations-${mode}`).doc(String(taxon_id)).update({
-        ids: firebase.firestore.FieldValue.arrayUnion((iNaturalist_id))
-    });
-}
-
-
-async function setBadIds(bad_ids, mode) {
-    // bad_ids is an object, key is taxon id, value is array of iNaturalist observation ids
-    // the array will have a property dirty=true if we changed it since getting it from firebase
-
-    // filter bad_ids so we only update firebase if we have something to add
-    const taxa_to_update = [];
-    for (let taxon_id in bad_ids) {
-        if (bad_ids[taxon_id].length === 0) continue;
-        if (!bad_ids[taxon_id].dirty) continue;
-        taxa_to_update.push(taxon_id);
-    }
-
-    // get data again, in case it changed
-    let firebase_bad_ids = await getBadIds(taxa_to_update, mode);
-
-    // reconcile and write
-    const collection = db.collection(`bad-observations-${mode}`);
-    for (let taxon_id of taxa_to_update) {
-        // remove any duplicates
-        const set = new Set(bad_ids[taxon_id]);
-        const ids = Array.from(set);
-
-        // add any new ids from firebase to my id list
-        firebase_bad_ids[taxon_id].forEach(id => { if (!set.has(id)) ids.push(id) });
-
-        // write
-        collection.doc(String(taxon_id)).set({ ids: ids });
-        bad_ids[taxon_id].dirty = false;
+    const doc = db.collection(`bad-observations-${mode}`).doc(String(taxon_id));
+    try {
+        doc.update({ ids: firebase.firestore.FieldValue.arrayUnion((iNaturalist_id)) });
+    } catch {
+        // doc probably doesn't exist, create it
+        doc.set({ ids: [iNaturalist_id] });
     }
 }
 
 
-// to send a request when closing the page, we need to use navigator.sendBeacon(), or fetch() with keepalive specified
-// sendBeacon() is probably most appropriate
-// but we need to send an HTTP request
-// so can use the firebase api
+// Old idea: optimize firebase writes by updating in bulk instead of after every game question
+// We'd want to update when the game ended, or when the user left the page
+
+// to send a request when closing the page, we need to use navigator.sendBeacon()
+// but we need to know what HTTP request to send - firebase has an API
 
 // here is a GET
 // await (await fetch("https://firestore.googleapis.com/v1beta1/projects/birds-bbabb/databases/(default)/documents/bad-observations-birdsong/9083?key=AIzaSyDZT6ZnYnrOvWjN3__u2vz7M3gmFS8hX2A")).json()
 
-// problem: we want to fetch the current data and then send a POST with the reconciled data
-
-// hmmm... seems we can do this with one function, maybe we can do this with one HTTP request too then:
-// https://firebase.google.com/docs/firestore/manage-data/add-data#update_elements_in_an_array
-// YES WE CAN!
+// how to do this (see webpages and below code):
 // https://firebase.google.com/docs/firestore/reference/rest/v1beta1/projects.databases.documents/batchWrite
 // https://firebase.google.com/docs/firestore/reference/rest/v1beta1/Write#FieldTransform
 // problem though... the REST API needs an access token from OAuth, unlike using the namespaced API
@@ -92,6 +61,7 @@ function addBadIds(bad_ids_to_add, mode) {
     }
     const post_data = JSON.stringify({"writes": writes});
     console.log(post_data)
+    // TODO set appropriate headers
 }
 
 function makeBadIdWriteObject(taxon_id, mode, ids) {

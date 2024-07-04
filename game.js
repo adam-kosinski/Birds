@@ -9,7 +9,6 @@ let taxon_queues = {}; //stores lists of observation objects for each taxon in o
 let taxon_bag = []; //list of unordered taxon ids, perhaps each id in here multiple times, pick a random item to determine next taxon to show
 let rejected_ids = []; //list of observation ids that we didn't like (because missing audio, might add other reasons in future), these will not be fetched
 let bad_ids = {}; // object (taxon_id: [array of iNaturalist ids]) that records ids that were skipped before or are otherwise bad (e.g. missing audio). This coordinates w firebase
-let bad_ids_to_add = {}; // Same format as bad_ids, but stuff to add to firebase. As ids are sent to firebase, they get removed from this
 
 let n_pages_by_query = {}; //cache for total results queries, key is args string '?sounds=true' etc, value is n pages
 //not super useful but hey why not, doesn't hurt
@@ -68,12 +67,6 @@ function setMode(new_mode) {
     if (loadBooleanSetting("auto-select-recommended", false)) {
         selectRecommended();
     }
-}
-
-function markAsBadId(taxon_id, id){
-    if(!(taxon_id in bad_ids)) bad_ids[taxon_id] = [];
-    bad_ids[taxon_id].push(id);
-    bad_ids[taxon_id].dirty = true; // so we know we changed something
 }
 
 
@@ -333,7 +326,7 @@ async function fetchObservationData(taxa_ids = undefined, extra_args = "", per_p
 
         //make sure audio has a working url (not always the case)
         if (mode == "birdsong" && !obj.sounds[0].file_url) {
-            if(!current.is_squirrel_intruder) markAsBadId(obj.taxon.id, obj.id);
+            if(!current.is_squirrel_intruder) addBadId(obj.taxon.id, obj.id, mode); //firebase.js
             continue;
         }
 

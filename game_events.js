@@ -21,9 +21,6 @@ document.getElementById("back-to-list").addEventListener("click", () => {
         selectRecommended();
     }
 
-    //send bad ids to firebase before resetting them
-    setBadIds(bad_ids, mode);
-
     //reset vars
     obs = [];
     taxa_to_use = []; //probably don't need to reset, but just in case
@@ -238,7 +235,7 @@ document.addEventListener("keypress", (e) => {
 document.getElementById("guess-button").addEventListener("click", checkAnswer);
 document.getElementById("skip-button").addEventListener("click", (e) => {
     // mark as bad
-    markAsBadId(current.taxon.id, current.id);
+    addBadId(current.taxon.id, current.id, mode);
     // show a loader so the user knows something is happening (if we transition instantly, it looks like nothing happened)
     e.target.style.visibility = "hidden";
     const loader = document.getElementById("skip-loader");
@@ -354,20 +351,3 @@ document.getElementById("funny-bird").addEventListener("click", () => {
         funny_bird.classList.remove("out");
     }, 750);
 });
-
-
-
-//leaving the page
-//use visibilitychange for mobile
-
-document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden") {
-        // update firebase with bad ids from this game
-        setBadIds(bad_ids, mode);
-    }
-})
-window.addEventListener("beforeunload", e => {
-    // update firebase with bad ids from this game
-    // e.preventDefault();
-    setBadIds(bad_ids, mode);
-})
