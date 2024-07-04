@@ -180,7 +180,8 @@ function selectRecommended() {
         }
 
         // overwrite some with taxa needing review if they exist
-        // sort so that longest-ago-reviewed taxa come first
+        // sort so that longest-ago-reviewed taxa come 
+        taxa_to_review.filter(obj => !recommended_ids.contains(obj.taxon_id));
         taxa_to_review.sort((a, b) => b.hours_since_reviewed - a.hours_since_reviewed);
         const n_review_spots = Math.min(taxa_to_review.length, Math.ceil(FRACTION_RESERVED_FOR_REVIEW * recommended_ids.length));
         const reviewing = taxa_to_review.slice(0, n_review_spots)

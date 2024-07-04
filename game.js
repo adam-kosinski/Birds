@@ -9,6 +9,7 @@ let taxon_queues = {}; //stores lists of observation objects for each taxon in o
 let taxon_bag = []; //list of unordered taxon ids, perhaps each id in here multiple times, pick a random item to determine next taxon to show
 let rejected_ids = []; //list of observation ids that we didn't like (because missing audio, might add other reasons in future), these will not be fetched
 let bad_ids = {}; // object (taxon_id: [array of iNaturalist ids]) that records ids that were skipped before or are otherwise bad (e.g. missing audio). This coordinates w firebase
+let bad_ids_to_add = {}; // Same format as bad_ids, but stuff to add to firebase. As ids are sent to firebase, they get removed from this
 
 let n_pages_by_query = {}; //cache for total results queries, key is args string '?sounds=true' etc, value is n pages
 //not super useful but hey why not, doesn't hurt
@@ -546,8 +547,8 @@ function checkAnswer() {
                 updateTaxonProficiency(correct_id, mode, false);
             }
             else {
-                // skipped
-                updateTaxonBag(correct_id, SKIPPED_ADD_COPIES);
+                // no guess
+                updateTaxonBag(correct_id, NO_GUESS_ADD_COPIES);
             }
         }
     }

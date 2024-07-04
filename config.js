@@ -14,7 +14,7 @@ const MAX_TAXON_BAG_COPIES = 11; //number of times a taxon can be in the taxon b
 const START_TAXON_BAG_COPIES = 7; //may add fewer copies for taxa that the user is very proficient at - see game.js, initGame()
 const CORRECT_REMOVE_COPIES = 2; //number of copies to remove from taxon_bag if the user got a question on this taxon right
 const INCORRECT_ADD_COPIES = 3; //number of copies to add if incorrect, for both the guess and what it actually is
-const SKIPPED_ADD_COPIES = 0; //number of copies to add to bag if no guess - 0 seems okay, since some recordings/images are v bad
+const NO_GUESS_ADD_COPIES = 0; //number of copies to add to bag if no guess - 0 seems okay, since some recordings/images are v bad
 // note that how the taxon bag works affects the progress bar:
 // the progress bar is keeping track of how many fewer times the taxon appears in the taxon bag than when we started
 // so if you get several wrong, you have to get several right to get the # copies back under START_TAXON_BAG_COPIES

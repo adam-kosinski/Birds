@@ -9,15 +9,9 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// method for using:
-// when a game starts, get the bad ids and store in a variable
-// as the user plays the game, add ids to this object
-// when the game ends or before the page unloads, update the database with this object
-// this way we only have to do one write
-// BTW we will need to get bad ids again right before writing in case someone else changed it
-
 
 async function getBadIds(taxa, mode) {
+    // gets iNaturalist ids of bad observations from firebase
     const collection = db.collection(`bad-observations-${mode}`);
     const bad_ids = {}; // key is taxon id, value is array of iNaturalist observation ids
     const promises = [];
@@ -32,6 +26,12 @@ async function getBadIds(taxa, mode) {
     return bad_ids;
 }
 
+function addBadId(taxon_id, iNaturalist_id, mode) {
+    const taxon_ref = db.collection(`bad-observations-${mode}`).doc(String(taxon_id)).update({
+        ids: firebase.firestore.FieldValue.arrayUnion((iNaturalist_id))
+    });
+}
+
 
 async function setBadIds(bad_ids, mode) {
     // bad_ids is an object, key is taxon id, value is array of iNaturalist observation ids
@@ -40,8 +40,8 @@ async function setBadIds(bad_ids, mode) {
     // filter bad_ids so we only update firebase if we have something to add
     const taxa_to_update = [];
     for (let taxon_id in bad_ids) {
-        if(bad_ids[taxon_id].length === 0) continue;
-        if(!bad_ids[taxon_id].dirty) continue;
+        if (bad_ids[taxon_id].length === 0) continue;
+        if (!bad_ids[taxon_id].dirty) continue;
         taxa_to_update.push(taxon_id);
     }
 
@@ -80,3 +80,32 @@ async function setBadIds(bad_ids, mode) {
 // YES WE CAN!
 // https://firebase.google.com/docs/firestore/reference/rest/v1beta1/projects.databases.documents/batchWrite
 // https://firebase.google.com/docs/firestore/reference/rest/v1beta1/Write#FieldTransform
+// problem though... the REST API needs an access token from OAuth, unlike using the namespaced API
+/*
+
+function addBadIds(bad_ids_to_add, mode) {
+    // appends iNaturalist ids of bad observations to firebase
+    // bad_ids_to_add is an object, key is taxon id, value is array of iNaturalist observation ids
+    const writes = [];
+    for(const [taxon_id, ids] of Object.entries(bad_ids_to_add)){
+        writes.push(makeBadIdWriteObject(taxon_id, mode, ids))
+    }
+    const post_data = JSON.stringify({"writes": writes});
+    console.log(post_data)
+}
+
+function makeBadIdWriteObject(taxon_id, mode, ids) {
+    return {
+        "transform": {
+            "document": `projects/birds-bbabb/databases/(default)/documents/bad-observations-${mode}/${taxon_id}`,
+            "fieldTransforms": [{
+                "fieldPath": "ids",
+                "appendMissingElements": {
+                    "values": ids.map(id => { return { "integerValue": id } })
+                }
+            }]
+        }
+    }
+}
+
+*/
