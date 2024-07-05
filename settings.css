@@ -22,3 +22,11 @@
     padding: 0 20px 40px 20px;
     overflow-y: auto;
 }
+
+#settings-container button {
+    background-color: white;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 5px;
+}

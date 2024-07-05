@@ -162,7 +162,22 @@ loadLocalStorage();
 
 
 
-// transferring data to another device utility functions
+
+// exporting / importing data
+
+document.getElementById("export-data-button").addEventListener("click", () => {
+    const data_string = getTaxonStorageString();
+    navigator.clipboard.writeText(data_string);
+    alert("Data has been copied to your clipboard!");
+});
+document.getElementById("import-data-button").addEventListener("click", () => {
+    const data_string = prompt("Please enter the data that was copied from another device. WARNING: this will overwrite any existing data stored on this device.");
+    if(!data_string) return;
+    // set storing data setting to true, otherwise this import makes no sense
+    localStorage.setItem("setting:store-progress", true);
+    applySetting("store-progress", true);
+    loadTaxonStorageString(data_string);
+});
 
 function getTaxonStorageString() {
     const taxon_data = Object.entries(localStorage).filter(a => a[0].startsWith("taxon"));
