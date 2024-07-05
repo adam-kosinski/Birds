@@ -124,7 +124,7 @@ function selectRecommended() {
         // - learn 4 (A), learn 4 (B), learn 8 (A+B), learn 4 (C), learn 8 (C + 4 from A+B) -- we would like to do learn 4 (D) before moving C up
         // - this is especially an issue if you have just one taxa in a level and the ones above are all mastered - would like to learn new taxa instead of recommending
 
-        const taxa_to_review = [];
+        let taxa_to_review = [];
 
         // organize taxa into levels: key = min difficulty achieved to belong
         const levels = { 0: [] };
@@ -182,7 +182,7 @@ function selectRecommended() {
 
         // overwrite some with taxa needing review if they exist
         // sort so that longest-ago-reviewed taxa come 
-        taxa_to_review.filter(obj => !recommended_ids.includes(obj.taxon_id));
+        taxa_to_review = taxa_to_review.filter(obj => !recommended_ids.includes(obj.taxon_id));
         taxa_to_review.sort((a, b) => b.hours_since_reviewed - a.hours_since_reviewed);
         const n_review_spots = Math.min(taxa_to_review.length, Math.ceil(FRACTION_RESERVED_FOR_REVIEW * recommended_ids.length));
         const reviewing = taxa_to_review.slice(0, n_review_spots)
@@ -198,6 +198,7 @@ function selectRecommended() {
             recommended_ids.push(taxon_ids.splice(idx, 1)[0]);
         }
     }
+    console.log("recommended ids", recommended_ids);
 
     // select
     clearListSelection();
