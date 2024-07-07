@@ -107,7 +107,7 @@ document.getElementById("clear-selection").addEventListener("click", clearListSe
 document.getElementById("select-recommended").addEventListener("click", selectRecommended);
 
 function selectRecommended() {
-    if (bird_taxa.length === 0) return;
+    if (list_taxa.length === 0) return;
 
     let recommended_ids = [];
 
@@ -129,7 +129,7 @@ function selectRecommended() {
         // organize taxa into levels: key = min difficulty achieved to belong
         const levels = { 0: [] };
         RECOMMENDED_SUBSET_SIZES.forEach(size => levels[size] = []);
-        bird_taxa.forEach(taxon => {
+        list_taxa.forEach(taxon => {
             const data = loadTaxonData(taxon.id, mode);
             if (data.hours_since_reviewed > HOURS_SINCE_REVIEWED_THRESHOLD) {
                 taxa_to_review.push(data);
@@ -164,7 +164,7 @@ function selectRecommended() {
             // concatenate levels into one big list, and pick from the front
             // sort ascending by proficiency and otherwise in original order - have to do this second sort b/c now proficiency should be going in the same direction as the original taxon list
             Object.values(levels).forEach(list => list.sort((a, b) => {
-                const taxon_order = bird_taxa.map(taxon => taxon.id);
+                const taxon_order = list_taxa.map(taxon => taxon.id);
                 return a.proficiency - b.proficiency || taxon_order.indexOf(a.taxon_id) - taxon_order.indexOf(b.taxon_id);
             }));
             const big_list = [0, ...RECOMMENDED_SUBSET_SIZES.toReversed()].flatMap(size => levels[size]);
@@ -192,7 +192,7 @@ function selectRecommended() {
     }
     else {
         // not storing proficiencies, just pick a random set of the smallest subset size
-        const taxon_ids = bird_taxa.map(taxon => taxon.id);
+        const taxon_ids = list_taxa.map(taxon => taxon.id);
         for (let i = 0; i < RECOMMENDED_SUBSET_SIZES.slice(-1); i++) {
             const idx = Math.floor(taxon_ids.length * Math.random());
             recommended_ids.push(taxon_ids.splice(idx, 1)[0]);
@@ -239,7 +239,7 @@ document.querySelectorAll(".mark-as-bad-button").forEach(el => {
             const current_taxon_id = current.taxon.id; // freeze this since it could change during the async fetches
             fetchUntilThreshold(N_OBS_PER_TAXON, 3000).then(result => {
                 if (!result.success && taxon_obs[current_taxon_id].length === 0 && result.failure_reason == "not_enough_observations") {
-                    const common_name = bird_taxa.find(obj => obj.id == current_taxon_id).preferred_common_name;
+                    const common_name = list_taxa.find(obj => obj.id == current_taxon_id).preferred_common_name;
                     alert("Failed to find research grade iNaturalist observations for " + common_name + ". This doesn't break anything (unless no other species exist), just no questions will be about these species.");
                 }
             })

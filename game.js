@@ -45,7 +45,7 @@ function setMode(new_mode) {
     document.querySelectorAll("#bird-list a").forEach(a => {
         let container = a.closest(".bird-list-item");
         let taxon_id = Number(container.dataset.taxonId);
-        let taxon_obj = bird_taxa.find(obj => obj.id == taxon_id);
+        let taxon_obj = list_taxa.find(obj => obj.id == taxon_id);
         a.href = getInfoURL(taxon_obj);
     });
 
@@ -53,7 +53,7 @@ function setMode(new_mode) {
     setURLParam("mode", mode);
 
     //update proficiency display
-    bird_taxa.forEach(obj => {
+    list_taxa.forEach(obj => {
         refreshTaxonProficiencyDisplay(obj.id, new_mode);
     });
 
@@ -140,9 +140,9 @@ async function initGame() {
     //get taxa_to_use
     taxa_to_use = Array.from(document.querySelectorAll("#bird-list .selected")).map(el => {
         let id = el.dataset.taxonId;
-        return bird_taxa.find(obj => obj.id == id);
+        return list_taxa.find(obj => obj.id == id);
     });
-    if (taxa_to_use.length === 0) taxa_to_use = bird_taxa;
+    if (taxa_to_use.length === 0) taxa_to_use = list_taxa;
     console.log("taxa to use", taxa_to_use)
 
     //init taxon_obs, taxon_queues, taxon bag
@@ -230,7 +230,7 @@ async function initGame() {
         if (no_obs_ids.length == 0) return;
 
         let failed_names = no_obs_ids.map(id_str => {
-            return bird_taxa.find(obj => obj.id == Number(id_str)).preferred_common_name;
+            return list_taxa.find(obj => obj.id == Number(id_str)).preferred_common_name;
         });
         alert("Failed to find research grade iNaturalist observations for " + failed_names.join(", ") + ". This doesn't break anything, just no questions will be about these species.");
     }
@@ -515,7 +515,7 @@ function checkAnswer() {
 
     //find taxon object that matches the guess, if it exists
     //concat with the squirrel taxon to check for correctness of squirrel intruder
-    let guess_obj = bird_taxa.concat([squirrel_taxon_obj]).find(obj =>
+    let guess_obj = list_taxa.concat([squirrel_taxon_obj]).find(obj =>
         guess.toLowerCase() == obj.name.toLowerCase() ||
         guess.toLowerCase() == obj.preferred_common_name.toLowerCase()
     );

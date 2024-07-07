@@ -1,5 +1,5 @@
-let bird_taxa = []; //list of iNaturalist taxon objects that are on the practice list
-let taxa_to_use = []; //subset of bird_taxa being used this game, initialized at game init based on the selected birds
+let list_taxa = []; //list of iNaturalist taxon objects that are on the practice list
+let taxa_to_use = []; //subset of list_taxa being used this game, initialized at game init based on the selected birds
 let place_id;
 
 //automatically read taxa from URL and populate the HTML and JS taxa lists
@@ -33,7 +33,7 @@ async function addBirds(taxa_id_list) {
     if (game_state !== INACTIVE) return;
 
     //extract only taxon ids we don't have
-    let ids_we_have = bird_taxa.map(obj => obj.id);
+    let ids_we_have = list_taxa.map(obj => obj.id);
 
     let ids_to_fetch = [];
     taxa_id_list.forEach(id => {
@@ -91,7 +91,7 @@ async function addBirds(taxa_id_list) {
         }
 
         //add to JS list
-        bird_taxa.push(taxon);
+        list_taxa.push(taxon);
 
         //add to HTML list ----------------
 
@@ -164,7 +164,7 @@ async function addBirds(taxa_id_list) {
     document.getElementById("start-game-button").removeAttribute("disabled");
 
     //update count
-    document.getElementById("n-species-display").textContent = bird_taxa.length;
+    document.getElementById("n-species-display").textContent = list_taxa.length;
 
     //select recommended automatically if setting is enabled, now that taxa have loaded
     if(loadBooleanSetting("auto-select-recommended", false)){
@@ -184,27 +184,27 @@ function removeBird(taxon_id) {
     container.parentElement.removeChild(container);
 
     //remove from JS
-    for (let i = 0; i < bird_taxa.length; i++) {
-        if (bird_taxa[i].id == taxon_id) {
-            bird_taxa.splice(i, 1);
+    for (let i = 0; i < list_taxa.length; i++) {
+        if (list_taxa[i].id == taxon_id) {
+            list_taxa.splice(i, 1);
             break;
         }
     }
 
     //update count
-    document.getElementById("n-species-display").textContent = bird_taxa.length;
+    document.getElementById("n-species-display").textContent = list_taxa.length;
 
     //remove from URL
-    if (bird_taxa.length == 0) {
+    if (list_taxa.length == 0) {
         //clear search params
         setURLParam("taxa", "");
     }
     else {
-        setURLParam("taxa", bird_taxa.map(obj => obj.id).join(","));
+        setURLParam("taxa", list_taxa.map(obj => obj.id).join(","));
     }
 
     //if no birds selected, update message and button
-    if (bird_taxa.length == 0) {
+    if (list_taxa.length == 0) {
         document.getElementById("bird-list-message").style.display = "block";
         document.getElementById("start-game-button").disabled = true;
         document.getElementById("above-list-container").style.display = "none";
@@ -213,8 +213,8 @@ function removeBird(taxon_id) {
 
 document.getElementById("clear-list").addEventListener("click", () => {
     if (!confirm("Are you sure you want to clear this bird list?")) return;
-    while (bird_taxa.length > 0) {
-        removeBird(bird_taxa[0].id);
+    while (list_taxa.length > 0) {
+        removeBird(list_taxa[0].id);
     }
 });
 
