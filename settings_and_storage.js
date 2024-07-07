@@ -149,6 +149,11 @@ function updateTaxonReviewedTimestamp(taxon_id, mode) {
 }
 
 
+function clearTaxonData(taxon_id, mode) {
+    localStorage.removeItem(`taxon-${taxon_id}-${mode}`);
+}
+
+
 
 
 function loadLocalStorage() {
