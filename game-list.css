@@ -168,7 +168,8 @@
 
 #above-list-container {
     display: none; /* usually grid */
-    grid-template-columns: 1fr auto auto;
+    max-width: 350px;
+    grid-template-columns: auto auto auto;
     align-items: center;
 }
 
