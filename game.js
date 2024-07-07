@@ -262,7 +262,7 @@ async function fetchObservationData(taxa_ids = undefined, extra_args = "", per_p
     if (!per_page) {
         //don't try to fetch with a big per page if realistically we don't need that many observations
         let n_obs_needed_ish = taxa_ids.length * N_OBS_PER_TAXON;
-        per_page = Math.min(DEFAULT_PER_PAGE, 3 * n_obs_needed_ish);
+        per_page = Math.min(DEFAULT_PER_PAGE, 3 * n_obs_needed_ish); // times 3 because some taxa are more common than others, would like to get a good amount of the less common
     }
     const taxa_id_string = taxa_ids.join(",");
 
