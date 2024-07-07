@@ -129,12 +129,19 @@ function updateTaxonProficiency(taxon_id, mode, answered_correctly) {
 
 
 function updateTaxonDifficultyAchieved(taxon_id, mode, difficulty) {
+    // don't store anything if the user doesn't want us to
+    if (!loadBooleanSetting("store-progress", false)) return;
+
     const data = loadTaxonData(taxon_id, mode, true);
-    data.difficulty_achieved = Math.max(data.difficulty_achieved, difficulty);
+    data.difficulty_achieved = data.difficulty_achieved ? Math.max(data.difficulty_achieved, difficulty) : difficulty;
     localStorage.setItem(`taxon-${taxon_id}-${mode}`, JSON.stringify(data));
 }
 
+
 function updateTaxonReviewedTimestamp(taxon_id, mode) {
+    // don't store anything if the user doesn't want us to
+    if (!loadBooleanSetting("store-progress", false)) return;
+
     // time is now
     const data = loadTaxonData(taxon_id, mode, true);
     data.reviewed_timestamp = Date.now();

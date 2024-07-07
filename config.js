@@ -548,7 +548,7 @@ const PRESETS = {
             29200,    //Rough Greensnake
             27137,    //North American Racer
             28557,    //Red-bellied Snake
-            539765,    //Rough Earthsnake
+            28102,    //Rough Earthsnake
             28362,    //Common Garter Snake
             26575,    //ring-necked snake
             29813,    //Eastern Kingsnake

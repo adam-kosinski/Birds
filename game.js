@@ -142,7 +142,7 @@ async function initGame() {
         let id = el.dataset.taxonId;
         return bird_taxa.find(obj => obj.id == id);
     });
-    if (taxa_to_use.length == 0) taxa_to_use = bird_taxa;
+    if (taxa_to_use.length === 0) taxa_to_use = bird_taxa;
     console.log("taxa to use", taxa_to_use)
 
     //init taxon_obs, taxon_queues, taxon bag
