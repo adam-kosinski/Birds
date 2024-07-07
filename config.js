@@ -50,8 +50,8 @@ const FRACTION_RESERVED_FOR_REVIEW = 0.25; // this fraction of recommended subse
 
 
 function getInfoURL(taxon_obj) {
-    if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank == "species") {
-        return "https://www.allaboutbirds.org/guide/" + taxon_obj.preferred_common_name.replaceAll(" ", "_").replaceAll("'", "") + (mode == "birdsong" ? "/sounds" : "/id");
+    if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank === "species") {
+        return "https://www.allaboutbirds.org/guide/" + taxon_obj.preferred_common_name.replaceAll(" ", "_").replaceAll("'", "") + (mode === "birdsong" ? "/sounds" : "/id");
     }
     //Amphibians and Reptiles
     if ((taxon_obj.ancestor_ids.includes(20978) || taxon_obj.ancestor_ids.includes(26036)) && taxon_obj.rank_level <= 10) {  // rank level 10 is species, 5 is subspecies
@@ -86,21 +86,21 @@ function getInfoURL(taxon_obj) {
     //Fungi - mushroomexpert.com
     //check if fungus and not lichen since the iNaturalist fungi taxon includes lichens
     let not_on_mushroom_expert = [144013];
-    if (taxon_obj.ancestor_ids.includes(47170) && !taxon_obj.ancestor_ids.includes(54743) && taxon_obj.rank == "species" && !not_on_mushroom_expert.includes(taxon_obj.id)) {
-        if (taxon_obj.id == 1238700) return "https://www.mushroomexpert.com/Armillaria_tabescens.html";
-        if (taxon_obj.id == 972793) return "https://www.mushroomexpert.com/lycoperdon_pyriforme.html";
-        if (taxon_obj.id == 786918) return "https://www.mushroomexpert.com/lenzites_betulina.html";
-        if (taxon_obj.id == 352462) return "https://www.mushroomexpert.com/strobilomyces_floccopus.html";
+    if (taxon_obj.ancestor_ids.includes(47170) && !taxon_obj.ancestor_ids.includes(54743) && taxon_obj.rank === "species" && !not_on_mushroom_expert.includes(taxon_obj.id)) {
+        if (taxon_obj.id === 1238700) return "https://www.mushroomexpert.com/Armillaria_tabescens.html";
+        if (taxon_obj.id === 972793) return "https://www.mushroomexpert.com/lycoperdon_pyriforme.html";
+        if (taxon_obj.id === 786918) return "https://www.mushroomexpert.com/lenzites_betulina.html";
+        if (taxon_obj.id === 352462) return "https://www.mushroomexpert.com/strobilomyces_floccopus.html";
         return "https://www.mushroomexpert.com/" + taxon_obj.name.toLowerCase().replaceAll(" ", "_") + ".html"
     }
 
     //Bryophytes
     //Use ohiomosslichen.org for mosses, good pictures, simple, and comprehensive
     //illinoiswildflowers.info is more detailed for some mosses but less comprehensive, and maybe a bit of an info dump
-    if (taxon_obj.ancestor_ids.includes(311249) && taxon_obj.rank == "species") {
-        if (taxon_obj.id == 1138520) return "https://ohiomosslichen.org/moss-anomodon-attenuatus/";
-        if (taxon_obj.id == 164650) return "https://ohiomosslichen.org/moss-leucobryum-glaucum/"; //other species of same genus, v similar and article mentions how to tell apart
-        if (taxon_obj.id == 1278022) return "https://ohiomosslichen.org/moss-hypnum-imponens/";
+    if (taxon_obj.ancestor_ids.includes(311249) && taxon_obj.rank === "species") {
+        if (taxon_obj.id === 1138520) return "https://ohiomosslichen.org/moss-anomodon-attenuatus/";
+        if (taxon_obj.id === 164650) return "https://ohiomosslichen.org/moss-leucobryum-glaucum/"; //other species of same genus, v similar and article mentions how to tell apart
+        if (taxon_obj.id === 1278022) return "https://ohiomosslichen.org/moss-hypnum-imponens/";
         return "https://ohiomosslichen.org/moss-" + taxon_obj.name.toLowerCase().replaceAll(" ", "-");
     }
 
@@ -108,8 +108,8 @@ function getInfoURL(taxon_obj) {
     if (taxon_obj.wikipedia_url) return taxon_obj.wikipedia_url;
 
     //Deal with name changes / weird taxa that haven't been synchronized with wikipedia in the iNaturalist database
-    if (taxon_obj.id == 1363728) return "https://en.wikipedia.org/wiki/Grouper";
-    if (taxon_obj.id == 1359791) return "https://en.wikipedia.org/wiki/Anthiinae";
+    if (taxon_obj.id === 1363728) return "https://en.wikipedia.org/wiki/Grouper";
+    if (taxon_obj.id === 1359791) return "https://en.wikipedia.org/wiki/Anthiinae";
 
     //Final default is the iNaturalist page for this taxa, which must exist
     return "https://www.inaturalist.org/taxa/" + taxon_obj.id;
@@ -117,23 +117,23 @@ function getInfoURL(taxon_obj) {
 
 
 function getQuestionHTML(mode, taxon_obj, is_squirrel_intruder = false) {
-    let rank = taxon_obj.rank;
+    const rank = taxon_obj.rank;
     let is_bird = taxon_obj.ancestor_ids.includes(3);
     if (is_squirrel_intruder) is_bird = true; // definitely a bird ;)
-    let is_animal = taxon_obj.ancestor_ids.includes(1);
-    let entity_name = is_bird ? "bird " : (is_animal ? "fella " : ""); //appending a space if not blank to make questions work out
+    const is_animal = taxon_obj.ancestor_ids.includes(1);
+    const entity_name = is_bird ? "bird " : (is_animal ? "animal " : ""); //appending a space if not blank to make questions work out
 
-    if (mode == "birdsong") {
-        if (rank == "species") {
+    if (mode === "birdsong") {
+        if (taxon_obj.rank_level <= 10) { // species, subspecies, etc.
             return `<span class='font-large'>What ${entity_name}is singing?</span><br>Select one below or write its name`;
         }
         else {
-            let rank_article = /a|e|i|o|u/.test(rank[0].toLowerCase()) ? "an" : "a";
+            const rank_article = /a|e|i|o|u/.test(rank[0].toLowerCase()) ? "an" : "a";
             return `<span class='font-large'>What ${rank} is this ${entity_name}from?</span><br>Select ${rank_article} ${rank} or write its name`
         }
     }
-    else if (mode == "visual_id") {
-        if (rank == "species") {
+    else if (mode === "visual_id") {
+        if (taxon_obj.rank_level <= 10) { // species, subspecies, etc.
             return `What ${entity_name}is this?`
         }
         else {
