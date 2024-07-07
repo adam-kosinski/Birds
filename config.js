@@ -54,7 +54,7 @@ function getInfoURL(taxon_obj) {
         return "https://www.allaboutbirds.org/guide/" + taxon_obj.preferred_common_name.replaceAll(" ", "_").replaceAll("'", "") + (mode == "birdsong" ? "/sounds" : "/id");
     }
     //Amphibians and Reptiles
-    if ((taxon_obj.ancestor_ids.includes(20978) || taxon_obj.ancestor_ids.includes(26036)) && taxon_obj.rank == "species") {
+    if ((taxon_obj.ancestor_ids.includes(20978) || taxon_obj.ancestor_ids.includes(26036)) && taxon_obj.rank_level <= 10) {  // rank level 10 is species, 5 is subspecies
         return "https://herpsofnc.org/?s=" + taxon_obj.name.replaceAll(" ", "+");
     }
     //Insect orders
@@ -539,32 +539,34 @@ const PRESETS = {
         description: "If those wriggly salamanders can be here we can too.",
         photo: "images/preset_snakes.jpg",
         mode: "visual_id",
+        place_id: "7,30,43", // virginia, north carolina, south carolina - to exclude subspecies that are far away that might look different
         taxa: [
             28562,    //DeKay's Brownsnake
             59644,    //Eastern Ratsnake
-            29305,    //Common Watersnake
+            29306,    //Northern Watersnake (N. sipedon sipedon)
             912622,    //Eastern Copperhead
-            27388,    //Eastern Worm Snake
+            27389,    //Eastern Worm Snake (C. amoenus amoenus)
             29200,    //Rough Greensnake
-            27137,    //North American Racer
-            28557,    //Red-bellied Snake
+            27149,    //Northern Black Racer (Coluber constrictor constrictor)
+            28559,    //Northern Redbelly Snake (S. occipitomaculata occipitomacculata)
             28102,    //Rough Earthsnake
-            28362,    //Common Garter Snake
+            28365,    //Eastern Garter Snake (T. sirtalis sirtalis)
             26575,    //ring-necked snake
             29813,    //Eastern Kingsnake
             29328,    //Plain-bellied Watersnake
             28850,    //Queensnake
-            146718,    //Smooth Earthsnake
+            28109,    //Smooth Earthsnake (V. valeriae valeriae)
             1304769,    //Mole Kingsnake
             29925,    //Eastern Hognose Snake
             28516,    //Southeastern Crowned Snake
             30746,    //Timber Rattlesnake
             73887,    //Corn Snake
             29304,    //Brown Watersnake
-            558951,    //Common Ribbon Snake
+            788326,    //Eastern Ribbon Snake (T. saurita saurita)
+            27377,    //Northern Scarletsnake (C. coccinea copei)
             29793,    //Scarlet Kingsnake
-            904170,    //Northern Cottonmouth
-            515419    //Eastern Milksnake
+            515419,   //Eastern Milksnake
+            904170    //Northern Cottonmouth
         ]
     },
     "Insect Orders (NC)": {
