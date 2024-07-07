@@ -92,8 +92,9 @@ function pickObservation() {
     //pick next observation object, return it. Try not to duplicate the current observation
     //use the taxon_queues to ensure each observation gets a chance to be seen before recycling
 
-    //squirrel intruder
-    if (mode == "birdsong" && Math.random() < SQUIRREL_PROBABILITY) {
+    //squirrel intruder (only for lists of birds b/c that's what is easily confused with squirrels)
+    const all_birds = list_taxa.every(taxon => taxon.ancestor_ids.includes(3));
+    if (all_birds && mode == "birdsong" && Math.random() < SQUIRREL_PROBABILITY) {
         return squirrel_obs[Math.floor(Math.random() * squirrel_obs.length)]
     }
 

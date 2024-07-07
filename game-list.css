@@ -24,6 +24,7 @@
     justify-content: flex-start;
     gap: 8px;
     white-space: nowrap;
+    
     /* for large displays, make the spacing appear more even with a negative margin to the right */
     margin-right: -5px;
 }
@@ -120,8 +121,10 @@
     transform: translateX(10px);
     top: calc(100% - 10px);
     padding-top: 10px;
+
     width: calc(100% - 20px);
     /* 10px on either side of input */
+
     background-color: white;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
@@ -136,6 +139,7 @@
     display: grid;
     grid-template-columns: min-content 1fr min-content;
     /* image, name, map icon */
+
     gap: 10px;
     align-items: center;
 }
@@ -167,7 +171,9 @@
 }
 
 #above-list-container {
-    display: none; /* usually grid */
+    display: none;
+    /* usually grid */
+
     max-width: 350px;
     grid-template-columns: auto auto auto;
     align-items: center;
@@ -189,6 +195,7 @@
 #clear-selection {
     visibility: hidden;
 }
+
 .white-container:has(#bird-list .selected) #clear-selection {
     visibility: visible;
 }
