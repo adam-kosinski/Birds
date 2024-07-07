@@ -12,13 +12,20 @@
     margin-left: 16px;
 }
 
+#list-header {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 40px;
+}
+
 #list-title {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     gap: 8px;
     white-space: nowrap;
-    margin-right: 0;
+    /* for large displays, make the spacing appear more even with a negative margin to the right */
+    margin-right: -5px;
 }
 
 .taxa-to-practice-title {
@@ -96,11 +103,12 @@
     position: relative;
     z-index: 5;
     margin-top: 10px;
+    width: 100%;
+    max-width: 350px;
 }
 
 #add-bird-input {
     width: 100%;
-    max-width: 350px;
     box-sizing: border-box;
     position: relative;
 }
@@ -159,9 +167,8 @@
 }
 
 #above-list-container {
-    display: none;
-    /* usually grid */
-    grid-template-columns: 1fr auto 80px;
+    display: none; /* usually grid */
+    grid-template-columns: 1fr auto auto;
     align-items: center;
 }
 
@@ -179,21 +186,12 @@
 }
 
 #clear-selection {
-    display: none;
-    text-align: right;
+    visibility: hidden;
 }
-
 .white-container:has(#bird-list .selected) #clear-selection {
-    display: block;
-}
-.white-container:has(#bird-list .selected) #select-recommended {
-    display: none;
+    visibility: visible;
 }
 
-#clear-list {
-    grid-column-start: 3;
-    /* so it's in the right place no matter if the clear selection button is visible or not */
-}
 
 #bird-list {
     display: grid;

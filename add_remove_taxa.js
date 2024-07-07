@@ -211,13 +211,6 @@ function removeBird(taxon_id) {
     }
 }
 
-document.getElementById("clear-list").addEventListener("click", () => {
-    if (!confirm("Are you sure you want to clear this bird list?")) return;
-    while (list_taxa.length > 0) {
-        removeBird(list_taxa[0].id);
-    }
-});
-
 
 
 

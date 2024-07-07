@@ -39,39 +39,39 @@
             </button>
         </nav>
         <div class="white-container">
-            <div id="list-title">
-                <p class="font-large">
-                    <span class="birds-to-practice-title">Birds to Practice</span>
-                    <span class="taxa-to-practice-title">Taxa to Practice</span>
-                </p>
-                <button id="start-game-button" disabled class="btn-primary">START</button>
-                <div id="bird-list-loader" class="loader"></div>
-            </div>
-
-            <div id="mode-toggle-container">
-                Game Mode
-                <div id="mode-toggle">
-                    <div id="mode-highlight"></div>
-                    <button id="mode-birdsong" data-mode="birdsong" class="selected">Sound</button>
-                    <button id="mode-visual-id" data-mode="visual_id">Visual ID</button>
+            <div id="list-header">
+                <div id="list-title">
+                    <p class="font-large">
+                        <span class="birds-to-practice-title">Birds to Practice</span>
+                        <span class="taxa-to-practice-title">Taxa to Practice</span>
+                    </p>
+                    <button id="start-game-button" disabled class="btn-primary">START</button>
+                    <div id="bird-list-loader" class="loader"></div>
+                </div>
+    
+                <div id="mode-toggle-container">
+                    Game Mode
+                    <div id="mode-toggle">
+                        <div id="mode-highlight"></div>
+                        <button id="mode-birdsong" data-mode="birdsong" class="selected">Sound</button>
+                        <button id="mode-visual-id" data-mode="visual_id">Visual ID</button>
+                    </div>
+                </div>
+    
+                <div id="bird-input-container">
+                    <div id="taxon-autocomplete-list"></div>
+                    <input id="add-bird-input" type="search" autocomplete="off" placeholder="Search for bird to add">
                 </div>
             </div>
-
-            <div id="bird-input-container">
-                <div id="taxon-autocomplete-list"></div>
-                <input id="add-bird-input" type="search" autocomplete="off" placeholder="Search for bird to add">
-            </div>
+            
 
             <div id="above-list-container">
                 <p class="font-small"><span id="n-species-display">0</span> <span id="species-or-taxa"></span></p>
+                <button id="clear-selection" class="font-small">
+                    <p>DESELECT ALL (<span id="n-selected">0</span>)</p>
+                </button>
                 <button id="select-recommended" class="font-small">
                     <p>SELECT RECOMMENDED</p>
-                </button>
-                <button id="clear-selection" class="font-small">
-                    <p>CLEAR SELECTION (<span id="n-selected">0</span>)</p>
-                </button>
-                <button id="clear-list" class="font-small">
-                    <p>CLEAR LIST</p>
                 </button>
             </div>
             <div id="bird-list-message">No birds selected</div>
@@ -239,7 +239,7 @@
     <script src="game_events.js"></script>
 
     <script src="autocomplete.js"></script>
-    <script src="add_remove_birds.js"></script>
+    <script src="add_remove_taxa.js"></script>
     <script src="range_map.js"></script>
 
 </body>
