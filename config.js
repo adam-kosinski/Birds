@@ -55,6 +55,7 @@ function getInfoURL(taxon_obj) {
     }
     //Amphibians and Reptiles
     if ((taxon_obj.ancestor_ids.includes(20978) || taxon_obj.ancestor_ids.includes(26036)) && taxon_obj.rank_level <= 10) {  // rank level 10 is species, 5 is subspecies
+        if(taxon_obj.id === 73887) return "https://herpsofnc.org/corn-snake/"  // herps of nc has a typo for the scientific name for corn snakes
         return "https://herpsofnc.org/?s=" + taxon_obj.name.replaceAll(" ", "+");
     }
     //Insect orders
