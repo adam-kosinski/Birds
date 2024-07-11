@@ -16,7 +16,10 @@ let ignore_map_move_once = false; //used when setting an iNaturalist place
 
 const iconic_taxon_select = document.getElementById("iconic-taxon-select")
 
-iconic_taxon_select.addEventListener("change", () => {
+iconic_taxon_select.addEventListener("change", updateSelectElementWidth);
+document.addEventListener("load", updateSelectElementWidth);  // for back-forward cache navigation, select defaults to previous selection, want to adjust width
+
+function updateSelectElementWidth() {
     // figure out width of text using hidden element
     const hidden_p = document.getElementById("taxon-select-width-guesser");
     const selectedText = iconic_taxon_select.selectedOptions[0].textContent;
@@ -26,7 +29,7 @@ iconic_taxon_select.addEventListener("change", () => {
     hidden_p.style.display = "none";
 
     iconic_taxon_select.style.width = textWidth + 45 + "px";
-});
+}
 
 
 //init map ----------------------------------------

@@ -29,7 +29,7 @@ document.getElementById("continue-button").addEventListener("click", () => {
     document.querySelectorAll(".list-option.selected").forEach(el => {
         taxon_ids.push(el.dataset.taxonId);
     });
-    let args = "?taxa=" + taxon_ids.join(",");
+    let args = "?mode=visual_id&taxa=" + taxon_ids.join(","); // default to visual id since this is generally always applicable, unlike sound
     window.location = "game.html" + (taxon_ids.length > 0 ? args : "");
 });
 
