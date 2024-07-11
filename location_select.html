@@ -30,7 +30,28 @@
         <nav>
             <a href="index.html"><img class="nav-icon" src="images/birdhouse.png" alt="birdhouse icon">Exit</a>
         </nav>
-        <p class="font-large">Pick Birds by Location</p>
+        <div id="find-by-location-title" class="font-large">Find
+            <div class="select">
+                <select id="iconic-taxon-select" class="font-large">
+                    <!-- value is the taxon id of that group -->
+                    <option value="3">Birds</option>
+                    <option value="20978">Amphibians</option>
+                    <option value="26036">Reptiles</option>
+                    <option value="47158">Insects</option>
+                    <option value="47119">Arachnids</option>
+                    <option value="40151">Mammals</option>
+                    <option value="47178">Ray-Finned Fish</option>
+                    <option value="47115">Molluscs</option>
+                    <option value="47126">Plants</option>
+                    <option value="47170">Fungi & Lichens</option>
+                </select>
+            </div>
+            by Location
+        </div>
+
+        <!-- we want to resize the select element to fit the text, copy the current option to this hidden element to get a sense of natural size -->
+        <p id="taxon-select-width-guesser" class="font-large"></p>
+
         <div id="place-input-container">
             <div id="place-autocomplete-list"></div>
             <input id="place-input" type="search" autocomplete="off" placeholder="Search for iNaturalist Place">
@@ -47,7 +68,7 @@
 
         </div>
         <div id="search-for-birds-container">
-            <button id="search-for-birds" class="btn-primary">SEARCH FOR BIRDS</button>
+            <button id="search-for-birds" class="btn-primary">SEARCH</button>
             <div id="search-loader" class="loader"></div>
         </div>
         <div id="sound-only-container">

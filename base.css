@@ -40,7 +40,8 @@ body {
     object-fit: cover;
 }
 
-a:not(.default-link-style), a:not(.default-link-style):visited {
+a:not(.default-link-style),
+a:not(.default-link-style):visited {
     text-decoration: none;
     color: inherit;
     cursor: pointer;
@@ -96,15 +97,73 @@ nav * {
 
 
 
+/* select styling */
+/* based on https://moderncss.dev/custom-select-styles-with-pure-css/ */
+div.select {
+    /* allow dropdown arrow to appear */
+    display: grid;
+    grid-template-areas: "select";
+    align-items: baseline;
+    width: min-content;
+    border-radius: 0.25em;
+    background-color: #fff;
+    background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+}
+select {
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    padding: 0 1em 0 0;
+    margin: 0;
+    width: 100%;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+
+    width: 20ch;
+    border: 1px solid #777;
+    border-radius: 0.25em;
+    padding: 0.3em 0.5em;
+    grid-area: select;
+
+    /* stack above custom dropdown arrow */
+    z-index: 1;
+}
+/* dropdown arrow */
+.select::before {
+    content: "";
+    width: 0.6em;
+    height: 0.3em;
+    margin-right: calc(0.5em + 1px);
+    background-color: #777;
+    clip-path: polygon(100% 0%, 0% 0%, 50% 100%);
+    grid-area: select;
+    align-self: center;
+    justify-self: end;
+}
 
 
 /* Component styling */
 
-.font-small {font-size: 12px;}
-.font-normal {font-size: 16px;}
-.font-medium {font-size: 20px;}
-.font-large {font-size: 24px;}
-.font-huge {font-size: 48px;}
+.font-small {
+    font-size: 12px;
+}
+
+.font-normal {
+    font-size: 16px;
+}
+
+.font-medium {
+    font-size: 20px;
+}
+
+.font-large {
+    font-size: 24px;
+}
+
+.font-huge {
+    font-size: 48px;
+}
 
 .screen {
     width: 100%;
@@ -116,7 +175,7 @@ nav * {
     background-color: white;
     flex-grow: 1;
     padding-top: 16px;
-    box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
     /* this helps somehow with the list overflow scrolling */
     display: flex;
@@ -144,14 +203,14 @@ nav * {
 
 @media (hover: hover) {
     .btn-primary:not([disabled]):hover {
-        box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     }
 }
 
 .bird-square {
     width: 75px;
     border-radius: 12px;
-    box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .range-map-icon {
@@ -172,6 +231,11 @@ nav * {
 }
 
 @keyframes rotate {
-    from {transform: rotate(0deg);}
-    to {transform: rotate(360deg);}
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }

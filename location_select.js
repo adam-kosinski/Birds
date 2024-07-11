@@ -11,11 +11,29 @@ let place_layer;
 let cached_places = {}; //key = place id, value = place object from autocomplete search
 let ignore_map_move_once = false; //used when setting an iNaturalist place
 
+
+// iconic taxon select ----------------------------------
+
+const iconic_taxon_select = document.getElementById("iconic-taxon-select")
+
+iconic_taxon_select.addEventListener("change", () => {
+    // figure out width of text using hidden element
+    const hidden_p = document.getElementById("taxon-select-width-guesser");
+    const selectedText = iconic_taxon_select.selectedOptions[0].textContent;
+    hidden_p.textContent = selectedText;
+    hidden_p.style.display = "block";
+    const textWidth = hidden_p.getBoundingClientRect().width;
+    hidden_p.style.display = "none";
+
+    iconic_taxon_select.style.width = textWidth + 45 + "px";
+});
+
+
 //init map ----------------------------------------
 
 map = L.map("map", {
-    center: [41, -29],
-    zoom: 1
+    center: [35, -90],
+    zoom: 2
 });
 
 //zoom snap 0 for touch interaction

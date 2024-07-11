@@ -10,6 +10,26 @@
     text-align: center;
 }
 
+#find-by-location-title {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    column-gap: 0.5ch;
+    flex-wrap: wrap;
+}
+
+#iconic-taxon-select {
+    /* good width for the birds option */
+    width: 102.5px;
+}
+
+#taxon-select-width-guesser {
+    display: none;
+    position: absolute;
+    /* will quickly set display block then display none, but keep opacity 0 just in case of flickering */
+    opacity: 0;
+}
+
 #place-input-container {
     width: min(90%, 400px);
     position: relative;
@@ -60,8 +80,10 @@
 }
 
 #map {
-    width: min(calc(100vw - 40px), 400px);
-    height: 300px;
+    /* width: min(calc(100vw - 40px), 400px);
+    height: 300px; */
+    height: calc(100dvh - 360px);
+    width: min(800px, calc(100vw - 40px));
     background-color: white;
     border: 1.5px solid black;
 }
