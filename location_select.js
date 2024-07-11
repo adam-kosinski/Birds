@@ -17,7 +17,11 @@ let ignore_map_move_once = false; //used when setting an iNaturalist place
 const iconic_taxon_select = document.getElementById("iconic-taxon-select")
 
 iconic_taxon_select.addEventListener("change", updateSelectElementWidth);
-document.addEventListener("load", updateSelectElementWidth);  // for back-forward cache navigation, select defaults to previous selection, want to adjust width
+// for back-forward cache navigation, select defaults to previous selection, want to adjust width
+document.addEventListener("DOMContentLoaded", () => {
+    // use set timeout so that this goes in the event queue after whatever script changes the select back to what we had before
+    setTimeout(updateSelectElementWidth, 0);
+});
 
 function updateSelectElementWidth() {
     // figure out width of text using hidden element
