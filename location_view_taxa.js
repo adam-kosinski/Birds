@@ -2,7 +2,7 @@
 
 //switching between screens
 
-document.getElementById("search-for-birds").addEventListener("click", e => {
+document.getElementById("search-for-taxa").addEventListener("click", e => {
     e.target.style.visibility = "hidden";
     document.getElementById("sound-only-checkbox").disabled = true;
     document.getElementById("search-loader").style.display = "block";
@@ -11,22 +11,22 @@ document.getElementById("search-for-birds").addEventListener("click", e => {
     fetchSpeciesCounts(iconic_taxon_id).then(() => {
         document.getElementById("search-loader").style.display = "none";
         document.getElementById("location-screen").style.display = "none";
-        document.getElementById("bird-screen").style.display = "flex";
+        document.getElementById("list-screen").style.display = "flex";
         document.getElementById("list").scrollTop = 0;
     });
 });
 
 document.getElementById("back-button").addEventListener("click", () => {
-    document.getElementById("search-for-birds").style.visibility = "visible";
+    document.getElementById("search-for-taxa").style.visibility = "visible";
     document.getElementById("sound-only-checkbox").removeAttribute("disabled");
-    document.getElementById("bird-screen").style.display = "none";
+    document.getElementById("list-screen").style.display = "none";
     document.getElementById("location-screen").style.display = "flex";
     map.invalidateSize(); //update sizing, since window might have been resized while the map wasn't visible
 });
 
 document.getElementById("continue-button").addEventListener("click", () => {
     let taxon_ids = [];
-    document.querySelectorAll(".bird-option.selected").forEach(el => {
+    document.querySelectorAll(".list-option.selected").forEach(el => {
         taxon_ids.push(el.dataset.taxonId);
     });
     let args = "?taxa=" + taxon_ids.join(",");
@@ -61,7 +61,7 @@ async function fetchSpeciesCounts(taxon_id=3) {
         let obj = data.results[k];
 
         let div = document.createElement("div");
-        div.className = "bird-option";
+        div.className = "list-option";
         div.dataset.taxonId = obj.taxon.id;
 
         let checkbox = document.createElement("div");
@@ -112,23 +112,23 @@ async function fetchSpeciesCounts(taxon_id=3) {
 //selection event handlers
 
 document.getElementById("list").addEventListener("click", e => {
-    let bird_option = e.target.closest(".bird-option");
-    if(bird_option && !e.target.classList.contains("range-map-icon")){
-        bird_option.classList.toggle("selected");
+    let list_option = e.target.closest(".list-option");
+    if(list_option && !e.target.classList.contains("range-map-icon")){
+        list_option.classList.toggle("selected");
         updateNSelectedDisplay()
     }
 });
 
 document.getElementById("select-all").addEventListener("click", () => {
-    document.querySelectorAll(".bird-option").forEach(el => el.classList.add("selected"));
+    document.querySelectorAll(".list-option").forEach(el => el.classList.add("selected"));
     updateNSelectedDisplay()
 });
 
 document.getElementById("select-none").addEventListener("click", () => {
-    document.querySelectorAll(".bird-option").forEach(el => el.classList.remove("selected"));
+    document.querySelectorAll(".list-option").forEach(el => el.classList.remove("selected"));
     updateNSelectedDisplay()
 });
 
 function updateNSelectedDisplay(){
-    document.getElementById("n-selected").textContent = document.querySelectorAll(".bird-option.selected").length;
+    document.getElementById("n-selected").textContent = document.querySelectorAll(".list-option.selected").length;
 }

@@ -4,7 +4,7 @@
 
 let place_id;
 let place_bounds; //sometimes have this (or an estimate of it) but not place_id
-//if both place_id and place_bounds are undefined, will use map bounds (see location_birds.js)
+//if both place_id and place_bounds are undefined, will use map bounds (see location_view_taxa.js)
 
 let map;
 let place_layer;

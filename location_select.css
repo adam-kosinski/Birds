@@ -101,7 +101,7 @@
     cursor: pointer;
 }
 
-#search-for-birds-container {
+#search-for-taxa-container {
     margin-top: 8px;
     display: flex;
     flex-direction: column;
@@ -129,7 +129,7 @@
 
 /* bird screen stuff */
 
-#bird-screen {
+#list-screen {
     display: none;
     height: 100%;
     flex-direction: column;
@@ -188,7 +188,7 @@
     padding-right: 16px;
 }
 
-.bird-option {
+.list-option {
     display: grid;
     grid-template-columns: min-content min-content 1fr min-content min-content;
     align-items: center;
@@ -198,7 +198,7 @@
     max-width: 330px;
     cursor: pointer;
 }
-.bird-option.selected {
+.list-option.selected {
     background-color: #eee;
     border-color: #eee;
     border-radius: 12px;
@@ -217,10 +217,10 @@
     justify-content: center;
     position: relative;
 }
-.bird-option.selected .checkbox {
+.list-option.selected .checkbox {
     background-color: var(--light-gray);
 }
-.bird-option.selected .checkbox::after {
+.list-option.selected .checkbox::after {
     content: '';
     border-bottom: 4px solid var(--dark-gray);
     border-right: 4px solid var(--dark-gray);
@@ -230,10 +230,10 @@
     height: 12px;
 }
 
-.bird-option .bird-square {
+.list-option .bird-square {
     width: 60px;
 }
 
-.bird-option b {
+.list-option b {
     font-size: 14px;
 }
