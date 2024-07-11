@@ -1,5 +1,6 @@
 TODO
 
+Sidescrolling in location search results list
 Better UI for selection
 
 ----

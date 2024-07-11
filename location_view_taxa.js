@@ -35,6 +35,19 @@ document.getElementById("continue-button").addEventListener("click", () => {
 
 
 
+// image lazy loading (since the location search can return hundreds of species, want to save people's data)
+
+const lazy_load_observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const image = entry.target;
+            image.src = image.dataset.src;
+            lazy_load_observer.unobserve(image);
+        }
+    });
+});
+
+
 // iNaturalist API calls and list construction
 
 async function fetchSpeciesCounts(taxon_id=3) {
@@ -73,8 +86,8 @@ async function fetchSpeciesCounts(taxon_id=3) {
 
         let img = document.createElement("img");
         img.className = "bird-square";
-        if (obj.taxon.default_photo) img.src = obj.taxon.default_photo.square_url;
-        img.alt = obj.taxon.preferred_common_name;
+        if (obj.taxon.default_photo) img.dataset.src = obj.taxon.default_photo.square_url;
+        lazy_load_observer.observe(img);
 
         let info = document.createElement("p");
         let b = document.createElement("b");
@@ -84,7 +97,7 @@ async function fetchSpeciesCounts(taxon_id=3) {
         let br2 = document.createElement("br");
         let count = document.createElement("p");
         count.className = "font-small";
-        b.textContent = (k+1) + ". " + obj.taxon.preferred_common_name;
+        b.textContent = (k+1) + ". " + (obj.taxon.preferred_common_name || "");
         i.textContent = obj.taxon.name;
         count.textContent = obj.count + " observations";
         info.append(b, br1, i, br2, count);
