@@ -57,6 +57,8 @@ function getInfoURL(taxon_obj) {
     if ((taxon_obj.ancestor_ids.includes(20978) || taxon_obj.ancestor_ids.includes(26036)) && taxon_obj.rank_level <= 10) {  // rank level 10 is species, 5 is subspecies
         if (taxon_obj.id === 73887) return "https://herpsofnc.org/corn-snake/"  // herps of nc has a typo for the scientific name for corn snakes
         if (taxon_obj.id === 788326) return "https://herpsofnc.org/eastern-ribbon-snake/" // herps of nc has a typo for eastern ribbon snake too
+        if (taxon_obj.id === 39830) return "https://herpsofnc.org/river-cooter/" // florida cooter comes up first for river cooter, which is confusing
+        if (taxon_obj.id === 39782) return "https://herpsofnc.org/yellow-bellied-slider/" // same, florida cooter comes up first
         return "https://herpsofnc.org/?s=" + taxon_obj.name.split(" ").slice(0, 2).join("+");  // only include genus and species, not subspecies (can mess up search)
     }
     //Insect orders
@@ -185,7 +187,7 @@ function getQuestionHTML(mode, taxon_obj, is_squirrel_intruder = false) {
 
 /*
 For generating preset lists from list_taxa
-console.log(list_taxa.map(obj => `${obj.id},   //${obj.preferred_common_name}`).join(""))
+console.log(list_taxa.map(obj => `${obj.id},   //${obj.preferred_common_name}\n`).join(""))
 */
 
 
@@ -615,6 +617,34 @@ const PRESETS = {
             904170    //Northern Cottonmouth
         ]
     },
+    "Turtles (NC)": {
+        description: "Can you pass this testudinal test? We shell see.",
+        photo: "images/preset_turtles.jpg",
+        mode: "visual_id",
+        taxa: [
+            39814,   //Common Box Turtle
+            39682,   //Common Snapping Turtle
+            39771,   //Painted Turtle
+            39782,   //Pond Slider
+            39830,   //River Cooter
+            39826,   //Northern Red-bellied Cooter
+            1367318,   //Coastal Plain Cooter
+            39713,   //Eastern Mud Turtle
+            39703,   //Eastern Musk Turtle
+            39753,   //Striped Mud Turtle
+            50000,   //Spotted Turtle
+            39836,   //Diamondback Terrapin
+            39762,   //Chicken Turtle
+
+            39556,   //Spiny Softshell
+            
+            39665,   //Loggerhead Sea Turtle
+            39659,   //Green Sea Turtle
+            73844,   //Kemp's Ridley Sea Turtle
+            39677,   //Leatherback Sea Turtle
+            39672,   //Hawksbill Sea Turtle
+        ]
+    },
     "Insect Orders (NC)": {
         description: "Honestly at this point, why not learn insects too. Tips <a class='default-link-style' target='_blank' href='https://bugguide.net/'>here</a>.",
         photo: "images/preset_insects.jpg",
@@ -684,6 +714,60 @@ const PRESETS = {
             108344   //Wandering Glider
         ]
     },
+    "Fish Families of the Great Barrier Reef": {
+        description: "Sploosh. I sense something fishy... <a class='default-link-style' target='_blank' href='https://fishesofaustralia.net.au/key/family'>Here</a> is a key to help you out.",
+        photo: "images/preset_great_barrier_reef.jpg",
+        mode: "visual_id",
+        place_id: 131021,   //great barrier reef
+        taxa: [
+            49284,    //Wrasses and Parrotfishes    n_obs: 6797
+            48313,    //Damselfishes    n_obs: 5565
+            47318,    //Butterflyfishes    n_obs: 3615
+            1363728,    //Groupers    n_obs: 1929
+            47295,    //Snappers    n_obs: 1886
+            47619,    //Surgeonfishes, Tangs, and Unicornfishes    n_obs: 1775
+            84096,    //Rabbitfishes    n_obs: 994
+            47237,    //Angelfishes    n_obs: 905
+            49263,    //Grunts    n_obs: 789
+            47308,    //Gobies    n_obs: 724
+            55207,    //Emperor Breams    n_obs: 670
+            47232,    //Jacks    n_obs: 644
+            49612,    //Triggerfishes    n_obs: 591
+            51095,    //Threadfin Breams    n_obs: 580
+            118620,    //Goatfishes    n_obs: 504
+            49390,    //Combtooth Blennies    n_obs: 498
+            49266,    //Pufferfishes    n_obs: 484
+            49317,    //Spadefishes    n_obs: 421
+            49423,    //Sandperches    n_obs: 280
+            47285,    //Scorpionfishes    n_obs: 244
+            83291,    //Moorish Idols    n_obs: 230
+            47580,    //Hawkfishes    n_obs: 209
+            47264,    //Barracudas    n_obs: 205
+            85594,    //Cardinalfishes    n_obs: 204
+            47313,    //Morays    n_obs: 200
+            49628,    //Squirrelfishes and Soldierfishes    n_obs: 189
+            47529,    //Boxfishes    n_obs: 170
+            47244,    //Trumpetfishes    n_obs: 127
+            47176,    //Filefishes    n_obs: 120
+            1359791,    //Anthiases    n_obs: 115
+            49410,    //Lizardfishes    n_obs: 113
+            49688,    //Sea Chubs    n_obs: 108
+            47249,    //Cornetfishes    n_obs: 88
+            49106,    //Pipefishes, Seahorses, and Seadragons    n_obs: 84
+            47266,    //Mackerels, Tunas, and Bonitos    n_obs: 82
+            54661,    //Mullets    n_obs: 78
+            85894,    //Wormfishes and Dartfishes    n_obs: 73
+            86099,    //Grunters    n_obs: 65
+            82142,    //Dottybacks    n_obs: 63
+            48842,    //Remoras    n_obs: 55
+            49270,    //Porcupinefishes    n_obs: 45
+            47355,    //Lates Perches    n_obs: 43
+            86057,    //Scats    n_obs: 41
+            86105,    //Archerfishes    n_obs: 37
+            52461,    //Needlefishes    n_obs: 34
+            64483    //Roundheads    n_obs: 32
+        ]
+    },
     "Common Piedmont Fungi and Lichens (NC)": {
         description: "Okay these aren't even animals. But are cool.",
         photo: "images/preset_mushrooms.jpg",
@@ -749,60 +833,6 @@ const PRESETS = {
             1278022,    //Callicladium imponens
             167808,    //Rhodobryum ontariense
             169216      //Sphagnum lescurii, less common but here to represent the iconic Sphagnum genus
-        ]
-    },
-    "Fish Families of the Great Barrier Reef": {
-        description: "Sploosh. I sense something fishy... <a class='default-link-style' target='_blank' href='https://fishesofaustralia.net.au/key/family'>Here</a> is a key to help you out.",
-        photo: "images/preset_great_barrier_reef.jpg",
-        mode: "visual_id",
-        place_id: 131021,   //great barrier reef
-        taxa: [
-            49284,    //Wrasses and Parrotfishes    n_obs: 6797
-            48313,    //Damselfishes    n_obs: 5565
-            47318,    //Butterflyfishes    n_obs: 3615
-            1363728,    //Groupers    n_obs: 1929
-            47295,    //Snappers    n_obs: 1886
-            47619,    //Surgeonfishes, Tangs, and Unicornfishes    n_obs: 1775
-            84096,    //Rabbitfishes    n_obs: 994
-            47237,    //Angelfishes    n_obs: 905
-            49263,    //Grunts    n_obs: 789
-            47308,    //Gobies    n_obs: 724
-            55207,    //Emperor Breams    n_obs: 670
-            47232,    //Jacks    n_obs: 644
-            49612,    //Triggerfishes    n_obs: 591
-            51095,    //Threadfin Breams    n_obs: 580
-            118620,    //Goatfishes    n_obs: 504
-            49390,    //Combtooth Blennies    n_obs: 498
-            49266,    //Pufferfishes    n_obs: 484
-            49317,    //Spadefishes    n_obs: 421
-            49423,    //Sandperches    n_obs: 280
-            47285,    //Scorpionfishes    n_obs: 244
-            83291,    //Moorish Idols    n_obs: 230
-            47580,    //Hawkfishes    n_obs: 209
-            47264,    //Barracudas    n_obs: 205
-            85594,    //Cardinalfishes    n_obs: 204
-            47313,    //Morays    n_obs: 200
-            49628,    //Squirrelfishes and Soldierfishes    n_obs: 189
-            47529,    //Boxfishes    n_obs: 170
-            47244,    //Trumpetfishes    n_obs: 127
-            47176,    //Filefishes    n_obs: 120
-            1359791,    //Anthiases    n_obs: 115
-            49410,    //Lizardfishes    n_obs: 113
-            49688,    //Sea Chubs    n_obs: 108
-            47249,    //Cornetfishes    n_obs: 88
-            49106,    //Pipefishes, Seahorses, and Seadragons    n_obs: 84
-            47266,    //Mackerels, Tunas, and Bonitos    n_obs: 82
-            54661,    //Mullets    n_obs: 78
-            85894,    //Wormfishes and Dartfishes    n_obs: 73
-            86099,    //Grunters    n_obs: 65
-            82142,    //Dottybacks    n_obs: 63
-            48842,    //Remoras    n_obs: 55
-            49270,    //Porcupinefishes    n_obs: 45
-            47355,    //Lates Perches    n_obs: 43
-            86057,    //Scats    n_obs: 41
-            86105,    //Archerfishes    n_obs: 37
-            52461,    //Needlefishes    n_obs: 34
-            64483    //Roundheads    n_obs: 32
         ]
     }
 }
