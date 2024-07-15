@@ -624,7 +624,7 @@ const PRESETS = {
         taxa: [
             39814,   //Common Box Turtle
             39682,   //Common Snapping Turtle
-            39771,   //Painted Turtle
+            39775,   //Eastern Painted Turtle (C picta picta)
             39782,   //Pond Slider
             39830,   //River Cooter
             39826,   //Northern Red-bellied Cooter
