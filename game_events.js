@@ -218,7 +218,7 @@ function selectRecommended() {
 //marking observation as bad
 document.querySelectorAll(".mark-as-bad-button").forEach(el => {
     el.addEventListener("click", () => {
-        if(!confirm("Please confirm that you intend to mark this observation as poor quality (this will propagate to all users of this app). A blurry image or quiet/short audio clip should not be marked poor quality if it is still identifiable. Good reasons are:\n - There are multiple species present and the primary species isn't obvious\n - The recording is inaudible (make sure you listen closely)\n - The observation is unidentifiable, even by an expert\n\n")){
+        if(!confirm("Please confirm that you intend to mark this observation as poor quality (this will propagate to all users of this app). A blurry image or quiet/short audio clip should not be marked poor quality if it is still identifiable. Good reasons are:\n - There are multiple species present and the primary species isn't obvious\n - The provided answer is incorrect\n - The recording is inaudible (make sure you listen closely)\n - The observation is unidentifiable, even by an expert\n\n")){
             return;
         }
 
