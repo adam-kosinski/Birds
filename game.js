@@ -193,7 +193,7 @@ async function initGame() {
         let option_common = document.createElement("option");
         option_common.value = obj.preferred_common_name;
         document.getElementById("guess-datalist").append(option_common);
-        if (obj.rank_level <= 10 || obj.ancestor_ids.includes(47126)) {
+        if (obj.rank_level > 10 || obj.ancestor_ids.includes(47126)) {
             let option_scientific = document.createElement("option");
             option_scientific.value = obj.name;
             document.getElementById("guess-datalist").append(option_scientific);
