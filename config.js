@@ -55,10 +55,11 @@ function getInfoURL(taxon_obj) {
     }
     //Amphibians and Reptiles
     if ((taxon_obj.ancestor_ids.includes(20978) || taxon_obj.ancestor_ids.includes(26036)) && taxon_obj.rank_level <= 10) {  // rank level 10 is species, 5 is subspecies
-        if (taxon_obj.id === 73887) return "https://herpsofnc.org/corn-snake/"  // herps of nc has a typo for the scientific name for corn snakes
-        if (taxon_obj.id === 788326) return "https://herpsofnc.org/eastern-ribbon-snake/" // herps of nc has a typo for eastern ribbon snake too
-        if (taxon_obj.id === 39830) return "https://herpsofnc.org/river-cooter/" // florida cooter comes up first for river cooter, which is confusing
-        if (taxon_obj.id === 39782) return "https://herpsofnc.org/yellow-bellied-slider/" // same, florida cooter comes up first
+        if (taxon_obj.id === 73887) return "https://herpsofnc.org/corn-snake/";  // herps of nc has a typo for the scientific name for corn snakes
+        if (taxon_obj.id === 788326) return "https://herpsofnc.org/eastern-ribbon-snake/"; // herps of nc has a typo for eastern ribbon snake too
+        if (taxon_obj.id === 27389) return "https://herpsofnc.org/worm-snake/";  // for some reason there is a "Worm Snake Test" result with less info that comes up first in search results, go to correct one
+        if (taxon_obj.id === 39830) return "https://herpsofnc.org/river-cooter/"; // florida cooter comes up first for river cooter, which is confusing
+        if (taxon_obj.id === 39782) return "https://herpsofnc.org/yellow-bellied-slider/"; // same, florida cooter comes up first
         return "https://herpsofnc.org/?s=" + taxon_obj.name.split(" ").slice(0, 2).join("+");  // only include genus and species, not subspecies (can mess up search)
     }
     //Insect orders
