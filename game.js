@@ -517,8 +517,8 @@ function checkAnswer() {
     //find taxon object that matches the guess, if it exists
     //concat with the squirrel taxon to check for correctness of squirrel intruder
     let guess_obj = list_taxa.concat([squirrel_taxon_obj]).find(obj =>
-        guess.toLowerCase() == obj.name.toLowerCase() ||
-        guess.toLowerCase() == obj.preferred_common_name.toLowerCase()
+        guess.toLowerCase() === obj.name.toLowerCase() ||
+        obj.preferred_common_name && guess.toLowerCase() === obj.preferred_common_name.toLowerCase()
     );
 
     let correct = Boolean(guess_obj && (current.taxon.id == guess_obj.id || current.taxon.ancestor_ids.includes(guess_obj.id)));

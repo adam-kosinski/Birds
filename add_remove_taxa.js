@@ -129,12 +129,15 @@ async function addBirds(taxa_id_list) {
         linked_name.href = getInfoURL(taxon);
         linked_name.target = "_blank";
 
-        let b = document.createElement("b");
+        if(taxon.preferred_common_name){
+            let b = document.createElement("b");
+            let br = document.createElement("br");
+            b.textContent = taxon.preferred_common_name;
+            linked_name.append(b, br)
+        }
         let i = document.createElement("i");
-        let br = document.createElement("br");
-        b.textContent = taxon.preferred_common_name;
         i.textContent = taxon.name;
-        linked_name.append(b, br, i);
+        linked_name.append(i);
 
         let map_icon = document.createElement("button");
         map_icon.className = "range-map-icon";
