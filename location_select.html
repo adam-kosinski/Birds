@@ -1,119 +1,193 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>Birds</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans">
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans"
+    />
 
     <!-- leaflet, js must come after css -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
 
-    <link type="text/css" rel="stylesheet" href="base.css">
-    <link type="text/css" rel="stylesheet" href="location_select.css">
-    <link type="text/css" rel="stylesheet" href="range_map.css">
+    <link type="text/css" rel="stylesheet" href="base.css" />
+    <link type="text/css" rel="stylesheet" href="location_select.css" />
+    <link type="text/css" rel="stylesheet" href="range_map.css" />
 
-    <meta name="viewport" content="width=device-width initial-scale=1">
-    <meta charset="UTF-8">
-    <link rel="icon" href="images/favicon.png" media="(prefers-color-scheme: light)">
-    <link rel="icon" href="images/favicon_dark_mode.png" media="(prefers-color-scheme: dark)">
-    <link rel="apple-touch-icon" href="images/favicon.png" media="(prefers-color-scheme: light)">
-    <link rel="apple-touch-icon" href="images/favicon_dark_mode.png" media="(prefers-color-scheme: dark)">
-</head>
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta charset="UTF-8" />
+    <link
+      rel="icon"
+      href="images/favicon.png"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="icon"
+      href="images/favicon_dark_mode.png"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="images/favicon.png"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="images/favicon_dark_mode.png"
+      media="(prefers-color-scheme: dark)"
+    />
+  </head>
 
-<body>
-    <img id="background-image" src="images/cloud_background.png">
+  <body>
+    <img id="background-image" src="images/cloud_background.png" />
 
     <div id="location-screen" class="screen">
-        <nav>
-            <a href="index.html"><img class="nav-icon" src="images/birdhouse.png" alt="birdhouse icon">Exit</a>
-        </nav>
-        <div id="find-by-location-title" class="font-large">Find
-            <div class="select">
-                <select id="iconic-taxon-select" class="font-large">
-                    <!-- value is the taxon id of that group -->
-                    <option value="3">Birds</option>
-                    <option value="20978">Amphibians</option>
-                    <option value="26036">Reptiles</option>
-                    <option value="47158">Insects</option>
-                    <option value="47119">Arachnids</option>
-                    <option value="40151">Mammals</option>
-                    <option value="47178">Ray-Finned Fish</option>
-                    <option value="47115">Molluscs</option>
-                    <option value="47126">Plants</option>
-                    <option value="47170">Fungi & Lichens</option>
-                </select>
-            </div>
-            by Location
+      <nav>
+        <a href="index.html"
+          ><img
+            class="nav-icon"
+            src="images/birdhouse.png"
+            alt="birdhouse icon"
+          />Exit</a
+        >
+      </nav>
+      <div id="find-by-location-title" class="font-large">
+        Find
+        <div class="select">
+          <select id="iconic-taxon-select" class="font-large">
+            <!-- value is the taxon id of that group -->
+            <option value="3">Birds</option>
+            <option value="20978">Amphibians</option>
+            <option value="26036">Reptiles</option>
+            <option value="47158">Insects</option>
+            <option value="47119">Arachnids</option>
+            <option value="40151">Mammals</option>
+            <option value="47178">Ray-Finned Fish</option>
+            <option value="47115">Molluscs</option>
+            <option value="47126">Plants</option>
+            <option value="47170">Fungi & Lichens</option>
+          </select>
         </div>
+        by Location
+      </div>
 
-        <!-- we want to resize the select element to fit the text, copy the current option to this hidden element to get a sense of natural size -->
-        <p id="taxon-select-width-guesser" class="font-large"></p>
+      <!-- we want to resize the select element to fit the text, copy the current option to this hidden element to get a sense of natural size -->
+      <p id="taxon-select-width-guesser" class="font-large"></p>
 
-        <div id="place-input-container">
-            <div id="place-autocomplete-list"></div>
-            <input id="place-input" type="search" autocomplete="off" placeholder="Search for iNaturalist Place">
+      <div id="place-input-container">
+        <div id="place-autocomplete-list"></div>
+        <input
+          id="place-input"
+          type="search"
+          autocomplete="off"
+          placeholder="Search for iNaturalist Place"
+        />
+      </div>
+      <p id="pan-zoom-instructions">Or pan/zoom the map:</p>
+      <div id="map-widget">
+        <div>
+          <p id="map-caption"></p>
+          <u id="clear-place-selection">(clear selection)</u>
         </div>
-        <p id="pan-zoom-instructions">Or pan/zoom the map:</p>
-        <div id="map-widget">
-            <div>
-                <p id="map-caption"></p>
-                <u id="clear-place-selection">(clear selection)</u>
-            </div>
-            <div id="map-container"> <!-- for outlining, because leaflet hides the map outline -->
-                <div id="map"></div>
-            </div>
-
+        <div id="map-container">
+          <!-- for outlining, because leaflet hides the map outline -->
+          <div id="map"></div>
         </div>
-        <div id="search-for-taxa-container">
-            <button id="search-for-taxa" class="btn-primary">SEARCH</button>
-            <div id="search-loader" class="loader"></div>
+      </div>
+      <div id="season-container">
+        <label for="season-select">Time of Year:</label>
+        <div class="select">
+          <select id="season-select" value="All">
+            <option value="All">All</option>
+            <option value="12,1,2,3">Winter (Dec-Mar)</option>
+            <option value="4,5">Spring (Apr-May)</option>
+            <option value="6,7,8">Summer (Jun-Aug)</option>
+            <option value="9,10,11">Fall (Sept-Nov)</option>
+            <!-- <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option> -->
+          </select>
         </div>
-        <div id="sound-only-container">
-            <input type="checkbox" id="sound-only-checkbox">
-            <label for="sound-only-checkbox">Search for sound observations only</label>
-        </div>
+      </div>
+      <div id="sound-only-container">
+        <input type="checkbox" id="sound-only-checkbox" />
+        <label for="sound-only-checkbox"
+          >Search for sound observations only</label
+        >
+      </div>
+      <div id="search-for-taxa-container">
+        <button id="search-for-taxa" class="btn-primary">SEARCH</button>
+        <div id="search-loader" class="loader"></div>
+      </div>
     </div>
-
 
     <div id="list-screen" class="screen">
-        <nav>
-            <a href="index.html"><img class="nav-icon" src="images/birdhouse.png" alt="birdhouse icon">Exit</a>
-        </nav>
-        <div class="white-container">
-            <div>
-                <div id="list-title-container">
-                    <p class="font-large">Choose Species</p>
-                </div>
-            </div>
-
-            <div id="button-panel">
-                <button id="back-button" class="btn-secondary">BACK</button>
-                <button id="continue-button" class="btn-primary">CONTINUE</button>
-            </div>
-            <div id="selectors-container">
-                <p><span id="n-selected"></span> selected</p>
-                <button id="select-all">SELECT ALL (<span id="species-count">0</span>)</button>
-                <button id="select-none">SELECT NONE</button>
-            </div>
-            <div id="list"></div>
+      <nav>
+        <a href="index.html"
+          ><img
+            class="nav-icon"
+            src="images/birdhouse.png"
+            alt="birdhouse icon"
+          />Exit</a
+        >
+      </nav>
+      <div class="white-container">
+        <div>
+          <div id="list-title-container">
+            <p class="font-large">Choose Species</p>
+          </div>
         </div>
+
+        <div id="button-panel">
+          <button id="back-button" class="btn-secondary">BACK</button>
+          <button id="continue-button" class="btn-primary">CONTINUE</button>
+        </div>
+        <div id="list-selectors-container">
+          <p><span id="n-selected"></span> selected</p>
+          <button id="select-all">
+            SELECT ALL (<span id="species-count">0</span>)
+          </button>
+          <button id="select-none">SELECT NONE</button>
+        </div>
+        <div id="list"></div>
+      </div>
     </div>
 
-
     <div id="range-map-modal">
-        <b class="font-large">Observation Map</b>
-        <div id="range-map-taxon-container">
-            <img id="range-map-taxon-image" class="bird-square" src="" alt="image of taxon">
-            <p>
-                <b id="range-map-common-name"></b><br>
-                <i id="range-map-scientific-name"></i>
-            </p>
-        </div>
-        <div id="range-map"></div>
-        <button id="close-range-map" class="btn-primary">BACK</button>
+      <b class="font-large">Observation Map</b>
+      <div id="range-map-taxon-container">
+        <img
+          id="range-map-taxon-image"
+          class="bird-square"
+          src=""
+          alt="image of taxon"
+        />
+        <p>
+          <b id="range-map-common-name"></b><br />
+          <i id="range-map-scientific-name"></i>
+        </p>
+      </div>
+      <div id="range-map"></div>
+      <button id="close-range-map" class="btn-primary">BACK</button>
     </div>
 
     <script src="config.js"></script>
@@ -123,8 +197,7 @@
     <script src="range_map.js"></script>
 
     <script>
-        document.getElementById("n-selected").textContent = TOP_N_SELECTED;
+      document.getElementById("n-selected").textContent = TOP_N_SELECTED;
     </script>
-</body>
-
+  </body>
 </html>

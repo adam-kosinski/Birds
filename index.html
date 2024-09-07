@@ -1,56 +1,84 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>Birds</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans">
-    <link type="text/css" rel="stylesheet" href="base.css">
-    <link type="text/css" rel="stylesheet" href="index.css">
-    <meta name="viewport" content="width=device-width initial-scale=1">
-    <meta charset="UTF-8">
-    <link rel="icon" href="images/favicon.png" media="(prefers-color-scheme: light)">
-    <link rel="icon" href="images/favicon_dark_mode.png" media="(prefers-color-scheme: dark)">
-    <link rel="apple-touch-icon" href="images/favicon.png" media="(prefers-color-scheme: light)">
-    <link rel="apple-touch-icon" href="images/favicon_dark_mode.png" media="(prefers-color-scheme: dark)">
-</head>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans"
+    />
+    <link type="text/css" rel="stylesheet" href="base.css" />
+    <link type="text/css" rel="stylesheet" href="index.css" />
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta charset="UTF-8" />
+    <link
+      rel="icon"
+      href="images/favicon.png"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="icon"
+      href="images/favicon_dark_mode.png"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="images/favicon.png"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="images/favicon_dark_mode.png"
+      media="(prefers-color-scheme: dark)"
+    />
+  </head>
 
-<body>
-    <img id="background-image" src="images/cloud_background.png">
-    <img id="bird-silhouette" src="images/hummingbird_silhouette.png" alt="hummingbird silhouette decoration">
+  <body>
+    <img id="background-image" src="images/cloud_background.png" />
+    <img
+      id="bird-silhouette"
+      src="images/hummingbird_silhouette.png"
+      alt="hummingbird silhouette decoration"
+    />
     <div id="layout">
-        <div id="title">
-            <p id="cacaw" class="font-huge">Ca-caw!</p>
-            <p id="hi">(that means hi)</p>
-        </div>
-        <p id="info">
-            This is a tool to help you practice birdsong ID and visual bird ID. The audio clips, photos, and
-            identifications used for the game are pulled from iNaturalist. Program by <a class="default-link-style"
-                href="https://adam-kosinski.github.io/about.html">Adam K</a>.
-        </p>
-        <div id="link-container">
-            <a id="backyard-birds-link" class="app-mode-link">
-                <img src="images/preset_backyard.png" alt="bird image">
-                <p>Backyard Birds (Southeast US)</p>
-            </a>
-            <a class="app-mode-link" href="presets.html">
-                <img src="images/main_page_presets.jpg" alt="bird image">
-                <p>List Presets</p>
-            </a>
-            <a class="app-mode-link" href="location_select.html">
-                <img src="images/main_page_location.png" alt="bird image">
-                <p>Pick Species By Location</p>
-            </a>
-            <a class="app-mode-link" href="game.html">
-                <img src="images/main_page_custom.png" alt="bird image">
-                <p>Choose Species Yourself</p>
-            </a>
-        </div>
+      <div id="title">
+        <p id="cacaw" class="font-huge">Ca-caw!</p>
+        <p id="hi">(that means hi)</p>
+      </div>
+      <p id="info">
+        This is a tool to help you practice birdsong ID and visual bird ID. The
+        audio clips, photos, and identifications used for the game are pulled
+        from iNaturalist. Program by
+        <a
+          class="default-link-style"
+          href="https://adam-kosinski.github.io/about.html"
+          >Adam K</a
+        >.
+      </p>
+      <div id="link-container">
+        <a id="backyard-birds-link" class="app-mode-link">
+          <img src="images/preset_backyard.png" alt="bird image" />
+          <p>Backyard Birds (Southeast US)</p>
+        </a>
+        <a class="app-mode-link" href="presets.html">
+          <img src="images/main_page_presets.jpg" alt="bird image" />
+          <p>List Presets</p>
+        </a>
+        <a class="app-mode-link" href="location_select.html">
+          <img src="images/main_page_location.png" alt="bird image" />
+          <p>Pick Species By Location/Season</p>
+        </a>
+        <a class="app-mode-link" href="game.html">
+          <img src="images/main_page_custom.png" alt="bird image" />
+          <p>Choose Species Yourself</p>
+        </a>
+      </div>
     </div>
 
     <script src="config.js"></script>
     <script>
-        document.getElementById("backyard-birds-link").href = "game.html?taxa=" + PRESETS['Backyard Birds (Southeast US)'].taxa.join(",");
+      document.getElementById("backyard-birds-link").href =
+        "game.html?taxa=" +
+        PRESETS["Backyard Birds (Southeast US)"].taxa.join(",");
     </script>
-</body>
-
+  </body>
 </html>

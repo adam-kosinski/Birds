@@ -1,240 +1,239 @@
 /* location screen stuff */
 
 #location-screen {
-    display: flex;
-    /* display: none; */
+  display: flex;
+  /* display: none; */
 
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    text-align: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
 }
 
 #find-by-location-title {
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    column-gap: 0.5ch;
-    flex-wrap: wrap;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  column-gap: 0.5ch;
+  flex-wrap: wrap;
 }
 
 #iconic-taxon-select {
-    /* good width for the birds option */
-    width: 102.5px;
+  /* good width for the birds option */
+  width: 102.5px;
 }
 
 #taxon-select-width-guesser {
-    display: none;
-    position: absolute;
-    /* will quickly set display block then display none, but keep opacity 0 just in case of flickering */
-    opacity: 0;
+  display: none;
+  position: absolute;
+  /* will quickly set display block then display none, but keep opacity 0 just in case of flickering */
+  opacity: 0;
 }
 
 #place-input-container {
-    width: min(90%, 400px);
-    position: relative;
-    z-index: 10;
+  width: min(90%, 400px);
+  position: relative;
+  z-index: 10;
 }
 
 #place-autocomplete-list {
-    display: none;
-    position: absolute;
-    transform: translateX(10px);
-    top: calc(100% - 10px);
-    padding-top: 10px;
-    width: calc(100% - 20px); /* 10px on either side of input */
-    background-color: white;
-    box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+  display: none;
+  position: absolute;
+  transform: translateX(10px);
+  top: calc(100% - 10px);
+  padding-top: 10px;
+  width: calc(100% - 20px); /* 10px on either side of input */
+  background-color: white;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 #place-autocomplete-list > * {
-    padding: 5px 10px 5px 10px;
-    text-align: left;
-    width: 100%;
+  padding: 5px 10px 5px 10px;
+  text-align: left;
+  width: 100%;
 }
 
 .autocomplete-option {
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
 }
 
 .autocomplete-option:not(:first-child) {
-    border-top: 1px solid rgba(0,0,0,0.25);
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
 }
 
 #place-input {
-    width: 100%;
-    box-sizing: border-box;
-    position: relative;
-    text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  text-align: center;
 }
 
 #map-widget {
-    position: relative;
-    z-index: 5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
 }
 
 #map {
-    /* width: min(calc(100vw - 40px), 400px);
+  /* width: min(calc(100vw - 40px), 400px);
     height: 300px; */
-    height: calc(100dvh - 360px);
-    width: min(800px, calc(100vw - 40px));
-    background-color: white;
-    border: 1.5px solid black;
+  height: calc(100dvh - 360px);
+  width: min(800px, calc(100vw - 40px));
+  background-color: white;
+  border: 1.5px solid black;
 }
 
 #map-container.outlined {
-    outline: 4px solid orange;
+  outline: 4px solid orange;
 }
 
 #map-caption {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 #clear-place-selection {
-    display: none;
-    cursor: pointer;
+  display: none;
+  cursor: pointer;
 }
 
 #search-for-taxa-container {
-    margin-top: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
 }
 
 #sound-only-container {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 #sound-only-checkbox {
-    margin: 0;
+  margin: 0;
+}
+
+#season-container {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
 }
 
 #search-loader {
-    position: absolute;
-    display: none;
+  position: absolute;
+  display: none;
 }
-
-
-
 
 /* bird screen stuff */
 
 #list-screen {
-    display: none;
-    height: 100%;
-    flex-direction: column;
-    gap: 10px;
+  display: none;
+  height: 100%;
+  flex-direction: column;
+  gap: 10px;
 }
-
-
 
 .white-container {
-    gap: 8px;
+  gap: 8px;
 }
 
-.white-container > :not(#list){
-    margin-left: 16px;
-    margin-right: 16px;
+.white-container > :not(#list) {
+  margin-left: 16px;
+  margin-right: 16px;
 }
 
 #list-title-container {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
-
 #button-panel {
-    display: flex;
-    gap: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid black;
+  display: flex;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid black;
 }
 
 #button-panel button {
-    width: 0;
-    flex-grow: 1;
-    max-width: 200px;
+  width: 0;
+  flex-grow: 1;
+  max-width: 200px;
 }
 
-#selectors-container {
-    display: flex;
-    align-items: baseline;
-    gap: 20px;
-    font-size: 12px;
+#list-selectors-container {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  font-size: 12px;
 }
 
 #list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 345px);
-    row-gap: 5px;
-    overflow-y: auto;
-    padding-left: 11px; /* plus the row's 5px padding gives 16px */
-    padding-right: 11px;
-    padding-bottom: 5px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 345px);
+  row-gap: 5px;
+  overflow-y: auto;
+  padding-left: 11px; /* plus the row's 5px padding gives 16px */
+  padding-right: 11px;
+  padding-bottom: 5px;
 }
 
 #list > p {
-    padding-left: 16px;
-    padding-right: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .list-option {
-    display: grid;
-    grid-template-columns: min-content min-content 1fr min-content min-content;
-    align-items: center;
-    gap: 10px;
-    padding: 5px;
-    border-top: 1px solid var(--light-gray);
-    max-width: 330px;
-    cursor: pointer;
+  display: grid;
+  grid-template-columns: min-content min-content 1fr min-content min-content;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  border-top: 1px solid var(--light-gray);
+  max-width: 330px;
+  cursor: pointer;
 }
 .list-option.selected {
-    background-color: #eee;
-    border-color: #eee;
-    border-radius: 12px;
+  background-color: #eee;
+  border-color: #eee;
+  border-radius: 12px;
 }
 
 .checkbox {
-    display: none;
+  display: none;
 
-    box-sizing: border-box;
-    width: 36px;
-    height: 36px;
-    border-radius: 36px;
-    border: 4px solid var(--light-gray);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+  box-sizing: border-box;
+  width: 36px;
+  height: 36px;
+  border-radius: 36px;
+  border: 4px solid var(--light-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 .list-option.selected .checkbox {
-    background-color: var(--light-gray);
+  background-color: var(--light-gray);
 }
 .list-option.selected .checkbox::after {
-    content: '';
-    border-bottom: 4px solid var(--dark-gray);
-    border-right: 4px solid var(--dark-gray);
-    transform: translate(0, -2px) rotate(45deg);
-    position: absolute;
-    width: 6px;
-    height: 12px;
+  content: "";
+  border-bottom: 4px solid var(--dark-gray);
+  border-right: 4px solid var(--dark-gray);
+  transform: translate(0, -2px) rotate(45deg);
+  position: absolute;
+  width: 6px;
+  height: 12px;
 }
 
 .list-option .bird-square {
-    width: 60px;
-    height: 60px;
+  width: 60px;
+  height: 60px;
 }
 
 .list-option b {
-    font-size: 14px;
+  font-size: 14px;
 }
