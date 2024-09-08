@@ -128,7 +128,7 @@ function pickObservation() {
     if (taxon_queues[next_taxon_id].length === 0) resetQueue(next_taxon_id); //refill queue if it emptied
     if (picked !== current) {
       if (mode !== "visual_id") return picked;
-      console.log("trying N PHOTOS", picked.photos.length);
+      console.log("trying to pick next - # photos", picked.photos.length);
       if (picked.photos.length === 1) return picked;
     }
   }
