@@ -118,7 +118,7 @@ function pickObservation() {
   // - using observations with only one photo means the taxon is probably identifiable from just that photo.
   // - this is helpful b/c the user only sees one photo
   let picked;
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 10; i++) {
     //draw from taxon bag, taxa are weighted differently in there depending on how good the player is doing
     let next_taxon_id =
       filtered_taxon_bag[Math.floor(filtered_taxon_bag.length * Math.random())];
@@ -128,7 +128,8 @@ function pickObservation() {
     if (taxon_queues[next_taxon_id].length === 0) resetQueue(next_taxon_id); //refill queue if it emptied
     if (picked !== current) {
       if (mode !== "visual_id") return picked;
-      //   console.log(picked.)
+      console.log("trying N PHOTOS", picked.photos.length);
+      if (picked.photos.length === 1) return picked;
     }
   }
   return picked;
