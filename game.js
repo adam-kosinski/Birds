@@ -40,13 +40,13 @@ function setMode(new_mode) {
   mode = new_mode;
   document.getElementById("game-main").dataset.mode = mode;
   document.getElementById("bird-image").style.cursor =
-    new_mode == "visual_id" ? "zoom-in" : "default";
+    new_mode === "visual_id" ? "zoom-in" : "default";
 
   //update links
   document.querySelectorAll("#bird-list a").forEach((a) => {
     let container = a.closest(".bird-list-item");
     let taxon_id = Number(container.dataset.taxonId);
-    let taxon_obj = list_taxa.find((obj) => obj.id == taxon_id);
+    let taxon_obj = list_taxa.find((obj) => obj.id === taxon_id);
     a.href = getInfoURL(taxon_obj);
   });
 
@@ -96,13 +96,17 @@ function pickObservation() {
 
   //squirrel intruder (only for lists of birds b/c that's what is easily confused with squirrels)
   const all_birds = list_taxa.every((taxon) => taxon.ancestor_ids.includes(3));
-  if (all_birds && mode == "birdsong" && Math.random() < SQUIRREL_PROBABILITY) {
+  if (
+    all_birds &&
+    mode === "birdsong" &&
+    Math.random() < SQUIRREL_PROBABILITY
+  ) {
     return squirrel_obs[Math.floor(Math.random() * squirrel_obs.length)];
   }
 
   //filter to get taxa we currently have observations for
   let filtered_taxon_bag = taxon_bag.filter((id) => taxon_obs[id].length > 0);
-  if (filtered_taxon_bag.length == 0) {
+  if (filtered_taxon_bag.length === 0) {
     console.error("No observations found, cannot pick one");
     alert(
       "Error: Cannot pick the next observation because no observations were found. This could be because:\n-Data is still being fetched\n-All iNaturalist observations are either not research grade or marked as 'Don't Show Again'\n-Some other error.\n\nPlease reload the page and try again."
@@ -110,7 +114,9 @@ function pickObservation() {
     return;
   }
 
-  // try a bunch of times to not duplicate the current observation
+  // try a bunch of times to not duplicate the current observation, and to pick one with only one photo (if visual id mode)
+  // - using observations with only one photo means the taxon is probably identifiable from just that photo.
+  // - this is helpful b/c the user only sees one photo
   let picked;
   for (let i = 0; i < 5; i++) {
     //draw from taxon bag, taxa are weighted differently in there depending on how good the player is doing
@@ -119,8 +125,8 @@ function pickObservation() {
 
     //take a random observation from our available ones for that taxon
     picked = taxon_queues[next_taxon_id].shift();
-    if (taxon_queues[next_taxon_id].length == 0) resetQueue(next_taxon_id); //refill queue if it emptied
-    if (picked != current) return picked;
+    if (taxon_queues[next_taxon_id].length === 0) resetQueue(next_taxon_id); //refill queue if it emptied
+    if (picked !== current) return picked;
   }
   return picked;
 }
@@ -144,7 +150,7 @@ async function initGame() {
     document.querySelectorAll("#bird-list .selected")
   ).map((el) => {
     let id = el.dataset.taxonId;
-    return list_taxa.find((obj) => obj.id == id);
+    return list_taxa.find((obj) => obj.id === id);
   });
   if (taxa_to_use.length === 0) taxa_to_use = list_taxa;
   console.log("taxa to use", taxa_to_use);
@@ -222,7 +228,7 @@ async function initGame() {
 
   //switch screens and stop loader
   //if visual id, delay starting until the image is loaded
-  if (mode == "visual_id") {
+  if (mode === "visual_id") {
     document.getElementById("bird-image").addEventListener(
       "load",
       () => {
@@ -249,14 +255,14 @@ async function initGame() {
   //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
   const result = await fetchUntilThreshold(N_OBS_PER_TAXON, 3000);
   //if some taxa had no observations at all, alert the user
-  if (!result.success && result.failure_reason == "not_enough_observations") {
+  if (!result.success && result.failure_reason === "not_enough_observations") {
     let no_obs_ids = result.lacking_ids.filter(
-      (id) => taxon_obs[id].length == 0
+      (id) => taxon_obs[id].length === 0
     );
-    if (no_obs_ids.length == 0) return;
+    if (no_obs_ids.length === 0) return;
 
     let failed_names = no_obs_ids.map((id_str) => {
-      return list_taxa.find((obj) => obj.id == Number(id_str))
+      return list_taxa.find((obj) => obj.id === Number(id_str))
         .preferred_common_name;
     });
     alert(
@@ -323,10 +329,10 @@ async function fetchObservationData(
     "?" +
     extra_args +
     "&" +
-    (mode == "birdsong" ? "sounds=true" : "photos=true") +
+    (mode === "birdsong" ? "sounds=true" : "photos=true") +
     (place_id ? "&place_id=" + place_id : "") +
     "&" +
-    (mode == "birdsong"
+    (mode === "birdsong"
       ? "sound_license=cc-by,cc-by-nc,cc-by-nd,cc-by-sa,cc-by-nc-nd,cc-by-nc-sa,cc0"
       : "photo_licensed=true") +
     "&quality_grade=research&taxon_id=" +
@@ -353,7 +359,7 @@ async function fetchObservationData(
 
   //fetch data -------------------------------------------------------------------
 
-  if (n_pages == 0) {
+  if (n_pages === 0) {
     console.log("n_pages is 0, skipping fetch");
     console.groupEnd();
     return false;
@@ -371,7 +377,7 @@ async function fetchObservationData(
     const obj = data.results[i];
 
     //make sure audio has a working url (not always the case)
-    if (mode == "birdsong" && !obj.sounds[0].file_url) {
+    if (mode === "birdsong" && !obj.sounds[0].file_url) {
       if (!current.is_squirrel_intruder) addBadId(obj.taxon.id, obj.id, mode); //firebase.js
       continue;
     }
@@ -404,16 +410,18 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
 
   let lacking_ids;
   let trying_popular = true;
-  let trying_no_photos = mode == "birdsong";
+  let trying_no_photos = mode === "birdsong";
   let popular_attempts =
-    mode == "birdsong" ? BIRDSONG_POPULAR_ATTEMPTS : VISUAL_ID_POPULAR_ATTEMPTS;
+    mode === "birdsong"
+      ? BIRDSONG_POPULAR_ATTEMPTS
+      : VISUAL_ID_POPULAR_ATTEMPTS;
 
   for (let attempt = 1; attempt <= MAX_FETCH_ATTEMPTS; attempt++) {
     //figure out ids with less than threshold, and check if we're done
     lacking_ids = Object.keys(taxon_obs).filter(
       (id) => taxon_obs[id].length < threshold
     );
-    if (lacking_ids.length == 0) {
+    if (lacking_ids.length === 0) {
       console.log("THRESHOLD OF " + threshold + " MET");
       return { success: true };
     }
@@ -494,7 +502,7 @@ function nextObservation() {
   console.log("current", current);
 
   let taxon_id = searchAncestorsForTaxonId(current);
-  let taxon_obj = taxa_to_use.find((obj) => obj.id == taxon_id);
+  let taxon_obj = taxa_to_use.find((obj) => obj.id === taxon_id);
   if (current.is_squirrel_intruder) {
     taxon_obj = squirrel_taxon_obj;
   }
@@ -505,7 +513,7 @@ function nextObservation() {
   document.getElementById("answer-scientific-name").textContent =
     taxon_obj.name;
   document.getElementById("answer-species-name-appended").textContent =
-    taxon_obj.rank == "species"
+    taxon_obj.rank === "species"
       ? ""
       : current.taxon.preferred_common_name
       ? " - " + current.taxon.preferred_common_name
@@ -531,7 +539,7 @@ function nextObservation() {
 
   let photo; //stored here for attribution later
 
-  if (mode == "birdsong") {
+  if (mode === "birdsong") {
     document.getElementById("birdsong-question").innerHTML = getQuestionHTML(
       mode,
       taxon_obj,
@@ -548,7 +556,7 @@ function nextObservation() {
       photo = current.photos[0];
       bird_image.src = photo.url.replace("square", "medium");
     } else {
-      if (taxon_obj.rank == "species" && taxon_obj.default_photo) {
+      if (taxon_obj.rank === "species" && taxon_obj.default_photo) {
         photo = taxon_obj.default_photo;
         bird_image.src = taxon_obj.default_photo.medium_url;
       } else if (current.taxon.default_photo) {
@@ -573,7 +581,7 @@ function nextObservation() {
     //start loading the next observation's audio
     //the event listener on the preloader will try to change the choice for 'next' if the audio is too long
     audio_preloader.src = next.sounds[0].file_url;
-  } else if (mode == "visual_id") {
+  } else if (mode === "visual_id") {
     document.getElementById("visual-id-question").innerHTML = getQuestionHTML(
       mode,
       taxon_obj
@@ -595,7 +603,7 @@ function nextObservation() {
     document.getElementById("image-attribution").textContent =
       photo.attribution;
     document.getElementById("image-copyright-type").textContent =
-      photo.license_code == "cc0"
+      photo.license_code === "cc0"
         ? "CC0"
         : photo.license_code === null
         ? "C"
@@ -628,7 +636,7 @@ function checkAnswer() {
 
   let correct = Boolean(
     guess_obj &&
-      (current.taxon.id == guess_obj.id ||
+      (current.taxon.id === guess_obj.id ||
         current.taxon.ancestor_ids.includes(guess_obj.id))
   );
   document.getElementById("game-main").dataset.correct =
@@ -661,7 +669,7 @@ function checkAnswer() {
 }
 
 function updateTaxonBag(taxon_id, delta) {
-  let n_copies_in_bag = taxon_bag.filter((id) => id == taxon_id).length;
+  let n_copies_in_bag = taxon_bag.filter((id) => id === taxon_id).length;
   let target = Math.max(
     1,
     Math.min(MAX_TAXON_BAG_COPIES, n_copies_in_bag + delta)

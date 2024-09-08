@@ -123,7 +123,7 @@ async function fetchSpeciesCounts(taxon_id = 3, months = "") {
     list.append(div);
   }
 
-  if (data.results.length == 0) {
+  if (data.results.length === 0) {
     let p = document.createElement("p");
     p.textContent = "No observations found";
     list.append(p);

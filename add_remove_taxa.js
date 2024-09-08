@@ -44,7 +44,7 @@ async function addBirds(taxa_id_list) {
       ids_to_fetch.push(id);
     }
   });
-  if (ids_to_fetch.length == 0) return;
+  if (ids_to_fetch.length === 0) return;
 
   //clear message about no birds selected, start loader
   document.getElementById("bird-list-message").style.display = "none";
@@ -174,7 +174,7 @@ async function addBirds(taxa_id_list) {
     refreshTaxonProficiencyDisplay(taxon.id, mode);
 
     // if just added a bird manually (proxy check if only added one), highlight it
-    if (results.length == 1) highlightElement(container);
+    if (results.length === 1) highlightElement(container);
   });
 
   //enable button
@@ -201,7 +201,7 @@ function removeBird(taxon_id) {
 
   //remove from JS
   for (let i = 0; i < list_taxa.length; i++) {
-    if (list_taxa[i].id == taxon_id) {
+    if (list_taxa[i].id === taxon_id) {
       list_taxa.splice(i, 1);
       break;
     }
@@ -211,7 +211,7 @@ function removeBird(taxon_id) {
   document.getElementById("n-species-display").textContent = list_taxa.length;
 
   //remove from URL
-  if (list_taxa.length == 0) {
+  if (list_taxa.length === 0) {
     //clear search params
     setURLParam("taxa", "");
   } else {
@@ -219,7 +219,7 @@ function removeBird(taxon_id) {
   }
 
   //if no birds selected, update message and button
-  if (list_taxa.length == 0) {
+  if (list_taxa.length === 0) {
     document.getElementById("bird-list-message").style.display = "block";
     document.getElementById("start-game-button").disabled = true;
     document.getElementById("above-list-container").style.display = "none";
@@ -246,7 +246,7 @@ initAutocomplete(
   },
   //result callback
   (obj, list_option) => {
-    if (!obj.default_photo || obj.observations_count == 0) return; //extinct species are sometimes returned
+    if (!obj.default_photo || obj.observations_count === 0) return; //extinct species are sometimes returned
 
     list_option.dataset.taxonId = obj.id;
 
