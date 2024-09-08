@@ -114,23 +114,39 @@ function pickObservation() {
     return;
   }
 
-  // try a bunch of times to not duplicate the current observation, and to pick one with only one photo (if visual id mode)
+  // try a few times to not duplicate the current observation, and to pick one with only one or few photos (if visual id mode)
   // - using observations with only one photo means the taxon is probably identifiable from just that photo.
   // - this is helpful b/c the user only sees one photo
+  // - don't try too hard though because then repeat the same observations too much
   let picked;
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 3; i++) {
     //draw from taxon bag, taxa are weighted differently in there depending on how good the player is doing
     let next_taxon_id =
       filtered_taxon_bag[Math.floor(filtered_taxon_bag.length * Math.random())];
 
     //take a random observation from our available ones for that taxon
+    prev_picked = picked; // store previous pick so we can compare # photos
     picked = taxon_queues[next_taxon_id].shift();
-    if (taxon_queues[next_taxon_id].length === 0) resetQueue(next_taxon_id); //refill queue if it emptied
-    if (picked !== current) {
-      if (mode !== "visual_id") return picked;
-      console.log("trying to pick next - # photos", picked.photos.length);
-      if (picked.photos.length === 1) return picked;
+
+    //refill queue if it emptied
+    if (taxon_queues[next_taxon_id].length === 0) resetQueue(next_taxon_id);
+
+    // main priority is not to duplicate the current observation
+    if (picked === current) continue;
+
+    // if not duplicating and mode isn't visual id, we can use this one
+    if (mode !== "visual_id") return picked;
+
+    // in visual id mode, try for fewer photos - ideally 1
+    if (picked.photos.length === 1) {
+      console.log("trying to pick next - found obs with 1 photo");
+      return picked;
     }
+    // prefer the observation with fewer photos
+    if (prev_picked && prev_picked.photos.length < picked.photos.length) {
+      picked = prev_picked;
+    }
+    console.log("trying to pick next - # photos", picked.photos.length);
   }
   return picked;
 }
