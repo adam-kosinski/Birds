@@ -344,18 +344,14 @@ async function fetchObservationData(
   const prefix = "https://api.inaturalist.org/v1/observations";
   const args =
     "?" +
-    extra_args +
-    "&" +
-    (mode === "birdsong" ? "sounds=true" : "photos=true") +
+    (extra_args ? extra_args + "&" : "") +
+    `taxon_id=${taxa_id_string}&quality_grade=research` +
     (place_id ? "&place_id=" + place_id : "") +
-    "&" +
     (mode === "birdsong"
-      ? "sound_license=cc-by,cc-by-nc,cc-by-nd,cc-by-sa,cc-by-nc-nd,cc-by-nc-sa,cc0"
-      : "photo_licensed=true") +
-    "&quality_grade=research&taxon_id=" +
-    taxa_id_string +
-    "&not_id=" +
-    [...obs_ids_we_have, ...bad_obs_ids].join(",");
+      ? "&sounds=true&sound_license=cc-by,cc-by-nc,cc-by-nd,cc-by-sa,cc-by-nc-nd,cc-by-nc-sa,cc0"
+      : "&photos=true&photo_licensed=true") +
+    `&not_id=${[...obs_ids_we_have, ...bad_obs_ids].join(",")}`;
+
   console.log(prefix + args);
 
   //figure out how many pages we're dealing with if we don't know -------------------
