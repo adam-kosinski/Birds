@@ -503,9 +503,9 @@ function nextObservation() {
     taxon_obj = squirrel_taxon_obj;
   }
 
-  //set taxon HTML (not necessarily displayed yet, see scss)
+  //set taxon HTML (not necessarily displayed yet, see game_display.scss)
   document.getElementById("answer-common-name").textContent =
-    taxon_obj.preferred_common_name;
+    taxon_obj.preferred_common_name || taxon_obj.name; // fall back onto scientific name
   document.getElementById("answer-scientific-name").textContent =
     taxon_obj.name;
   document.getElementById("answer-species-name-appended").textContent =
