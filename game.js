@@ -385,6 +385,16 @@ async function fetchObservationData(
   ).then((res) => res.json());
   console.log(data);
 
+  // shuffle if popular fetch, so we don't add the same popular ones every time
+  if (args.includes("popular=true")) {
+    const shuffled = [];
+    for (const obj of data.results) {
+      const i = Math.floor(shuffled.length * Math.random());
+      shuffled.splice(i, 0, obj);
+    }
+    data.results = shuffled;
+  }
+
   //add to data structures
   for (let i = 0; i < data.results.length; i++) {
     const obj = data.results[i];
@@ -396,14 +406,29 @@ async function fetchObservationData(
     }
 
     const id = searchAncestorsForTaxonId(obj);
-    if (taxon_obs.hasOwnProperty(id)) {
-      // need to check for this in case game was ended while we were fetching
-      taxon_obs[id].push(obj);
+
+    // don't add too many popular observations, when fetching only popular observations
+    if (args.includes("popular=true")) {
+      const n_popular = taxon_obs[id].filter((x) => x.faves_count > 0).length;
+      if (n_popular >= MAX_POPULAR_OBS) continue;
     }
-    if (taxon_queues.hasOwnProperty(id)) {
+
+    // need to check that we have a place to put the data (in case the game was ended while we were fetching)
+    if (taxon_obs.hasOwnProperty(id) && taxon_queues.hasOwnProperty(id)) {
+      taxon_obs[id].push(obj);
       taxon_queues[id].push(obj);
     }
   }
+  // report if hit popular limit
+  if (args.includes("popular=true")) {
+    for (const id in taxon_obs) {
+      const n_popular = taxon_obs[id].filter((x) => x.faves_count > 0).length;
+      if (n_popular >= MAX_POPULAR_OBS) {
+        console.log(`hit max popular obs (${MAX_POPULAR_OBS}) for taxon ${id}`);
+      }
+    }
+  }
+
   console.log("Done adding to data structures");
   console.groupEnd();
   return true;
