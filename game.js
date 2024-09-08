@@ -126,7 +126,10 @@ function pickObservation() {
     //take a random observation from our available ones for that taxon
     picked = taxon_queues[next_taxon_id].shift();
     if (taxon_queues[next_taxon_id].length === 0) resetQueue(next_taxon_id); //refill queue if it emptied
-    if (picked !== current) return picked;
+    if (picked !== current) {
+      if (mode !== "visual_id") return picked;
+      //   console.log(picked.)
+    }
   }
   return picked;
 }
@@ -149,7 +152,7 @@ async function initGame() {
   taxa_to_use = Array.from(
     document.querySelectorAll("#bird-list .selected")
   ).map((el) => {
-    let id = el.dataset.taxonId;
+    let id = Number(el.dataset.taxonId);
     return list_taxa.find((obj) => obj.id === id);
   });
   if (taxa_to_use.length === 0) taxa_to_use = list_taxa;
@@ -211,8 +214,7 @@ async function initGame() {
     button.className = "bird-grid-option";
     button.dataset.commonName = obj.preferred_common_name;
     if (obj.default_photo)
-      button.style.backgroundImage =
-        "url('" + obj.default_photo.square_url + "')";
+      button.style.backgroundImage = `url('${obj.default_photo.square_url}')`;
     bird_grid.append(button);
 
     //datalist - only include scientific option if taxon isn't a species/subspecies, OR if taxon is a plant
@@ -304,9 +306,7 @@ async function fetchObservationData(
   }
   const taxa_id_string = taxa_ids.join(",");
 
-  console.groupCollapsed(
-    "FETCH " + taxa_id_string + "\nExtra args: " + extra_args
-  );
+  console.groupCollapsed(`FETCH ${taxa_id_string}\nExtra args: ${extra_args}`);
 
   //figure out which observations (of the requested taxa) we have already so we don't repeat
   let obs_ids_we_have = [];
@@ -480,12 +480,7 @@ async function fetchUntilThreshold(threshold = 1, delay_between_attempts = 0) {
     }
   }
   console.warn(
-    "Exceeded max (" +
-      MAX_FETCH_ATTEMPTS +
-      ") number of attempts to fetch until threshold of " +
-      threshold +
-      "\nTaxon ids remaining: " +
-      lacking_ids.join(",")
+    `Exceeded max (${MAX_FETCH_ATTEMPTS}) number of attempts to fetch until threshold of ${threshold}\nTaxon ids remaining: ${lacking_ids.join()}`
   );
   return {
     success: false,
