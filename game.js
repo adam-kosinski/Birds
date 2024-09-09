@@ -124,15 +124,19 @@ function pickObservation() {
     let next_taxon_id =
       filtered_taxon_bag[Math.floor(filtered_taxon_bag.length * Math.random())];
 
-    //take a random observation from our available ones for that taxon
+    //take an observation from our available ones for that taxon
     prev_picked = picked; // store previous pick so we can compare # photos
     picked = taxon_queues[next_taxon_id].shift();
-
     //refill queue if it emptied
     if (taxon_queues[next_taxon_id].length === 0) resetQueue(next_taxon_id);
 
     // main priority is not to duplicate the current observation
-    if (picked === current) continue;
+    if (picked === current) {
+      // revert to non-current if we can
+      if (prev_picked && prev_picked !== current) picked = prev_picked;
+      // keep looking
+      continue;
+    }
 
     // if not duplicating and mode isn't visual id, we can use this one
     if (mode !== "visual_id") return picked;
