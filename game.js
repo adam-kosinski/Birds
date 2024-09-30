@@ -556,7 +556,8 @@ function nextObservation() {
       ? " - " + current.taxon.preferred_common_name
       : "";
   document.getElementById("answer-info-link").href = getInfoURL(taxon_obj);
-  document.getElementById("inat-link").href = current.uri;
+  document.getElementById("inat-link").href =
+    "https://www.inaturalist.org/observations/" + current.id;
 
   //reset HTML from answer screen
   document.getElementById("guess-input").value = "";
