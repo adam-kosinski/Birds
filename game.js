@@ -206,18 +206,23 @@ async function initGame() {
   );
 
   // get initial data
-  const data_was_fetched = await fetchObservationData(
-    undefined,
-    "",
-    INITIAL_PER_PAGE
-  );
-  if (!data_was_fetched) {
-    alert(
-      "Failed to find research grade iNaturalist observations for any of the chosen birds. Please try again with different birds."
+  const taxa_ids = taxa_to_use.map((obj) => obj.id);
+  if (mode === "ebird_calls") {
+    loadEBirdCalls(taxa_ids);
+  } else {
+    const data_was_fetched = await fetchObservationData(
+      taxa_ids,
+      "",
+      INITIAL_PER_PAGE
     );
-    document.getElementById("bird-list-loader").style.display = "none";
-    resetAndExitGame();
-    return;
+    if (!data_was_fetched) {
+      alert(
+        "Failed to find research grade iNaturalist observations for any of the chosen birds. Please try again with different birds."
+      );
+      document.getElementById("bird-list-loader").style.display = "none";
+      resetAndExitGame();
+      return;
+    }
   }
 
   //populate bird grid
@@ -320,6 +325,7 @@ async function fetchObservationData(
   if (!taxa_ids) {
     taxa_ids = taxa_to_use.map((obj) => obj.id);
   }
+
   if (!per_page) {
     //don't try to fetch with a big per page if realistically we don't need that many observations
     let n_obs_needed_ish = taxa_ids.length * N_OBS_PER_TAXON;
@@ -403,7 +409,8 @@ async function fetchObservationData(
   for (let i = 0; i < data.results.length; i++) {
     const obj = data.results[i];
 
-    //make sure audio has a working url (not always the case)
+    // make sure audio has a working url (not always the case)
+    // if not, mark it as a bad id
     if (
       (mode === "birdsong" || mode === "ebird_calls") &&
       !obj.sounds[0].file_url
