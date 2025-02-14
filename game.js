@@ -33,7 +33,7 @@ function setGameState(state) {
 function setMode(new_mode) {
   //update HTML and JS
   document
-    .querySelectorAll("#mode-toggle-container *")
+    .querySelectorAll("#mode-container *")
     .forEach((el) => el.classList.remove("selected"));
   document
     .querySelector("[data-mode=" + new_mode + "]")
@@ -67,6 +67,16 @@ function setMode(new_mode) {
 
 function setDataSource(new_data_source) {
   data_source = new_data_source;
+
+  if (new_data_source === "ebird_calls") {
+    document
+      .querySelector(".override[data-name=ebird_calls]")
+      .setAttribute("active", true);
+  } else {
+    document
+      .querySelectorAll(".override[active]")
+      .forEach((el) => el.removeAttribute("active"));
+  }
 }
 
 // try a different observation if the audio is too long
