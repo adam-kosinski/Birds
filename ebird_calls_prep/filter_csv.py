@@ -4,17 +4,27 @@ import csv
 
 def should_include(row):
     # filter out recordings with human voice prefix
-    if row["Recordist"] == "Wil Hershberger":
+    people_to_ignore = ["Wil Hershberger", "Geoffrey A. Keller"]
+    if row["Recordist"] in people_to_ignore:
         return False
 
     # filter out recordings containing birdsong - giveaway
-    # if row[""]
+    if "Song" in row["Behaviors"]:
+        return False
+
+    # filter out weird subspecies
+    if len(row["Scientific Name"].split()) > 2:
+        print("Ignoring subspecies", row["Scientific Name"])
+        return False
 
     return True
 
 
 RAW_DIR = "csv_raw"
 CLEAN_DIR = "csv_filtered"
+DESIRED_N_OBS = 15
+
+not_enough_obs = []
 
 # find csv files for each taxon in this directory
 for file in os.listdir(RAW_DIR):
@@ -26,7 +36,11 @@ for file in os.listdir(RAW_DIR):
     # read in file
     with open(os.path.join(RAW_DIR, file), encoding='utf-8-sig') as f:
         reader = csv.DictReader(f)
-        filtered_rows = [row for row in reader if should_include(row)]
+        for i, row in enumerate(reader):
+            if should_include(row):
+                filtered_rows.append(row)
+            if len(filtered_rows) >= DESIRED_N_OBS:
+                break
 
     common_name = filtered_rows[0]["Common Name"]
 
@@ -36,3 +50,10 @@ for file in os.listdir(RAW_DIR):
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(filtered_rows)
+
+    if len(filtered_rows) < DESIRED_N_OBS:
+        not_enough_obs.append(common_name)
+
+print("\nNot enough observations:")
+for name in not_enough_obs:
+    print(name)
