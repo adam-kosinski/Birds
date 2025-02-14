@@ -1,313 +1,310 @@
 /* List screen ============================================== */
 
 #list-screen {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-
-.white-container> :not(#bird-list) {
-    margin-right: 16px;
-    margin-left: 16px;
+.white-container > :not(#bird-list) {
+  margin-right: 16px;
+  margin-left: 16px;
 }
 
 #list-header {
-    display: flex;
-    flex-wrap: wrap;
-    column-gap: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 40px;
 }
 
 #list-title {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 8px;
-    white-space: nowrap;
-    
-    /* for large displays, make the spacing appear more even with a negative margin to the right */
-    margin-right: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  white-space: nowrap;
+
+  /* for large displays, make the spacing appear more even with a negative margin to the right */
+  margin-right: -5px;
 }
 
 .taxa-to-practice-title {
-    display: none;
+  display: none;
 }
 
-.white-container:has([data-is-bird=false]) .taxa-to-practice-title {
-    display: block;
+.white-container:has([data-is-bird="false"]) .taxa-to-practice-title {
+  display: block;
 }
 
-.white-container:has([data-is-bird=false]) .birds-to-practice-title {
-    display: none;
+.white-container:has([data-is-bird="false"]) .birds-to-practice-title {
+  display: none;
 }
-
 
 #bird-list-loader {
-    display: none;
-    flex-shrink: 0;
+  display: none;
+  flex-shrink: 0;
 }
-
-
 
 /* mode toggle */
 
 #mode-toggle-container {
-    flex-shrink: 0;
-    margin-top: 10px;
+  flex-shrink: 0;
+  margin-top: 10px;
 
-    display: flex;
-    gap: 10px;
-    align-items: center;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 #mode-toggle {
-    width: 180px;
-    border-radius: 12px;
-    background-color: #eee;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    position: relative;
+  width: 180px;
+  border-radius: 12px;
+  background-color: #eee;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+}
+#fixed-modes:has(.selected) + #mode-toggle {
+  display: none;
 }
 
 #mode-toggle button {
-    padding: 6px;
-    position: relative;
-    color: var(--dark-gray);
-    -webkit-tap-highlight-color: transparent;
+  padding: 6px;
+  position: relative;
+  color: var(--dark-gray);
+  -webkit-tap-highlight-color: transparent;
 }
 
 #mode-toggle button.selected {
-    font-weight: bold;
-    color: black;
+  font-weight: bold;
+  color: black;
 }
 
 #mode-highlight {
-    position: absolute;
-    width: 50%;
-    height: 100%;
-    background-color: #ccc;
-    border-radius: inherit;
-    left: 0%;
-    transition: left 0.25s;
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background-color: #ccc;
+  border-radius: inherit;
+  left: 0%;
+  transition: left 0.25s;
 }
 
 #mode-toggle:has(#mode-visual-id.selected) #mode-highlight {
-    left: 50%;
+  left: 50%;
 }
 
-
-
+#fixed-modes {
+  display: none;
+}
+#fixed-modes:has(.selected) {
+  display: block;
+}
 
 /* Bird input and autocomplete */
 
 #bird-input-container {
-    position: relative;
-    z-index: 5;
-    margin-top: 10px;
-    width: 100%;
-    max-width: 350px;
+  position: relative;
+  z-index: 5;
+  margin-top: 10px;
+  width: 100%;
+  max-width: 350px;
 }
 
 #add-bird-input {
-    width: 100%;
-    box-sizing: border-box;
-    position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
 }
 
 #taxon-autocomplete-list {
-    display: none;
-    position: absolute;
-    z-index: -1;
-    transform: translateX(10px);
-    top: calc(100% - 10px);
-    padding-top: 10px;
+  display: none;
+  position: absolute;
+  z-index: -1;
+  transform: translateX(10px);
+  top: calc(100% - 10px);
+  padding-top: 10px;
 
-    width: calc(100% - 20px);
-    /* 10px on either side of input */
+  width: calc(100% - 20px);
+  /* 10px on either side of input */
 
-    background-color: white;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  background-color: white;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-#taxon-autocomplete-list>* {
-    padding: 5px 10px 5px 10px;
-    text-align: left;
-    width: 100%;
+#taxon-autocomplete-list > * {
+  padding: 5px 10px 5px 10px;
+  text-align: left;
+  width: 100%;
 }
 
 .autocomplete-option {
-    display: grid;
-    grid-template-columns: min-content 1fr min-content;
-    /* image, name, map icon */
+  display: grid;
+  grid-template-columns: min-content 1fr min-content;
+  /* image, name, map icon */
 
-    gap: 10px;
-    align-items: center;
+  gap: 10px;
+  align-items: center;
 }
 
 .autocomplete-option:not(:first-child) {
-    border-top: 1px solid rgba(0, 0, 0, 0.25);
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
 }
 
 .autocomplete-option:hover {
-    background-color: var(--light-gray);
+  background-color: var(--light-gray);
 }
 
 .autocomplete-option img {
-    width: 50px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  width: 50px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
-
-
-
-
-
 
 /* bird list */
 
 #bird-list-message {
-    margin-top: 30px;
-    display: none;
+  margin-top: 30px;
+  display: none;
 }
 
 #above-list-container {
-    display: none;
-    /* usually grid */
+  display: none;
+  /* usually grid */
 
-    max-width: 350px;
-    grid-template-columns: auto auto auto;
-    align-items: center;
+  max-width: 350px;
+  grid-template-columns: auto auto auto;
+  align-items: center;
 }
 
 #species-or-taxa::after {
-    content: 'species';
+  content: "species";
 }
 
-.white-container:has([data-rank]:not([data-rank=species])) #species-or-taxa::after {
-    content: 'taxa';
+.white-container:has([data-rank]:not([data-rank="species"]))
+  #species-or-taxa::after {
+  content: "taxa";
 }
 
 #above-list-container button {
-    color: var(--medium-gray);
-    padding: 5px;
+  color: var(--medium-gray);
+  padding: 5px;
 }
 
 #clear-selection {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 .white-container:has(#bird-list .selected) #clear-selection {
-    visibility: visible;
+  visibility: visible;
 }
 
-
 #bird-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
-    overflow-y: auto;
-    position: relative;
-    /* for aligning '+' pseudo elements*/
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
+  overflow-y: auto;
+  position: relative;
+  /* for aligning '+' pseudo elements*/
 
-    /* to place scrollbar outside of content */
-    box-sizing: border-box;
-    width: 100%;
-    padding-left: 11px;
-    /* plus the row's 5px padding gives 16px */
-    padding-right: 11px;
-    padding-bottom: 5px;
+  /* to place scrollbar outside of content */
+  box-sizing: border-box;
+  width: 100%;
+  padding-left: 11px;
+  /* plus the row's 5px padding gives 16px */
+  padding-right: 11px;
+  padding-bottom: 5px;
 }
 
 .bird-list-item {
-    display: grid;
-    grid-template-columns: min-content 1fr min-content min-content;
-    align-items: center;
-    gap: 10px;
-    padding: 5px;
-    border-radius: 12px;
-    max-width: 350px;
-    position: relative;
-    /* for the plus signs */
+  display: grid;
+  grid-template-columns: min-content 1fr min-content min-content;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  border-radius: 12px;
+  max-width: 350px;
+  position: relative;
+  /* for the plus signs */
 }
 
 .bird-square,
 .plus-sign,
 .taxon-progress {
-    /* adding onto base.css for .bird-square */
-    cursor: pointer;
+  /* adding onto base.css for .bird-square */
+  cursor: pointer;
 }
 
 .x-button {
-    width: 30px;
-    height: 30px;
-    border-radius: 20px;
-    background-color: var(--light-gray);
-    color: var(--dark-gray);
-    font-size: 16px;
-    font-weight: bold;
+  width: 30px;
+  height: 30px;
+  border-radius: 20px;
+  background-color: var(--light-gray);
+  color: var(--dark-gray);
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .x-button::before {
-    content: '✖';
+  content: "✖";
 }
 
 .just-added {
-    animation: highlight 2s;
-    /* should match setTimeout in add_remove_birds.js */
+  animation: highlight 2s;
+  /* should match setTimeout in add_remove_birds.js */
 }
 
 @keyframes highlight {
-    from {
-        background-color: var(--focus-color);
-    }
+  from {
+    background-color: var(--focus-color);
+  }
 
-    to {
-        background-color: transparent;
-    }
+  to {
+    background-color: transparent;
+  }
 }
 
-
-#bird-list:has(.selected)> :not(.selected) {
-    opacity: 0.4;
+#bird-list:has(.selected) > :not(.selected) {
+  opacity: 0.4;
 }
 
 #bird-list .plus-sign {
-    display: none;
+  display: none;
 }
 
-#bird-list:has(.selected)> :not(.selected) .plus-sign {
-    content: '+';
-    font-size: 60px;
-    font-weight: bold;
-    color: white;
-    text-shadow: 0 4px 4px black;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    left: 17.5px;
+#bird-list:has(.selected) > :not(.selected) .plus-sign {
+  content: "+";
+  font-size: 60px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 4px 4px black;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 17.5px;
 }
 
 .taxon-progress {
-    display: none;
-    position: absolute;
+  display: none;
+  position: absolute;
 
-    /* store width as variable so javascript can access */
-    --width: 75px;
-    width: var(--width);
-    height: 12px;
-    /* 5px offsets to account for padding */
-    left: 5px;
-    bottom: 5px;
+  /* store width as variable so javascript can access */
+  --width: 75px;
+  width: var(--width);
+  height: 12px;
+  /* 5px offsets to account for padding */
+  left: 5px;
+  bottom: 5px;
 
-    background-color: rgba(255, 255, 255, 0.5);
-    border-left: 0 solid #00bf00;
-    box-sizing: border-box;
-    /* round the bottom to match the bird image */
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-left: 0 solid #00bf00;
+  box-sizing: border-box;
+  /* round the bottom to match the bird image */
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
 #bird-list.show-taxa-progress .taxon-progress {
-    display: block;
+  display: block;
 }

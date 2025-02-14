@@ -18,7 +18,7 @@ const GUESSING = 1;
 const ANSWER_SHOWN = 2;
 setGameState(INACTIVE);
 
-let mode = "birdsong"; // or "visual_id"
+let mode = "birdsong"; // or "visual_id", or "ebird_calls"
 
 let funny_bird_timeout_id;
 
@@ -32,7 +32,7 @@ function setGameState(state) {
 function setMode(new_mode) {
   //update HTML and JS
   document
-    .querySelectorAll("#mode-toggle button")
+    .querySelectorAll("#mode-toggle-container *")
     .forEach((el) => el.classList.remove("selected"));
   document
     .querySelector("[data-mode=" + new_mode + "]")
@@ -47,7 +47,7 @@ function setMode(new_mode) {
     let container = a.closest(".bird-list-item");
     let taxon_id = Number(container.dataset.taxonId);
     let taxon_obj = list_taxa.find((obj) => obj.id === taxon_id);
-    a.href = getInfoURL(taxon_obj);
+    a.href = getInfoURL(taxon_obj, new_mode);
   });
 
   //update URL
@@ -98,7 +98,7 @@ function pickObservation() {
   const all_birds = list_taxa.every((taxon) => taxon.ancestor_ids.includes(3));
   if (
     all_birds &&
-    mode === "birdsong" &&
+    (mode === "birdsong" || mode === "ebird_calls") &&
     Math.random() < SQUIRREL_PROBABILITY
   ) {
     return squirrel_obs[Math.floor(Math.random() * squirrel_obs.length)];
@@ -404,7 +404,10 @@ async function fetchObservationData(
     const obj = data.results[i];
 
     //make sure audio has a working url (not always the case)
-    if (mode === "birdsong" && !obj.sounds[0].file_url) {
+    if (
+      (mode === "birdsong" || mode === "ebird_calls") &&
+      !obj.sounds[0].file_url
+    ) {
       if (!current.is_squirrel_intruder) addBadId(obj.taxon.id, obj.id, mode); //firebase.js
       continue;
     }
@@ -556,8 +559,7 @@ function nextObservation() {
       ? " - " + current.taxon.preferred_common_name
       : "";
   document.getElementById("answer-info-link").href = getInfoURL(taxon_obj);
-  document.getElementById("inat-link").href =
-    "https://www.inaturalist.org/observations/" + current.id;
+  document.getElementById("observation-link").href = current.uri;
 
   //reset HTML from answer screen
   document.getElementById("guess-input").value = "";
@@ -577,7 +579,7 @@ function nextObservation() {
 
   let photo; //stored here for attribution later
 
-  if (mode === "birdsong") {
+  if (mode === "birdsong" || mode === "ebird_calls") {
     document.getElementById("birdsong-question").innerHTML = getQuestionHTML(
       mode,
       taxon_obj,

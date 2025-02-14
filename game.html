@@ -1,227 +1,343 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>Birds</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans">
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans"
+    />
 
     <!-- leaflet, js must come after css -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
 
-    <link type="text/css" rel="stylesheet" href="base.css">
-    <link type="text/css" rel="stylesheet" href="game-list.css">
-    <link type="text/css" rel="stylesheet" href="game.css">
-    <link type="text/css" rel="stylesheet" href="game_display.css">
-    <link type="text/css" rel="stylesheet" href="range_map.css">
-    <link type="text/css" rel="stylesheet" href="settings.css">
+    <link type="text/css" rel="stylesheet" href="base.css" />
+    <link type="text/css" rel="stylesheet" href="game-list.css" />
+    <link type="text/css" rel="stylesheet" href="game.css" />
+    <link type="text/css" rel="stylesheet" href="game_display.css" />
+    <link type="text/css" rel="stylesheet" href="range_map.css" />
+    <link type="text/css" rel="stylesheet" href="settings.css" />
 
-    <meta name="viewport" content="width=device-width initial-scale=1">
-    <meta charset="UTF-8">
-    <link rel="icon" href="images/favicon.png" media="(prefers-color-scheme: light)">
-    <link rel="icon" href="images/favicon_dark_mode.png" media="(prefers-color-scheme: dark)">
-    <link rel="apple-touch-icon" href="images/favicon.png" media="(prefers-color-scheme: light)">
-    <link rel="apple-touch-icon" href="images/favicon_dark_mode.png" media="(prefers-color-scheme: dark)">
-</head>
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta charset="UTF-8" />
+    <link
+      rel="icon"
+      href="images/favicon.png"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="icon"
+      href="images/favicon_dark_mode.png"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="images/favicon.png"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="images/favicon_dark_mode.png"
+      media="(prefers-color-scheme: dark)"
+    />
+  </head>
 
-<body>
-    <img id="background-image" src="images/cloud_background.png">
-
+  <body>
+    <img id="background-image" src="images/cloud_background.png" />
 
     <div id="list-screen" class="screen">
-        <nav>
-            <a href="index.html"><img class="nav-icon" src="images/birdhouse.png" alt="birdhouse icon">Exit</a>
-            <button id="save-list"><img class="nav-icon" src="images/list_icon.png" alt="list icon">Save List</button>
-            <button class="settings-button">
-                <img class="nav-icon" src="images/settings.svg" alt="settings icon">
+      <nav>
+        <a href="index.html"
+          ><img
+            class="nav-icon"
+            src="images/birdhouse.png"
+            alt="birdhouse icon"
+          />Exit</a
+        >
+        <button id="save-list">
+          <img
+            class="nav-icon"
+            src="images/list_icon.png"
+            alt="list icon"
+          />Save List
+        </button>
+        <button class="settings-button">
+          <img class="nav-icon" src="images/settings.svg" alt="settings icon" />
+        </button>
+      </nav>
+      <div class="white-container">
+        <div id="list-header">
+          <div id="list-title">
+            <p class="font-large">
+              <span class="birds-to-practice-title">Birds to Practice</span>
+              <span class="taxa-to-practice-title">Taxa to Practice</span>
+            </p>
+            <button id="start-game-button" disabled class="btn-primary">
+              START
             </button>
-        </nav>
-        <div class="white-container">
-            <div id="list-header">
-                <div id="list-title">
-                    <p class="font-large">
-                        <span class="birds-to-practice-title">Birds to Practice</span>
-                        <span class="taxa-to-practice-title">Taxa to Practice</span>
-                    </p>
-                    <button id="start-game-button" disabled class="btn-primary">START</button>
-                    <div id="bird-list-loader" class="loader"></div>
-                </div>
-    
-                <div id="mode-toggle-container">
-                    Game Mode
-                    <div id="mode-toggle">
-                        <div id="mode-highlight"></div>
-                        <button id="mode-birdsong" data-mode="birdsong" class="selected">Sound</button>
-                        <button id="mode-visual-id" data-mode="visual_id">Visual ID</button>
-                    </div>
-                </div>
-    
-                <div id="bird-input-container">
-                    <div id="taxon-autocomplete-list"></div>
-                    <input id="add-bird-input" type="search" autocomplete="off" placeholder="Search for bird to add">
-                </div>
-            </div>
-            
+            <div id="bird-list-loader" class="loader"></div>
+          </div>
 
-            <div id="above-list-container">
-                <p class="font-small" style="margin-right: 5px;"><span id="n-species-display">0</span> <span id="species-or-taxa"></span></p>
-                <button id="select-recommended" class="font-small">
-                    <p>PICK RECOMMENDED</p>
-                </button>
-                <button id="clear-selection" class="font-small">
-                    <p>DESELECT ALL (<span id="n-selected">0</span>)</p>
-                </button>
+          <div id="mode-toggle-container">
+            Game Mode:
+
+            <div id="fixed-modes">
+              <!-- if one of these modes is selected, we hide the audio/visual id toggle -->
+              <p data-mode="ebird_calls">eBird Calls</p>
             </div>
-            <div id="bird-list-message">Species list is empty</div>
-            <div id="bird-list"></div>
+
+            <div id="mode-toggle">
+              <div id="mode-highlight"></div>
+              <button id="mode-birdsong" data-mode="birdsong" class="selected">
+                Sound
+              </button>
+              <button id="mode-visual-id" data-mode="visual_id">
+                Visual ID
+              </button>
+            </div>
+          </div>
+
+          <div id="bird-input-container">
+            <div id="taxon-autocomplete-list"></div>
+            <input
+              id="add-bird-input"
+              type="search"
+              autocomplete="off"
+              placeholder="Search for bird to add"
+            />
+          </div>
         </div>
+
+        <div id="above-list-container">
+          <p class="font-small" style="margin-right: 5px">
+            <span id="n-species-display">0</span>
+            <span id="species-or-taxa"></span>
+          </p>
+          <button id="select-recommended" class="font-small">
+            <p>PICK RECOMMENDED</p>
+          </button>
+          <button id="clear-selection" class="font-small">
+            <p>DESELECT ALL (<span id="n-selected">0</span>)</p>
+          </button>
+        </div>
+        <div id="bird-list-message">Species list is empty</div>
+        <div id="bird-list"></div>
+      </div>
     </div>
 
     <div id="game-screen" class="screen">
-        <nav>
-            <div>
-                <a href="index.html"><img class="nav-icon" src="images/birdhouse.png" alt="birdhouse icon">Exit</a>
-                <button id="back-to-list"><img class="nav-icon" src="images/list_icon.png" alt="list icon">Back to
-                    List</button>
-            </div>
-            <div>
-                <a id="inat-link" class="font-small" target="_blank" href="">
-                    <div>iNaturalist<br>Observation</div><img class="nav-icon" src="images/external_link.png"
-                        alt="external link icon">
-                </a>
-                <button class="settings-button">
-                    <img class="nav-icon" src="images/settings.svg" alt="settings icon" style="margin-left: 10px;">
-                </button>
-            </div>
-        </nav>
-        <div id="game-main" data-mode="birdsong">
-            <div id="audio-container">
-                <div>
-                    <audio id="birdsong-audio-0" controls autoplay controlslist="nodownload"></audio>
-                    <audio id="birdsong-audio-1" controls controlslist="nodownload"></audio>
-                </div>
-                <button class="mark-as-bad-button">Flag as Low Quality</button>
-            </div>
-
-            <p id="birdsong-question"></p>
-
-            <div id="bird-image-container" class="birdsong-subflex">
-                <div id="answer-caption">
-                    <div>
-                        <b id="answer-common-name" class="font-large"></b>
-                        <a id="answer-info-link" target="_blank" class="font-large">i</a>
-                    </div>
-                    <i id="answer-scientific-name"></i>
-                    <p id="answer-species-name-appended"></p>
-                </div>
-                <p id="visual-id-question" class="font-large"></p>
-                <div id="bird-image-parent-div">
-                    <img id="bird-image" src="" alt="image of answer">
-                    <div id="image-attribution-container">
-                        <div id="image-attribution"></div>
-                        <button id="image-attribution-button" class="font-small">
-                            <div id="image-copyright-type">CC</div>
-                        </button>
-                    </div>
-                </div>
-                <!-- zoom instructions, only visible for media (hover: hover), see game.css -->
-                <p id="scroll-to-zoom-instructions" class="font-small">(scroll or click image to zoom)</p>
-                <button class="mark-as-bad-button">Flag as Low Quality</button>
-            </div>
-
-            <div id="bird-grid">
-                <!-- <button id="other-option" class="bird-grid-option font-medium" data-common-name="Other">Other</button> -->
-            </div>
-
-            <div class="birdsong-subflex">
-                <datalist id="guess-datalist"></datalist>
-                <input id="guess-input" type="text" autocomplete="off" list="guess-datalist"
-                    placeholder="Write your guess">
-
-                <div id="guess-and-skip-buttons">
-                    <div id="skip-button-container">
-                        <button id="skip-button" class="btn-secondary">SKIP</button>
-                        <div id="skip-loader" class="loader"></div>
-                    </div>
-                    <button id="guess-button" class="btn-primary">REVEAL</button>
-                </div>
-
-                <button id="correct-button" class="btn-primary">CORRECT! NEXT ></button>
-                <button id="incorrect-button" class="btn-primary">INCORRECT, NEXT ></button>
-                <button id="neutral-next-button" class="btn-primary">NO GUESS, NEXT ></button>
-            </div>
-
-            <div>
-                <label for="game-progress">Proficiency</label>
-                <progress id="game-progress" max="1" value="0"></progress>
-            </div>
-
-            <!-- used while skipping -->
-            <div id="page-disabler"></div>
-
-            <img id="img-preloader" src="" style="display: none;">
-            <img id="funny-bird" src="images/funny_hawk_transparent.png">
+      <nav>
+        <div>
+          <a href="index.html"
+            ><img
+              class="nav-icon"
+              src="images/birdhouse.png"
+              alt="birdhouse icon"
+            />Exit</a
+          >
+          <button id="back-to-list">
+            <img
+              class="nav-icon"
+              src="images/list_icon.png"
+              alt="list icon"
+            />Back to List
+          </button>
         </div>
-    </div>
+        <div>
+          <a id="observation-link" class="font-small" target="_blank" href="">
+            <div>iNaturalist<br />Observation</div>
+            <img
+              class="nav-icon"
+              src="images/external_link.png"
+              alt="external link icon"
+            />
+          </a>
+          <button class="settings-button">
+            <img
+              class="nav-icon"
+              src="images/settings.svg"
+              alt="settings icon"
+              style="margin-left: 10px"
+            />
+          </button>
+        </div>
+      </nav>
+      <div id="game-main" data-mode="birdsong">
+        <div id="audio-container">
+          <div>
+            <audio
+              id="birdsong-audio-0"
+              controls
+              autoplay
+              controlslist="nodownload"
+            ></audio>
+            <audio
+              id="birdsong-audio-1"
+              controls
+              controlslist="nodownload"
+            ></audio>
+          </div>
+          <button class="mark-as-bad-button">Flag as Low Quality</button>
+        </div>
 
+        <p id="birdsong-question"></p>
+
+        <div id="bird-image-container" class="birdsong-subflex">
+          <div id="answer-caption">
+            <div>
+              <b id="answer-common-name" class="font-large"></b>
+              <a id="answer-info-link" target="_blank" class="font-large">i</a>
+            </div>
+            <i id="answer-scientific-name"></i>
+            <p id="answer-species-name-appended"></p>
+          </div>
+          <p id="visual-id-question" class="font-large"></p>
+          <div id="bird-image-parent-div">
+            <img id="bird-image" src="" alt="image of answer" />
+            <div id="image-attribution-container">
+              <div id="image-attribution"></div>
+              <button id="image-attribution-button" class="font-small">
+                <div id="image-copyright-type">CC</div>
+              </button>
+            </div>
+          </div>
+          <!-- zoom instructions, only visible for media (hover: hover), see game.css -->
+          <p id="scroll-to-zoom-instructions" class="font-small">
+            (scroll or click image to zoom)
+          </p>
+          <button class="mark-as-bad-button">Flag as Low Quality</button>
+        </div>
+
+        <div id="bird-grid">
+          <!-- <button id="other-option" class="bird-grid-option font-medium" data-common-name="Other">Other</button> -->
+        </div>
+
+        <div class="birdsong-subflex">
+          <datalist id="guess-datalist"></datalist>
+          <input
+            id="guess-input"
+            type="text"
+            autocomplete="off"
+            list="guess-datalist"
+            placeholder="Write your guess"
+          />
+
+          <div id="guess-and-skip-buttons">
+            <div id="skip-button-container">
+              <button id="skip-button" class="btn-secondary">SKIP</button>
+              <div id="skip-loader" class="loader"></div>
+            </div>
+            <button id="guess-button" class="btn-primary">REVEAL</button>
+          </div>
+
+          <button id="correct-button" class="btn-primary">
+            CORRECT! NEXT >
+          </button>
+          <button id="incorrect-button" class="btn-primary">
+            INCORRECT, NEXT >
+          </button>
+          <button id="neutral-next-button" class="btn-primary">
+            NO GUESS, NEXT >
+          </button>
+        </div>
+
+        <div>
+          <label for="game-progress">Proficiency</label>
+          <progress id="game-progress" max="1" value="0"></progress>
+        </div>
+
+        <!-- used while skipping -->
+        <div id="page-disabler"></div>
+
+        <img id="img-preloader" src="" style="display: none" />
+        <img id="funny-bird" src="images/funny_hawk_transparent.png" />
+      </div>
+    </div>
 
     <div id="range-map-modal">
-        <b class="font-large">Observation Map</b>
-        <div id="range-map-taxon-container">
-            <img id="range-map-taxon-image" class="bird-square" src="" alt="image of taxon">
-            <p>
-                <b id="range-map-common-name"></b><br>
-                <i id="range-map-scientific-name"></i>
-            </p>
-        </div>
-        <div id="range-map"></div>
-        <button id="close-range-map" class="btn-primary">BACK</button>
+      <b class="font-large">Observation Map</b>
+      <div id="range-map-taxon-container">
+        <img
+          id="range-map-taxon-image"
+          class="bird-square"
+          src=""
+          alt="image of taxon"
+        />
+        <p>
+          <b id="range-map-common-name"></b><br />
+          <i id="range-map-scientific-name"></i>
+        </p>
+      </div>
+      <div id="range-map"></div>
+      <button id="close-range-map" class="btn-primary">BACK</button>
     </div>
 
-
     <div id="settings-modal">
-        <div id="settings-container">
-            <h2>Settings</h2>
-            <p>Note: Settings are persistent when you reload or revisit this site.</p>
-            <hr>
-            <div>
-                <input id="allow-all-taxa" type="checkbox">
-                <label for="allow-all-taxa">Include all iNaturalist taxa in search results (default is birds
-                    only).</label>
-            </div>
-            <hr>
-            <div>
-                <input id="store-progress" type="checkbox">
-                <label for="store-progress">Store learning progress on your device. As you use the program, your recent
-                    proficiency at identifying each species will be stored on your device, and displayed as a progress
-                    meter below each image in the main list. This is used to:
-                    <ul>
-                        <li>Show less of species that you are proficient at, so you can focus on ones you need practice
-                            with.</li>
-                        <li>Help you choose what to practice next.</li>
-                        <li>Give you a sense of accomplishment to see your progress over time.</li>
-                    </ul>
-                    Unchecking this setting or clearing your browsing data will remove this data from your device.
-                    <br>
-                    <button id="export-data-button">Export Data</button>
-                    <button id="import-data-button">Import Data</button>
-                </label>
-            </div>
-            <hr>
-            <div>
-                <input id="auto-select-recommended" type="checkbox">
-                <label for="auto-select-recommended">Automatically pick recommended species whenever you load a
-                    species list (instead of needing to manually click the "PICK RECOMMENDED" button).
-                    <ul>
-                        <li>Note that without storing progress on your device (see setting above), recommendations will
-                            be much less useful.</li>
-                    </ul>
-                </label>
-            </div>
+      <div id="settings-container">
+        <h2>Settings</h2>
+        <p>
+          Note: Settings are persistent when you reload or revisit this site.
+        </p>
+        <hr />
+        <div>
+          <input id="allow-all-taxa" type="checkbox" />
+          <label for="allow-all-taxa"
+            >Include all iNaturalist taxa in search results (default is birds
+            only).</label
+          >
         </div>
-        <button id="close-settings" class="btn-primary">BACK</button>
+        <hr />
+        <div>
+          <input id="store-progress" type="checkbox" />
+          <label for="store-progress"
+            >Store learning progress on your device. As you use the program,
+            your recent proficiency at identifying each species will be stored
+            on your device, and displayed as a progress meter below each image
+            in the main list. This is used to:
+            <ul>
+              <li>
+                Show less of species that you are proficient at, so you can
+                focus on ones you need practice with.
+              </li>
+              <li>Help you choose what to practice next.</li>
+              <li>
+                Give you a sense of accomplishment to see your progress over
+                time.
+              </li>
+            </ul>
+            Unchecking this setting or clearing your browsing data will remove
+            this data from your device.
+            <br />
+            <button id="export-data-button">Export Data</button>
+            <button id="import-data-button">Import Data</button>
+          </label>
+        </div>
+        <hr />
+        <div>
+          <input id="auto-select-recommended" type="checkbox" />
+          <label for="auto-select-recommended"
+            >Automatically pick recommended species whenever you load a species
+            list (instead of needing to manually click the "PICK RECOMMENDED"
+            button).
+            <ul>
+              <li>
+                Note that without storing progress on your device (see setting
+                above), recommendations will be much less useful.
+              </li>
+            </ul>
+          </label>
+        </div>
+      </div>
+      <button id="close-settings" class="btn-primary">BACK</button>
     </div>
 
     <!-- script order is important so function declarations work properly -->
@@ -241,7 +357,5 @@
     <script src="autocomplete.js"></script>
     <script src="add_remove_taxa.js"></script>
     <script src="range_map.js"></script>
-
-</body>
-
+  </body>
 </html>

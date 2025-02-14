@@ -49,12 +49,12 @@ const RECOMMENDED_SUBSET_SIZES = [16, 8, 4]; // needs to be descending
 const HOURS_SINCE_REVIEWED_THRESHOLD = 24; // if time since reviewed is greater than this, species needs review
 const FRACTION_RESERVED_FOR_REVIEW = 0.25; // this fraction of recommended subsets will consist of species needing review
 
-function getInfoURL(taxon_obj) {
+function getInfoURL(taxon_obj, mode) {
   if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank === "species") {
     return (
       "https://www.allaboutbirds.org/guide/" +
       taxon_obj.preferred_common_name.replaceAll(" ", "_").replaceAll("'", "") +
-      (mode === "birdsong" ? "/sounds" : "/id")
+      (mode === "birdsong" || mode === "ebird_calls" ? "/sounds" : "/id")
     );
   }
   //Amphibians and Reptiles
@@ -214,6 +214,14 @@ function getQuestionHTML(mode, taxon_obj, is_squirrel_intruder = false) {
     } else {
       return `What ${rank} is this ${entity_name}from?`;
     }
+  } else if (mode === "ebird_calls") {
+    if (taxon_obj.rank_level <= 10) {
+      // species, subspecies, etc.
+      return `<span class='font-large'>What ${entity_name}is calling?</span><br>Select one below or write its name`;
+    } else {
+      const rank_article = /a|e|i|o|u/.test(rank[0].toLowerCase()) ? "an" : "a";
+      return `<span class='font-large'>What ${rank} is this ${entity_name}from?</span><br>Select ${rank_article} ${rank} or write its name`;
+    }
   }
 }
 
@@ -262,6 +270,22 @@ const PRESETS = {
       13858, //House Sparrow
       14898, //Brown Thrasher
       19893, //Barred Owl
+    ],
+  },
+  "Backyard Bird Calls (Southeast US)": {
+    description:
+      "Bird calls curated from ebird to help you tell all those chip notes apart.",
+    mode: "ebird_calls",
+    photo: "",
+    taxa: [
+      9083, //Northern Cardinal
+      144814, //Carolina Chickadee
+      7513, //Carolina Wren
+      13632, //Tufted Titmouse
+      8021, //American Crow
+      18205, //Red-bellied Woodpecker
+      9424, //Eastern Towhee
+      12727, //American Robin
     ],
   },
 

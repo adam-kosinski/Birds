@@ -1,41 +1,50 @@
 const firebaseConfig = {
-    apiKey: "AIzaSyDZT6ZnYnrOvWjN3__u2vz7M3gmFS8hX2A",
-    authDomain: "birds-bbabb.firebaseapp.com",
-    projectId: "birds-bbabb",
-    storageBucket: "birds-bbabb.appspot.com",
-    messagingSenderId: "419452911794",
-    appId: "1:419452911794:web:57e05757aca5e24cca09ab"
+  apiKey: "AIzaSyDZT6ZnYnrOvWjN3__u2vz7M3gmFS8hX2A",
+  authDomain: "birds-bbabb.firebaseapp.com",
+  projectId: "birds-bbabb",
+  storageBucket: "birds-bbabb.appspot.com",
+  messagingSenderId: "419452911794",
+  appId: "1:419452911794:web:57e05757aca5e24cca09ab",
 };
 const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-
 async function getBadIds(taxa, mode) {
-    // gets iNaturalist ids of bad observations from firebase
-    const collection = db.collection(`bad-observations-${mode}`);
-    const bad_ids = {}; // key is taxon id, value is array of iNaturalist observation ids
-    const promises = [];
-    taxa.forEach(taxon_id => {
-        promises.push(
-            collection.doc(String(taxon_id)).get().then(doc => {
-                bad_ids[taxon_id] = doc.exists ? doc.data().ids : [];
-            })
-        )
-    });
-    await Promise.all(promises);
-    return bad_ids;
+  // gets iNaturalist ids of bad observations from firebase
+  const collection = db.collection(`bad-observations-${mode}`);
+  const bad_ids = {}; // key is taxon id, value is array of iNaturalist observation ids
+  const promises = [];
+  taxa.forEach((taxon_id) => {
+    promises.push(
+      collection
+        .doc(String(taxon_id))
+        .get()
+        .then((doc) => {
+          bad_ids[taxon_id] = doc.exists ? doc.data().ids : [];
+        })
+    );
+  });
+  await Promise.all(promises);
+  return bad_ids;
 }
 
 function addBadId(taxon_id, iNaturalist_id, mode) {
-    const doc = db.collection(`bad-observations-${mode}`).doc(String(taxon_id));
-    doc.update({
-        ids: firebase.firestore.FieldValue.arrayUnion((iNaturalist_id))
-    }).catch(error => {
-        // document probably doesn't exist for this taxon, create it
-        doc.set({ ids: [iNaturalist_id] });
+  if (!(mode === "birdsong" || mode === "visual_id")) {
+    console.warn(
+      "Tried to add non iNaturalist observation to firebase, canceling attempt."
+    );
+    return;
+  }
+  const doc = db.collection(`bad-observations-${mode}`).doc(String(taxon_id));
+  doc
+    .update({
+      ids: firebase.firestore.FieldValue.arrayUnion(iNaturalist_id),
+    })
+    .catch((error) => {
+      // document probably doesn't exist for this taxon, create it
+      doc.set({ ids: [iNaturalist_id] });
     });
 }
-
 
 // Old idea: optimize firebase writes by updating in bulk instead of after every game question
 // We'd want to update when the game ended, or when the user left the page
