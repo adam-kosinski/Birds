@@ -13,8 +13,8 @@ def should_include(row):
     return True
 
 
-RAW_DIR = "raw_csv"
-CLEAN_DIR = "filtered_csv"
+RAW_DIR = "csv_raw"
+CLEAN_DIR = "csv_filtered"
 
 # find csv files for each taxon in this directory
 for file in os.listdir(RAW_DIR):
