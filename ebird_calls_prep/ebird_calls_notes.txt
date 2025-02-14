@@ -4,3 +4,6 @@ Disable flag poor quality (I did this already, and we want to avoid ebird ids ge
 Don't filter for short audio for ebird ones?
 
 Add bird autocomplete should be limited to birds we have data for
+
+Revert mode to only being visual_id or birdsong, and add a new URL parameter
+This makes more sense for CSS and game logic
