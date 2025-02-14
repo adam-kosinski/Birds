@@ -18,7 +18,8 @@ const GUESSING = 1;
 const ANSWER_SHOWN = 2;
 setGameState(INACTIVE);
 
-let mode = "birdsong"; // or "visual_id", or "ebird_calls"
+let mode = "birdsong"; // or "visual_id"
+let data_source = "iNaturalist"; // default "iNaturalist" (see initURLArgs()), other options: "ebird_calls"
 
 let funny_bird_timeout_id;
 
@@ -64,6 +65,10 @@ function setMode(new_mode) {
   }
 }
 
+function setDataSource(new_data_source) {
+  data_source = new_data_source;
+}
+
 // try a different observation if the audio is too long
 
 let n_short_audio_retries_left = MAX_SHORT_AUDIO_RETRIES;
@@ -77,6 +82,7 @@ setInterval(function () {
 function checkNextAudioDuration(e) {
   // this is an event handler for when the next observation's audio's metadata loads
   // if the audio is too long, try again
+  if (data_source !== "iNaturalist") return; // other data sources will probably be curated already
   if (audio_preloader.duration <= MAX_PREFERRED_AUDIO_DURATION) return;
   if (n_short_audio_retries_left > 0) {
     console.log(
@@ -98,7 +104,7 @@ function pickObservation() {
   const all_birds = list_taxa.every((taxon) => taxon.ancestor_ids.includes(3));
   if (
     all_birds &&
-    (mode === "birdsong" || mode === "ebird_calls") &&
+    mode === "birdsong" &&
     Math.random() < SQUIRREL_PROBABILITY
   ) {
     return squirrel_obs[Math.floor(Math.random() * squirrel_obs.length)];
@@ -207,9 +213,9 @@ async function initGame() {
 
   // get initial data
   const taxa_ids = taxa_to_use.map((obj) => obj.id);
-  if (mode === "ebird_calls") {
+  if (data_source === "ebird_calls") {
     loadEBirdCalls(taxa_ids);
-  } else {
+  } else if (data_source === "iNaturalist") {
     const data_was_fetched = await fetchObservationData(
       taxa_ids,
       "",
@@ -279,25 +285,30 @@ async function initGame() {
   //funny bird
   scheduleFunnyBird();
 
-  //fetch the rest more slowly (limit to < 1 API call per sec)
-  //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
-  const result = await fetchUntilThreshold(N_OBS_PER_TAXON, 3000);
-  //if some taxa had no observations at all, alert the user
-  if (!result.success && result.failure_reason === "not_enough_observations") {
-    let no_obs_ids = result.lacking_ids.filter(
-      (id) => taxon_obs[id].length === 0
-    );
-    if (no_obs_ids.length === 0) return;
+  if (data_source === "iNaturalist") {
+    //fetch the rest more slowly (limit to < 1 API call per sec)
+    //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
+    const result = await fetchUntilThreshold(N_OBS_PER_TAXON, 3000);
+    //if some taxa had no observations at all, alert the user
+    if (
+      !result.success &&
+      result.failure_reason === "not_enough_observations"
+    ) {
+      let no_obs_ids = result.lacking_ids.filter(
+        (id) => taxon_obs[id].length === 0
+      );
+      if (no_obs_ids.length === 0) return;
 
-    let failed_names = no_obs_ids.map((id_str) => {
-      return list_taxa.find((obj) => obj.id === Number(id_str))
-        .preferred_common_name;
-    });
-    alert(
-      "Failed to find research grade iNaturalist observations for " +
-        failed_names.join(", ") +
-        ". This doesn't break anything, just no questions will be about these species."
-    );
+      let failed_names = no_obs_ids.map((id_str) => {
+        return list_taxa.find((obj) => obj.id === Number(id_str))
+          .preferred_common_name;
+      });
+      alert(
+        "Failed to find research grade iNaturalist observations for " +
+          failed_names.join(", ") +
+          ". This doesn't break anything, just no questions will be about these species."
+      );
+    }
   }
 }
 
@@ -411,10 +422,7 @@ async function fetchObservationData(
 
     // make sure audio has a working url (not always the case)
     // if not, mark it as a bad id
-    if (
-      (mode === "birdsong" || mode === "ebird_calls") &&
-      !obj.sounds[0].file_url
-    ) {
+    if (mode === "birdsong" && !obj.sounds[0].file_url) {
       if (!current.is_squirrel_intruder) addBadId(obj.taxon.id, obj.id, mode); //firebase.js
       continue;
     }
@@ -586,7 +594,7 @@ function nextObservation() {
 
   let photo; //stored here for attribution later
 
-  if (mode === "birdsong" || mode === "ebird_calls") {
+  if (mode === "birdsong") {
     document.getElementById("birdsong-question").innerHTML = getQuestionHTML(
       mode,
       taxon_obj,

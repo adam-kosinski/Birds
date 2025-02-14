@@ -54,7 +54,7 @@ function getInfoURL(taxon_obj, mode) {
     return (
       "https://www.allaboutbirds.org/guide/" +
       taxon_obj.preferred_common_name.replaceAll(" ", "_").replaceAll("'", "") +
-      (mode === "birdsong" || mode === "ebird_calls" ? "/sounds" : "/id")
+      (mode === "birdsong" ? "/sounds" : "/id")
     );
   }
   //Amphibians and Reptiles
@@ -214,14 +214,6 @@ function getQuestionHTML(mode, taxon_obj, is_squirrel_intruder = false) {
     } else {
       return `What ${rank} is this ${entity_name}from?`;
     }
-  } else if (mode === "ebird_calls") {
-    if (taxon_obj.rank_level <= 10) {
-      // species, subspecies, etc.
-      return `<span class='font-large'>What ${entity_name}is calling?</span><br>Select one below or write its name`;
-    } else {
-      const rank_article = /a|e|i|o|u/.test(rank[0].toLowerCase()) ? "an" : "a";
-      return `<span class='font-large'>What ${rank} is this ${entity_name}from?</span><br>Select ${rank_article} ${rank} or write its name`;
-    }
   }
 }
 
@@ -275,7 +267,8 @@ const PRESETS = {
   "Backyard Bird Calls (Southeast US)": {
     description:
       "Bird calls curated from ebird to help you tell all those chip notes apart.",
-    mode: "ebird_calls",
+    mode: "birdsong",
+    data_source: "ebird_calls",
     photo: "",
     taxa: [
       9083, //Northern Cardinal

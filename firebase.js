@@ -29,7 +29,7 @@ async function getBadIds(taxa, mode) {
 }
 
 function addBadId(taxon_id, iNaturalist_id, mode) {
-  if (!(mode === "birdsong" || mode === "visual_id")) {
+  if (data_source !== "iNaturalist") {
     console.warn(
       "Tried to add non iNaturalist observation to firebase, canceling attempt."
     );

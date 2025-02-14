@@ -9,6 +9,8 @@ function initURLArgs() {
   let url = new URL(window.location.href);
   let taxa_ids = url.searchParams.get("taxa");
   let default_mode = url.searchParams.get("mode");
+  let data_source_setting =
+    url.searchParams.get("data_source") || "iNaturalist";
   place_id = url.searchParams.get("place_id");
 
   //if no taxa, display message
@@ -17,6 +19,7 @@ function initURLArgs() {
   else addBirds(taxa_ids.split(",").map((s) => Number(s)));
 
   if (default_mode) setMode(default_mode);
+  setDataSource(data_source_setting);
 }
 
 function setURLParam(key, value) {
