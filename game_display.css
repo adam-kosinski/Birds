@@ -88,4 +88,12 @@
   display: none;
 }
 
+/* Other game types */
+[data-data-source=ebird_calls] .mark-as-bad-button {
+  display: none;
+}
+[data-data-source=ebird_calls] #audio-container {
+  grid-template-columns: 1fr;
+}
+
 /*# sourceMappingURL=game_display.css.map */

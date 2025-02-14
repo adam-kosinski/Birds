@@ -3,74 +3,130 @@
 /* By default everything is visible */
 /* All attributes will target #game-main, but omitting that here for cleanliness */
 
+// use with: sass --watch game_display.scss game_display.css
+
 /* General stuff */
 
 //guessing
 [data-game-state="1"] {
-    #correct-button {display: none;}
-    #incorrect-button {display: none;}
-    #neutral-next-button {display: none;}
+  #correct-button {
+    display: none;
+  }
+  #incorrect-button {
+    display: none;
+  }
+  #neutral-next-button {
+    display: none;
+  }
 }
 
 //answer
 [data-game-state="2"] {
-    #guess-and-skip-buttons {display: none;}
+  #guess-and-skip-buttons {
+    display: none;
+  }
 }
 
-[data-game-state="2"][data-correct=true] {
-    #incorrect-button {display: none;}
-    #neutral-next-button {display: none;}
+[data-game-state="2"][data-correct="true"] {
+  #incorrect-button {
+    display: none;
+  }
+  #neutral-next-button {
+    display: none;
+  }
 }
-[data-game-state="2"][data-correct=false] {
-    #correct-button {display: none;}
-    #neutral-next-button {display: none;}
+[data-game-state="2"][data-correct="false"] {
+  #correct-button {
+    display: none;
+  }
+  #neutral-next-button {
+    display: none;
+  }
 }
-[data-game-state="2"][data-correct=no-guess] {
-    #correct-button {display: none;}
-    #incorrect-button {display: none;}
+[data-game-state="2"][data-correct="no-guess"] {
+  #correct-button {
+    display: none;
+  }
+  #incorrect-button {
+    display: none;
+  }
 }
-
-
 
 /* Birdsong game specific */
 
-[data-mode=birdsong] {
-    audio:not([src]) {display: none;}
-    #visual-id-question {display: none;}
-    #scroll-to-zoom-instructions {display: none;}
-    #bird-image-container .mark-as-bad-button {display: none;}
+[data-mode="birdsong"] {
+  audio:not([src]) {
+    display: none;
+  }
+  #visual-id-question {
+    display: none;
+  }
+  #scroll-to-zoom-instructions {
+    display: none;
+  }
+  #bird-image-container .mark-as-bad-button {
+    display: none;
+  }
 }
 
-[data-mode=birdsong][data-game-state="1"] { //guessing
-    #bird-image-container {display: none;}
+[data-mode="birdsong"][data-game-state="1"] {
+  //guessing
+  #bird-image-container {
+    display: none;
+  }
 }
 
-[data-mode=birdsong][data-game-state="2"] { //answer
-    #bird-grid {display: none;}
-    #birdsong-question {display: none;}
+[data-mode="birdsong"][data-game-state="2"] {
+  //answer
+  #bird-grid {
+    display: none;
+  }
+  #birdsong-question {
+    display: none;
+  }
 }
-
-
-
 
 /* Visual ID game specific */
 
-#game-main[data-mode=visual_id] {
-    /* stop the question / caption from getting too close to the top nav */
-    padding-top: 10px;
-    box-sizing: border-box;
+#game-main[data-mode="visual_id"] {
+  /* stop the question / caption from getting too close to the top nav */
+  padding-top: 10px;
+  box-sizing: border-box;
 }
 
-[data-mode=visual_id]  {
-    #audio-container {display: none;}
-    #birdsong-question {display: none;}
-    #bird-grid {display: none;}
+[data-mode="visual_id"] {
+  #audio-container {
+    display: none;
+  }
+  #birdsong-question {
+    display: none;
+  }
+  #bird-grid {
+    display: none;
+  }
 }
 
-[data-mode=visual_id][data-game-state="1"] { //guessing
-    #answer-caption {display: none;}
+[data-mode="visual_id"][data-game-state="1"] {
+  //guessing
+  #answer-caption {
+    display: none;
+  }
 }
 
-[data-mode=visual_id][data-game-state="2"] { //answer
-    #visual-id-question {display: none;}
+[data-mode="visual_id"][data-game-state="2"] {
+  //answer
+  #visual-id-question {
+    display: none;
+  }
+}
+
+/* Other game types */
+
+[data-data-source="ebird_calls"] {
+  .mark-as-bad-button {
+    display: none;
+  }
+  #audio-container {
+    grid-template-columns: 1fr;
+  }
 }

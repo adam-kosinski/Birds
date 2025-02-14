@@ -1,6 +1,1 @@
-Overrule game mode
-
-Disable flag poor quality UI
-- I also put a check in the firebase code for this
-
 Add bird autocomplete should be limited to birds we have data for
