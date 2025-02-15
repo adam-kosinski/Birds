@@ -587,7 +587,10 @@ function nextObservation() {
       : current.taxon.preferred_common_name
       ? " - " + current.taxon.preferred_common_name
       : "";
-  document.getElementById("answer-info-link").href = getInfoURL(taxon_obj);
+  document.getElementById("answer-info-link").href = getInfoURL(
+    taxon_obj,
+    mode
+  );
   document.getElementById("observation-link").href = current.uri;
 
   //reset HTML from answer screen

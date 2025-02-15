@@ -39,11 +39,13 @@ function loadEBirdCalls(taxa_ids) {
   const failedNames = taxaWithoutData.map(
     (id) => taxonObjects[id].preferred_common_name
   );
-  alert(
-    "No bird call data is available for: " +
-      failedNames.join(", ") +
-      ". This doesn't break anything, just no questions will be about these species."
-  );
+  if (failedNames.length > 0) {
+    alert(
+      "No bird call data is available for: " +
+        failedNames.join(", ") +
+        ". This doesn't break anything, just no questions will be about these species."
+    );
+  }
 }
 
 const eBirdCalls = {
@@ -3099,19 +3101,6 @@ const eBirdCalls = {
     {
       taxon_id: 18205,
       common_name: "Red-bellied Woodpecker",
-      id: "ML323504401",
-      uri: "https://macaulaylibrary.org/asset/323504401",
-      sounds: [
-        {
-          file_url:
-            "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/323504401/mp3",
-          attribution: "(c) Wil Hershberger",
-        },
-      ],
-    },
-    {
-      taxon_id: 18205,
-      common_name: "Red-bellied Woodpecker",
       id: "ML306064",
       uri: "https://macaulaylibrary.org/asset/306064",
       sounds: [
@@ -3288,6 +3277,19 @@ const eBirdCalls = {
           file_url:
             "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/491921111/mp3",
           attribution: "(c) Ethan Kang",
+        },
+      ],
+    },
+    {
+      taxon_id: 18205,
+      common_name: "Red-bellied Woodpecker",
+      id: "ML411698511",
+      uri: "https://macaulaylibrary.org/asset/411698511",
+      sounds: [
+        {
+          file_url:
+            "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/411698511/mp3",
+          attribution: "(c) David Cimprich",
         },
       ],
     },
@@ -5463,19 +5465,6 @@ const eBirdCalls = {
     {
       taxon_id: 17008,
       common_name: "Eastern Phoebe",
-      id: "ML55662311",
-      uri: "https://macaulaylibrary.org/asset/55662311",
-      sounds: [
-        {
-          file_url:
-            "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/55662311/mp3",
-          attribution: "(c) Joe Verica",
-        },
-      ],
-    },
-    {
-      taxon_id: 17008,
-      common_name: "Eastern Phoebe",
       id: "ML497847391",
       uri: "https://macaulaylibrary.org/asset/497847391",
       sounds: [
@@ -5652,6 +5641,19 @@ const eBirdCalls = {
           file_url:
             "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/218006981/mp3",
           attribution: "(c) Wil Hershberger",
+        },
+      ],
+    },
+    {
+      taxon_id: 17008,
+      common_name: "Eastern Phoebe",
+      id: "ML132008131",
+      uri: "https://macaulaylibrary.org/asset/132008131",
+      sounds: [
+        {
+          file_url:
+            "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/132008131/mp3",
+          attribution: "(c) David McQuade",
         },
       ],
     },

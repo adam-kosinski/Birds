@@ -1,8 +1,13 @@
 import os
 import csv
 
+bad_ids = [55662311, 323504401]
+
 
 def should_include(row):
+    if int(row["ML Catalog Number"]) in bad_ids:
+        return False
+
     # filter out old recordings which tend to have human voice prefix
     if int(row["Year"]) < 2014:
         return False

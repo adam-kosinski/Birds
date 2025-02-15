@@ -135,7 +135,7 @@ async function addBirds(taxa_id_list) {
     bird_square.alt = "Photo of " + taxon.preferred_common_name;
 
     let linked_name = document.createElement("a");
-    linked_name.href = getInfoURL(taxon);
+    linked_name.href = getInfoURL(taxon, mode);
     linked_name.target = "_blank";
 
     if (taxon.preferred_common_name) {
