@@ -1,4 +1,4 @@
-{
+const eBirdCalls = {
   "12727": [
     {
       "taxon_id": 12727,

@@ -41,6 +41,8 @@ for file in os.listdir(CLEAN_DIR):
         json_data[observations[0]["taxon_id"]] = observations
 
 
-# write to output json file
-with open("ebird_calls.json", mode="w") as f:
-    json.dump(json_data, f, indent=2)
+# write to output javascript file
+json_string = json.dumps(json_data, indent=2)
+js_content = "const eBirdCalls = " + json_string
+with open("ebird_calls.js", "w", encoding="utf-8") as js_file:
+    js_file.write(js_content)
