@@ -9,6 +9,8 @@ function initURLArgs() {
   let url = new URL(window.location.href);
   let taxa_ids = url.searchParams.get("taxa");
   let default_mode = url.searchParams.get("mode");
+  let data_source_setting =
+    url.searchParams.get("data_source") || "iNaturalist";
   place_id = url.searchParams.get("place_id");
 
   //if no taxa, display message
@@ -17,6 +19,7 @@ function initURLArgs() {
   else addBirds(taxa_ids.split(",").map((s) => Number(s)));
 
   if (default_mode) setMode(default_mode);
+  setDataSource(data_source_setting);
 }
 
 function setURLParam(key, value) {
@@ -132,7 +135,7 @@ async function addBirds(taxa_id_list) {
     bird_square.alt = "Photo of " + taxon.preferred_common_name;
 
     let linked_name = document.createElement("a");
-    linked_name.href = getInfoURL(taxon);
+    linked_name.href = getInfoURL(taxon, mode);
     linked_name.target = "_blank";
 
     if (taxon.preferred_common_name) {
@@ -237,12 +240,21 @@ function capitalize(str) {
 initAutocomplete(
   "add-bird-input",
   "taxon-autocomplete-list",
-  "list-screen",
+  // get api endpoint function
   () => {
-    let allow_all_taxa = loadBooleanSetting("allow-all-taxa", false);
-    return `https://api.inaturalist.org/v1/taxa/autocomplete?${
-      allow_all_taxa ? "" : "taxon_id=3&"
-    }rank=species,genus,family,order&is_active=true`;
+    const allow_all_taxa = loadBooleanSetting("allow-all-taxa", false);
+    let taxa_to_search_in = allow_all_taxa ? [] : [3];
+
+    if (data_source === "ebird_calls") {
+      // restrict to taxa we have data for
+      taxa_to_search_in = taxa_to_search_in.concat(Object.keys(eBirdCalls));
+    }
+    let taxonIdParam =
+      taxa_to_search_in.length === 0
+        ? ""
+        : "taxon_id=" + taxa_to_search_in.join() + "&";
+
+    return `https://api.inaturalist.org/v1/taxa/autocomplete?${taxonIdParam}rank=species,genus,family,order&is_active=true`;
   },
   //result callback
   (obj, list_option) => {

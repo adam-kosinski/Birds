@@ -49,7 +49,7 @@ const RECOMMENDED_SUBSET_SIZES = [16, 8, 4]; // needs to be descending
 const HOURS_SINCE_REVIEWED_THRESHOLD = 24; // if time since reviewed is greater than this, species needs review
 const FRACTION_RESERVED_FOR_REVIEW = 0.25; // this fraction of recommended subsets will consist of species needing review
 
-function getInfoURL(taxon_obj) {
+function getInfoURL(taxon_obj, mode) {
   if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank === "species") {
     return (
       "https://www.allaboutbirds.org/guide/" +
@@ -227,6 +227,49 @@ const PRESETS = {
     description:
       "Your best birdy friends! Well, if you live in the southeast US at least.",
     photo: "images/preset_backyard.png",
+    taxa: [
+      9083, //Northern Cardinal
+      144814, //Carolina Chickadee
+      7513, //Carolina Wren
+      13632, //Tufted Titmouse
+      8021, //American Crow
+      18205, //Red-bellied Woodpecker
+      9424, //Eastern Towhee
+      12727, //American Robin
+      14886, //Northern Mockingbird
+      8229, //Blue Jay
+      792988, //Downy Woodpecker
+      3454, //Mourning Dove
+      12942, //Eastern Bluebird
+      145310, //American Goldfinch
+      199840, //House Finch
+      9135, //Chipping Sparrow
+      14801, //White-breasted Nuthatch
+      17008, //Eastern Phoebe
+      14850, //European Starling
+      18236, //Northern Flicker
+      9744, //Red-winged Blackbird
+      10227, //Indigo Bunting
+      9602, //Common Grackle
+      14995, //Gray Catbird
+      9184, //White-throated Sparrow
+      10094, //Dark-eyed Junco
+      145245, //Yellow-rumped Warbler
+      1289388, //Ruby-crowned Kinglet
+      9100, //Song Sparrow
+      145244, //Pine Warbler
+      14825, //Brown-headed Nuthatch
+      13858, //House Sparrow
+      14898, //Brown Thrasher
+      19893, //Barred Owl
+    ],
+  },
+  "Backyard Bird Calls (Southeast US)": {
+    description:
+      "Bird calls curated from eBird to help you tell all those chip notes apart.",
+    mode: "birdsong",
+    data_source: "ebird_calls",
+    photo: "images/preset_backyard_calls.jpg",
     taxa: [
       9083, //Northern Cardinal
       144814, //Carolina Chickadee

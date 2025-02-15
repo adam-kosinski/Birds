@@ -19,6 +19,7 @@ const ANSWER_SHOWN = 2;
 setGameState(INACTIVE);
 
 let mode = "birdsong"; // or "visual_id"
+let data_source = "iNaturalist"; // default "iNaturalist" (see initURLArgs()), other options: "ebird_calls"
 
 let funny_bird_timeout_id;
 
@@ -32,7 +33,7 @@ function setGameState(state) {
 function setMode(new_mode) {
   //update HTML and JS
   document
-    .querySelectorAll("#mode-toggle button")
+    .querySelectorAll("#mode-container *")
     .forEach((el) => el.classList.remove("selected"));
   document
     .querySelector("[data-mode=" + new_mode + "]")
@@ -47,7 +48,7 @@ function setMode(new_mode) {
     let container = a.closest(".bird-list-item");
     let taxon_id = Number(container.dataset.taxonId);
     let taxon_obj = list_taxa.find((obj) => obj.id === taxon_id);
-    a.href = getInfoURL(taxon_obj);
+    a.href = getInfoURL(taxon_obj, new_mode);
   });
 
   //update URL
@@ -64,6 +65,24 @@ function setMode(new_mode) {
   }
 }
 
+function setDataSource(new_data_source) {
+  data_source = new_data_source;
+
+  // game mode override (if data source doesn't allow visual id / birdsong toggling)
+  if (new_data_source === "ebird_calls") {
+    document
+      .querySelector(".override[data-name=ebird_calls]")
+      .setAttribute("active", true);
+  } else {
+    document
+      .querySelectorAll(".override[active]")
+      .forEach((el) => el.removeAttribute("active"));
+  }
+
+  // apply CSS styling changes to the game
+  document.getElementById("game-main").dataset.dataSource = new_data_source;
+}
+
 // try a different observation if the audio is too long
 
 let n_short_audio_retries_left = MAX_SHORT_AUDIO_RETRIES;
@@ -77,6 +96,7 @@ setInterval(function () {
 function checkNextAudioDuration(e) {
   // this is an event handler for when the next observation's audio's metadata loads
   // if the audio is too long, try again
+  if (data_source !== "iNaturalist") return; // other data sources will probably be curated already
   if (audio_preloader.duration <= MAX_PREFERRED_AUDIO_DURATION) return;
   if (n_short_audio_retries_left > 0) {
     console.log(
@@ -206,18 +226,23 @@ async function initGame() {
   );
 
   // get initial data
-  const data_was_fetched = await fetchObservationData(
-    undefined,
-    "",
-    INITIAL_PER_PAGE
-  );
-  if (!data_was_fetched) {
-    alert(
-      "Failed to find research grade iNaturalist observations for any of the chosen birds. Please try again with different birds."
+  const taxa_ids = taxa_to_use.map((obj) => obj.id);
+  if (data_source === "ebird_calls") {
+    loadEBirdCalls(taxa_ids);
+  } else if (data_source === "iNaturalist") {
+    const data_was_fetched = await fetchObservationData(
+      taxa_ids,
+      "",
+      INITIAL_PER_PAGE
     );
-    document.getElementById("bird-list-loader").style.display = "none";
-    resetAndExitGame();
-    return;
+    if (!data_was_fetched) {
+      alert(
+        "Failed to find research grade iNaturalist observations for any of the chosen taxa. Please try again with different taxa."
+      );
+      document.getElementById("bird-list-loader").style.display = "none";
+      resetAndExitGame();
+      return;
+    }
   }
 
   //populate bird grid
@@ -274,25 +299,30 @@ async function initGame() {
   //funny bird
   scheduleFunnyBird();
 
-  //fetch the rest more slowly (limit to < 1 API call per sec)
-  //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
-  const result = await fetchUntilThreshold(N_OBS_PER_TAXON, 3000);
-  //if some taxa had no observations at all, alert the user
-  if (!result.success && result.failure_reason === "not_enough_observations") {
-    let no_obs_ids = result.lacking_ids.filter(
-      (id) => taxon_obs[id].length === 0
-    );
-    if (no_obs_ids.length === 0) return;
+  if (data_source === "iNaturalist") {
+    //fetch the rest more slowly (limit to < 1 API call per sec)
+    //each attempt usually makes 2 API calls (n pages, and data), pace it slower than 1 API call / sec
+    const result = await fetchUntilThreshold(N_OBS_PER_TAXON, 3000);
+    //if some taxa had no observations at all, alert the user
+    if (
+      !result.success &&
+      result.failure_reason === "not_enough_observations"
+    ) {
+      let no_obs_ids = result.lacking_ids.filter(
+        (id) => taxon_obs[id].length === 0
+      );
+      if (no_obs_ids.length === 0) return;
 
-    let failed_names = no_obs_ids.map((id_str) => {
-      return list_taxa.find((obj) => obj.id === Number(id_str))
-        .preferred_common_name;
-    });
-    alert(
-      "Failed to find research grade iNaturalist observations for " +
-        failed_names.join(", ") +
-        ". This doesn't break anything, just no questions will be about these species."
-    );
+      let failed_names = no_obs_ids.map((id_str) => {
+        return list_taxa.find((obj) => obj.id === Number(id_str))
+          .preferred_common_name;
+      });
+      alert(
+        "Failed to find research grade iNaturalist observations for " +
+          failed_names.join(", ") +
+          ". This doesn't break anything, just no questions will be about these species."
+      );
+    }
   }
 }
 
@@ -320,6 +350,7 @@ async function fetchObservationData(
   if (!taxa_ids) {
     taxa_ids = taxa_to_use.map((obj) => obj.id);
   }
+
   if (!per_page) {
     //don't try to fetch with a big per page if realistically we don't need that many observations
     let n_obs_needed_ish = taxa_ids.length * N_OBS_PER_TAXON;
@@ -403,7 +434,8 @@ async function fetchObservationData(
   for (let i = 0; i < data.results.length; i++) {
     const obj = data.results[i];
 
-    //make sure audio has a working url (not always the case)
+    // make sure audio has a working url (not always the case)
+    // if not, mark it as a bad id
     if (mode === "birdsong" && !obj.sounds[0].file_url) {
       if (!current.is_squirrel_intruder) addBadId(obj.taxon.id, obj.id, mode); //firebase.js
       continue;
@@ -555,9 +587,11 @@ function nextObservation() {
       : current.taxon.preferred_common_name
       ? " - " + current.taxon.preferred_common_name
       : "";
-  document.getElementById("answer-info-link").href = getInfoURL(taxon_obj);
-  document.getElementById("inat-link").href =
-    "https://www.inaturalist.org/observations/" + current.id;
+  document.getElementById("answer-info-link").href = getInfoURL(
+    taxon_obj,
+    mode
+  );
+  document.getElementById("observation-link").href = current.uri;
 
   //reset HTML from answer screen
   document.getElementById("guess-input").value = "";

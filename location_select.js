@@ -60,7 +60,6 @@ clearMapPlace(); //sets initial state to use full map
 initAutocomplete(
   "place-input",
   "place-autocomplete-list",
-  "location-screen",
   () => "https://api.inaturalist.org/v1/places/autocomplete?",
   //result callback
   (obj, list_option) => {
