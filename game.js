@@ -31,14 +31,15 @@ function setGameState(state) {
 }
 
 function setMode(new_mode) {
-  //update HTML and JS
+  mode = new_mode;
+
+  //update HTML
   document
     .querySelectorAll("#mode-container *")
     .forEach((el) => el.classList.remove("selected"));
   document
     .querySelector("[data-mode=" + new_mode + "]")
     .classList.add("selected");
-  mode = new_mode;
   document.getElementById("game-main").dataset.mode = mode;
   document.getElementById("bird-image").style.cursor =
     new_mode === "visual_id" ? "zoom-in" : "default";
@@ -56,7 +57,7 @@ function setMode(new_mode) {
 
   //update proficiency display
   list_taxa.forEach((obj) => {
-    refreshTaxonProficiencyDisplay(obj.id, new_mode);
+    refreshTaxonProficiencyDisplay(obj.id);
   });
 
   //update auto-selection if setting is enabled
@@ -207,9 +208,7 @@ async function initGame() {
     // determine how many to add to taxon bag, based on previous proficiency
     // should range from 2 to START_TAXON_BAG_COPIES (never 1 b/c we don't want them to start at full proficiency meter)
     const n_copies = Math.ceil(
-      2 +
-        (START_TAXON_BAG_COPIES - 2) *
-          (1 - loadTaxonData(obj.id, mode).proficiency)
+      2 + (START_TAXON_BAG_COPIES - 2) * (1 - loadTaxonData(obj.id).proficiency)
     );
     console.log(obj.preferred_common_name, n_copies, "copies in taxon bag");
     // add to taxon_bag
@@ -719,8 +718,8 @@ function checkAnswer() {
   if (!current.is_squirrel_intruder) {
     if (correct) {
       updateTaxonBag(guess_obj.id, -CORRECT_REMOVE_COPIES);
-      updateTaxonProficiency(guess_obj.id, mode, true);
-      updateTaxonReviewedTimestamp(guess_obj.id, mode);
+      updateTaxonProficiency(guess_obj.id, true);
+      updateTaxonReviewedTimestamp(guess_obj.id);
     } else {
       // incorrect or skipped
       const correct_id = searchAncestorsForTaxonId(current);
@@ -728,8 +727,8 @@ function checkAnswer() {
         // incorrect
         updateTaxonBag(guess_obj.id, INCORRECT_ADD_COPIES);
         updateTaxonBag(correct_id, INCORRECT_ADD_COPIES);
-        updateTaxonProficiency(guess_obj.id, mode, false);
-        updateTaxonProficiency(correct_id, mode, false);
+        updateTaxonProficiency(guess_obj.id, false);
+        updateTaxonProficiency(correct_id, false);
       } else {
         // no guess
         updateTaxonBag(correct_id, NO_GUESS_ADD_COPIES);
@@ -758,7 +757,7 @@ function updateTaxonBag(taxon_id, delta) {
   }
   // if reached one copy, this species has been passed at the current difficulty
   if (target === 1) {
-    updateTaxonDifficultyAchieved(taxon_id, mode, taxa_to_use.length);
+    updateTaxonDifficultyAchieved(taxon_id, taxa_to_use.length);
   }
 
   updateProgressBar();

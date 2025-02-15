@@ -135,7 +135,7 @@ function selectRecommended() {
     const levels = { 0: [] };
     RECOMMENDED_SUBSET_SIZES.forEach((size) => (levels[size] = []));
     list_taxa.forEach((taxon) => {
-      const data = loadTaxonData(taxon.id, mode);
+      const data = loadTaxonData(taxon.id);
       if (data.hours_since_reviewed > HOURS_SINCE_REVIEWED_THRESHOLD) {
         taxa_to_review.push(data);
       }

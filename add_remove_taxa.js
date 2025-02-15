@@ -174,7 +174,7 @@ async function addBirds(taxa_id_list) {
     document.getElementById("bird-list").append(container);
 
     //load proficiency display (nothing will show if not storing data)
-    refreshTaxonProficiencyDisplay(taxon.id, mode);
+    refreshTaxonProficiencyDisplay(taxon.id);
 
     // if just added a bird manually (proxy check if only added one), highlight it
     if (results.length === 1) highlightElement(container);
