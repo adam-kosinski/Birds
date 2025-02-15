@@ -3,17 +3,19 @@ import csv
 
 
 def should_include(row):
-    # filter out recordings with human voice prefix
-    people_to_ignore = ["Wil Hershberger", "Geoffrey A. Keller"]
-    if row["Recordist"] in people_to_ignore:
+    # filter out old recordings which tend to have human voice prefix
+    if int(row["Year"]) < 2014:
         return False
 
     # filter out recordings containing birdsong - giveaway
     if "Song" in row["Behaviors"]:
         return False
 
-    # filter out weird subspecies
-    if len(row["Scientific Name"].split()) > 2:
+    # filter out subspecies that aren't the main one
+    taxa = row["Scientific Name"].split()
+    species = taxa[1]
+    subspecies = " ".join(taxa[2:])
+    if subspecies and species not in subspecies:
         print("Ignoring subspecies", row["Scientific Name"])
         return False
 
@@ -43,6 +45,7 @@ for file in os.listdir(RAW_DIR):
                 break
 
     common_name = filtered_rows[0]["Common Name"]
+    sci_name = filtered_rows[0]["Scientific Name"]
 
     # write filtered version
     with open(f"{CLEAN_DIR}/{common_name}.csv", 'w', encoding='utf-8', newline='') as outfile:
@@ -52,8 +55,8 @@ for file in os.listdir(RAW_DIR):
         writer.writerows(filtered_rows)
 
     if len(filtered_rows) < DESIRED_N_OBS:
-        not_enough_obs.append(common_name)
+        not_enough_obs.append((common_name, sci_name))
 
 print("\nNot enough observations:")
-for name in not_enough_obs:
-    print(name)
+for taxon in not_enough_obs:
+    print(taxon[0], "-", taxon[1])

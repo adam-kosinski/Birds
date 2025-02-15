@@ -20,9 +20,13 @@ for file in os.listdir(CLEAN_DIR):
         for r in reader:
             obs_id = r["ML Catalog Number"]
             cdn_prefix = "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/"
+            # chop off subspecies from scientific name
+            sci_name = r["Scientific Name"].split()[:2]
+            sci_name = " ".join(sci_name)
+
             obs = {
                 # taxon_id will be used by javascript to fill in the taxon object
-                "taxon_id": iNaturalist_ids[r["Scientific Name"]],
+                "taxon_id": iNaturalist_ids[sci_name],
                 "common_name": r["Common Name"],  # for convenience only
                 "id": "ML" + obs_id,
                 "uri": f"https://macaulaylibrary.org/asset/{obs_id}",
