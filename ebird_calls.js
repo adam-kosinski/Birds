@@ -40,7 +40,7 @@ function loadEBirdCalls(taxa_ids) {
     (id) => taxonObjects[id].preferred_common_name
   );
   alert(
-    "No data is available for: " +
+    "No bird call data is available for: " +
       failedNames.join(", ") +
       ". This doesn't break anything, just no questions will be about these species."
   );

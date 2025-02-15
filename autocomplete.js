@@ -3,18 +3,14 @@
 function initAutocomplete(
   input_id,
   list_id,
-  click_off_id,
   get_api_endpoint,
   result_callback,
   select_callback
 ) {
   /*
-    click_off_id is the parent element, which if we click in it (not counting the autocomplete input and list), we should hide the autocomplete list
     get_api_endpoint is a function that returns the api endpoint when called - need a function b/c the endpoint can change based on user settings
     result_callback is a function to call for each result object,
-    - arguments of result_object, list_option element (will be class autocomplete-option)
     select_callback is a function to call when a user clicks an autocomplete option
-    - argument of the the .autocomplete-option that was clicked
     */
 
   let autocomplete_timeout_id;
@@ -50,7 +46,7 @@ function initAutocomplete(
   });
 
   //close list if click off it, or press Esc
-  document.getElementById(click_off_id).addEventListener("pointerdown", (e) => {
+  document.addEventListener("pointerdown", (e) => {
     if (!e.target.closest("#" + input_id) && !e.target.closest("#" + list_id)) {
       list.style.display = "none";
       input.blur();

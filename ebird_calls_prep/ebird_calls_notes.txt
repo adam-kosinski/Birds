@@ -1,1 +1,0 @@
-Add bird autocomplete should be limited to birds we have data for

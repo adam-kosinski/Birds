@@ -237,7 +237,7 @@ async function initGame() {
     );
     if (!data_was_fetched) {
       alert(
-        "Failed to find research grade iNaturalist observations for any of the chosen birds. Please try again with different birds."
+        "Failed to find research grade iNaturalist observations for any of the chosen taxa. Please try again with different taxa."
       );
       document.getElementById("bird-list-loader").style.display = "none";
       resetAndExitGame();

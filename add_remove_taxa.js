@@ -240,12 +240,21 @@ function capitalize(str) {
 initAutocomplete(
   "add-bird-input",
   "taxon-autocomplete-list",
-  "list-screen",
+  // get api endpoint function
   () => {
-    let allow_all_taxa = loadBooleanSetting("allow-all-taxa", false);
-    return `https://api.inaturalist.org/v1/taxa/autocomplete?${
-      allow_all_taxa ? "" : "taxon_id=3&"
-    }rank=species,genus,family,order&is_active=true`;
+    const allow_all_taxa = loadBooleanSetting("allow-all-taxa", false);
+    let taxa_to_search_in = allow_all_taxa ? [] : [3];
+
+    if (data_source === "ebird_calls") {
+      // restrict to taxa we have data for
+      taxa_to_search_in = taxa_to_search_in.concat(Object.keys(eBirdCalls));
+    }
+    let taxonIdParam =
+      taxa_to_search_in.length === 0
+        ? ""
+        : "taxon_id=" + taxa_to_search_in.join() + "&";
+
+    return `https://api.inaturalist.org/v1/taxa/autocomplete?${taxonIdParam}rank=species,genus,family,order&is_active=true`;
   },
   //result callback
   (obj, list_option) => {
