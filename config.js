@@ -266,10 +266,10 @@ const PRESETS = {
   },
   "Backyard Bird Calls (Southeast US)": {
     description:
-      "Bird calls curated from ebird to help you tell all those chip notes apart.",
+      "Bird calls curated from eBird to help you tell all those chip notes apart.",
     mode: "birdsong",
     data_source: "ebird_calls",
-    photo: "",
+    photo: "images/preset_backyard_calls.jpg",
     taxa: [
       9083, //Northern Cardinal
       144814, //Carolina Chickadee
