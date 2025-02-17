@@ -271,40 +271,54 @@ const PRESETS = {
     data_source: "ebird_calls",
     photo: "images/preset_backyard_calls.jpg",
     taxa: [
-      9083, //Northern Cardinal
+      // scolding / raspy
       144814, //Carolina Chickadee
-      7513, //Carolina Wren
       13632, //Tufted Titmouse
-      8021, //American Crow
-      18205, //Red-bellied Woodpecker
-      9424, //Eastern Towhee
-      12727, //American Robin
+      7513, //Carolina Wren
+
+      // squirrel-like
       14886, //Northern Mockingbird
-      8229, //Blue Jay
-      792988, //Downy Woodpecker
-      3454, //Mourning Dove
-      12942, //Eastern Bluebird
-      145310, //American Goldfinch
-      199840, //House Finch
-      9135, //Chipping Sparrow
-      14801, //White-breasted Nuthatch
-      17008, //Eastern Phoebe
-      14850, //European Starling
-      18236, //Northern Flicker
-      9744, //Red-winged Blackbird
-      10227, //Indigo Bunting
-      9602, //Common Grackle
       14995, //Gray Catbird
-      9184, //White-throated Sparrow
+      9602, //Common Grackle
+      9744, //Red-winged Blackbird
+      19893, //Barred Owl
+
+      // "weeps" and barks
+      12727, //American Robin
+      9100, //Song Sparrow
+      18205, //Red-bellied Woodpecker
+      18236, //Northern Flicker
+
+      // clean chip calls
+      9083, //Northern Cardinal
+      10227, //Indigo Bunting
+      9135, //Chipping Sparrow
+      17008, //Eastern Phoebe
       10094, //Dark-eyed Junco
+      9184, //White-throated Sparrow
+      145244, //Pine Warbler
+
+      // raspier chip calls
       145245, //Yellow-rumped Warbler
       1289388, //Ruby-crowned Kinglet
-      9100, //Song Sparrow
-      145244, //Pine Warbler
-      14825, //Brown-headed Nuthatch
-      13858, //House Sparrow
       14898, //Brown Thrasher
-      19893, //Barred Owl
+
+      792988, //Downy Woodpecker
+
+      // harsh / nasaly
+      8021, //American Crow
+      8229, //Blue Jay
+      14801, //White-breasted Nuthatch
+
+      // squeaky or finchy
+      9424, //Eastern Towhee
+      199840, //House Finch
+      145310, //American Goldfinch
+      14825, //Brown-headed Nuthatch
+
+      13858, //House Sparrow
+      14850, //European Starling
+      12942, //Eastern Bluebird
     ],
   },
 

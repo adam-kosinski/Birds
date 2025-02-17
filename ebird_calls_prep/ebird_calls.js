@@ -2297,18 +2297,6 @@ const eBirdCalls = {
     {
       "taxon_id": 792988,
       "common_name": "Downy Woodpecker (Eastern)",
-      "id": "ML147240231",
-      "uri": "https://macaulaylibrary.org/asset/147240231",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/147240231/mp3",
-          "attribution": "(c) Brad Walker"
-        }
-      ]
-    },
-    {
-      "taxon_id": 792988,
-      "common_name": "Downy Woodpecker (Eastern)",
       "id": "ML100388531",
       "uri": "https://macaulaylibrary.org/asset/100388531",
       "sounds": [
@@ -2447,6 +2435,18 @@ const eBirdCalls = {
         {
           "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/94266441/mp3",
           "attribution": "(c) Jocelyn Lauzon"
+        }
+      ]
+    },
+    {
+      "taxon_id": 792988,
+      "common_name": "Downy Woodpecker",
+      "id": "ML72509491",
+      "uri": "https://macaulaylibrary.org/asset/72509491",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/72509491/mp3",
+          "attribution": "(c) Christine Stoughton Root"
         }
       ]
     }

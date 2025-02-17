@@ -1,7 +1,7 @@
 import os
 import csv
 
-bad_ids = [55662311, 323504401]
+bad_ids = [55662311, 323504401, 147240231]
 
 
 def should_include(row):
