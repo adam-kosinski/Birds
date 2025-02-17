@@ -316,8 +316,10 @@ const PRESETS = {
       145310, //American Goldfinch
       14825, //Brown-headed Nuthatch
 
+      // chirps and wildness
       13858, //House Sparrow
       14850, //European Starling
+
       12942, //Eastern Bluebird
     ],
   },
