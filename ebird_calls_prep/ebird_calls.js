@@ -3547,18 +3547,6 @@ const eBirdCalls = {
     {
       "taxon_id": 7513,
       "common_name": "Carolina Wren",
-      "id": "ML539845",
-      "uri": "https://macaulaylibrary.org/asset/539845",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/539845/mp3",
-          "attribution": "(c) Wil Hershberger"
-        }
-      ]
-    },
-    {
-      "taxon_id": 7513,
-      "common_name": "Carolina Wren",
       "id": "ML393675451",
       "uri": "https://macaulaylibrary.org/asset/393675451",
       "sounds": [
@@ -3720,6 +3708,18 @@ const eBirdCalls = {
       "sounds": [
         {
           "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/539446/mp3",
+          "attribution": "(c) Wil Hershberger"
+        }
+      ]
+    },
+    {
+      "taxon_id": 7513,
+      "common_name": "Carolina Wren",
+      "id": "ML539629",
+      "uri": "https://macaulaylibrary.org/asset/539629",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/539629/mp3",
           "attribution": "(c) Wil Hershberger"
         }
       ]
@@ -5003,6 +5003,18 @@ const eBirdCalls = {
     {
       "taxon_id": 17008,
       "common_name": "Eastern Phoebe",
+      "id": "ML55662311",
+      "uri": "https://macaulaylibrary.org/asset/55662311",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/55662311/mp3",
+          "attribution": "(c) Joe Verica"
+        }
+      ]
+    },
+    {
+      "taxon_id": 17008,
+      "common_name": "Eastern Phoebe",
       "id": "ML497847391",
       "uri": "https://macaulaylibrary.org/asset/497847391",
       "sounds": [
@@ -5165,18 +5177,6 @@ const eBirdCalls = {
         {
           "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/218006981/mp3",
           "attribution": "(c) Wil Hershberger"
-        }
-      ]
-    },
-    {
-      "taxon_id": 17008,
-      "common_name": "Eastern Phoebe",
-      "id": "ML132008131",
-      "uri": "https://macaulaylibrary.org/asset/132008131",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/132008131/mp3",
-          "attribution": "(c) David McQuade"
         }
       ]
     }

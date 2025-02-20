@@ -34,7 +34,8 @@ function loadEBirdCalls(taxa_ids) {
 
   // set taxon_queues
   for (const taxon_id in taxon_obs) {
-    taxon_queues[taxon_id] = taxon_obs[taxon_id].slice();
+    taxon_queues[taxon_id] = [];
+    resetQueue(taxon_id);
   }
 
   // warn the user about taxa without data

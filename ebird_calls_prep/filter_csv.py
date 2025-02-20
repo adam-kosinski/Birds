@@ -1,7 +1,9 @@
 import os
 import csv
 
-bad_ids = [55662311, 323504401, 147240231]
+diff_species = [323504401, 147240231]
+bird_starts_late = [539845]
+bad_ids = diff_species + bird_starts_late
 
 
 def should_include(row):
