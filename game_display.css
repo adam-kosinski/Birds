@@ -2,6 +2,12 @@
 /* Easier to not miss things in css */
 /* By default everything is visible */
 /* All attributes will target #game-main, but omitting that here for cleanliness */
+/*
+Game states:
+INACTIVE = 0;
+GUESSING = 1;
+ANSWER_SHOWN = 2;
+*/
 /* General stuff */
 [data-game-state="1"] #correct-button {
   display: none;
@@ -12,9 +18,15 @@
 [data-game-state="1"] #neutral-next-button {
   display: none;
 }
+[data-game-state="1"] #description {
+  display: none;
+}
 
 [data-game-state="2"] #guess-and-skip-buttons {
   display: none;
+}
+[data-game-state="2"] #description {
+  display: block;
 }
 
 [data-game-state="2"][data-correct=true] #incorrect-button {

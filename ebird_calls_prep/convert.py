@@ -34,6 +34,7 @@ for file in os.listdir(CLEAN_DIR):
                     "file_url": cdn_prefix + obs_id + "/mp3",
                     "attribution": f"(c) {r['Recordist']}"
                 }],
+                "description": r['Media notes'],
             }
             observations.append(obs)
 

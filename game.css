@@ -166,6 +166,11 @@
   }
 }
 
+#description {
+  font-size: 12px;
+  max-width: 600px;
+}
+
 /* grid */
 
 #bird-grid {

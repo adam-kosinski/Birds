@@ -2,6 +2,12 @@
 /* Easier to not miss things in css */
 /* By default everything is visible */
 /* All attributes will target #game-main, but omitting that here for cleanliness */
+/*
+Game states:
+INACTIVE = 0;
+GUESSING = 1;
+ANSWER_SHOWN = 2;
+*/
 
 // use with: sass --watch game_display.scss game_display.css
 
@@ -18,12 +24,18 @@
   #neutral-next-button {
     display: none;
   }
+  #description {
+    display: none;
+  }
 }
 
 //answer
 [data-game-state="2"] {
   #guess-and-skip-buttons {
     display: none;
+  }
+  #description {
+    display: block;
   }
 }
 

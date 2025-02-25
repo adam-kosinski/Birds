@@ -685,6 +685,17 @@ function nextObservation() {
   bird_image_zoom_factor = 1;
   document.getElementById("bird-image").style.transform = "initial";
 
+  // description
+  let descriptionDisplay = "";
+  if (current.description) {
+    let words = current.description.split(" ").slice(0, MAX_DESCRIPTION_WORDS);
+    descriptionDisplay = "Notes - " + words.join(" ");
+    if (words.length === MAX_DESCRIPTION_WORDS) {
+      descriptionDisplay += " ...";
+    }
+  }
+  document.getElementById("description").textContent = descriptionDisplay;
+
   setGameState(GUESSING);
 }
 
