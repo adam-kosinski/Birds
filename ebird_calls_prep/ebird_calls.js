@@ -1328,19 +1328,6 @@ const eBirdCalls = {
     {
       "taxon_id": 14886,
       "common_name": "Northern Mockingbird",
-      "id": "ML203918441",
-      "uri": "https://macaulaylibrary.org/asset/203918441",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/203918441/mp3",
-          "attribution": "(c) Josep del Hoyo"
-        }
-      ],
-      "description": "Calls of a bird. Elevation: 21 m. Date added to IBC: October 17, 2018."
-    },
-    {
-      "taxon_id": 14886,
-      "common_name": "Northern Mockingbird",
       "id": "ML239201",
       "uri": "https://macaulaylibrary.org/asset/239201",
       "sounds": [
@@ -1376,6 +1363,19 @@ const eBirdCalls = {
         }
       ],
       "description": "perched in the open"
+    },
+    {
+      "taxon_id": 14886,
+      "common_name": "Northern Mockingbird",
+      "id": "ML529727101",
+      "uri": "https://macaulaylibrary.org/asset/529727101",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/529727101/mp3",
+          "attribution": "(c) Doug Gochfeld"
+        }
+      ],
+      "description": ""
     }
   ],
   "14801": [
