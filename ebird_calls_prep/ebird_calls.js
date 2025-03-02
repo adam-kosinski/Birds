@@ -737,19 +737,6 @@ const eBirdCalls = {
     {
       "taxon_id": 9135,
       "common_name": "Chipping Sparrow",
-      "id": "ML27605311",
-      "uri": "https://macaulaylibrary.org/asset/27605311",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/27605311/mp3",
-          "attribution": "(c) Jay McGowan"
-        }
-      ],
-      "description": "Dawn song."
-    },
-    {
-      "taxon_id": 9135,
-      "common_name": "Chipping Sparrow",
       "id": "ML157421181",
       "uri": "https://macaulaylibrary.org/asset/157421181",
       "sounds": [
@@ -776,15 +763,28 @@ const eBirdCalls = {
     {
       "taxon_id": 9135,
       "common_name": "Chipping Sparrow",
-      "id": "ML30946131",
-      "uri": "https://macaulaylibrary.org/asset/30946131",
+      "id": "ML620428230",
+      "uri": "https://macaulaylibrary.org/asset/620428230",
       "sounds": [
         {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/30946131/mp3",
-          "attribution": "(c) Jay McGowan"
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/620428230/mp3",
+          "attribution": "(c) Amy Swarr"
         }
       ],
-      "description": "End of a feeding event then soft begging from a juvenile."
+      "description": "Juvenile begging calls from a shrub in our yard. When adult approached with suet on the fence, the juvenile came out of the shrub to join the adult on the fence and was fed."
+    },
+    {
+      "taxon_id": 9135,
+      "common_name": "Chipping Sparrow",
+      "id": "ML457681821",
+      "uri": "https://macaulaylibrary.org/asset/457681821",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/457681821/mp3",
+          "attribution": "(c) Wil Hershberger"
+        }
+      ],
+      "description": "Behavior and other notes: Adult Chipping Sparrow giving calls from a Balsam Fir next to the parking lot. He had just been singing before the start of this cut. Equipment Notes: Recorder HPF on at 80Hz, -12dB/octave. Channels: Mono Distance to source: 13 meters. Recording Time: 0738 (UTC -4). Temperature 7.8\u00b0C. Habitat: Spurce/fir forest with maples and birches, open lawns. Specific location: Schoodic Training Center at the water tower., Hancock Co., Maine. Latitude 44.336533, Longitude -68.062526. Elevation 15 meters. ID\u2019d by: sight and sound 100%. Playback: No used. Recordist original file name: WH_22T0585_Chipping Sparrow calls_Hancock Co ME_ML.WAV.wav"
     }
   ],
   "199840": [
@@ -2261,19 +2261,6 @@ const eBirdCalls = {
     {
       "taxon_id": 19893,
       "common_name": "Barred Owl",
-      "id": "ML37500081",
-      "uri": "https://macaulaylibrary.org/asset/37500081",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/37500081/mp3",
-          "attribution": "(c) Steven Biggers"
-        }
-      ],
-      "description": ""
-    },
-    {
-      "taxon_id": 19893,
-      "common_name": "Barred Owl",
       "id": "ML153850371",
       "uri": "https://macaulaylibrary.org/asset/153850371",
       "sounds": [
@@ -2361,6 +2348,19 @@ const eBirdCalls = {
         }
       ],
       "description": "Two BDOW plus songbird alarm calls. Responded to owl call made by me. 13:45 See also ML70041511"
+    },
+    {
+      "taxon_id": 19893,
+      "common_name": "Barred Owl",
+      "id": "ML74917531",
+      "uri": "https://macaulaylibrary.org/asset/74917531",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/74917531/mp3",
+          "attribution": "(c) Gustav Holtz"
+        }
+      ],
+      "description": ""
     }
   ],
   "145245": [
@@ -2748,19 +2748,6 @@ const eBirdCalls = {
     {
       "taxon_id": 18236,
       "common_name": "Northern Flicker (Yellow-shafted)",
-      "id": "ML534407",
-      "uri": "https://macaulaylibrary.org/asset/534407",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/534407/mp3",
-          "attribution": "(c) Wil Hershberger"
-        }
-      ],
-      "description": "Male doing typical, low amplitude drumming from within and on the outside of nest box while female is away. Female arrives giving wicka calls, male comes out of box and flies away.\n Compilation of 2 recordings of copulations, ends at 1404hours. Other Behaviors: Bill Drumming. Equipment Notes: SD 702 HPF on at 80Hz, -12 dB/octave."
-    },
-    {
-      "taxon_id": 18236,
-      "common_name": "Northern Flicker (Yellow-shafted)",
       "id": "ML590123071",
       "uri": "https://macaulaylibrary.org/asset/590123071",
       "sounds": [
@@ -2845,6 +2832,19 @@ const eBirdCalls = {
         {
           "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/171896461/mp3",
           "attribution": "(c) Paul Marvin"
+        }
+      ],
+      "description": ""
+    },
+    {
+      "taxon_id": 18236,
+      "common_name": "Northern Flicker (Yellow-shafted)",
+      "id": "ML162837031",
+      "uri": "https://macaulaylibrary.org/asset/162837031",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/162837031/mp3",
+          "attribution": "(c) Julia Plummer"
         }
       ],
       "description": ""
@@ -3642,19 +3642,6 @@ const eBirdCalls = {
     {
       "taxon_id": 145244,
       "common_name": "Pine Warbler",
-      "id": "ML316658101",
-      "uri": "https://macaulaylibrary.org/asset/316658101",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/316658101/mp3",
-          "attribution": "(c) Darrell Peterson"
-        }
-      ],
-      "description": "Singing male   one of the three heard, the only one seen.  Singing, foraging and then singing again  a second piwa can be heard in the distance"
-    },
-    {
-      "taxon_id": 145244,
-      "common_name": "Pine Warbler",
       "id": "ML203346201",
       "uri": "https://macaulaylibrary.org/asset/203346201",
       "sounds": [
@@ -3694,32 +3681,6 @@ const eBirdCalls = {
     {
       "taxon_id": 145244,
       "common_name": "Pine Warbler",
-      "id": "ML140642211",
-      "uri": "https://macaulaylibrary.org/asset/140642211",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/140642211/mp3",
-          "attribution": "(c) Steve Myers"
-        }
-      ],
-      "description": ""
-    },
-    {
-      "taxon_id": 145244,
-      "common_name": "Pine Warbler",
-      "id": "ML220531961",
-      "uri": "https://macaulaylibrary.org/asset/220531961",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/220531961/mp3",
-          "attribution": "(c) Wil Hershberger"
-        }
-      ],
-      "description": "Recording Time: 0659 (UTC -4). Temperature 8C. Habitat: mixed deciduous woods. Distance to sound source: 9-11 meters. Behavior and other notes: Female Pine Warbler apparently looking for nesting material on the forest floor and giving calls. Specific location: Latitude 39.575464, Longitude -78.056623. Elevation 156 meters. ID\u2019d by sight and sound; ID confidence 100%. Equipment notes: Recorder HPF on at 80Hz, -12dB/octave."
-    },
-    {
-      "taxon_id": 145244,
-      "common_name": "Pine Warbler",
       "id": "ML350417891",
       "uri": "https://macaulaylibrary.org/asset/350417891",
       "sounds": [
@@ -3733,38 +3694,12 @@ const eBirdCalls = {
     {
       "taxon_id": 145244,
       "common_name": "Pine Warbler",
-      "id": "ML27047961",
-      "uri": "https://macaulaylibrary.org/asset/27047961",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/27047961/mp3",
-          "attribution": "(c) Brad Walker"
-        }
-      ],
-      "description": "Calls from a semi-flighted fledgling as it was being fed by a female."
-    },
-    {
-      "taxon_id": 145244,
-      "common_name": "Pine Warbler",
       "id": "ML619010706",
       "uri": "https://macaulaylibrary.org/asset/619010706",
       "sounds": [
         {
           "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/619010706/mp3",
           "attribution": "(c) Jesse Morris"
-        }
-      ],
-      "description": ""
-    },
-    {
-      "taxon_id": 145244,
-      "common_name": "Pine Warbler",
-      "id": "ML436167411",
-      "uri": "https://macaulaylibrary.org/asset/436167411",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/436167411/mp3",
-          "attribution": "(c) Christopher Volker"
         }
       ],
       "description": ""
@@ -3824,15 +3759,80 @@ const eBirdCalls = {
     {
       "taxon_id": 145244,
       "common_name": "Pine Warbler",
-      "id": "ML177711021",
-      "uri": "https://macaulaylibrary.org/asset/177711021",
+      "id": "ML36376111",
+      "uri": "https://macaulaylibrary.org/asset/36376111",
       "sounds": [
         {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/177711021/mp3",
-          "attribution": "(c) Mark Robbins"
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/36376111/mp3",
+          "attribution": "(c) Paul Marvin"
         }
       ],
-      "description": "same bird as in cut "
+      "description": ""
+    },
+    {
+      "taxon_id": 145244,
+      "common_name": "Pine Warbler",
+      "id": "ML621274951",
+      "uri": "https://macaulaylibrary.org/asset/621274951",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/621274951/mp3",
+          "attribution": "(c) Oscar Johnson"
+        }
+      ],
+      "description": "Four flight calls between 15 and 20 seconds"
+    },
+    {
+      "taxon_id": 145244,
+      "common_name": "Pine Warbler",
+      "id": "ML559980071",
+      "uri": "https://macaulaylibrary.org/asset/559980071",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/559980071/mp3",
+          "attribution": "(c) Jesse Morris"
+        }
+      ],
+      "description": ""
+    },
+    {
+      "taxon_id": 145244,
+      "common_name": "Pine Warbler",
+      "id": "ML351152571",
+      "uri": "https://macaulaylibrary.org/asset/351152571",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/351152571/mp3",
+          "attribution": "(c) Glen Chapman"
+        }
+      ],
+      "description": "We were able to see adult Pine Warbler feeding young who was making this call high in a white pine tree.  This has 2 recordings of the same individual.  I used a high pass filter at 25 Hz on the second recording. "
+    },
+    {
+      "taxon_id": 145244,
+      "common_name": "Pine Warbler",
+      "id": "ML248982451",
+      "uri": "https://macaulaylibrary.org/asset/248982451",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/248982451/mp3",
+          "attribution": "(c) Julia Plummer"
+        }
+      ],
+      "description": ""
+    },
+    {
+      "taxon_id": 145244,
+      "common_name": "Pine Warbler",
+      "id": "ML184194341",
+      "uri": "https://macaulaylibrary.org/asset/184194341",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/184194341/mp3",
+          "attribution": "(c) Jay McGowan"
+        }
+      ],
+      "description": ""
     }
   ],
   "7513": [
@@ -4863,28 +4863,15 @@ const eBirdCalls = {
     {
       "taxon_id": 9083,
       "common_name": "Northern Cardinal",
-      "id": "ML249823",
-      "uri": "https://macaulaylibrary.org/asset/249823",
+      "id": "ML626038949",
+      "uri": "https://macaulaylibrary.org/asset/626038949",
       "sounds": [
         {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/249823/mp3",
-          "attribution": "(c) Wil Hershberger"
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/626038949/mp3",
+          "attribution": "(c) Brady Schwab"
         }
       ],
-      "description": "Sleepy Creek road 0.5 miles west of ranger station. \"Adult male Northern Cardinal giving chip calls. Habitat: Deciduous woods. Distance: 9 meters. Equipment note: Telinga Pro 7 HPF on.\""
-    },
-    {
-      "taxon_id": 9083,
-      "common_name": "Northern Cardinal",
-      "id": "ML310448821",
-      "uri": "https://macaulaylibrary.org/asset/310448821",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/310448821/mp3",
-          "attribution": "(c) Tom Marvel"
-        }
-      ],
-      "description": "Chip note is from female. "
+      "description": "Distress calls from bird in-hand while banding"
     },
     {
       "taxon_id": 9083,
@@ -4898,19 +4885,6 @@ const eBirdCalls = {
         }
       ],
       "description": "Nearly dark. Bird calling from bushes after I apparently disturbed it by walking by. Moving from spot to spot on occasion, but never far."
-    },
-    {
-      "taxon_id": 9083,
-      "common_name": "Northern Cardinal",
-      "id": "ML284999651",
-      "uri": "https://macaulaylibrary.org/asset/284999651",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/284999651/mp3",
-          "attribution": "(c) Jeff Graham"
-        }
-      ],
-      "description": ""
     },
     {
       "taxon_id": 9083,
@@ -4993,19 +4967,6 @@ const eBirdCalls = {
     {
       "taxon_id": 9083,
       "common_name": "Northern Cardinal",
-      "id": "ML237010",
-      "uri": "https://macaulaylibrary.org/asset/237010",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/237010/mp3",
-          "attribution": "(c) Bob McGuire"
-        }
-      ],
-      "description": "Low-pitched chip calls."
-    },
-    {
-      "taxon_id": 9083,
-      "common_name": "Northern Cardinal",
       "id": "ML612541663",
       "uri": "https://macaulaylibrary.org/asset/612541663",
       "sounds": [
@@ -5015,6 +4976,45 @@ const eBirdCalls = {
         }
       ],
       "description": "Nearly dark. Bird calling from bushes after I apparently disturbed it by walking by. Moving from spot to spot on occasion, but never far."
+    },
+    {
+      "taxon_id": 9083,
+      "common_name": "Northern Cardinal",
+      "id": "ML333907501",
+      "uri": "https://macaulaylibrary.org/asset/333907501",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/333907501/mp3",
+          "attribution": "(c) James (Jim) Holmes"
+        }
+      ],
+      "description": ""
+    },
+    {
+      "taxon_id": 9083,
+      "common_name": "Northern Cardinal",
+      "id": "ML119832581",
+      "uri": "https://macaulaylibrary.org/asset/119832581",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/119832581/mp3",
+          "attribution": "(c) John Hurd"
+        }
+      ],
+      "description": ""
+    },
+    {
+      "taxon_id": 9083,
+      "common_name": "Northern Cardinal",
+      "id": "ML378701461",
+      "uri": "https://macaulaylibrary.org/asset/378701461",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/378701461/mp3",
+          "attribution": "(c) Lyndsey Hartsfield"
+        }
+      ],
+      "description": "Pair communicating at feeder"
     }
   ],
   "9100": [
@@ -6320,19 +6320,6 @@ const eBirdCalls = {
     {
       "taxon_id": 10227,
       "common_name": "Indigo Bunting",
-      "id": "ML98062121",
-      "uri": "https://macaulaylibrary.org/asset/98062121",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/98062121/mp3",
-          "attribution": "(c) Anne Thompson"
-        }
-      ],
-      "description": ""
-    },
-    {
-      "taxon_id": 10227,
-      "common_name": "Indigo Bunting",
       "id": "ML31406781",
       "uri": "https://macaulaylibrary.org/asset/31406781",
       "sounds": [
@@ -6394,6 +6381,19 @@ const eBirdCalls = {
         }
       ],
       "description": "Comportement agit\u00e9."
+    },
+    {
+      "taxon_id": 10227,
+      "common_name": "Indigo Bunting",
+      "id": "ML163380151",
+      "uri": "https://macaulaylibrary.org/asset/163380151",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/163380151/mp3",
+          "attribution": "(c) Albert Linkowski"
+        }
+      ],
+      "description": ""
     }
   ],
   "9744": [

@@ -1,10 +1,13 @@
 import os
 import csv
 
-other_species_prominent = [323504401, 147240231]
-bird_starts_late = [539845]
-is_song = [203918441]
-bad_ids = other_species_prominent + bird_starts_late + is_song
+other_species_prominent = [323504401, 147240231, 27605311, 237010, 220531961]
+bird_starts_late = [539845, 534407]
+has_song = [203918441, 37500081, 98062121, 177711021, 436167411,
+            310448821, 316658101, 177711021, 436167411, 27047961, 140642211, 213268451]
+answer_spoken = [249823, 284999651, 30946131]
+loud_background_noise = [203892031]
+bad_ids = other_species_prominent + bird_starts_late + has_song + answer_spoken
 
 
 def should_include(row):
