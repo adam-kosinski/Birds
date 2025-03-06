@@ -142,3 +142,15 @@ ANSWER_SHOWN = 2;
     grid-template-columns: 1fr;
   }
 }
+
+#spectrogram {
+  display: none;
+}
+.spectrogram-visible {
+  #spectrogram {
+    display: block;
+  }
+  #bird-image-parent-div {
+    display: none;
+  }
+}

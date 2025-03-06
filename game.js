@@ -671,6 +671,18 @@ function nextObservation() {
     photo = current.photos[0];
   }
 
+  // spectrogram visibility - needs to be done in JS because squirrel intruders are edge case
+  const birdImgContainer = document.getElementById("bird-image-container");
+  if (
+    mode === "birdsong" &&
+    data_source === "ebird_calls" &&
+    !current.is_squirrel_intruder
+  ) {
+    birdImgContainer.classList.add("spectrogram-visible");
+  } else {
+    birdImgContainer.classList.remove("spectrogram-visible");
+  }
+
   //image attribution
   if (photo) {
     document.getElementById("image-attribution").textContent =
