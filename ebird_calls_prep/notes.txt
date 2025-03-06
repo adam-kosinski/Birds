@@ -1,0 +1,1 @@
+Show squirrel, not spectrogram if squirrel intruder
