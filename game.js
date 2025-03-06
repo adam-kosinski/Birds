@@ -647,14 +647,7 @@ function nextObservation() {
       audio1.pause();
       audio1.removeAttribute("src");
     }
-
-    // spectrogram
-    if (data_source === "ebird_calls" && !current.is_squirrel_intruder) {
-      const id = current.id.split("ML")[1];
-      const spectrogramUri = `https://cdn.download.ams.birds.cornell.edu/api/v2/asset/${id}/default/partial/0001`;
-      document.querySelector("#spectrogram-images img").src = spectrogramUri;
-    }
-
+    // note: spectrogram stuff happens automatically when audio src changed
     // misc
     document.getElementById("bird-grid").scrollTop = 0;
 

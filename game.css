@@ -193,6 +193,8 @@
   /* need position absolute so the parent's aspect ratio can work */
   position: absolute;
   left: 0;
+  transform-origin: left;
+  transform: scaleX(0.5);
 }
 
 #spectrogram-images img {
