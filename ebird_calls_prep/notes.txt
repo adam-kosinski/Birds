@@ -1,1 +1,3 @@
 Show squirrel, not spectrogram if squirrel intruder
+Display spectrogram vs main image in game_display.scss
+Frequency axis annotation, styled responsively
