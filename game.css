@@ -160,6 +160,44 @@
   display: block;
 }
 
+#spectrogram {
+  border: 10px solid white;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  background-color: white;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  max-width: 800px;
+  max-height: calc(257px + 20px); /* natural spectrogram height + border */
+  overflow: hidden;
+  /* needed so that max height obeys what the flexbox wants, not what the image wants (make the image size "uncompromising") */
+}
+
+#spectrogram-scroll-container {
+  /* Doing a hacky thing here to make this responsive */
+  /* Spectrogram height is our reference, it can change. Amount to scroll horizontally needs to be proportional
+  to height. To achieve this, have a wrapper (this element) with an aspect ratio of 1, and the scroll by a
+  percentage of the wrapper's width. That way the horizontal scroll is also a percentage of the container's height. */
+  height: 100%;
+  aspect-ratio: 1 / 1;
+
+  /* start the left border in the middle of the spectrogram */
+  position: relative;
+  left: 50%;
+}
+
+#spectrogram-images {
+  height: 100%;
+  display: flex;
+  /* need position absolute so the parent's aspect ratio can work */
+  position: absolute;
+  left: 0;
+}
+
+#spectrogram-images img {
+  height: 100%;
+}
+
 @media (hover: none) {
   #scroll-to-zoom-instructions {
     display: none;

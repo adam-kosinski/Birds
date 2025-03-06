@@ -199,13 +199,23 @@
             <p id="answer-species-name-appended"></p>
           </div>
           <p id="visual-id-question" class="font-large"></p>
-          <div id="bird-image-parent-div">
+          <div style="display: none" id="bird-image-parent-div">
             <img id="bird-image" src="" alt="image of answer" />
             <div id="image-attribution-container">
               <div id="image-attribution"></div>
               <button id="image-attribution-button" class="font-small">
                 <div id="image-copyright-type">CC</div>
               </button>
+            </div>
+          </div>
+          <!-- spectrogram only visible for ebird audio questions -->
+          <div id="spectrogram">
+            <div id="spectrogram-scroll-container">
+              <div id="spectrogram-images">
+                <img
+                  src="https://cdn.download.ams.birds.cornell.edu/api/v2/asset/609311038/default/partial/0001"
+                />
+              </div>
             </div>
           </div>
           <!-- zoom instructions, only visible for media (hover: hover), see game.css -->
