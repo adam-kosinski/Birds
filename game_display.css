@@ -108,4 +108,15 @@ ANSWER_SHOWN = 2;
   grid-template-columns: 1fr;
 }
 
+#spectrogram {
+  display: none;
+}
+
+.spectrogram-visible #spectrogram {
+  display: block;
+}
+.spectrogram-visible #bird-image-parent-div {
+  display: none;
+}
+
 /*# sourceMappingURL=game_display.css.map */

@@ -213,19 +213,6 @@ const eBirdCalls = {
     {
       "taxon_id": 144814,
       "common_name": "Carolina Chickadee",
-      "id": "ML306058",
-      "uri": "https://macaulaylibrary.org/asset/306058",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/306058/mp3",
-          "attribution": "(c) Wil Hershberger"
-        }
-      ],
-      "description": "Behavior and other notes: Adult unknown sex Carolina Chickadee calling near feeders. Recording Time: 1522 (UTC -5).  Temperature 7.2C.  Habitat: mixed deciduous woods.  Distance to sound source: 3 meters.  Specific location: Wood Song, Berkeley Co., WV. Latitude 39.575464, Longitude -78.056623.  Elevation 156 meters.  ID\u2019d by sight and sound; ID confidence 100%.  Equipment notes: Recorder HPF on at 80Hz, -12dB/octave. Recordists original file name: WH_20T0010_Carolina Chickadee calls_Berkeley Co WV.wav"
-    },
-    {
-      "taxon_id": 144814,
-      "common_name": "Carolina Chickadee",
       "id": "ML342303351",
       "uri": "https://macaulaylibrary.org/asset/342303351",
       "sounds": [
@@ -391,6 +378,19 @@ const eBirdCalls = {
         }
       ],
       "description": "Two adult Carolina Chickadees at tray feeder. Equipment Notes: Recorder's HPF on (80Hz, -18dB/octave). Elevation: 176 m."
+    },
+    {
+      "taxon_id": 144814,
+      "common_name": "Carolina Chickadee",
+      "id": "ML539647",
+      "uri": "https://macaulaylibrary.org/asset/539647",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/539647/mp3",
+          "attribution": "(c) Wil Hershberger"
+        }
+      ],
+      "description": "Adult \"male\" Carolina Chickadee giving calls and gargle calls. Second cut is a gargle call. Equipment Notes: SD 702 HPF on (80Hz, -12dB/octave)."
     }
   ],
   "13632": [

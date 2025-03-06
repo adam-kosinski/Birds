@@ -637,7 +637,7 @@ function nextObservation() {
         bird_image.src = "";
       }
     }
-    //audio and misc
+    //audio
     document.getElementById("birdsong-audio-0").src =
       current.sounds[0].file_url;
     let audio1 = document.getElementById("birdsong-audio-1");
@@ -647,6 +647,8 @@ function nextObservation() {
       audio1.pause();
       audio1.removeAttribute("src");
     }
+    // note: spectrogram stuff happens automatically when audio src changed
+    // misc
     document.getElementById("bird-grid").scrollTop = 0;
 
     //start loading the next observation's audio
@@ -667,6 +669,18 @@ function nextObservation() {
       "large"
     );
     photo = current.photos[0];
+  }
+
+  // spectrogram visibility - needs to be done in JS because squirrel intruders are edge case
+  const birdImgContainer = document.getElementById("bird-image-container");
+  if (
+    mode === "birdsong" &&
+    data_source === "ebird_calls" &&
+    !current.is_squirrel_intruder
+  ) {
+    birdImgContainer.classList.add("spectrogram-visible");
+  } else {
+    birdImgContainer.classList.remove("spectrogram-visible");
   }
 
   //image attribution

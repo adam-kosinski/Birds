@@ -24,6 +24,13 @@ const NO_GUESS_ADD_COPIES = 0; //number of copies to add to bag if no guess - 0 
 const AUTOCOMPLETE_DELAY = 1000; //ms after user stops typing, to update the autocomplete
 const N_AUTOCOMPLETE_RESULTS = 5;
 
+// 250 horizontal pixels per second in raw spectrogram image
+// squished by factor of 2
+// 100% height = 257 pixels raw image height
+const SPECTROGRAM_HORIZ_PERCENT_PER_SEC = (250 / 2) * (100 / 257);
+const SPECTROGRAM_SEC_PER_IMAGE = 60;
+const SPECTROGRAM_IMAGE_FETCH_BUFFER_SEC = 15;
+
 const PLACE_STYLE = {
   //for location geometry
   color: "orange",
