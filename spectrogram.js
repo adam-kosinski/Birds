@@ -28,7 +28,7 @@ function initSpectrogram() {
     // which starts actually playing the audio some undetermined amount of time after the "play" event fires
     // try not to activate this multiple times? detect if already scrolling?
     if (!audio.paused) {
-      stopScroll(true); // just in case
+      stopScroll(); // just in case
       stopScroll = scrollSpectrogram();
     }
 
