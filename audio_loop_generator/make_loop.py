@@ -8,7 +8,7 @@ import concurrent.futures
 
 
 def format_bird_name(bird_name):
-    return bird_name.title().replace(" ", "_")
+    return bird_name.replace(" ", "_")
 
 
 def fetch_audio_urls(bird_name):
@@ -18,6 +18,7 @@ def fetch_audio_urls(bird_name):
 
     if response.status_code != 200:
         print("Failed to fetch the webpage. Please check the bird name and try again.")
+        print("URL:", url)
         return []
 
     soup = BeautifulSoup(response.text, "html.parser")
@@ -31,12 +32,15 @@ def fetch_audio_urls(bird_name):
 
 def download_audio(url, filename):
     response = requests.get(url, stream=True)
-    if response.status_code == 200:
-        with open(filename, "wb") as f:
-            for chunk in response.iter_content(1024):
-                f.write(chunk)
-        return filename
-    return None
+    if response.status_code != 200:
+        print(response)
+        print(f"Failed to download {url} to {filename}")
+        return None
+
+    with open(filename, "wb") as f:
+        for chunk in response.iter_content(1024):
+            f.write(chunk)
+    return filename
 
 
 def download_all_audios(audio_urls):
@@ -53,6 +57,8 @@ def download_all_audios(audio_urls):
                     audio_files.append(filename)
             except Exception as e:
                 print(f"Error downloading {filename}: {e}")
+
+    print(f"Successfully downloaded {len(audio_files)} audio files")
     return audio_files
 
 
@@ -87,7 +93,7 @@ def create_looped_audio(audio_files, output_filename, duration_minutes):
         for file in shuffled_files:
             if len(combined) >= target_duration:
                 break
-            print(file)
+            # print(file)
             combined += audio_data_dict[file]
             recent_files.append(file)
 
@@ -97,20 +103,25 @@ def create_looped_audio(audio_files, output_filename, duration_minutes):
 
 
 def process_bird(bird_name, duration_minutes):
-    print(f"\nProcessing {bird_name}")
+    print(f"\nProcessing {bird_name} ------------------------------------")
+    if os.path.exists(f"{bird_name}.mp3"):
+        print("Combined audio exists already, skipping")
+        return
+
     audio_urls = fetch_audio_urls(bird_name)
     if not audio_urls:
         return
 
     audio_files = download_all_audios(audio_urls)
-
-    if audio_files:
-        output_filename = f"{bird_name.title()}.mp3"
+    if len(audio_files) < len(audio_urls):
+        print("FAILED AUDIO DOWNLOADS, ABORTING")
+    elif audio_files:
+        output_filename = f"{bird_name}.mp3"
         create_looped_audio(audio_files, output_filename, duration_minutes)
 
-        # Cleanup downloaded files
-        for file in audio_files:
-            os.remove(file)
+    # Cleanup downloaded files
+    for file in audio_files:
+        os.remove(file)
 
 
 def main():
