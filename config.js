@@ -274,7 +274,7 @@ const PRESETS = {
   },
   "Backyard Bird Calls (Southeast US)": {
     description:
-      "Bird calls curated from eBird to help you tell all those chip notes apart.",
+      "Bird calls curated from the Macaulay Library to help you tell all those chip notes apart.",
     mode: "birdsong",
     data_source: "ebird_calls",
     photo: "images/preset_backyard_calls.jpg",
@@ -415,7 +415,7 @@ const PRESETS = {
     ],
   },
   "Sophie's Favorite Warblers (Calls)": {
-    description: "Warble warblery weeble wooble. From eBird.",
+    description: "Warble warblery weeble wooble. From the Macaulay Library.",
     photo: "images/preset_warbler_calls.jpg",
     mode: "birdsong",
     data_source: "ebird_calls",
