@@ -3824,19 +3824,6 @@ const eBirdCalls = {
     {
       "taxon_id": 145231,
       "common_name": "Cape May Warbler",
-      "id": "ML156885741",
-      "uri": "https://macaulaylibrary.org/asset/156885741",
-      "sounds": [
-        {
-          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/156885741/mp3",
-          "attribution": "(c) Brad Walker"
-        }
-      ],
-      "description": ""
-    },
-    {
-      "taxon_id": 145231,
-      "common_name": "Cape May Warbler",
       "id": "ML242662991",
       "uri": "https://macaulaylibrary.org/asset/242662991",
       "sounds": [
@@ -3937,6 +3924,19 @@ const eBirdCalls = {
         }
       ],
       "description": ""
+    },
+    {
+      "taxon_id": 145231,
+      "common_name": "Cape May Warbler",
+      "id": "ML478211081",
+      "uri": "https://macaulaylibrary.org/asset/478211081",
+      "sounds": [
+        {
+          "file_url": "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/478211081/mp3",
+          "attribution": "(c) Alex Lamoreaux"
+        }
+      ],
+      "description": "Call upon being released from banding"
     }
   ],
   "8021": [

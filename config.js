@@ -414,6 +414,48 @@ const PRESETS = {
       145240, //Blackpoll Warbler
     ],
   },
+  "Sophie's Favorite Warblers (Calls)": {
+    description: "Warble warblery weeble wooble. From eBird.",
+    photo: "images/preset_warbler_calls.jpg",
+    mode: "birdsong",
+    data_source: "ebird_calls",
+    taxa: [
+      145232, //Cerulean Warbler
+      10442, //Swainson's Warbler
+      73148, //Louisiana Waterthrush
+      73149, //Northern Waterthrush
+      145237, //Blackburnian Warbler
+      145275, //Canada Warbler
+      145240, //Blackpoll Warbler
+      10247, //American Redstart
+      145238, //Yellow Warbler
+      10729, //Prothonotary Warbler
+      145246, //Yellow-throated Warbler
+      72912, //Worm-eating Warbler
+      145225, //Kentucky Warbler
+      145249, //Prairie Warbler
+      145229, //Hooded Warbler
+      62550, //Ovenbird
+      145231, //Cape May Warbler
+      145239, //Chestnut-sided Warbler
+      10431, //Connecticut Warbler
+      73553, //Blue-winged Warbler
+      145224, //Mourning Warbler
+      979753, //Nashville Warbler
+      145276, //Wilson's Warbler
+      145236, //Bay-breasted Warbler
+      979757, //Orange-crowned Warbler
+      979756, //Tennessee Warbler
+      9807, //Golden-winged Warbler
+      9721, //Common Yellowthroat
+      145233, //Northern Parula
+      199916, //Black-throated Blue Warbler
+      145242, //Palm Warbler
+      145258, //Black-throated Green Warbler
+      10286, //Black-and-white Warbler
+      145235, //Magnolia Warbler
+    ],
+  },
   "Sparrows (NC)": {
     description:
       "Get your high-powered binoculars out for these because you're going to need them.",
