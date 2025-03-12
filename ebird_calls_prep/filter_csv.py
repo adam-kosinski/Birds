@@ -1,13 +1,17 @@
 import os
 import csv
 
-other_species_prominent = [323504401, 147240231, 27605311, 237010, 220531961]
+other_species_prominent = [323504401, 147240231,
+                           27605311, 237010, 220531961, 126648381, 318081001]
 bird_starts_late = [539845, 534407]
-has_song = [203918441, 37500081, 98062121, 177711021, 436167411,
-            310448821, 316658101, 177711021, 436167411, 27047961, 140642211, 213268451]
-answer_spoken = [249823, 284999651, 30946131, 306058]
-loud_background_noise = [203892031]
-bad_ids = other_species_prominent + bird_starts_late + has_song + answer_spoken
+has_song = [203918441, 37500081, 98062121, 177711021, 436167411, 310448821, 316658101, 177711021,
+            436167411, 27047961, 140642211, 213268451, 326676501, 149702811, 218677441, 55662311]
+answer_spoken = [249823, 284999651, 30946131,
+                 306058, 539855, 27600351, 116299721]
+audio_quality_issue = [203892031, 151532241]
+
+bad_ids = other_species_prominent + bird_starts_late + \
+    has_song + answer_spoken + audio_quality_issue
 
 
 def should_include(row):
@@ -55,7 +59,8 @@ for file in os.listdir(RAW_DIR):
             if len(filtered_rows) >= DESIRED_N_OBS:
                 break
 
-    common_name = filtered_rows[0]["Common Name"]
+    # common and sci name - remove parentheses specifying subspecies for common name
+    common_name = filtered_rows[0]["Common Name"].split(" (")[0]
     sci_name = filtered_rows[0]["Scientific Name"]
 
     # write filtered version
