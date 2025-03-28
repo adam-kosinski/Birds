@@ -6,15 +6,23 @@
     <title>Cytoscape Graph</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.23.0/cytoscape.min.js"></script>
     <style>
-      #cy {
-        width: 90vw;
-        height: 90vh;
+      .cy {
+        width: 48vw;
+        height: 95vh;
         border: 1px solid black;
+      }
+      #container {
+        display: flex;
+        flex-direction: row;
+        gap: 1vw;
       }
     </style>
   </head>
   <body>
-    <div id="cy"></div>
+    <div id="container">
+      <div id="cy" class="cy"></div>
+      <div id="cy2" class="cy"></div>
+    </div>
     <script>
       // Example adjacency matrix
       let soundAdjacencyMatrix = [
@@ -152,6 +160,146 @@
         ],
         [
           0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
+      ];
+
+      let noSoundAdjacencyMatrix = [
+        [
+          0, 12, 169, 171, 0, 12, 173, 367, 27, 75, 0, 0, 0, 27, 507, 0, 0, 0,
+          0, 191, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 4, 46, 584, 0,
+        ],
+        [
+          12, 0, 387, 760, 0, 0, 0, 0, 43, 21, 14, 0, 0, 0, 0, 31, 607, 256, 0,
+          0, 0, 0, 0, 0, 0, 23, 0, 14, 0, 0, 479, 1195, 0, 0,
+        ],
+        [
+          169, 387, 0, 188, 0, 0, 34, 378, 76, 0, 0, 0, 59, 0, 55, 399, 0, 236,
+          0, 0, 0, 0, 0, 0, 484, 0, 0, 0, 444, 0, 930, 1109, 939, 0,
+        ],
+        [
+          171, 760, 188, 0, 0, 0, 25, 0, 504, 360, 0, 12, 175, 0, 11, 0, 968,
+          268, 0, 0, 0, 0, 0, 537, 0, 500, 0, 43, 0, 0, 1087, 23, 0, 0,
+        ],
+        [
+          0, 0, 0, 0, 0, 0, 0, 48, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 923, 0, 461,
+          0, 3084, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
+        [
+          12, 0, 0, 0, 0, 0, 0, 10, 0, 86, 1485, 22, 0, 0, 15, 0, 71, 0, 15,
+          1899, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
+        [
+          173, 0, 34, 25, 0, 0, 0, 2253, 18, 0, 0, 0, 195, 0, 0, 0, 0, 18, 0, 0,
+          13, 0, 38, 0, 36, 47, 0, 0, 0, 0, 0, 14, 143, 0,
+        ],
+        [
+          367, 0, 378, 0, 48, 10, 2253, 0, 379, 51, 0, 576, 614, 0, 399, 32, 10,
+          39, 835, 395, 193, 0, 617, 790, 13, 363, 0, 0, 0, 0, 0, 292, 717, 0,
+        ],
+        [
+          27, 43, 76, 504, 0, 0, 18, 379, 0, 655, 0, 475, 61, 0, 223, 64, 86,
+          568, 190, 36, 0, 0, 30, 1302, 0, 89, 316, 33, 79, 0, 27, 848, 771, 0,
+        ],
+        [
+          75, 21, 0, 360, 0, 86, 0, 51, 655, 0, 86, 645, 1190, 0, 0, 0, 224, 0,
+          27, 0, 0, 0, 132, 210, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
+        [
+          0, 14, 0, 0, 0, 1485, 0, 0, 0, 86, 0, 0, 0, 0, 13, 0, 646, 0, 0, 125,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0,
+        ],
+        [
+          0, 0, 0, 12, 40, 22, 0, 576, 475, 645, 0, 0, 0, 0, 46, 0, 17, 0, 231,
+          269, 0, 0, 20, 42, 0, 0, 0, 0, 0, 0, 0, 96, 0, 0,
+        ],
+        [
+          0, 0, 59, 175, 0, 0, 195, 614, 61, 1190, 0, 0, 0, 35, 78, 0, 0, 143,
+          27, 0, 0, 695, 0, 103, 0, 23, 0, 0, 0, 0, 14, 14, 0, 0,
+        ],
+        [
+          27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 0, 329, 0, 0, 0, 0, 131, 0,
+          0, 0, 0, 0, 0, 171, 326, 0, 3587, 0, 68, 0, 0,
+        ],
+        [
+          507, 0, 55, 11, 0, 15, 0, 399, 223, 0, 13, 46, 78, 329, 0, 603, 0, 49,
+          0, 0, 191, 615, 0, 15, 33, 240, 328, 0, 870, 0, 17, 2333, 31, 0,
+        ],
+        [
+          0, 31, 399, 0, 0, 0, 0, 32, 64, 0, 0, 0, 0, 0, 603, 0, 0, 0, 0, 0,
+          205, 0, 0, 62, 1836, 194, 0, 56, 2577, 0, 62, 4375, 31, 0,
+        ],
+        [
+          0, 607, 0, 968, 0, 71, 0, 10, 86, 224, 646, 17, 0, 0, 0, 0, 0, 37, 0,
+          0, 0, 0, 0, 161, 0, 47, 20, 0, 0, 0, 1735, 32, 0, 0,
+        ],
+        [
+          0, 256, 236, 268, 0, 0, 18, 39, 568, 0, 0, 0, 143, 0, 49, 0, 37, 0, 0,
+          0, 0, 0, 0, 68, 0, 507, 319, 175, 0, 0, 37, 62, 0, 0,
+        ],
+        [
+          0, 0, 0, 0, 923, 15, 0, 835, 190, 27, 0, 231, 27, 0, 0, 0, 0, 0, 0,
+          371, 1228, 0, 2987, 619, 0, 121, 0, 0, 0, 0, 0, 488, 52, 0,
+        ],
+        [
+          191, 0, 0, 0, 0, 1899, 0, 395, 36, 0, 125, 269, 0, 131, 0, 0, 0, 0,
+          371, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 0, 293, 23,
+        ],
+        [
+          0, 0, 0, 0, 461, 0, 13, 193, 0, 0, 0, 0, 0, 0, 191, 205, 0, 0, 1228,
+          0, 0, 0, 1586, 40, 56, 0, 0, 0, 1067, 0, 0, 53, 16, 0,
+        ],
+        [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 695, 0, 615, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 23, 17, 0, 14, 0, 0, 26, 0, 0,
+        ],
+        [
+          0, 0, 0, 0, 3084, 0, 38, 617, 30, 132, 0, 20, 0, 0, 0, 0, 0, 0, 2987,
+          0, 1586, 0, 0, 733, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0,
+        ],
+        [
+          0, 0, 0, 537, 0, 0, 0, 790, 1302, 210, 0, 42, 103, 0, 15, 62, 161, 68,
+          619, 0, 40, 0, 733, 0, 0, 680, 0, 0, 0, 0, 24, 53, 0, 0,
+        ],
+        [
+          0, 0, 484, 0, 0, 0, 36, 13, 0, 0, 0, 0, 0, 0, 33, 1836, 0, 0, 0, 0,
+          56, 0, 0, 0, 0, 173, 26, 0, 3569, 0, 0, 2005, 179, 0,
+        ],
+        [
+          29, 23, 0, 500, 0, 0, 47, 363, 89, 0, 0, 0, 23, 0, 240, 194, 47, 507,
+          121, 0, 0, 23, 0, 680, 173, 0, 0, 0, 306, 0, 5, 819, 0, 0,
+        ],
+        [
+          0, 0, 0, 0, 0, 0, 0, 0, 316, 0, 0, 0, 0, 171, 328, 0, 20, 319, 0, 0,
+          0, 17, 0, 0, 26, 0, 0, 641, 144, 3763, 14, 61, 0, 0,
+        ],
+        [
+          0, 14, 0, 43, 0, 0, 0, 0, 33, 0, 0, 0, 0, 326, 0, 56, 0, 175, 0, 0, 0,
+          0, 0, 0, 0, 0, 641, 0, 0, 934, 0, 14, 0, 0,
+        ],
+        [
+          0, 0, 444, 0, 0, 0, 0, 0, 79, 0, 0, 0, 0, 0, 870, 2577, 0, 0, 0, 0,
+          1067, 14, 0, 0, 3569, 306, 144, 0, 0, 0, 0, 2421, 687, 0,
+        ],
+        [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3587, 0, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 0, 3763, 934, 0, 0, 0, 0, 0, 0,
+        ],
+        [
+          4, 479, 930, 1087, 0, 0, 0, 0, 27, 0, 0, 0, 14, 0, 17, 62, 1735, 37,
+          0, 19, 0, 0, 0, 24, 0, 5, 14, 0, 0, 0, 0, 13, 0, 0,
+        ],
+        [
+          46, 1195, 1109, 23, 0, 0, 14, 292, 848, 0, 16, 96, 14, 68, 2333, 4375,
+          32, 62, 488, 0, 53, 26, 13, 53, 2005, 819, 61, 14, 2421, 0, 13, 0, 84,
+          0,
+        ],
+        [
+          584, 0, 939, 0, 0, 0, 143, 717, 771, 0, 0, 0, 0, 0, 31, 31, 0, 0, 52,
+          293, 16, 0, 0, 0, 179, 0, 0, 0, 687, 0, 0, 84, 0, 0,
+        ],
+        [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23, 0, 0, 0,
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ],
       ];
@@ -297,12 +445,14 @@
         ],
       ];
 
-      adjacencyMatrix = allAdjacencyMatrix;
+      adjacencyMatrix = noSoundAdjacencyMatrix;
 
       //   process
 
       let maxWeight = Math.max(...adjacencyMatrix.flat());
-      let threshold = 0.13 * maxWeight;
+      let threshold = 0.13 * maxWeight; // works well for visual id
+      // let threshold = 0.08 * maxWeight; // works well for sound
+      // let threshold = 0 * maxWeight;
 
       adjacencyMatrix = adjacencyMatrix.map((row) =>
         row.map((value) => (value < threshold ? 0 : value))
@@ -377,7 +527,7 @@
       }
 
       // Initialize Cytoscape
-      let cy = cytoscape({
+      let cyOrig = cytoscape({
         container: document.getElementById("cy"),
         elements: elements,
         style: [
@@ -386,6 +536,7 @@
             style: {
               label: "data(label)",
               "background-color": "#ccf",
+              // "background-color": "data(backgroundColor)",
               "text-valign": "center",
               color: "black",
               "font-size": "10px",
@@ -399,7 +550,7 @@
               width: 3,
               "line-color": "#888",
               width: `mapData(weight, ${threshold}, ${maxWeight}, 1, 20)`,
-              //   opacity: "mapData(weight, 0, 828, 0, 1)", // Set opacity based on weight
+              curveStyle: "bezier",
             },
           },
         ],
@@ -407,6 +558,75 @@
           name: "cose", // Force-directed layout
         },
       });
+
+      function renderElements(eles) {
+        let elementsWithPositions = eles.map((ele) => {
+          return {
+            data: ele.data(),
+            position: ele.isNode() ? { ...ele.position() } : undefined,
+          };
+        });
+        let cy = cytoscape({
+          container: document.getElementById("cy2"),
+          elements: elementsWithPositions,
+          style: cyOrig.style().json(),
+          layout: { name: "preset" },
+        });
+        return cy;
+      }
+
+      let cy, eles, comps, minCut, mkv, mkvEles;
+      cyOrig.on("layoutstop", () => {
+        cy = renderElements(cyOrig.elements());
+        eles = cy.elements();
+        comps = eles.components();
+        minCut = comps[0].kargerStein();
+
+        mkv = eles.markovClustering({
+          attributes: [(edge) => edge.data("weight")],
+        });
+        makeGroups(cy);
+      });
+
+      function makeGroups(cy) {
+        const maxGroupSize = 4;
+        const sortedEdges = cy
+          .edges()
+          .sort((a, b) => b.data("weight") - a.data("weight"));
+
+        let c = cy.collection(cy.nodes());
+
+        // add edges to connect up the nodes, largest weight to smallest
+        for (let e of sortedEdges) {
+          c = c.union(e);
+          // check if adding that caused a group to be too big, if so don't add it
+          for (let comp of c.components()) {
+            if (comp.nodes().length > maxGroupSize) {
+              c = c.difference(e);
+              break;
+            }
+          }
+        }
+        // assign colors to groups
+        const groups = c.components();
+        for (let i = 0; i < groups.length; i++) {
+          console.log(groups[i]);
+          const color = randomColor();
+          groups[i].forEach((ele) => {
+            if (ele.isNode()) {
+              console.log(ele);
+              ele.style({ "background-color": color });
+            }
+          });
+        }
+      }
+
+      function randomColor() {
+        return `rgb(${randomColorChannelValue()},${randomColorChannelValue()},${randomColorChannelValue()})`;
+      }
+      function randomColorChannelValue() {
+        return 128 + Math.floor(Math.random() * 128);
+      }
     </script>
   </body>
 </html>

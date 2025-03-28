@@ -22,8 +22,58 @@ Case study:
 - Q3 - incorrectly identify as indigo bunting
 - Q4 - incorrectly identify as eastern phoebe
 
+- indigo bunting score = 2/3
+- eastern phoebe score = 1/2
+
 - Intuitively - indigo bunting was confused twice as much as eastern phoebe.
 - Random guessing baseline - indigo bunting confused
+
+Confusion budget:
+
+Given a cardinal question, p(wrong)
+
+confusion score of bird A on cardinal questions = # bird A guesses / (# bird A guesses + # cardinal guesses) \
+
+(1/score) - 1 \
+= ((# bird A guesses + # cardinal guesses) / # bird A guesses) - 1 \
+= (1 + (# cardinal guesses / # bird A guesses)) - 1 \
+= # cardinal guesses / # bird A guesses
+
+p(wrong | cardinal) \
+= # non-cardinal guesses / # total relevant guesses \
+
+Set # cardinal guesses to 4. Then can convert score to # bird A guesses, in theory? Possibly a wrong assumption though that # cardinal guesses would be shared across different birds, since as the number of birds increases, the relative number of cardinal guesses decreases. But this is taken care of by my assumption that the score will stay the same no matter the number of birds in play.
+
+Try it:
+
+(1/score) - 1 \
+bunting = 1/2, phoebe = 1
+
+Set # cardinal guesses to 1: \
+bunting guesses = 2, phoebe guesses = 1
+
+p(wrong | cardinal) = 3 / 4, as desired
+
+To do this analysis properly, it would be best to score directed confusion scores (i.e. score given which bird was correct). Though I wonder, when p(wrong) gets marginalized across all types of bird questions, whether we can use the average confusion score for a pair of birds.
+
+p (wrong | cardinal) = [sum_birds_b: s_cardinal / (1 - s_cardinal)] / same sum + 1 \
+p (wrong) = 1/n sum_question_bird_q: sum_birds_b: s_qb / (1- s_qb)
+
+In the sum we have [s_xy / (1 - s_xy)] + [s_yx / (1 - s_yx)] \
+= [s_xy (1 - s_yx) + s_yx (1 - s_xy)] / [(1 - s_xy)(1 - s_yx)] \
+= [s_xy + s_yx - 2 s_xy s_yx] / [1 - s_xy - s_yx + 2 s_xy s_yx] \
+Let a = s_xy + s_yx - 2 s_xy s_yx, then \
+= a / (1 - a) \
+WAIT I messed up earlier because I calculated sum of other birds' # guesses, not p(wrong), need to fix
+
+So we could treat a as the edge weight for the two species, which would be more principled.
+
+x/(x+1) = s \
+x = sx + s \
+(1-s)x = s \
+x = s / (1-s) = # bird A guesses
+
+From the iNaturalist data, it's clear that often one direction of confusion is much more than the other direction.
 
 ---
 

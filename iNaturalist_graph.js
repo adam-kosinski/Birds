@@ -6,7 +6,7 @@ const taxa = [
 ];
 
 async function getCounts(taxa) {
-  const url = `https://api.inaturalist.org/v1/observations/species_counts?taxon_id=${taxa.join(
+  const url = `https://api.inaturalist.org/v1/observations/species_counts?sounds=false&taxon_id=${taxa.join(
     ","
   )}&quality_grade=research`;
   const results = (await (await fetch(url)).json()).results;
@@ -20,7 +20,7 @@ async function getCounts(taxa) {
 
 async function getEdges(taxonId, correctCounts) {
   console.log(taxonId);
-  const similarUrl = `https://api.inaturalist.org/v1/identifications/similar_species?taxon_id=${taxonId}`;
+  const similarUrl = `https://api.inaturalist.org/v1/identifications/similar_species?sounds=false&taxon_id=${taxonId}`;
   const similarResults = (await (await fetch(similarUrl)).json()).results;
 
   const row = new Array(taxa.length).fill(0);
