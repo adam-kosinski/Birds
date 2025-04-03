@@ -57,6 +57,8 @@ const RECOMMENDED_SUBSET_SIZES = [16, 8, 4]; // needs to be descending
 const HOURS_SINCE_REVIEWED_THRESHOLD = 24; // if time since reviewed is greater than this, species needs review
 const FRACTION_RESERVED_FOR_REVIEW = 0.25; // this fraction of recommended subsets will consist of species needing review
 
+const CONFUSION_EMA_FRAC = 0.9;
+
 function getInfoURL(taxon_obj, mode) {
   if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank === "species") {
     return (
