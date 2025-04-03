@@ -171,7 +171,7 @@ function updateTaxonReviewedTimestamp(taxon_id) {
   localStorage.setItem(key(taxon_id), JSON.stringify(data));
 }
 
-function clearTaxonData(taxon_id, mode) {
+function clearTaxonData(taxon_id) {
   localStorage.removeItem(key(taxon_id));
 }
 
