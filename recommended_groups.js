@@ -15,14 +15,37 @@
 // If A was guessed, I EMA in a 0 to the numerator value and a 1 into the denominator.
 // The values are stored in local storage in the taxon data of who the question was about.
 
-function defaultConf(correctTaxonId, otherTaxonId) {
+async function defaultConf(correctTaxonId, otherTaxonId) {
   // returns [numerator, denominator] for default confusion values, should add to 1
   // TODO: more sophisticated initialization based on configuration, or iNaturalist data
+
+  // first try iNaturalist data
+  const similarData = await firebaseGetSimilarSpecies(
+    correctTaxonId,
+    mode === "birdsong"
+  );
+  if (similarData) {
+    const otherSpecies = similarData.similar_species.find(
+      (x) => x.id === otherTaxonId
+    );
+    if (!otherSpecies) return [0, 1]; // not confused at all
+    const correctCount = similarData.observations_count;
+    let ratio = (40 * otherSpecies.count) / correctCount;
+    ratio = Math.min(0.8, ratio);
+
+    // 1-x / x = r
+    // 1-x = xr
+    // 1 = (1+r)x
+    // 1/(1+r) = x
+    const denom = 1 / (1 + ratio);
+    const num = 1 - denom;
+    return [num, denom];
+  }
 
   return [0.5, 0.5]; // this matches the score values if randomly guessing
 }
 
-function updateConfusionScore(correctId, guessedId, idsInPlay) {
+async function updateConfusionScore(correctId, guessedId, idsInPlay) {
   // update incorrect and correct counts using an exponential moving average
 
   // confusion scores are stored with the taxon who the question is about
@@ -30,12 +53,12 @@ function updateConfusionScore(correctId, guessedId, idsInPlay) {
   const confusedTaxa = loadTaxonData(correctId, true).confused_taxa || {};
 
   if (guessedId !== correctId) {
-    applyEMA(confusedTaxa, correctId, guessedId, 1, 0);
+    await applyEMA(confusedTaxa, correctId, guessedId, 1, 0);
   } else {
     // got it right, update scores for all taxa in play
     for (const id of idsInPlay) {
       if (id !== correctId) {
-        applyEMA(confusedTaxa, correctId, id, 0, 1);
+        await applyEMA(confusedTaxa, correctId, id, 0, 1);
       }
     }
   }
@@ -44,11 +67,11 @@ function updateConfusionScore(correctId, guessedId, idsInPlay) {
   updateTaxonConfusions(correctId, confusedTaxa);
 }
 
-function applyEMA(confusedTaxa, correctId, otherId, numVal, denomVal) {
+async function applyEMA(confusedTaxa, correctId, otherId, numVal, denomVal) {
   // get existing num and denom values
   let num, denom;
   if (!(otherId in confusedTaxa)) {
-    [num, denom] = defaultConf(correctId, otherId);
+    [num, denom] = await defaultConf(correctId, otherId);
   } else {
     [num, denom] = confusedTaxa[otherId];
   }
@@ -61,7 +84,7 @@ function applyEMA(confusedTaxa, correctId, otherId, numVal, denomVal) {
   confusedTaxa[otherId] = [num, denom];
 }
 
-function makeTaxonGroups() {
+async function makeTaxonGroups() {
   const taxonIds = list_taxa.map((obj) => obj.id);
 
   // load adjacency list of taxon scores {A: {B: conf(A,B), C: conf(A,C), ...}, ...}
@@ -73,7 +96,7 @@ function makeTaxonGroups() {
     // fill in default values if conf scores missing
     for (const otherId of taxonIds) {
       if (otherId !== id && !(otherId in adjList[id])) {
-        const [num, denom] = defaultConf(id, otherId);
+        const [num, denom] = await defaultConf(id, otherId);
         adjList[id][otherId] = num / denom;
       }
     }
@@ -130,7 +153,65 @@ function makeTaxonGroups() {
   }
 
   // TODO load iNaturalist data and test this on that
-  // TODO figure out what to return
+  // TODO figure out what to return (might want to include info to help sort groups)
   // TODO try symmetric weight = p(wrong) for game w only A and B
   // TODO try dynamic group sizing based on p(wrong)
+}
+
+// iNaturalist fetching functions
+
+async function fetchSimilarSpecies(taxonId, sounds = false) {
+  const similarUrl = `https://api.inaturalist.org/v1/identifications/similar_species?sounds=${sounds}&taxon_id=${taxonId}`;
+  const results = (await (await fetch(similarUrl)).json()).results;
+
+  const infoToKeep = results.map((obj) => {
+    return {
+      id: obj.taxon.id,
+      count: obj.count,
+      name: obj.taxon.name,
+      preferred_common_name: obj.taxon.preferred_common_name,
+    };
+  });
+  return infoToKeep;
+}
+
+function sleep(sec) {
+  return new Promise((resolve) => setTimeout(resolve, 1000 * sec));
+}
+
+async function updateFirebaseSimilarSpecies(taxonIds, sounds = false) {
+  console.log(
+    "Updating firebase similar species database for " +
+      taxonIds.join() +
+      `, with sounds=${sounds}`
+  );
+  // get total number of observations for each species
+  const countsUrl =
+    "https://api.inaturalist.org/v1/observations/species_counts?quality_grade=research" +
+    `&sounds=${sounds}&taxon_id=${taxonIds.join(",")}`;
+  const results = (await (await fetch(countsUrl)).json()).results;
+  const counts = {};
+  results.forEach((obj) => {
+    counts[obj.taxon.id] = {
+      count: obj.count,
+      commonName: obj.taxon.preferred_common_name,
+    };
+  });
+
+  // get similar species, combine with count data to be sent to firebase
+  const data = {};
+  for (let taxonId of taxonIds) {
+    await sleep(1); // keep iNaturalist happy
+    const similarSpecies = await fetchSimilarSpecies(taxonId, sounds);
+    console.log(`Got similar species for ${taxonId}`);
+    data[taxonId] = {
+      preferred_common_name: counts[taxonId].commonName,
+      observations_count: counts[taxonId].count,
+      similar_species: similarSpecies,
+    };
+  }
+
+  // send to firebase
+  console.log("Sending similar species to firebase");
+  firebaseAddSimilarSpecies(data, sounds);
 }

@@ -1,3 +1,5 @@
+TODO - check that behavior is as intended if identifying not at the species level
+
 Better recommendation brainstorming:
 
 For each pair of birds, count how many times the two were confused.
