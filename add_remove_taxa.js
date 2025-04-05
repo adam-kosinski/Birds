@@ -1,11 +1,19 @@
 let list_taxa = []; //list of iNaturalist taxon objects that are on the practice list
 let taxa_to_use = []; //subset of list_taxa being used this game, initialized at game init based on the selected birds
 let place_id;
+let similarSpeciesData = {
+  //gets fetched from firebase once, when page loads
+  // load both sounds and photos so that it's easier for switching modes
+  birdsong: {},
+  visual_id: {},
+};
 
-//automatically read taxa from URL and populate the HTML and JS taxa lists
-initURLArgs();
+// this function gets called on page load, see html file
+async function initURLArgs() {
+  // start loader
+  document.getElementById("above-list-container").style.display = "grid";
+  document.getElementById("bird-list-loader").style.display = "block";
 
-function initURLArgs() {
   let url = new URL(window.location.href);
   let taxa_ids = url.searchParams.get("taxa");
   let default_mode = url.searchParams.get("mode");
@@ -13,13 +21,31 @@ function initURLArgs() {
     url.searchParams.get("data_source") || "iNaturalist";
   place_id = url.searchParams.get("place_id");
 
-  //if no taxa, display message
-  if (taxa_ids === null)
-    document.getElementById("bird-list-message").style.display = "block";
-  else addBirds(taxa_ids.split(",").map((s) => Number(s)));
-
-  if (default_mode) setMode(default_mode);
+  if (default_mode) setMode(default_mode); //triggers filling similarSpecies data
   setDataSource(data_source_setting);
+
+  // fetch similar species data - this is quick, and want this to happen before addBirds gets called,
+  // since that triggers recommendation selection
+  const promiseSounds = firebaseGetSimilarSpeciesData(true).then(
+    (data) => (similarSpeciesData["birdsong"] = data)
+  );
+  const promisePhotos = firebaseGetSimilarSpeciesData(false).then(
+    (data) => (similarSpeciesData["visual_id"] = data)
+  );
+  await Promise.all([promiseSounds, promisePhotos]);
+  console.log("Similar species data loaded");
+
+  // fill in taxa
+  if (taxa_ids === null) {
+    //if no taxa, display message
+    document.getElementById("bird-list-message").style.display = "block";
+  } else {
+    await addBirds(taxa_ids.split(",").map((s) => Number(s)));
+  }
+  console.log("Taxa loaded");
+
+  //stop loader
+  document.getElementById("bird-list-loader").style.display = "none";
 }
 
 function setURLParam(key, value) {
@@ -51,8 +77,6 @@ async function addBirds(taxa_id_list) {
 
   //clear message about no birds selected, start loader
   document.getElementById("bird-list-message").style.display = "none";
-  document.getElementById("above-list-container").style.display = "grid";
-  document.getElementById("bird-list-loader").style.display = "block";
 
   //update URL list, added entries will be at the end
   setURLParam("taxa", ids_we_have.concat(ids_to_fetch).join(","));
@@ -186,13 +210,13 @@ async function addBirds(taxa_id_list) {
   //update count
   document.getElementById("n-species-display").textContent = list_taxa.length;
 
+  // always sort into groups
+  makeTaxonGroups();
+
   //select recommended automatically if setting is enabled, now that taxa have loaded
   if (loadBooleanSetting("auto-select-recommended", false)) {
     selectRecommended();
   }
-
-  //stop loader
-  document.getElementById("bird-list-loader").style.display = "none";
 }
 
 function removeBird(taxon_id) {

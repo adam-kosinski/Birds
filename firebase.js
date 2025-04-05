@@ -55,16 +55,17 @@ function firebaseAddSimilarSpecies(data, sounds) {
   }
 }
 
-async function firebaseGetSimilarSpecies(taxonId, sounds) {
-  const doc = db
+async function firebaseGetSimilarSpeciesData(sounds) {
+  // get all data, it's much faster than one at a time or filtering and doesn't use much bandwidth
+  const snapshot = await db
     .collection(`similar-species-${sounds ? "sounds" : "photos"}`)
-    .doc(String(taxonId));
+    .get();
 
-  const d = await doc.get();
-  if (d.exists) {
-    return d.data();
-  }
-  return null;
+  const data = {};
+  snapshot.forEach((doc) => {
+    data[doc.id] = doc.data();
+  });
+  return data;
 }
 
 // Old idea: optimize firebase writes by updating in bulk instead of after every game question

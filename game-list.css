@@ -197,18 +197,25 @@
 
 #bird-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  column-gap: 11px;
+  row-gap: 11px;
   overflow-y: auto;
+  width: 100%;
+
   position: relative;
   /* for aligning '+' pseudo elements*/
 
-  /* to place scrollbar outside of content */
   box-sizing: border-box;
-  width: 100%;
-  padding-left: 11px;
-  /* plus the row's 5px padding gives 16px */
-  padding-right: 11px;
-  padding-bottom: 5px;
+  /* to place scrollbar outside of content */
+
+  padding: 5px 11px;
+  /* horizontal padding plus the row's 5px padding gives 16px */
+}
+
+.taxa-group {
+  padding: 4px 0;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.35);
 }
 
 .bird-list-item {
