@@ -209,6 +209,28 @@ function makeTaxonGroups() {
   for (const group of groups) {
     const div = document.createElement("div");
     div.className = "taxa-group";
+
+    const header = document.createElement("div");
+    header.className = "taxa-group-header";
+    const selectGroup = document.createElement("button");
+    selectGroup.className = "font-small";
+    selectGroup.textContent = "SELECT GROUP";
+    selectGroup.addEventListener("click", () => {
+      div
+        .querySelectorAll(".bird-list-item:not(.selected)")
+        .forEach((el) => toggleListSelection(el.dataset.taxonId));
+    });
+    const deselectGroup = document.createElement("button");
+    deselectGroup.className = "font-small";
+    deselectGroup.textContent = "DESELECT GROUP";
+    deselectGroup.addEventListener("click", () => {
+      div
+        .querySelectorAll(".bird-list-item.selected")
+        .forEach((el) => toggleListSelection(el.dataset.taxonId));
+    });
+    header.append(selectGroup, deselectGroup);
+    div.append(header);
+
     for (const taxonId of group) {
       const listItem = document.querySelector(
         `.bird-list-item[data-taxon-id="${taxonId}"]`

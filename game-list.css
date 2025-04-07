@@ -208,8 +208,16 @@
 }
 
 .taxa-group {
-  padding: 4px 0;
+  padding-bottom: 4px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.35);
+  border-radius: 8px;
+}
+.taxa-group-header {
+  display: flex;
+}
+.taxa-group-header button {
+  color: var(--medium-gray);
+  padding: 8px 8px 4px 8px;
 }
 
 .bird-list-item {
