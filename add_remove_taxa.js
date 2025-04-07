@@ -17,9 +17,6 @@ async function initURLArgs() {
     url.searchParams.get("data_source") || "iNaturalist";
   place_id = url.searchParams.get("place_id");
 
-  if (default_mode) setMode(default_mode); //triggers filling similarSpecies data
-  setDataSource(data_source_setting);
-
   // fill in taxa
   if (taxa_ids === null) {
     //if no taxa, display message
@@ -28,6 +25,9 @@ async function initURLArgs() {
     await addBirds(taxa_ids.split(",").map((s) => Number(s)));
   }
   console.log("Taxa loaded");
+
+  if (default_mode) setMode(default_mode); //triggers filling similarSpecies data so needs to happen after addBirds() call
+  setDataSource(data_source_setting);
 
   stopListLoader();
 }
@@ -201,9 +201,6 @@ async function addBirds(taxa_id_list) {
 
     //load proficiency display (nothing will show if not storing data)
     refreshTaxonProficiencyDisplay(taxon.id);
-
-    // if just added a bird manually (proxy check if only added one), highlight it
-    if (results.length === 1) highlightElement(container);
   });
 
   //update count
@@ -213,9 +210,9 @@ async function addBirds(taxa_id_list) {
   // always sort into groups
   makeTaxonGroups();
 
-  //select recommended automatically if setting is enabled, now that taxa have loaded
-  if (loadBooleanSetting("auto-select-recommended", false)) {
-    selectRecommended();
+  // if just added a bird manually (proxy this with if only added one), highlight it
+  if (results.length === 1) {
+    highlightElement(document.getElementById("bird-list-" + ids_to_fetch[0]));
   }
 
   checkIfNoneSelected();
@@ -251,11 +248,6 @@ function removeBird(taxon_id) {
 
   // update groups
   makeTaxonGroups();
-
-  //select recommended automatically if setting is enabled
-  if (loadBooleanSetting("auto-select-recommended", false)) {
-    selectRecommended();
-  }
 
   checkIfNoneSelected();
 }
@@ -344,10 +336,12 @@ initAutocomplete(
   }
 );
 
-function highlightElement(el) {
-  el.scrollIntoView({ block: "center" });
-  el.classList.add("just-added");
+function highlightElement(el, scrollTo = true) {
+  if (scrollTo) {
+    el.scrollIntoView({ block: "center" });
+  }
+  el.classList.add("highlighting");
   setTimeout(() => {
-    el.classList.remove("just-added");
+    el.classList.remove("highlighting");
   }, 2000);
 }

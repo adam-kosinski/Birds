@@ -20,11 +20,6 @@ function resetAndExitGame() {
   document.getElementById("game-screen").style.display = "none";
   document.getElementById("start-game-button").removeAttribute("disabled");
 
-  //update auto-selection if setting is enabled
-  if (loadBooleanSetting("auto-select-recommended", false)) {
-    selectRecommended();
-  }
-
   //reset vars
   obs = [];
   taxa_to_use = []; //probably don't need to reset, but just in case
@@ -55,6 +50,8 @@ function resetAndExitGame() {
 
   // reset progress bar
   document.getElementById("game-progress").value = 0;
+
+  makeTaxonGroups();
 }
 
 //save list
@@ -105,13 +102,13 @@ function selectAll() {
     .querySelectorAll(".bird-list-item:not(.selected)")
     .forEach((el) => toggleListSelection(el.dataset.taxonId));
 }
-function selectNone() {
+function deselectAll() {
   document
     .querySelectorAll(".bird-list-item.selected")
     .forEach((el) => toggleListSelection(el.dataset.taxonId));
 }
 document.getElementById("select-all").addEventListener("click", selectAll);
-document.getElementById("select-none").addEventListener("click", selectNone);
+document.getElementById("select-none").addEventListener("click", deselectAll);
 
 //marking observation as bad
 document.querySelectorAll(".mark-as-bad-button").forEach((el) => {

@@ -112,7 +112,7 @@ function makeTaxonGroups() {
       }
     }
   }
-  console.log(adjList);
+  console.log("user confusion data", adjList);
   // const adjMatrix = [];
   // const labels = [];
   // for (const a of taxonIds) {
@@ -206,9 +206,11 @@ function makeTaxonGroups() {
   // update bird list UI to reflect groups
   // first get reference to old group containers so we can delete them later
   const oldGroupDivs = document.querySelectorAll(".taxa-group");
+  let firstGroupDiv = undefined;
   for (const group of groups) {
     const div = document.createElement("div");
     div.className = "taxa-group";
+    if (!firstGroupDiv) firstGroupDiv = div;
 
     const header = document.createElement("div");
     header.className = "taxa-group-header";
@@ -241,6 +243,18 @@ function makeTaxonGroups() {
   }
   // remove the old group containers
   oldGroupDivs.forEach((div) => div.remove());
+
+  // update auto-selection if setting is enabled
+  // this is just selecting the first group
+  if (loadBooleanSetting("auto-select-recommended", false)) {
+    deselectAll();
+    document
+      .querySelector(".taxa-group")
+      .querySelectorAll(".bird-list-item")
+      .forEach((el) => {
+        toggleListSelection(el.dataset.taxonId);
+      });
+  }
 
   // TODO figure out what to return (might want to include info to help sort groups)
   // TODO try symmetric weight = p(wrong) for game w only A and B

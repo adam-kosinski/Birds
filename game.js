@@ -62,11 +62,6 @@ function setMode(new_mode) {
 
   //update groups
   makeTaxonGroups();
-
-  //update auto-selection if setting is enabled
-  if (loadBooleanSetting("auto-select-recommended", false)) {
-    selectRecommended();
-  }
 }
 
 function setDataSource(new_data_source) {
