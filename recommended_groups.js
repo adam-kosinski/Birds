@@ -17,31 +17,43 @@
 
 function defaultConf(correctTaxonId, otherTaxonId) {
   // returns [numerator, denominator] for default confusion values, should add to 1
-  // TODO: more sophisticated initialization based on configuration, or iNaturalist data
 
-  // first try iNaturalist data
-  if (correctTaxonId in similarSpeciesData[mode]) {
-    const data = similarSpeciesData[mode][correctTaxonId];
-    const otherSpecies = data.similar_species.find(
-      (x) => x.id === otherTaxonId
-    );
-    if (!otherSpecies) return [0, 1]; // not confused at all
-    const correctCount = data.observations_count;
-    let ratio = (200 * otherSpecies.count) / correctCount;
-    // ratio = Math.min(1, ratio);
+  // TODO use configuration (e.g. for bird calls, doesn't align w iNat confusion)
 
-    // 1-x / x = r
+  // try iNaturalist data
+  let iNatConf = iNaturalistConf(correctTaxonId, otherTaxonId);
+  if (iNatConf === undefined) {
+    // try conf(B, A) as an estimate when we don't have conf(A, B)
+    iNatConf = iNaturalistConf(otherTaxonId, correctTaxonId);
+    console.log("using flipped conf");
+  }
+  if (iNatConf !== undefined) {
+    // get num and denom from the ratio
+    // 1-x / x = ratio r
     // 1-x = xr
     // 1 = (1+r)x
     // 1/(1+r) = x
-    const denom = 1 / (1 + ratio);
+    const denom = 1 / (1 + iNatConf);
     const num = 1 - denom;
     return [num, denom];
   }
 
+  // TODO use similar ancestry
+
   // for taxa without data, assume we won't confuse them so that it doesn't mess with
   // the groupings of taxa for which we do have data
   return [0, 1];
+}
+
+function iNaturalistConf(correctTaxonId, otherTaxonId) {
+  if (!similarSpeciesData) return undefined;
+  if (!(correctTaxonId in similarSpeciesData[mode])) return undefined;
+  const data = similarSpeciesData[mode][correctTaxonId];
+  const otherSpecies = data.similar_species.find((x) => x.id === otherTaxonId);
+  if (!otherSpecies) return 0; // not confused at all
+  const correctCount = data.observations_count;
+  let ratio = (200 * otherSpecies.count) / correctCount;
+  return ratio;
 }
 
 function updateConfusionScore(correctId, guessedId, idsInPlay) {
@@ -101,25 +113,25 @@ function makeTaxonGroups() {
     }
   }
   console.log(adjList);
-  const adjMatrix = [];
-  const labels = [];
-  for (const a of taxonIds) {
-    labels.push(idToName(Number(a)));
-    const row = [];
-    for (const b of taxonIds) {
-      row.push(adjList[a][b] || 0);
-    }
-    adjMatrix.push(row);
-  }
-  for (let r = 0; r < adjMatrix.length; r++) {
-    for (let c = r + 1; c < adjMatrix.length; c++) {
-      adjMatrix[r][c] =
-        1 - 0.5 * (1 / (1 + adjMatrix[r][c]) + 1 / (1 + adjMatrix[c][r]));
-      adjMatrix[c][r] = adjMatrix[r][c];
-    }
-  }
-  console.log(JSON.stringify(adjMatrix));
-  console.log(JSON.stringify(labels));
+  // const adjMatrix = [];
+  // const labels = [];
+  // for (const a of taxonIds) {
+  //   labels.push(idToName(Number(a)));
+  //   const row = [];
+  //   for (const b of taxonIds) {
+  //     row.push(adjList[a][b] || 0);
+  //   }
+  //   adjMatrix.push(row);
+  // }
+  // for (let r = 0; r < adjMatrix.length; r++) {
+  //   for (let c = r + 1; c < adjMatrix.length; c++) {
+  //     adjMatrix[r][c] =
+  //       1 - 0.5 * (1 / (1 + adjMatrix[r][c]) + 1 / (1 + adjMatrix[c][r]));
+  //     adjMatrix[c][r] = adjMatrix[r][c];
+  //   }
+  // }
+  // console.log(JSON.stringify(adjMatrix));
+  // console.log(JSON.stringify(labels));
   // console.log(adjMatrix.map((row) => Math.max(...row)));
 
   // create list of edges, assign edges symmetric weights based on conf(A,B) and conf(B,A)
