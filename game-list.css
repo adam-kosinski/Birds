@@ -165,12 +165,14 @@
 }
 
 #above-list-container {
-  display: none;
-  /* usually grid */
+  display: grid;
 
   max-width: 350px;
   grid-template-columns: auto auto auto;
   align-items: center;
+}
+.white-container:not(:has(.bird-list-item)) #above-list-container {
+  display: none;
 }
 
 #species-or-taxa::after {
