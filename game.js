@@ -191,7 +191,7 @@ async function initGame() {
   console.log("\nINIT GAME ============================\n\n");
 
   //start loader
-  document.getElementById("bird-list-loader").style.display = "block";
+  startListLoader();
 
   //get taxa_to_use
   taxa_to_use = Array.from(
@@ -200,7 +200,11 @@ async function initGame() {
     let id = Number(el.dataset.taxonId);
     return list_taxa.find((obj) => obj.id === id);
   });
-  if (taxa_to_use.length === 0) taxa_to_use = list_taxa;
+  if (taxa_to_use.length === 0) {
+    alert("No taxa selected");
+    stopListLoader();
+    return;
+  }
   console.log("taxa to use", taxa_to_use);
 
   //init taxon_obs, taxon_queues, taxon bag
@@ -241,7 +245,7 @@ async function initGame() {
       alert(
         "Failed to find research grade iNaturalist observations for any of the chosen taxa. Please try again with different taxa."
       );
-      document.getElementById("bird-list-loader").style.display = "none";
+      stopListLoader();
       resetAndExitGame();
       return;
     }

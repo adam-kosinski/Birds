@@ -1,12 +1,10 @@
 let list_taxa = []; //list of iNaturalist taxon objects that are on the practice list
 let taxa_to_use = []; //subset of list_taxa being used this game, initialized at game init based on the selected birds
 let place_id;
-let similarSpeciesData = {
-  //gets fetched from firebase once, when page loads
-  // load both sounds and photos so that it's easier for switching modes
-  birdsong: {},
-  visual_id: {},
-};
+let similarSpeciesData;
+// gets fetched from firebase once, when addBirds() is called for the first time (on page load)
+// will load both sounds and photos so that it's easier for switching modes
+// format: {birdsong: {taxonId1: {...}, taxonId2: {...}, ...}, visual_id: {...}}
 
 // this function gets called on page load, see html file
 async function initURLArgs() {
@@ -22,17 +20,6 @@ async function initURLArgs() {
   if (default_mode) setMode(default_mode); //triggers filling similarSpecies data
   setDataSource(data_source_setting);
 
-  // fetch similar species data - this is quick, and want this to happen before addBirds gets called,
-  // since that triggers recommendation selection
-  const promiseSounds = firebaseGetSimilarSpeciesData(true).then(
-    (data) => (similarSpeciesData["birdsong"] = data)
-  );
-  const promisePhotos = firebaseGetSimilarSpeciesData(false).then(
-    (data) => (similarSpeciesData["visual_id"] = data)
-  );
-  await Promise.all([promiseSounds, promisePhotos]);
-  console.log("Similar species data loaded");
-
   // fill in taxa
   if (taxa_ids === null) {
     //if no taxa, display message
@@ -43,6 +30,19 @@ async function initURLArgs() {
   console.log("Taxa loaded");
 
   stopListLoader();
+}
+
+async function fetchSimilarSpeciesData() {
+  similarSpeciesData = {};
+  const promiseSounds = firebaseGetSimilarSpeciesData(true).then(
+    (data) => (similarSpeciesData["birdsong"] = data)
+  );
+  const promisePhotos = firebaseGetSimilarSpeciesData(false).then(
+    (data) => (similarSpeciesData["visual_id"] = data)
+  );
+  await Promise.all([promiseSounds, promisePhotos]);
+  console.log("Similar species data loaded");
+  return;
 }
 
 function setURLParam(key, value) {
@@ -86,11 +86,11 @@ async function addBirds(taxa_id_list) {
 
   // Get bird data
 
-  let results = new Array(ids_to_fetch.length); //array of undefined, will check if array includes undefined to tell if all arrived
+  let results = new Array(ids_to_fetch.length); //array of undefined which will get populated w the data
+  let promises = [];
 
   //fetch 30 taxa at a time (iNaturalist limit)
   //only when they've all arrived add them to the list (so ensure same order as in id list)
-  let promises = [];
   let start_idx = 0; //for indexing ids_to_fetch
 
   while (start_idx < ids_to_fetch.length) {
@@ -108,6 +108,11 @@ async function addBirds(taxa_id_list) {
           }
         })
     );
+  }
+
+  // also fetch similar species data at the same time if we haven't yet
+  if (!similarSpeciesData) {
+    promises.push(fetchSimilarSpeciesData());
   }
 
   await Promise.all(promises);
