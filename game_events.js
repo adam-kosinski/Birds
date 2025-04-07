@@ -96,21 +96,22 @@ function toggleListSelection(taxon_id) {
   const bird_list_item = document.getElementById("bird-list-" + taxon_id);
   bird_list_item.classList.toggle("selected");
   document.getElementById("n-selected").textContent = document.querySelectorAll(
-    "#bird-list .selected"
+    ".bird-list-item.selected"
   ).length;
   checkIfNoneSelected();
 }
-function clearListSelection() {
-  document.querySelectorAll("#bird-list .selected").forEach((el) => {
-    el.classList.remove("selected");
-  });
+function selectAll() {
+  document
+    .querySelectorAll(".bird-list-item:not(.selected)")
+    .forEach((el) => toggleListSelection(el.dataset.taxonId));
 }
-document
-  .getElementById("clear-selection")
-  .addEventListener("click", clearListSelection);
-document
-  .getElementById("select-recommended")
-  .addEventListener("click", selectRecommended);
+function selectNone() {
+  document
+    .querySelectorAll(".bird-list-item.selected")
+    .forEach((el) => toggleListSelection(el.dataset.taxonId));
+}
+document.getElementById("select-all").addEventListener("click", selectAll);
+document.getElementById("select-none").addEventListener("click", selectNone);
 
 //marking observation as bad
 document.querySelectorAll(".mark-as-bad-button").forEach((el) => {

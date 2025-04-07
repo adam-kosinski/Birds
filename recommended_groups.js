@@ -339,7 +339,7 @@ function selectRecommended() {
   console.log("recommended ids", recommended_ids);
 
   // select
-  clearListSelection();
+  selectNone();
   recommended_ids.forEach((id) => toggleListSelection(id));
 
   // show the user what we selected by moving them to the top and highlighting

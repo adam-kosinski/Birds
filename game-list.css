@@ -189,14 +189,6 @@
   padding: 5px;
 }
 
-#clear-selection {
-  visibility: hidden;
-}
-
-.white-container:has(#bird-list .selected) #clear-selection {
-  visibility: visible;
-}
-
 #bird-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
