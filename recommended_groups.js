@@ -38,7 +38,10 @@ function defaultConf(correctTaxonId, otherTaxonId) {
     const num = 1 - denom;
     return [num, denom];
   }
-  return [0.5, 0.5]; // this matches the score values if randomly guessing
+
+  // for taxa without data, assume we won't confuse them so that it doesn't mess with
+  // the groupings of taxa for which we do have data
+  return [0, 1];
 }
 
 function updateConfusionScore(correctId, guessedId, idsInPlay) {

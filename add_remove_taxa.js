@@ -10,9 +10,7 @@ let similarSpeciesData = {
 
 // this function gets called on page load, see html file
 async function initURLArgs() {
-  // start loader
-  document.getElementById("above-list-container").style.display = "grid";
-  document.getElementById("bird-list-loader").style.display = "block";
+  startListLoader();
 
   let url = new URL(window.location.href);
   let taxa_ids = url.searchParams.get("taxa");
@@ -44,8 +42,7 @@ async function initURLArgs() {
   }
   console.log("Taxa loaded");
 
-  //stop loader
-  document.getElementById("bird-list-loader").style.display = "none";
+  stopListLoader();
 }
 
 function setURLParam(key, value) {
@@ -59,6 +56,13 @@ function setURLParam(key, value) {
     "",
     "?" + params.toString().replaceAll("%2C", ",")
   ); //technically %2C is correct but comma looks so much neater and more intuitive
+}
+
+function startListLoader() {
+  document.getElementById("bird-list-loader").style.display = "block";
+}
+function stopListLoader() {
+  document.getElementById("bird-list-loader").style.display = "none";
 }
 
 async function addBirds(taxa_id_list) {
@@ -75,8 +79,7 @@ async function addBirds(taxa_id_list) {
   });
   if (ids_to_fetch.length === 0) return;
 
-  //clear message about no birds selected, start loader
-  document.getElementById("bird-list-message").style.display = "none";
+  startListLoader();
 
   //update URL list, added entries will be at the end
   setURLParam("taxa", ids_we_have.concat(ids_to_fetch).join(","));
@@ -136,7 +139,6 @@ async function addBirds(taxa_id_list) {
     container.addEventListener("click", (e) => {
       if (
         e.target.classList.contains("bird-square") ||
-        e.target.classList.contains("plus-sign") ||
         e.target.classList.contains("taxon-progress")
       ) {
         toggleListSelection(taxon.id);
@@ -144,10 +146,6 @@ async function addBirds(taxa_id_list) {
     });
 
     //create elements in container
-
-    let plus_sign = document.createElement("div");
-    plus_sign.className = "plus-sign";
-    plus_sign.textContent = "+";
 
     let progress_bar = document.createElement("div");
     progress_bar.className = "taxon-progress";
@@ -188,7 +186,6 @@ async function addBirds(taxa_id_list) {
 
     //append
     container.append(
-      plus_sign,
       progress_bar,
       bird_square,
       linked_name,
@@ -204,9 +201,6 @@ async function addBirds(taxa_id_list) {
     if (results.length === 1) highlightElement(container);
   });
 
-  //enable button
-  document.getElementById("start-game-button").removeAttribute("disabled");
-
   //update count
   document.getElementById("n-species-display").textContent = list_taxa.length;
 
@@ -217,6 +211,13 @@ async function addBirds(taxa_id_list) {
   if (loadBooleanSetting("auto-select-recommended", false)) {
     selectRecommended();
   }
+
+  // list can't be empty now
+  document.getElementById("bird-list-message").style.display = "none";
+  document.getElementById("above-list-container").style.display = "grid";
+
+  checkIfNoneSelected();
+  stopListLoader();
 }
 
 function removeBird(taxon_id) {
@@ -245,12 +246,27 @@ function removeBird(taxon_id) {
     setURLParam("taxa", list_taxa.map((obj) => obj.id).join(","));
   }
 
-  //if no birds selected, update message and button
   if (list_taxa.length === 0) {
     document.getElementById("bird-list-message").style.display = "block";
-    document.getElementById("start-game-button").disabled = true;
     document.getElementById("above-list-container").style.display = "none";
   }
+
+  // update groups
+  makeTaxonGroups();
+
+  //select recommended automatically if setting is enabled
+  if (loadBooleanSetting("auto-select-recommended", false)) {
+    selectRecommended();
+  }
+
+  checkIfNoneSelected();
+}
+
+function checkIfNoneSelected() {
+  //if no birds selected, update message and button
+  const empty =
+    document.querySelectorAll(".bird-list-item.selected").length === 0;
+  document.getElementById("start-game-button").disabled = empty;
 }
 
 //autocomplete list stuff

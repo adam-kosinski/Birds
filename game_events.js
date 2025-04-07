@@ -98,6 +98,7 @@ function toggleListSelection(taxon_id) {
   document.getElementById("n-selected").textContent = document.querySelectorAll(
     "#bird-list .selected"
   ).length;
+  checkIfNoneSelected();
 }
 function clearListSelection() {
   document.querySelectorAll("#bird-list .selected").forEach((el) => {

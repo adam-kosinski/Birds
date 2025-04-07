@@ -60,6 +60,9 @@ function setMode(new_mode) {
     refreshTaxonProficiencyDisplay(obj.id);
   });
 
+  //update groups
+  makeTaxonGroups();
+
   //update auto-selection if setting is enabled
   if (loadBooleanSetting("auto-select-recommended", false)) {
     selectRecommended();

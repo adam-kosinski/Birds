@@ -227,11 +227,13 @@
   border-radius: 12px;
   max-width: 350px;
   position: relative;
-  /* for the plus signs */
+}
+
+.bird-list-item:not(.selected) {
+  opacity: 0.4;
 }
 
 .bird-square,
-.plus-sign,
 .taxon-progress {
   /* adding onto base.css for .bird-square */
   cursor: pointer;
@@ -266,15 +268,15 @@
   }
 }
 
-#bird-list:has(.selected) > :not(.selected) {
+/* #bird-list:has(.selected) > :not(.selected) {
   opacity: 0.4;
-}
+} */
 
-#bird-list .plus-sign {
+/* #bird-list .plus-sign {
   display: none;
-}
+} */
 
-#bird-list:has(.selected) > :not(.selected) .plus-sign {
+/* #bird-list:has(.selected) > :not(.selected) .plus-sign {
   content: "+";
   font-size: 60px;
   font-weight: bold;
@@ -287,7 +289,7 @@
   justify-content: center;
   position: absolute;
   left: 17.5px;
-}
+} */
 
 .taxon-progress {
   display: none;
