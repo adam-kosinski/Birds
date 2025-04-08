@@ -22,7 +22,10 @@ async function initURLArgs() {
     //if no taxa, display message
     document.getElementById("bird-list-message").style.display = "block";
   } else {
-    await addBirds(taxa_ids.split(",").map((s) => Number(s)));
+    await addBirds(
+      taxa_ids.split(",").map((s) => Number(s)),
+      false
+    );
   }
   console.log("Taxa loaded");
 
@@ -65,7 +68,7 @@ function stopListLoader() {
   document.getElementById("bird-list-loader").style.display = "none";
 }
 
-async function addBirds(taxa_id_list) {
+async function addBirds(taxa_id_list, update_taxon_groups_after = true) {
   if (game_state !== INACTIVE) return;
 
   //extract only taxon ids we don't have
@@ -207,8 +210,8 @@ async function addBirds(taxa_id_list) {
   document.getElementById("n-species-display").textContent = list_taxa.length;
   document.getElementById("bird-list-message").style.display = "none";
 
-  // always sort into groups
-  makeTaxonGroups();
+  // always sort into groups (unless this is the initialization stage, since setMode will do it again later)
+  if (update_taxon_groups_after) makeTaxonGroups();
 
   // if just added a bird manually (proxy this with if only added one), highlight it
   if (results.length === 1) {
