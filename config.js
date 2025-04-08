@@ -50,7 +50,7 @@ const SPECTROGRAM_IMAGE_FETCH_BUFFER_SEC = 15;
 // progress, recommendation, and grouping config
 const MAX_GROUP_SIZE = 6;
 const CONFUSION_EMA_FRAC = 0.9;
-const PRED_ACCURACY_TARGET = 0.6; // don't make groups larger if their predicted accuracy is already below this
+const PRED_ACCURACY_TARGET = 0.7; // don't make groups larger if their predicted accuracy is already below this
 const N_ANSWERS_TO_STORE = 10;
 // we store recent proficiency in local storage (if setting checked), this is how far back to remember
 // - affects stability of proficiency measurement

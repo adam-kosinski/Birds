@@ -29,7 +29,7 @@ async function initURLArgs() {
   }
   console.log("Taxa loaded");
 
-  if (default_mode) setMode(default_mode); //triggers filling similarSpecies data so needs to happen after addBirds() call
+  if (default_mode) setMode(default_mode, false);
   setDataSource(data_source_setting);
 
   stopListLoader();
@@ -71,7 +71,7 @@ function stopListLoader() {
   document.getElementById("bird-list-loader").style.display = "none";
 }
 
-async function addBirds(taxa_id_list, update_taxon_groups_after = true) {
+async function addBirds(taxa_id_list) {
   if (game_state !== INACTIVE) return;
 
   //extract only taxon ids we don't have
@@ -216,8 +216,8 @@ async function addBirds(taxa_id_list, update_taxon_groups_after = true) {
   document.getElementById("n-species-display").textContent = list_taxa.length;
   document.getElementById("bird-list-message").style.display = "none";
 
-  // always sort into groups (unless this is the initialization stage, since setMode will do it again later)
-  if (update_taxon_groups_after) makeTaxonGroups();
+  // always sort into groups
+  makeTaxonGroups();
 
   // if just added a bird manually (proxy this with if only added one), highlight it
   if (results.length === 1) {

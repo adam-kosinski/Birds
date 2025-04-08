@@ -30,7 +30,7 @@ function setGameState(state) {
   document.getElementById("game-main").dataset.gameState = state;
 }
 
-function setMode(new_mode) {
+function setMode(new_mode, make_taxon_groups = true) {
   mode = new_mode;
 
   //update HTML
@@ -61,7 +61,7 @@ function setMode(new_mode) {
   });
 
   //update groups
-  makeTaxonGroups();
+  if (make_taxon_groups) makeTaxonGroups();
 }
 
 function setDataSource(new_data_source) {

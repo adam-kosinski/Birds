@@ -98,6 +98,12 @@
   display: none;
 }
 
+/* location container */
+#target-location-container {
+  display: flex;
+  align-items: center;
+}
+
 /* Bird input and autocomplete */
 
 #bird-input-container {
