@@ -151,10 +151,7 @@ async function addBirds(taxa_id_list) {
     container.dataset.isBird = taxon.ancestor_ids.includes(3); // used for css styling
 
     container.addEventListener("click", (e) => {
-      if (
-        e.target.classList.contains("bird-square") ||
-        e.target.classList.contains("taxon-progress")
-      ) {
+      if (e.target.tagName !== "BUTTON") {
         toggleListSelection(taxon.id);
       }
     });
@@ -170,19 +167,26 @@ async function addBirds(taxa_id_list) {
     if (taxon.default_photo) bird_square.src = taxon.default_photo.square_url;
     bird_square.alt = "Photo of " + taxon.preferred_common_name;
 
-    let linked_name = document.createElement("a");
-    linked_name.href = getInfoURL(taxon, mode);
-    linked_name.target = "_blank";
+    let name_container = document.createElement("div");
+
+    let link = document.createElement("a");
+    link.href = getInfoURL(taxon, mode);
+    link.target = "_blank";
+    let info_button = document.createElement("button");
+    info_button.className = "info-button";
+    link.append(info_button);
+
+    let i = document.createElement("i");
+    i.textContent = taxon.name;
 
     if (taxon.preferred_common_name) {
       let b = document.createElement("b");
       let br = document.createElement("br");
       b.textContent = taxon.preferred_common_name;
-      linked_name.append(b, br);
+      name_container.append(b, link, br, i);
+    } else {
+      name_container.append(i, link);
     }
-    let i = document.createElement("i");
-    i.textContent = taxon.name;
-    linked_name.append(i);
 
     let map_icon = document.createElement("button");
     map_icon.className = "range-map-icon";
@@ -202,7 +206,7 @@ async function addBirds(taxa_id_list) {
     container.append(
       progress_bar,
       bird_square,
-      linked_name,
+      name_container,
       map_icon,
       x_button
     );
