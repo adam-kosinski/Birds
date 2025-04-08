@@ -27,6 +27,8 @@ function defaultConf(correctTaxonId, otherTaxonId) {
     iNatConf = iNaturalistConf(otherTaxonId, correctTaxonId);
   }
   if (iNatConf !== undefined) {
+    // threshold the ratio - only makes sense to be between 0 and 1
+    iNatConf = Math.min(1, iNatConf);
     // get num and denom from the ratio
     // 1-x / x = ratio r
     // 1-x = xr
@@ -168,12 +170,21 @@ function makeTaxonGroups() {
   // unless we identify that we're not allowed to
   edges.sort((a, b) => b.weight - a.weight);
   for (const e of edges) {
-    // check if not allowed to join groups because would make the group too big
     const A = idToGroup[e.nodes[0]];
     const B = idToGroup[e.nodes[1]];
+    if (A === B) continue; // already in the same group
     const groupA = groupToIds[A];
     const groupB = groupToIds[B];
-    if (groupA.length + groupB.length > 4) continue;
+
+    // check if not allowed to join groups because would make the group too big
+    if (groupA.length + groupB.length > MAX_GROUP_SIZE) continue;
+
+    // check if not allowed to join groups because the predicted accuracy is already past the threshold
+    const predAccA = predictedAccuracy(groupA, adjList);
+    const predAccB = predictedAccuracy(groupB, adjList);
+    if (predAccA < PRED_ACCURACY_TARGET || predAccB < PRED_ACCURACY_TARGET) {
+      continue;
+    }
 
     // // debug - group formation process
     // console.log(idToName(e.nodes[0]), "<->", idToName(e.nodes[1]));
@@ -192,24 +203,45 @@ function makeTaxonGroups() {
     }
   }
 
-  // // print out groups
-  // for (const g in groupToIds) {
-  //   const groupNames = groupToIds[g].map(
-  //     (id) => list_taxa.find((obj) => obj.id === id).preferred_common_name
-  //   );
-  //   console.log(groupNames);
-  // }
-
   // sort groups
   const groups = Object.values(groupToIds);
-  sortGroups(groups); // sorts in place
+  sortGroups(groups, adjList); // sorts in place
+
+  // print out groups
+  for (const g of groups) {
+    const groupNames = g.map(
+      (id) => list_taxa.find((obj) => obj.id === id).preferred_common_name
+    );
+    const predAcc = predictedAccuracy(g, adjList);
+    console.log(`pred acc ${predAcc.toFixed(2)} ${groupNames.join(",")}`);
+  }
 
   displayGroups(groups);
 
   // TODO try dynamic group sizing based on p(wrong)
 }
 
-function sortGroups(groups) {
+function predictedAccuracy(group, adjList) {
+  // returns the user's predicted accuracy on a group of taxon ids
+  // calculated as avg p(correct | taxon i)
+  // where p(correct | taxon i) = 1 / (1 + conf(i, a) + conf(i, b) + ...)
+  // adjList contains confusion scores between taxa
+  let probSum = 0;
+  // iterate over the taxon a question is being asked about
+  // assume all taxa are chosen uniformly for questions, for simplicity
+  for (const id of group) {
+    let confSum = 0;
+    // iterate over taxa that could be confused
+    for (const otherId of group) {
+      if (id === otherId) continue;
+      confSum += adjList[id][otherId];
+    }
+    probSum += 1 / (1 + confSum);
+  }
+  return probSum / group.length;
+}
+
+function sortGroups(groups, adjList) {
   // average frequency metric (frequencies 0-1, all sum to 1) -----------------
 
   // first check if we have species counts of all taxa for this mode specifically (sounds=true vs false)
@@ -236,20 +268,19 @@ function sortGroups(groups) {
 
   // sort ------------------------------
   groups.sort((a, b) => {
+    // return predictedAccuracy(a, adjList) - predictedAccuracy(b, adjList);
     return avgFreq(b) - avgFreq(a);
   });
 
-  groups.forEach((g) => {
-    console.log(
-      avgFreq(g).toFixed(4) +
-        " " +
-        g
-          .map((id) => idToName(id) + `(${(taxaCounts[id] / 1000).toFixed(0)})`)
-          .join(", ")
-    );
-  });
+  // groups.forEach((g) => {
+  //   console.log(
+  //     `rel freq ${avgFreq(g).toFixed(4)} ${g
+  //       .map((id) => idToName(id) + `(${(taxaCounts[id] / 1000).toFixed(0)})`)
+  //       .join(", ")}`
+  //   );
+  // });
 
-  // TODO use observation density, not observation count, to measure most common taxa
+  // TODO use radius around a target location to measure observation count
   // TODO don't revert back to total counts unless a sizable fraction of the taxa don't have data - can just assume taxa w no data to be at the median count.
   // - This stops adding one extra bird to the birdsong mode from messing up the sorting
   // TODO incorporate degree of confusion, and time since reviewed

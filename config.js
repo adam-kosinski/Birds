@@ -1,16 +1,21 @@
+// iNaturalist observation fetching
 const DEFAULT_PER_PAGE = 200;
 const INITIAL_PER_PAGE = 5;
-
 const MAX_FETCH_ATTEMPTS = 15; //how many times to attempt fetching to meet threshold, before quit
 const BIRDSONG_POPULAR_ATTEMPTS = 3; //how many times to attempt fetching popular observations before reverting to popular or not popular
 const VISUAL_ID_POPULAR_ATTEMPTS = 1;
 const N_OBS_PER_TAXON = 20; //number of observations we'd like to have for each taxon, will stop when reach this
 const MAX_POPULAR_OBS = 10; //number of popular observations to add before fetching any observation - set less than N_OBS_PER_TAXON so we don't get only the same popular observations each time
 
+// select by location
+const TOP_N_SELECTED = 16;
+
+// question selection
 const MAX_PREFERRED_AUDIO_DURATION = 15; //seconds, if the next observation's sound is longer, try to pick a different next one
 const MAX_SHORT_AUDIO_RETRIES = 3; //max number of tries to pick a shorter audio (to limit requests / possible infinite looping)
 const TIME_TO_REPLENISH_A_SHORT_AUDIO_RETRY = 1000; //ms, retries replenish over time
-
+const SQUIRREL_PROBABILITY = 0.02; //hee hee :)
+// taxon bag
 const MAX_TAXON_BAG_COPIES = 11; //number of times a taxon can be in the taxon bag, min is 1
 const START_TAXON_BAG_COPIES = 7; //may add fewer copies for taxa that the user is very proficient at - see game.js, initGame()
 const CORRECT_REMOVE_COPIES = 2; //number of copies to remove from taxon_bag if the user got a question on this taxon right
@@ -21,9 +26,20 @@ const NO_GUESS_ADD_COPIES = 0; //number of copies to add to bag if no guess - 0 
 // so if you get several wrong, you have to get several right to get the # copies back under START_TAXON_BAG_COPIES
 // so probably don't set MAX_TAXON_BAG_COPIES too high, or this will never get back down enough
 
+// UI stuff
 const AUTOCOMPLETE_DELAY = 1000; //ms after user stops typing, to update the autocomplete
 const N_AUTOCOMPLETE_RESULTS = 5;
-
+const MAX_BIRD_IMAGE_ZOOM_FACTOR = 6;
+const MAX_DESCRIPTION_WORDS = 40;
+const PLACE_STYLE = {
+  //for location geometry
+  color: "orange",
+};
+const FUNNY_BIRD_LEAVE_DELAY = 8000; //ms
+function getFunnyBirdDelay() {
+  return 60000 + 60000 * Math.random();
+}
+// macaulay library spectrogram
 // 250 horizontal pixels per second in raw spectrogram image
 // squished by factor of 2
 // 100% height = 257 pixels raw image height
@@ -31,33 +47,17 @@ const SPECTROGRAM_HORIZ_PERCENT_PER_SEC = (250 / 2) * (100 / 257);
 const SPECTROGRAM_SEC_PER_IMAGE = 60;
 const SPECTROGRAM_IMAGE_FETCH_BUFFER_SEC = 15;
 
-const PLACE_STYLE = {
-  //for location geometry
-  color: "orange",
-};
-const TOP_N_SELECTED = 16; //for location selection
-
-const FUNNY_BIRD_LEAVE_DELAY = 8000; //ms
-function getFunnyBirdDelay() {
-  return 60000 + 60000 * Math.random();
-}
-
-const SQUIRREL_PROBABILITY = 0.02; //hee hee :)
-
-const MAX_BIRD_IMAGE_ZOOM_FACTOR = 6;
-const MAX_DESCRIPTION_WORDS = 40;
-
+// progress, recommendation, and grouping config
+const MAX_GROUP_SIZE = 6;
+const CONFUSION_EMA_FRAC = 0.9;
+const PRED_ACCURACY_TARGET = 0.6; // don't make groups larger if their predicted accuracy is already below this
 const N_ANSWERS_TO_STORE = 10;
 // we store recent proficiency in local storage (if setting checked), this is how far back to remember
 // - affects stability of proficiency measurement
 // - also, when starting out, we assume that this many previous questions were all answered incorrectly
 //   (so the user has to build up from 0 proficiency), so this affects how fast that can happen
 
-const RECOMMENDED_SUBSET_SIZES = [16, 8, 4]; // needs to be descending
-const HOURS_SINCE_REVIEWED_THRESHOLD = 24; // if time since reviewed is greater than this, species needs review
-const FRACTION_RESERVED_FOR_REVIEW = 0.25; // this fraction of recommended subsets will consist of species needing review
-
-const CONFUSION_EMA_FRAC = 0.9;
+// FUNCTIONS (DYNAMIC CONFIG) ----------------------------------------------------
 
 function getInfoURL(taxon_obj, mode) {
   if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank === "species") {

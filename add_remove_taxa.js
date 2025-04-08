@@ -33,6 +33,9 @@ async function initURLArgs() {
   setDataSource(data_source_setting);
 
   stopListLoader();
+
+  // TODO start fetching similar species data for taxa we don't have it for yet
+  // maybe slow down the timer so that we don't exceed iNat limits even if they start playing the game
 }
 
 async function fetchSimilarSpeciesData() {
@@ -95,6 +98,9 @@ async function addBirds(taxa_id_list, update_taxon_groups_after = true) {
   //fetch 30 taxa at a time (iNaturalist limit)
   //only when they've all arrived add them to the list (so ensure same order as in id list)
   let start_idx = 0; //for indexing ids_to_fetch
+
+  // TODO - experiment with whether sending out more balanced queries is faster
+  // e.g. for 35 species, sending queries with 17 and 18 taxa, rather than queries with 30 and 5 taxa
 
   while (start_idx < ids_to_fetch.length) {
     let ids = ids_to_fetch.slice(start_idx, start_idx + 30);
