@@ -213,9 +213,11 @@ function makeTaxonGroups() {
     if (!firstGroupDiv) firstGroupDiv = div;
 
     const header = document.createElement("div");
-    header.className = "taxa-group-header";
+    header.className = "taxa-group-header font-small";
+
+    const headerButtons = document.createElement("div");
+    headerButtons.className = "selector-buttons";
     const selectGroup = document.createElement("button");
-    selectGroup.className = "font-small";
     selectGroup.textContent = "SELECT GROUP";
     selectGroup.addEventListener("click", () => {
       div
@@ -223,14 +225,22 @@ function makeTaxonGroups() {
         .forEach((el) => toggleListSelection(el.dataset.taxonId));
     });
     const deselectGroup = document.createElement("button");
-    deselectGroup.className = "font-small";
     deselectGroup.textContent = "DESELECT GROUP";
     deselectGroup.addEventListener("click", () => {
       div
         .querySelectorAll(".bird-list-item.selected")
         .forEach((el) => toggleListSelection(el.dataset.taxonId));
     });
-    header.append(selectGroup, deselectGroup);
+    const infoButton = document.createElement("button");
+    infoButton.className = "info-button";
+    infoButton.addEventListener("click", () =>
+      alert(
+        "Similar taxa are automatically grouped together based on how likely it is for you to confuse them. Groups are also sorted, such that groups are placed earlier if they contain taxa that are common, that you are struggling with, or that you haven't reviewed in a while. It is recommended to practice the first group, but you can choose otherwise."
+      )
+    );
+
+    headerButtons.append(selectGroup, deselectGroup);
+    header.append(headerButtons, infoButton);
     div.append(header);
 
     for (const taxonId of group) {
