@@ -297,8 +297,13 @@ function displayGroups(groups) {
     const header = document.createElement("div");
     header.className = "taxa-group-header font-small";
 
-    const headerButtons = document.createElement("div");
-    headerButtons.className = "selector-buttons";
+    const headerLeft = document.createElement("div");
+    headerLeft.className = "group-header-left";
+
+    const nTaxa = document.createElement("p");
+    nTaxa.className = "group-n-taxa font-small";
+    nTaxa.textContent = `${group.length} taxa`;
+
     const selectGroup = document.createElement("button");
     selectGroup.textContent = "SELECT GROUP";
     selectGroup.addEventListener("click", () => {
@@ -321,8 +326,8 @@ function displayGroups(groups) {
       )
     );
 
-    headerButtons.append(selectGroup, deselectGroup);
-    header.append(headerButtons, infoButton);
+    headerLeft.append(nTaxa, selectGroup, deselectGroup);
+    header.append(headerLeft, infoButton);
     div.append(header);
 
     for (const taxonId of group) {

@@ -197,7 +197,7 @@
 
 #bird-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   column-gap: 11px;
   row-gap: 11px;
   overflow-y: auto;
@@ -223,8 +223,16 @@
   color: var(--medium-gray);
   justify-content: space-between;
 }
-.selector-buttons button {
+.group-header-left {
+  display: flex;
+  align-items: baseline;
+  /* padding: 0 8px; */
+}
+.group-header-left button {
   padding: 8px 8px 4px 8px;
+}
+.group-n-taxa {
+  padding: 0 4px 0 8px;
 }
 .info-button {
   height: 20px;
@@ -262,7 +270,6 @@
   gap: 10px;
   padding: 5px;
   border-radius: 12px;
-  max-width: 350px;
   position: relative;
 }
 
