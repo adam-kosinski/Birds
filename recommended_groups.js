@@ -323,7 +323,7 @@ function displayGroups(groups) {
     infoButton.className = "info-button";
     infoButton.addEventListener("click", () =>
       alert(
-        "Similar taxa are automatically grouped together based on how likely it is for you to confuse them. Groups are also sorted, such that groups are placed earlier if they contain taxa that are common, that you are struggling with, or that you haven't reviewed in a while. It is recommended to practice the first group, but you can choose otherwise."
+        "Similar taxa are automatically grouped together based on how likely it is for you to confuse them. Groups are also sorted, such that groups are placed earlier if they\n(1) contain taxa that are common\n(2) contain taxa that you are struggling with, or\n(3) contain taxa that you haven't reviewed in a while.\n\nIt is recommended to practice the first group, but you can choose otherwise."
       )
     );
 
