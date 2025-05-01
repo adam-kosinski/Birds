@@ -117,7 +117,7 @@ async function fetchSpeciesCounts(taxon_id = 3, months = "") {
     map_icon.dataset.id = obj.taxon.id;
     map_icon.dataset.commonName = obj.taxon.preferred_common_name;
     map_icon.dataset.scientificName = obj.taxon.name;
-    map_icon.dataset.imageUrl = img.src;
+    map_icon.dataset.imageUrl = obj.taxon.default_photo.square_url;
 
     div.append(checkbox, img, info, map_icon);
     list.append(div);
