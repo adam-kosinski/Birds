@@ -40,6 +40,7 @@ function defaultConf(correctTaxonId, otherTaxonId) {
   }
 
   // TODO use similar ancestry
+  // TODO default conf values should not be 0, since the user will probably make some mistakes given they've never seen the taxa before
 
   // for taxa without data, assume we won't confuse them so that it doesn't mess with
   // the groupings of taxa for which we do have data
@@ -347,7 +348,7 @@ function displayGroups(groups) {
     deselectAll();
     document
       .querySelector(".taxa-group")
-      .querySelectorAll(".bird-list-item")
+      ?.querySelectorAll(".bird-list-item") // ?. b/c if list is empty there are no taxa groups
       .forEach((el) => {
         toggleListSelection(el.dataset.taxonId);
       });

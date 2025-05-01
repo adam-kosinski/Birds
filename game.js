@@ -19,7 +19,7 @@ const ANSWER_SHOWN = 2;
 setGameState(INACTIVE);
 
 let mode = "birdsong"; // or "visual_id"
-let data_source = "iNaturalist"; // default "iNaturalist" (see initURLArgs()), other options: "ebird_calls"
+let data_source = "iNaturalist"; // default "iNaturalist" (see initListScreen()), other options: "ebird_calls"
 
 let funny_bird_timeout_id;
 
@@ -30,7 +30,7 @@ function setGameState(state) {
   document.getElementById("game-main").dataset.gameState = state;
 }
 
-function setMode(new_mode, make_taxon_groups = true) {
+function setMode(new_mode) {
   mode = new_mode;
 
   //update HTML
@@ -60,8 +60,8 @@ function setMode(new_mode, make_taxon_groups = true) {
     refreshTaxonProficiencyDisplay(obj.id);
   });
 
-  //update groups
-  if (make_taxon_groups) makeTaxonGroups();
+  //update groups if mode is set after initialization
+  if (initializationComplete) makeTaxonGroups();
 }
 
 function setDataSource(new_data_source) {

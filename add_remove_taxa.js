@@ -1,3 +1,4 @@
+let initializationComplete = false;
 let list_taxa = []; //list of iNaturalist taxon objects that are on the practice list
 let taxa_to_use = []; //subset of list_taxa being used this game, initialized at game init based on the selected birds
 let place_id;
@@ -7,7 +8,7 @@ let similarSpeciesData;
 // format: {birdsong: {taxonId1: {...}, taxonId2: {...}, ...}, visual_id: {...}}
 
 // this function gets called on page load, see html file
-async function initURLArgs() {
+async function initListScreen() {
   startListLoader();
 
   let url = new URL(window.location.href);
@@ -29,10 +30,13 @@ async function initURLArgs() {
   }
   console.log("Taxa loaded");
 
-  if (default_mode) setMode(default_mode, false);
+  if (default_mode) setMode(default_mode);
   setDataSource(data_source_setting);
 
+  makeTaxonGroups();
+
   stopListLoader();
+  initializationComplete = true;
 
   // TODO start fetching similar species data for taxa we don't have it for yet
   // maybe slow down the timer so that we don't exceed iNat limits even if they start playing the game
@@ -220,8 +224,8 @@ async function addBirds(taxa_id_list) {
   document.getElementById("n-species-display").textContent = list_taxa.length;
   document.getElementById("bird-list-message").style.display = "none";
 
-  // always sort into groups
-  makeTaxonGroups();
+  //update groups if birds are added after initialization
+  if (initializationComplete) makeTaxonGroups();
 
   // if just added a bird manually (proxy this with if only added one), highlight it
   if (results.length === 1) {
