@@ -177,7 +177,7 @@ async function addBirds(taxa_id_list) {
     link.href = getInfoURL(taxon, mode);
     link.target = "_blank";
     let info_button = document.createElement("button");
-    info_button.className = "info-button";
+    info_button.className = "info-button inline";
     link.append(info_button);
 
     let i = document.createElement("i");

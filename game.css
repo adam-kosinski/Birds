@@ -72,24 +72,6 @@
   justify-content: center;
 }
 
-#answer-common-name {
-  margin-right: 4px;
-}
-
-#answer-info-link {
-  background-color: var(--focus-color);
-  color: white;
-  font-style: italic;
-  font-weight: bold;
-  font-family: serif;
-  height: 1.25em;
-  width: 1.25em;
-  border-radius: 1.25em;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
 #answer-species-name-appended {
   display: inline;
 }
