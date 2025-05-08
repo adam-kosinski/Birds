@@ -171,6 +171,10 @@ async function addBirds(taxa_id_list) {
     if (taxon.default_photo) bird_square.src = taxon.default_photo.square_url;
     bird_square.alt = "Photo of " + taxon.preferred_common_name;
 
+    let checkmark = document.createElement("img");
+    checkmark.src = "images/checkmark_icon.png";
+    checkmark.className = "checkmark";
+
     let name_container = document.createElement("div");
 
     let link = document.createElement("a");
@@ -209,6 +213,7 @@ async function addBirds(taxa_id_list) {
     //append
     container.append(
       progress_bar,
+      checkmark,
       bird_square,
       name_container,
       map_icon,

@@ -83,6 +83,7 @@ TODO
 
 Sidescrolling in location search results list
 Better UI for selection
+Auto-pulling species confusion data from iNaturalist (and maybe not allowing user confusion scores to be stored before this, to ensure they get a decent initialization?)
 
 ---
 

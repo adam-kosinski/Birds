@@ -45,6 +45,10 @@
   flex-shrink: 0;
 }
 
+#list-screen .info-button {
+  opacity: 0.6;
+}
+
 /* mode toggle */
 
 #mode-container {
@@ -226,7 +230,6 @@
 .taxa-group-header .info-button {
   margin-top: 4px;
   margin-right: 4px;
-  opacity: 0.5;
 }
 .group-header-left {
   display: flex;
@@ -283,29 +286,6 @@
     background-color: transparent;
   }
 }
-
-/* #bird-list:has(.selected) > :not(.selected) {
-  opacity: 0.4;
-} */
-
-/* #bird-list .plus-sign {
-  display: none;
-} */
-
-/* #bird-list:has(.selected) > :not(.selected) .plus-sign {
-  content: "+";
-  font-size: 60px;
-  font-weight: bold;
-  color: white;
-  text-shadow: 0 4px 4px black;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  left: 17.5px;
-} */
 
 .taxon-progress {
   display: none;
