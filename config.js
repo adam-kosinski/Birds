@@ -369,6 +369,7 @@ const PRESETS = {
     taxa: [
       12727, //american robin
       9921, //scarlet tanager
+      9915, //summer tanager
       10271, //rose breasted grosbeak
       891704, //red eyed vireo
       11935, //tree swallow

@@ -30,7 +30,7 @@ function setGameState(state) {
   document.getElementById("game-main").dataset.gameState = state;
 }
 
-function setMode(new_mode) {
+async function setMode(new_mode) {
   mode = new_mode;
 
   //update HTML
@@ -61,7 +61,11 @@ function setMode(new_mode) {
   });
 
   //update groups if mode is set after initialization
-  if (initializationComplete) makeTaxonGroups();
+  if (initializationComplete) {
+    //update similar species data (since mode changed)
+    // await loadSimilarSpeciesData();
+    makeTaxonGroups();
+  }
 }
 
 function setDataSource(new_data_source) {

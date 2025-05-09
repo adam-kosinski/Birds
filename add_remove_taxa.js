@@ -35,14 +35,15 @@ async function initListScreen() {
 
   makeTaxonGroups();
 
+  // start getting similar species data from iNaturalist for taxa we don't have it for yet
+  // but don't require this to finish before we resolve this function's promise; this can happen in the background
+  getMissingSimilarSpeciesData();
+
   stopListLoader();
   initializationComplete = true;
-
-  // TODO start fetching similar species data for taxa we don't have it for yet
-  // maybe slow down the timer so that we don't exceed iNat limits even if they start playing the game
 }
 
-async function fetchSimilarSpeciesData() {
+async function loadSimilarSpeciesData() {
   similarSpeciesData = {};
   const promiseSounds = firebaseGetSimilarSpeciesData(true).then(
     (data) => (similarSpeciesData["birdsong"] = data)
@@ -52,7 +53,31 @@ async function fetchSimilarSpeciesData() {
   );
   await Promise.all([promiseSounds, promisePhotos]);
   console.log("Similar species data loaded");
+
   return;
+}
+
+async function getMissingSimilarSpeciesData() {
+  // do it for both modes,, but prioritize the current mode
+  // this helps make sure it's still happening even if the mode is switched back and forth, without happening multiple times
+  // having extra data is okay, and the fetch rate adapts to whether a game is going on
+  const modeList =
+    mode === "birdsong" ? ["birdsong", "visual_id"] : ["visual_id", "birdsong"];
+
+  for (const m of modeList) {
+    const idsWithData = new Set(Object.keys(similarSpeciesData[m]));
+    const allIds = new Set(list_taxa.map((obj) => String(obj.id)));
+    const idsWithoutData = Array.from(allIds.difference(idsWithData));
+    console.log(
+      `Taxa without similar species data for mode ${m}: ${
+        idsWithoutData.join(",") || "None"
+      }`
+    );
+    if (idsWithoutData.length > 0) {
+      const sounds = m === "birdsong";
+      await updateFirebaseSimilarSpecies(idsWithoutData, sounds);
+    }
+  }
 }
 
 function setURLParam(key, value) {
@@ -125,7 +150,7 @@ async function addBirds(taxa_id_list) {
 
   // also fetch similar species data at the same time if we haven't yet
   if (!similarSpeciesData) {
-    promises.push(fetchSimilarSpeciesData());
+    promises.push(loadSimilarSpeciesData());
   }
 
   await Promise.all(promises);
@@ -229,8 +254,15 @@ async function addBirds(taxa_id_list) {
   document.getElementById("n-species-display").textContent = list_taxa.length;
   document.getElementById("bird-list-message").style.display = "none";
 
-  //update groups if birds are added after initialization
-  if (initializationComplete) makeTaxonGroups();
+  //if birds are added after initialization, update groups and missing similar species data
+  if (initializationComplete) {
+    makeTaxonGroups();
+
+    const sounds = mode === "birdsong";
+    updateFirebaseSimilarSpecies(taxa_id_list, sounds).then(() => {
+      updateFirebaseSimilarSpecies(taxa_id_list, !sounds);
+    });
+  }
 
   // if just added a bird manually (proxy this with if only added one), highlight it
   if (results.length === 1) {

@@ -61,6 +61,14 @@ function iNaturalistConf(correctTaxonId, otherTaxonId) {
 function updateConfusionScore(correctId, guessedId, idsInPlay) {
   // update incorrect and correct counts using an exponential moving average
 
+  // don't store anything if we don't have iNaturalist data, we want to start from a reasonable confusion score
+  if (!(correctId in similarSpeciesData[mode])) {
+    console.log(
+      `No iNaturalist data for taxon ${correctId}, not updating local storage`
+    );
+    return;
+  }
+
   // confusion scores are stored with the taxon who the question is about
   // load raw data because we want to access numerator and denominator
   const confusedTaxa = loadTaxonData(correctId, true).confused_taxa || {};
@@ -269,8 +277,8 @@ function sortGroups(groups, adjList) {
 
   // sort ------------------------------
   groups.sort((a, b) => {
-    // return predictedAccuracy(a, adjList) - predictedAccuracy(b, adjList);
-    return avgFreq(b) - avgFreq(a);
+    return predictedAccuracy(a, adjList) - predictedAccuracy(b, adjList);
+    // return avgFreq(b) - avgFreq(a);
   });
 
   // groups.forEach((g) => {
@@ -323,7 +331,7 @@ function displayGroups(groups) {
     infoButton.className = "info-button";
     infoButton.addEventListener("click", () =>
       alert(
-        "Similar taxa are automatically grouped together based on how likely it is for you to confuse them. Groups are also sorted, such that groups are placed earlier if they\n(1) contain taxa that are common\n(2) contain taxa that you are struggling with, or\n(3) contain taxa that you haven't reviewed in a while.\n\nIt is recommended to practice the first group, but you can choose otherwise."
+        "Similar taxa are automatically grouped together based on how likely it is for you to confuse them. Groups are also sorted, such that groups are placed earlier if they\n(1) contain taxa that are common\n(2) contain taxa that you are struggling with, or\n(3) contain taxa that you haven't reviewed in a while.\n\nIt is recommended to practice the first group, but you can choose otherwise. If a taxon was recently added, you may need to wait a few minutes and then refresh the page for it to be grouped properly."
       )
     );
 
@@ -383,7 +391,7 @@ function sleep(sec) {
   return new Promise((resolve) => setTimeout(resolve, 1000 * sec));
 }
 
-async function updateFirebaseSimilarSpecies(taxonIds, sounds = false) {
+async function updateFirebaseSimilarSpecies(taxonIds, sounds) {
   console.log(
     "Updating firebase similar species database for " +
       taxonIds.join() +
@@ -404,15 +412,14 @@ async function updateFirebaseSimilarSpecies(taxonIds, sounds = false) {
 
   // get similar species, combine with count data to be sent to firebase
   for (let taxonId of taxonIds) {
-    await sleep(1); // keep iNaturalist happy
+    await sleep(game_state === INACTIVE ? 1 : 3); // keep iNaturalist happy
     const similarSpecies = await fetchSimilarSpecies(taxonId, sounds);
     console.log(`Got similar species for ${taxonId}, sending to firebase`);
-    const data = {
-      taxonId: {
-        preferred_common_name: counts[taxonId].commonName,
-        observations_count: counts[taxonId].count,
-        similar_species: similarSpecies,
-      },
+    const data = {};
+    data[taxonId] = {
+      preferred_common_name: counts[taxonId].commonName,
+      observations_count: counts[taxonId].count,
+      similar_species: similarSpecies,
     };
     firebaseAddSimilarSpecies(data, sounds);
   }

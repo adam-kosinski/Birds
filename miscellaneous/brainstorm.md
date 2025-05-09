@@ -1,4 +1,10 @@
-TODO - check that behavior is as intended if identifying not at the species level
+TODO
+
+Error - Species counts don't fetch properly for genus, family, etc rank (species are returned within requested genus)
+What happens if iNaturalist doesn't have data for similar species?
+Sidescrolling in location search results list
+
+---
 
 Better recommendation brainstorming:
 
@@ -15,75 +21,6 @@ Perhaps the fix to this is to use random guessing as a baseline. Something like 
 A related idea - scale our ratio by the number of birds in the current game? This fixes the long problem above (1/2 _2 becomes 1, and 1/10 _ 10 becomes 1, and if you were doing better, e.g. 1/4 confused instead of 1/2, then our number becomes 1/2). This has the weakness of if there are a bunch of other unrelated birds in play that you always get right (so never confuse), they seem like they shouldn't affect how much you're confusing the cardinal and the indigo bunting??
 
 Another (probably right) idea - ignore cases where a bird other than the cardinal or the indigo bunting was identified. These aren't part of the numerator or denominator.
-
-Case study:
-
-- 3 birds in play
-- Q1 - correctly identify as cardinal
-- Q2 - incorrectly identify as indigo bunting
-- Q3 - incorrectly identify as indigo bunting
-- Q4 - incorrectly identify as eastern phoebe
-
-- indigo bunting score = 2/3
-- eastern phoebe score = 1/2
-
-- Intuitively - indigo bunting was confused twice as much as eastern phoebe.
-- Random guessing baseline - indigo bunting confused
-
-Confusion budget:
-
-Given a cardinal question, p(wrong)
-
-confusion score of bird A on cardinal questions = # bird A guesses / (# bird A guesses + # cardinal guesses) \
-
-(1/score) - 1 \
-= ((# bird A guesses + # cardinal guesses) / # bird A guesses) - 1 \
-= (1 + (# cardinal guesses / # bird A guesses)) - 1 \
-= # cardinal guesses / # bird A guesses
-
-p(wrong | cardinal) \
-= # non-cardinal guesses / # total relevant guesses \
-
-Set # cardinal guesses to 4. Then can convert score to # bird A guesses, in theory? Possibly a wrong assumption though that # cardinal guesses would be shared across different birds, since as the number of birds increases, the relative number of cardinal guesses decreases. But this is taken care of by my assumption that the score will stay the same no matter the number of birds in play.
-
-Try it:
-
-(1/score) - 1 \
-bunting = 1/2, phoebe = 1
-
-Set # cardinal guesses to 1: \
-bunting guesses = 2, phoebe guesses = 1
-
-p(wrong | cardinal) = 3 / 4, as desired
-
-To do this analysis properly, it would be best to score directed confusion scores (i.e. score given which bird was correct). Though I wonder, when p(wrong) gets marginalized across all types of bird questions, whether we can use the average confusion score for a pair of birds.
-
-p (wrong | cardinal) = [sum_birds_b: s_cardinal / (1 - s_cardinal)] / same sum + 1 \
-p (wrong) = 1/n sum_question_bird_q: sum_birds_b: s_qb / (1- s_qb)
-
-In the sum we have [s_xy / (1 - s_xy)] + [s_yx / (1 - s_yx)] \
-= [s_xy (1 - s_yx) + s_yx (1 - s_xy)] / [(1 - s_xy)(1 - s_yx)] \
-= [s_xy + s_yx - 2 s_xy s_yx] / [1 - s_xy - s_yx + 2 s_xy s_yx] \
-Let a = s_xy + s_yx - 2 s_xy s_yx, then \
-= a / (1 - a) \
-WAIT I messed up earlier because I calculated sum of other birds' # guesses, not p(wrong), need to fix
-
-So we could treat a as the edge weight for the two species, which would be more principled.
-
-x/(x+1) = s \
-x = sx + s \
-(1-s)x = s \
-x = s / (1-s) = # bird A guesses
-
-From the iNaturalist data, it's clear that often one direction of confusion is much more than the other direction.
-
----
-
-TODO
-
-Sidescrolling in location search results list
-Better UI for selection
-Auto-pulling species confusion data from iNaturalist (and maybe not allowing user confusion scores to be stored before this, to ensure they get a decent initialization?)
 
 ---
 
