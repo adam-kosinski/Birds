@@ -55,6 +55,17 @@ function firebaseAddSimilarSpecies(data, sounds) {
   }
 }
 
+// debug
+function firebaseDeleteSimilarSpecies() {
+  for (let sounds of [true, false]) {
+    for (let taxonId of list_taxa.map((x) => x.id)) {
+      db.collection(`similar-species-${sounds ? "sounds" : "photos"}`)
+        .doc(String(taxonId))
+        .delete();
+    }
+  }
+}
+
 async function firebaseGetSimilarSpeciesData(sounds) {
   // get all data, it's much faster than one at a time or filtering and doesn't use much bandwidth
   const snapshot = await db

@@ -1,7 +1,12 @@
 TODO
 
-Error - Species counts don't fetch properly for genus, family, etc rank (species are returned within requested genus)
-What happens if iNaturalist doesn't have data for similar species?
+Error - counts not being fetched correctly for genus or subspecies
+Error - Similar species can't be fetched for rank family and above
+
+- fix by not requiring (and not fetching) iNaturalist initializations for these
+
+Allow groups to be configured
+It's possible for a group to be created with one species it seems (see turtle preset)
 Sidescrolling in location search results list
 
 ---

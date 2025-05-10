@@ -40,11 +40,10 @@ function defaultConf(correctTaxonId, otherTaxonId) {
   }
 
   // TODO use similar ancestry
-  // TODO default conf values should not be 0, since the user will probably make some mistakes given they've never seen the taxa before
 
-  // for taxa without data, assume we won't confuse them so that it doesn't mess with
-  // the groupings of taxa for which we do have data
-  return [0, 1];
+  // for taxa without data, assume we won't confuse them that much so that it doesn't mess with
+  // the groupings of taxa for which we do have data, but still leave room for confusion
+  return [0.2, 0.8];
 }
 
 function iNaturalistConf(correctTaxonId, otherTaxonId) {
@@ -374,6 +373,15 @@ function idToName(taxonId) {
 
 async function fetchSimilarSpecies(taxonId, sounds = false) {
   const similarUrl = `https://api.inaturalist.org/v1/identifications/similar_species?sounds=${sounds}&taxon_id=${taxonId}`;
+  const fetchResult = await fetch(similarUrl);
+  if (fetchResult.status !== 200) {
+    const taxonObj = list_taxa.find((obj) => obj.id === taxonId);
+    const commonName = taxonObj?.preferred_common_name || taxonObj?.name || "?";
+    console.warn(
+      `Failed to fetch similar species data for taxon ${taxonId}: ${commonName}`
+    );
+    return undefined;
+  }
   const results = (await (await fetch(similarUrl)).json()).results;
 
   const infoToKeep = results.map((obj) => {
@@ -381,7 +389,7 @@ async function fetchSimilarSpecies(taxonId, sounds = false) {
       id: obj.taxon.id,
       count: obj.count,
       name: obj.taxon.name,
-      preferred_common_name: obj.taxon.preferred_common_name,
+      preferred_common_name: obj.taxon.preferred_common_name || obj.taxon.name,
     };
   });
   return infoToKeep;
@@ -392,35 +400,39 @@ function sleep(sec) {
 }
 
 async function updateFirebaseSimilarSpecies(taxonIds, sounds) {
-  console.log(
-    "Updating firebase similar species database for " +
-      taxonIds.join() +
-      `, with sounds=${sounds}`
-  );
+  taxonIds = taxonIds.map((x) => Number(x));
+
+  // console.log(
+  //   "Updating firebase similar species database for " +
+  //     taxonIds.join() +
+  //     `, with sounds=${sounds}`
+  // );
+
   // get total number of observations for each species
-  const countsUrl =
-    "https://api.inaturalist.org/v1/observations/species_counts?quality_grade=research" +
-    `&sounds=${sounds}&taxon_id=${taxonIds.join(",")}`;
-  const results = (await (await fetch(countsUrl)).json()).results;
   const counts = {};
-  results.forEach((obj) => {
-    counts[obj.taxon.id] = {
-      count: obj.count,
-      commonName: obj.taxon.preferred_common_name,
+  list_taxa.forEach((obj) => {
+    counts[obj.id] = {
+      count: obj.observations_count,
+      commonName: obj.preferred_common_name || obj.name,
     };
   });
 
-  // get similar species, combine with count data to be sent to firebase
+  // get similar taxa, combine with count data to be sent to firebase
   for (let taxonId of taxonIds) {
     await sleep(game_state === INACTIVE ? 1 : 3); // keep iNaturalist happy
     const similarSpecies = await fetchSimilarSpecies(taxonId, sounds);
-    console.log(`Got similar species for ${taxonId}, sending to firebase`);
+    if (!similarSpecies) continue;
+    console.log(
+      `Got similar species for ${taxonId}, sounds=${sounds}, sending to firebase`
+    );
+
     const data = {};
     data[taxonId] = {
       preferred_common_name: counts[taxonId].commonName,
       observations_count: counts[taxonId].count,
       similar_species: similarSpecies,
     };
+    console.log(data);
     firebaseAddSimilarSpecies(data, sounds);
   }
 }
