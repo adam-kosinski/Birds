@@ -57,7 +57,7 @@ async function loadSimilarSpeciesData() {
   return;
 }
 
-async function getMissingSimilarSpeciesData() {
+async function getMissingSimilarSpeciesData(taxonIdSubset = undefined) {
   // do it for both modes,, but prioritize the current mode
   // this helps make sure it's still happening even if the mode is switched back and forth, without happening multiple times
   // having extra data is okay, and the fetch rate adapts to whether a game is going on
@@ -66,7 +66,12 @@ async function getMissingSimilarSpeciesData() {
 
   for (const m of modeList) {
     const idsWithData = new Set(Object.keys(similarSpeciesData[m]));
-    const allIds = new Set(list_taxa.map((obj) => String(obj.id)));
+    let allIds = new Set(list_taxa.map((obj) => String(obj.id)));
+    if (taxonIdSubset) {
+      allIds = allIds.intersection(
+        new Set(taxonIdSubset.map((x) => String(x)))
+      );
+    }
     const idsWithoutData = Array.from(allIds.difference(idsWithData));
     console.log(
       `Taxa without similar species data for mode ${m}: ${
@@ -257,11 +262,7 @@ async function addBirds(taxa_id_list) {
   //if birds are added after initialization, update groups and missing similar species data
   if (initializationComplete) {
     makeTaxonGroups();
-
-    const sounds = mode === "birdsong";
-    updateFirebaseSimilarSpecies(taxa_id_list, sounds).then(() => {
-      updateFirebaseSimilarSpecies(taxa_id_list, !sounds);
-    });
+    getMissingSimilarSpeciesData(taxa_id_list);
   }
 
   // if just added a bird manually (proxy this with if only added one), highlight it
