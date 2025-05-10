@@ -43,6 +43,21 @@ async function initListScreen() {
   initializationComplete = true;
 }
 
+function getSpeciesParent(taxonObj) {
+  // converts subspecies taxon object to species level taxon object
+  if (taxonObj.rank_level >= 10) {
+    console.error(taxonObj);
+    throw new Error("Taxon object is not at subspecies level");
+  }
+  for (let i = taxonObj.ancestors.length - 1; i >= 0; i--) {
+    if (taxonObj.ancestors[i].rank === "species") {
+      return taxonObj.ancestors[i];
+    }
+  }
+  console.error(taxonObj);
+  throw new Error("Couldn't find a species level parent");
+}
+
 async function loadSimilarSpeciesData() {
   similarSpeciesData = {};
   const promiseSounds = firebaseGetSimilarSpeciesData(true).then(
@@ -65,14 +80,21 @@ async function getMissingSimilarSpeciesData(taxonIdSubset = undefined) {
     mode === "birdsong" ? ["birdsong", "visual_id"] : ["visual_id", "birdsong"];
 
   for (const m of modeList) {
-    const idsWithData = new Set(Object.keys(similarSpeciesData[m]));
-    let allIds = new Set(list_taxa.map((obj) => String(obj.id)));
-    if (taxonIdSubset) {
-      allIds = allIds.intersection(
-        new Set(taxonIdSubset.map((x) => String(x)))
-      );
+    // determine which taxa we don't have similar species data for already
+    // note that subspecies use their parent species' data
+
+    const idsWithoutData = [];
+    for (const obj of list_taxa) {
+      const idInData = obj.rank_level < 10 ? getSpeciesParent(obj).id : obj.id;
+      const noData = !(String(idInData) in similarSpeciesData[m]);
+      const inSubset =
+        taxonIdSubset === undefined || taxonIdSubset.includes(obj.id);
+      // console.log(obj.id, idInData, noData, inSubset);
+
+      if (noData && inSubset) {
+        idsWithoutData.push(obj.id);
+      }
     }
-    const idsWithoutData = Array.from(allIds.difference(idsWithData));
     console.log(
       `Taxa without similar species data for mode ${m}: ${
         idsWithoutData.join(",") || "None"

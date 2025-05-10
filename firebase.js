@@ -56,11 +56,15 @@ function firebaseAddSimilarSpecies(data, sounds) {
 }
 
 // debug
-function firebaseDeleteSimilarSpecies() {
-  for (let sounds of [true, false]) {
-    for (let taxonId of list_taxa.map((x) => x.id)) {
+function firebaseDeleteSimilarSpecies(sounds) {
+  for (const obj of list_taxa) {
+    db.collection(`similar-species-${sounds ? "sounds" : "photos"}`)
+      .doc(String(obj.id))
+      .delete();
+
+    if (obj.rank_level < 10) {
       db.collection(`similar-species-${sounds ? "sounds" : "photos"}`)
-        .doc(String(taxonId))
+        .doc(String(getSpeciesParent(obj).id))
         .delete();
     }
   }

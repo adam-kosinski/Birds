@@ -46,8 +46,23 @@ function defaultConf(correctTaxonId, otherTaxonId) {
   return [0.2, 0.8];
 }
 
+function roundUpIdToSpecies(taxonId) {
+  const taxonObj = list_taxa.find((obj) => obj.id === taxonId);
+  if (!taxonObj)
+    throw new Error(
+      `Couldn't find taxon object in list for taxon id ${taxonId}`
+    );
+  if (taxonObj.rank_level < 10) return getSpeciesParent(taxonObj).id;
+  return taxonId;
+}
+
 function iNaturalistConf(correctTaxonId, otherTaxonId) {
   if (!similarSpeciesData) return undefined;
+
+  // convert subspecies ids to species level
+  correctTaxonId = roundUpIdToSpecies(correctTaxonId);
+  otherTaxonId = roundUpIdToSpecies(otherTaxonId);
+
   if (!(correctTaxonId in similarSpeciesData[mode])) return undefined;
   const data = similarSpeciesData[mode][correctTaxonId];
   const otherSpecies = data.similar_species.find((x) => x.id === otherTaxonId);
@@ -408,28 +423,38 @@ async function updateFirebaseSimilarSpecies(taxonIds, sounds) {
   //     `, with sounds=${sounds}`
   // );
 
-  // get total number of observations for each species
-  const counts = {};
-  list_taxa.forEach((obj) => {
-    counts[obj.id] = {
-      count: obj.observations_count,
-      commonName: obj.preferred_common_name || obj.name,
-    };
-  });
-
   // get similar taxa, combine with count data to be sent to firebase
   for (let taxonId of taxonIds) {
     await sleep(game_state === INACTIVE ? 1 : 3); // keep iNaturalist happy
-    const similarSpecies = await fetchSimilarSpecies(taxonId, sounds);
+
+    let taxonObj = list_taxa.find((obj) => obj.id === taxonId);
+    if (!taxonObj) {
+      console.warn(`Failed to find taxon object for taxon ${taxonId}`);
+      continue;
+    }
+
+    // convert subspecies taxa to species level, since iNaturalist searches for similar taxa at the same rank,
+    // and it's more meaningful to confuse with other species than other subspecies
+    if (taxonObj.rank_level < 10) {
+      console.log(
+        `Converting subspecies ${taxonObj.id}: "${taxonObj.name}" to species`
+      );
+      taxonObj = getSpeciesParent(taxonObj);
+      console.log(`Species is ${taxonObj.id}: "${taxonObj.name}"`);
+    }
+
+    const similarSpecies = await fetchSimilarSpecies(taxonObj.id, sounds);
     if (!similarSpecies) continue;
     console.log(
-      `Got similar species for ${taxonId}, sounds=${sounds}, sending to firebase`
+      `Got similar species for ${taxonObj.id}: ${
+        taxonObj.preferred_common_name || taxonObj.name
+      }, sounds=${sounds}, sending to firebase`
     );
 
     const data = {};
-    data[taxonId] = {
-      preferred_common_name: counts[taxonId].commonName,
-      observations_count: counts[taxonId].count,
+    data[taxonObj.id] = {
+      preferred_common_name: taxonObj.preferred_common_name || taxonObj.name,
+      observations_count: taxonObj.observations_count,
       similar_species: similarSpecies,
     };
     console.log(data);
