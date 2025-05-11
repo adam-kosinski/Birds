@@ -42,7 +42,9 @@ function defaultConf(correctTaxonId, otherTaxonId) {
   // TODO use similar ancestry
 
   // for taxa without data, assume we won't confuse them that much so that it doesn't mess with
-  // the groupings of taxa for which we do have data, but still leave room for confusion
+  // the groupings of taxa for which we do have data, but still leave room for confusion,
+  // since that's realistic and also we want all pairings to be considered for a taxon group,
+  // which won't happen if we assume not confused at all
   return [0.2, 0.8];
 }
 

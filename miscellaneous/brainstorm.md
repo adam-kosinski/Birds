@@ -1,10 +1,20 @@
 TODO
 
-Error - counts not being fetched correctly for genus or subspecies
+Things to tune:
+
+- EMA parameter
+- Max group size
+- Predicted accuracy threshold for limiting group size
+- iNaturalist initial confusion value multiplier
+- iNaturalist minimum confusion value
+- Default confusion value
+- Confusion values within and between configured groups
+
 Error - Similar species can't be fetched for rank family and above
 
 - fix by not requiring (and not fetching) iNaturalist initializations for these
 
+Minimum iNaturalist confusion score (don't set to 0 if not confused on iNaturalist)
 Allow groups to be configured
 It's possible for a group to be created with one species it seems (see turtle preset)
 Sidescrolling in location search results list
