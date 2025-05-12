@@ -13,12 +13,10 @@ Affects group size
 - Predicted accuracy threshold for limiting group size
 - Confusion values within and between configured groups
 
-Error - Similar species can't be fetched for rank family and above
-
-- fix by not requiring (and not fetching) iNaturalist initializations for these
-
+Location thing
 Minimum iNaturalist confusion score (don't set to 0 if not confused on iNaturalist)
 Allow groups to be configured
+Issue - custom groups won't update local storage because no iNaturalist data fetched yet. Fix this by disallowing local storage update if no iNaturalist AND no conf value from a custom grouping
 It's possible for a group to be created with one species it seems (see turtle preset)
 Sidescrolling in location search results list
 
