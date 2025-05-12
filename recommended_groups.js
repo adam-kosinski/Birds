@@ -1,6 +1,7 @@
 // A confusion score conf(A, B) measures, for games with taxon A and B in play,
 // the expected number of times the user will guess taxon B for a question about taxon A,
-// per time that the user correctly guesses taxon A.
+// per time that the user correctly guesses taxon A. So a value of 0 means never confusing the two,
+// a value of 1 means randomly guessing, and more than 1 means systematcally getting it wrong.
 // So it is calculated (# B guesses / # A guesses) assuming the question is about A and both are in play.
 // Note that conf(A,B) is not the same as conf(B, A)
 

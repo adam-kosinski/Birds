@@ -85,6 +85,9 @@ async function getMissingSimilarSpeciesData(taxonIdSubset = undefined) {
 
     const idsWithoutData = [];
     for (const obj of list_taxa) {
+      // if rank is too high, this data doesn't exist, don't try to fetch it
+      if (obj.rank_level > 20) continue;
+
       const idInData = obj.rank_level < 10 ? getSpeciesParent(obj).id : obj.id;
       const noData = !(String(idInData) in similarSpeciesData[m]);
       const inSubset =
