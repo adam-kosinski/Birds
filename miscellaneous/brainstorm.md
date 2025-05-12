@@ -3,11 +3,14 @@ TODO
 Things to tune:
 
 - EMA parameter
-- Max group size
-- Predicted accuracy threshold for limiting group size
 - iNaturalist initial confusion value multiplier
+
+Affects group size
+
 - iNaturalist minimum confusion value
 - Default confusion value
+- Max group size
+- Predicted accuracy threshold for limiting group size
 - Confusion values within and between configured groups
 
 Error - Similar species can't be fetched for rank family and above

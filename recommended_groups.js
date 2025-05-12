@@ -68,7 +68,7 @@ function iNaturalistConf(correctTaxonId, otherTaxonId) {
   if (!(correctTaxonId in similarSpeciesData[mode])) return undefined;
   const data = similarSpeciesData[mode][correctTaxonId];
   const otherSpecies = data.similar_species.find((x) => x.id === otherTaxonId);
-  if (!otherSpecies) return 0; // not confused at all
+  if (!otherSpecies) return MIN_INAT_CONFUSION_VALUE; // not confused at all
   const correctCount = data.observations_count;
   let ratio = (200 * otherSpecies.count) / correctCount;
   return ratio;
