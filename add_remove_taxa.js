@@ -7,26 +7,30 @@ let similarSpeciesData;
 // will load both sounds and photos so that it's easier for switching modes
 // format: {birdsong: {taxonId1: {...}, taxonId2: {...}, ...}, visual_id: {...}}
 
+let userLat;
+let userLng;
+let regionalSpeciesCounts; // gets fetched from iNaturalist when page inits, and updates when new taxa are added
+
 // this function gets called on page load, see html file
 async function initListScreen() {
   startListLoader();
 
   let url = new URL(window.location.href);
-  let taxa_ids = url.searchParams.get("taxa");
+  let taxonIdsString = url.searchParams.get("taxa");
   let default_mode = url.searchParams.get("mode");
   let data_source_setting =
     url.searchParams.get("data_source") || "iNaturalist";
   place_id = url.searchParams.get("place_id");
 
   // fill in taxa
-  if (taxa_ids === null) {
+  if (taxonIdsString === null) {
     //if no taxa, display message
     document.getElementById("bird-list-message").style.display = "block";
   } else {
-    await addBirds(
-      taxa_ids.split(",").map((s) => Number(s)),
-      false
-    );
+    const taxonIds = taxonIdsString.split(",").map((s) => Number(s));
+    const addBirdsPromise = addBirds(taxonIds, false);
+    const locationPromise = initRegionalCounts(taxonIds);
+    await Promise.all([addBirdsPromise, locationPromise]);
   }
   console.log("Taxa loaded");
 
@@ -41,6 +45,18 @@ async function initListScreen() {
 
   stopListLoader();
   initializationComplete = true;
+}
+
+async function initRegionalCounts(taxonIds) {
+  let locationData = await getIPLocation();
+  userLat = locationData.lat;
+  userLng = locationData.lng;
+  document.getElementById("location-name").textContent = locationData.name;
+  regionalSpeciesCounts = await speciesCountsInLocation(
+    userLat,
+    userLng,
+    taxonIds
+  );
 }
 
 function getSpeciesParent(taxonObj) {

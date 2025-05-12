@@ -62,8 +62,6 @@ async function setMode(new_mode) {
 
   //update groups if mode is set after initialization
   if (initializationComplete) {
-    //update similar species data (since mode changed)
-    // await loadSimilarSpeciesData();
     makeTaxonGroups();
   }
 }

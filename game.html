@@ -106,10 +106,14 @@
 
           <div id="target-location-container">
             <p>
-              Location<button class="info-button inline"></button>:
-              <span>Chapel Hill, NC</span>
+              Location<button
+                class="info-button inline"
+                onclick="alert('Your city is determined using your IP address. It is used to determine which species are more common in your area, so they can be sorted earlier in the list below.')"
+              ></button
+              >:
+              <span id="location-name">Unknown</span>
             </p>
-            <button class="font-small">EDIT</button>
+            <!-- <button class="font-small">EDIT</button> -->
           </div>
 
           <div id="bird-input-container">
@@ -372,6 +376,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <script src="firebase.js"></script>
 
+    <script src="user_location.js"></script>
     <script src="settings_and_storage.js"></script>
 
     <script src="game.js"></script>

@@ -348,7 +348,7 @@ function displayGroups(groups) {
     infoButton.className = "info-button";
     infoButton.addEventListener("click", () =>
       alert(
-        "Similar taxa are automatically grouped together based on how likely it is for you to confuse them. Groups are also sorted, such that groups are placed earlier if they\n(1) contain taxa that are common\n(2) contain taxa that you are struggling with, or\n(3) contain taxa that you haven't reviewed in a while.\n\nIt is recommended to practice the first group, but you can choose otherwise. If a taxon was recently added, you may need to wait a few minutes and then refresh the page for it to be grouped properly."
+        "Similar species are automatically grouped together based on how likely it is for you to confuse them. This changes over time based on which species you confuse often. Groups are also sorted, such that groups are placed earlier if they\n(1) contain species that are common\n(2) contain species that you are struggling with, or\n(3) contain species that you haven't reviewed in a while.\n\nIt is recommended to practice the first group, but you can choose otherwise. If a species was recently added, you may need to wait a minute for the similar species data to be fetched, and then refresh the page for it to be grouped properly."
       )
     );
 
