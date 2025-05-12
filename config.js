@@ -373,6 +373,7 @@ const PRESETS = {
       9915, //summer tanager
       10271, //rose breasted grosbeak
       891704, //red eyed vireo
+      17402, //blue-headed vireo
       11935, //tree swallow
     ],
   },

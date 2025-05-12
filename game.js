@@ -747,22 +747,26 @@ function checkAnswer() {
   //update taxon picking probabilities and user data (if storing)
   //don't do anything if squirrel intruder, those are jokes
   if (!current.is_squirrel_intruder) {
+    const correctId = searchAncestorsForTaxonId(current);
+    const idsInPlay = Object.keys(taxon_queues).map((x) => Number(x));
+
     if (correct) {
       updateTaxonBag(guess_obj.id, -CORRECT_REMOVE_COPIES);
       updateTaxonProficiency(guess_obj.id, true);
       updateTaxonReviewedTimestamp(guess_obj.id);
+      updateConfusionScore(correctId, correctId, idsInPlay);
     } else {
       // incorrect or skipped
-      const correct_id = searchAncestorsForTaxonId(current);
       if (guess_obj) {
         // incorrect
         updateTaxonBag(guess_obj.id, INCORRECT_ADD_COPIES);
-        updateTaxonBag(correct_id, INCORRECT_ADD_COPIES);
+        updateTaxonBag(correctId, INCORRECT_ADD_COPIES);
         updateTaxonProficiency(guess_obj.id, false);
-        updateTaxonProficiency(correct_id, false);
+        updateTaxonProficiency(correctId, false);
+        updateConfusionScore(correctId, guess_obj.id, idsInPlay);
       } else {
-        // no guess
-        updateTaxonBag(correct_id, NO_GUESS_ADD_COPIES);
+        // no guess (skipped)
+        updateTaxonBag(correctId, NO_GUESS_ADD_COPIES);
       }
     }
   }
