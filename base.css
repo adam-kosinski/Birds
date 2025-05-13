@@ -1,241 +1,269 @@
 /* Variables */
 :root {
-    --focus-color: #59B6D3;
-    --focus-color-shadow: #2E4C68;
-    --light-gray: #d1d1d1;
-    --medium-gray: #9D9D9D;
-    --dark-gray: #464646;
+  --focus-color: #59b6d3;
+  --focus-color-shadow: #2e4c68;
+  --light-gray: #d1d1d1;
+  --medium-gray: #9d9d9d;
+  --dark-gray: #464646;
 }
-
-
 
 /* General stuff */
 
 html {
-    font-family: 'Open Sans';
-    font-size: 16px;
-    height: 100%;
-    width: 100%;
+  font-family: "Open Sans";
+  font-size: 16px;
+  height: 100%;
+  width: 100%;
 }
 
 body {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    padding: 10px 10px 0 10px;
-    box-sizing: border-box;
-    margin: 0;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 10px 10px 0 10px;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 #background-image {
-    filter: blur(8px);
-    opacity: 0.6;
-    display: block;
-    width: 110%;
-    height: 110%;
-    position: fixed;
-    z-index: -1;
-    top: -5%;
-    left: -5%;
-    object-fit: cover;
+  filter: blur(8px);
+  opacity: 0.6;
+  display: block;
+  width: 110%;
+  height: 110%;
+  position: fixed;
+  z-index: -1;
+  top: -5%;
+  left: -5%;
+  object-fit: cover;
 }
 
 a:not(.default-link-style),
 a:not(.default-link-style):visited {
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
 
 button {
-    background-color: transparent;
-    border: none;
-    padding: 0;
-    font-size: inherit;
-    font-family: inherit;
-    cursor: pointer;
-    color: inherit;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+  cursor: pointer;
+  color: inherit;
 }
 
 button[disabled] {
-    opacity: 0.5;
+  opacity: 0.5;
+  cursor: default;
 }
 
 input {
-    font-family: inherit;
-    font-size: inherit;
-    border-radius: 10px;
-    padding: 8px;
-    border: 1px solid var(--medium-gray);
+  font-family: inherit;
+  font-size: inherit;
+  border-radius: 10px;
+  padding: 8px;
+  border: 1px solid var(--medium-gray);
 }
 
 p {
-    margin: 0;
+  margin: 0;
 }
-
-
-
 
 /* Nav styling */
 
 nav {
-    display: flex;
-    justify-content: space-between;
-    align-self: flex-start;
-    width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-self: flex-start;
+  width: 100%;
 }
 
 nav * {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .nav-icon {
-    width: 20px;
+  width: 20px;
 }
-
-
 
 /* select styling */
 /* based on https://moderncss.dev/custom-select-styles-with-pure-css/ */
 div.select {
-    /* allow dropdown arrow to appear */
-    display: grid;
-    grid-template-areas: "select";
-    align-items: baseline;
-    width: min-content;
-    border-radius: 0.25em;
-    background-color: #fff;
-    background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+  /* allow dropdown arrow to appear */
+  display: grid;
+  grid-template-areas: "select";
+  align-items: baseline;
+  width: min-content;
+  border-radius: 0.25em;
+  background-color: #fff;
+  background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
 }
 select {
-    appearance: none;
-    background-color: transparent;
-    border: none;
-    padding: 0 1em 0 0;
-    margin: 0;
-    width: 100%;
-    font-size: inherit;
-    line-height: inherit;
-    color: inherit;
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  padding: 0 1em 0 0;
+  margin: 0;
+  width: 100%;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
 
-    width: 20ch;
-    border: 1px solid #777;
-    border-radius: 0.25em;
-    padding: 0.3em 0.5em;
-    grid-area: select;
+  width: 20ch;
+  border: 1px solid #777;
+  border-radius: 0.25em;
+  padding: 0.3em 0.5em;
+  grid-area: select;
 
-    /* stack above custom dropdown arrow */
-    z-index: 1;
+  /* stack above custom dropdown arrow */
+  z-index: 1;
 }
 /* dropdown arrow */
 .select::before {
-    content: "";
-    width: 0.6em;
-    height: 0.3em;
-    margin-right: calc(0.5em + 1px);
-    background-color: #777;
-    clip-path: polygon(100% 0%, 0% 0%, 50% 100%);
-    grid-area: select;
-    align-self: center;
-    justify-self: end;
+  content: "";
+  width: 0.6em;
+  height: 0.3em;
+  margin-right: calc(0.5em + 1px);
+  background-color: #777;
+  clip-path: polygon(100% 0%, 0% 0%, 50% 100%);
+  grid-area: select;
+  align-self: center;
+  justify-self: end;
 }
-
 
 /* Component styling */
 
 .font-small {
-    font-size: 12px;
+  font-size: 12px;
 }
 
 .font-normal {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .font-medium {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 .font-large {
-    font-size: 24px;
+  font-size: 24px;
 }
 
 .font-huge {
-    font-size: 48px;
+  font-size: 48px;
 }
 
 .screen {
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .white-container {
-    background-color: white;
-    flex-grow: 1;
-    padding-top: 16px;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  background-color: white;
+  flex-grow: 1;
+  padding-top: 16px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
-    /* this helps somehow with the list overflow scrolling */
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
+  /* this helps somehow with the list overflow scrolling */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
 .btn-primary {
-    font-size: 24px;
-    font-weight: bold;
-    background-color: var(--focus-color);
-    padding: 2px 12px 2px 12px;
-    border-radius: 15px;
-    border-bottom: 3px solid var(--focus-color-shadow);
-    transition: box-shadow 0.25s;
+  font-size: 24px;
+  font-weight: bold;
+  background-color: var(--focus-color);
+  padding: 2px 12px 2px 12px;
+  border-radius: 15px;
+  border-bottom: 3px solid var(--focus-color-shadow);
+  transition: box-shadow 0.25s;
 }
 
 .btn-secondary {
-    font-size: 24px;
-    font-weight: bold;
-    border: 2px solid var(--light-gray);
-    padding: 2px 12px 2px 12px;
-    border-radius: 15px;
+  font-size: 24px;
+  font-weight: bold;
+  border: 2px solid var(--light-gray);
+  padding: 2px 12px 2px 12px;
+  border-radius: 15px;
 }
 
 @media (hover: hover) {
-    .btn-primary:not([disabled]):hover {
-        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    }
+  .btn-primary:not([disabled]):hover {
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  }
 }
 
 .bird-square {
-    width: 75px;
-    border-radius: 12px;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  width: 75px;
+  border-radius: 12px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+.checkmark {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+.bird-list-item .checkmark {
+  position: absolute;
+  left: 65px;
+  top: 0;
+}
+.bird-list-item:not(.selected) .checkmark {
+  display: none;
+}
+
+.info-button {
+  height: 20px;
+  width: 20px;
+  background-image: url("images/info_icon.png");
+  background-size: contain;
+}
+.info-button.inline {
+  width: 1.25em;
+  height: 1.25em;
+  position: relative;
+  top: 0.23em;
+  margin: 0 0.25em;
+}
+.info-button::before {
+  /* larger click target */
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: scale(1.5);
 }
 
 .range-map-icon {
-    display: block;
-    height: 24px;
-    width: 24px;
-    background-image: url('images/globe.png');
-    background-size: contain;
-    background-repeat: no-repeat;
+  display: block;
+  height: 24px;
+  width: 24px;
+  background-image: url("images/globe.png");
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .loader {
-    animation: rotate infinite 1s linear;
-    height: 24px;
-    width: 24px;
-    background-image: url('images/loader.png');
-    background-size: contain;
+  animation: rotate infinite 1s linear;
+  height: 24px;
+  width: 24px;
+  background-image: url("images/loader.png");
+  background-size: contain;
 }
 
 @keyframes rotate {
-    from {
-        transform: rotate(0deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
 
-    to {
-        transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
+  }
 }

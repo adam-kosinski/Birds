@@ -66,11 +66,11 @@ function clearData() {
   });
 }
 
-function refreshTaxonProficiencyDisplay(taxon_id) {
+function refreshTaxonProficiencyDisplay(taxonId) {
   const progress_bar = document.querySelector(
-    `#bird-list-${taxon_id} .taxon-progress`
+    `#bird-list-${taxonId} .taxon-progress`
   );
-  const proficiency = loadTaxonData(taxon_id).proficiency;
+  const proficiency = loadTaxonData(taxonId).proficiency;
   const full_progress_width =
     getComputedStyle(progress_bar).getPropertyValue("--width");
   progress_bar.style.borderLeftWidth = `calc(${proficiency} * ${full_progress_width})`;
@@ -87,25 +87,25 @@ function loadBooleanSetting(name, default_value) {
   }
 }
 
-function key(taxon_id) {
-  const baseKey = `taxon-${taxon_id}-${mode}`;
+function key(taxonId) {
+  const baseKey = `taxon-${taxonId}-${mode}`;
   if (data_source === "iNaturalist") return baseKey;
   return baseKey + "-" + data_source;
 }
 
-function loadTaxonData(taxon_id, raw = false) {
+function loadTaxonData(taxonId, raw = false) {
   // if raw=false, also calculates proficiency, time since reviewed, and default values if missing,
   // since when we call this function we usually want to know these things,
   // and helps avoid redundant reading of localstorage
 
   let data = {};
-  const storage_string = localStorage.getItem(key(taxon_id));
+  const storage_string = localStorage.getItem(key(taxonId));
   if (storage_string !== null) data = JSON.parse(storage_string);
 
   if (raw) return data;
 
   // default values
-  data.taxon_id = taxon_id; // useful to keep this tied to the data
+  data.taxonId = taxonId; // useful to keep this tied to the data
   if (!data.prev_answers) {
     data.prev_answers = [];
   }
@@ -115,6 +115,9 @@ function loadTaxonData(taxon_id, raw = false) {
   if (!data.reviewed_timestamp) {
     data.reviewed_timestamp = Date.now();
   } // if never started this taxon, make it so time since reviewed is 0 so it doesn't get chosen to review
+  if (!data.confused_taxa) {
+    data.confused_taxa = {};
+  }
 
   // calculate proficiency
   const prev_answers = data.prev_answers.slice(); // slice so we don't mutate this
@@ -129,14 +132,21 @@ function loadTaxonData(taxon_id, raw = false) {
   data.hours_since_reviewed =
     (Date.now() - data.reviewed_timestamp) / (60 * 60 * 1000);
 
+  // replace confusion numerator and denominator values with the divided value (confusion score)
+  for (const id in data.confused_taxa) {
+    const [num, denom] = data.confused_taxa[id];
+    // replace with value
+    data.confused_taxa[id] = num / denom;
+  }
+
   return data;
 }
 
-function updateTaxonProficiency(taxon_id, answered_correctly) {
+function updateTaxonProficiency(taxonId, answered_correctly) {
   // don't store anything if the user doesn't want us to
   if (!loadBooleanSetting("store-progress", false)) return;
 
-  const data = loadTaxonData(taxon_id, true);
+  const data = loadTaxonData(taxonId, true);
   const prev_answers = data.prev_answers || [];
   prev_answers.push(answered_correctly ? 1 : 0);
   // remove old answers we don't care about anymore
@@ -144,36 +154,43 @@ function updateTaxonProficiency(taxon_id, answered_correctly) {
 
   // store
   data.prev_answers = prev_answers;
-  localStorage.setItem(key(taxon_id), JSON.stringify(data));
+  localStorage.setItem(key(taxonId), JSON.stringify(data));
 
   // update display
-  refreshTaxonProficiencyDisplay(taxon_id);
+  refreshTaxonProficiencyDisplay(taxonId);
 }
 
-function updateTaxonDifficultyAchieved(taxon_id, difficulty) {
+function updateTaxonDifficultyAchieved(taxonId, difficulty) {
   // don't store anything if the user doesn't want us to
   if (!loadBooleanSetting("store-progress", false)) return;
 
-  const data = loadTaxonData(taxon_id, true);
+  const data = loadTaxonData(taxonId, true);
   data.difficulty_achieved = data.difficulty_achieved
     ? Math.max(data.difficulty_achieved, difficulty)
     : difficulty;
-  localStorage.setItem(key(taxon_id), JSON.stringify(data));
+  localStorage.setItem(key(taxonId), JSON.stringify(data));
 }
 
-function updateTaxonReviewedTimestamp(taxon_id) {
+function updateTaxonReviewedTimestamp(taxonId) {
   // don't store anything if the user doesn't want us to
   if (!loadBooleanSetting("store-progress", false)) return;
 
   // time is now
-  const data = loadTaxonData(taxon_id, true);
+  const data = loadTaxonData(taxonId, true);
   data.reviewed_timestamp = Date.now();
-  localStorage.setItem(key(taxon_id), JSON.stringify(data));
+  localStorage.setItem(key(taxonId), JSON.stringify(data));
 }
 
-function clearTaxonData(taxon_id, mode) {
-  localStorage.removeItem(key(taxon_id));
+function updateTaxonConfusions(taxonId, confusedTaxaData) {
+  // don't store anything if the user doesn't want us to
+  if (!loadBooleanSetting("store-progress", false)) return;
+
+  const data = loadTaxonData(taxonId, true);
+  data.confused_taxa = confusedTaxaData;
+  localStorage.setItem(key(taxonId), JSON.stringify(data));
 }
+
+// LOAD INITIAL SETTINGS --------------------------------------------------------
 
 function loadLocalStorage() {
   let allow_all_taxa = loadBooleanSetting("allow-all-taxa", false);

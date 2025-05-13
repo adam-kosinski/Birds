@@ -104,6 +104,18 @@
             </div>
           </div>
 
+          <div id="target-location-container">
+            <p>
+              Location<button
+                class="info-button inline"
+                onclick="alert('Your city is determined using your IP address. It is used to determine which species are more common in your area, so they can be sorted earlier in the list below.')"
+              ></button
+              >:
+              <span id="location-name">Unknown</span>
+            </p>
+            <!-- <button class="font-small">EDIT</button> -->
+          </div>
+
           <div id="bird-input-container">
             <div id="taxon-autocomplete-list"></div>
             <input
@@ -117,14 +129,14 @@
 
         <div id="above-list-container">
           <p class="font-small" style="margin-right: 5px">
-            <span id="n-species-display">0</span>
-            <span id="species-or-taxa"></span>
+            <span id="n-selected">0</span>/<span id="n-species-display">0</span>
+            <span id="species-or-taxa"></span> selected
           </p>
-          <button id="select-recommended" class="font-small">
-            <p>PICK RECOMMENDED</p>
+          <button id="select-all" class="font-small">
+            <p>SELECT ALL</p>
           </button>
-          <button id="clear-selection" class="font-small">
-            <p>DESELECT ALL (<span id="n-selected">0</span>)</p>
+          <button id="select-none" class="font-small">
+            <p>DESELECT ALL</p>
           </button>
         </div>
         <div id="bird-list-message">Species list is empty</div>
@@ -193,7 +205,9 @@
           <div id="answer-caption">
             <div>
               <b id="answer-common-name" class="font-large"></b>
-              <a id="answer-info-link" target="_blank" class="font-large">i</a>
+              <a id="answer-info-link" target="_blank" class="font-large">
+                <button class="info-button inline"></button>
+              </a>
             </div>
             <i id="answer-scientific-name"></i>
             <p id="answer-species-name-appended"></p>
@@ -342,15 +356,8 @@
         <div>
           <input id="auto-select-recommended" type="checkbox" />
           <label for="auto-select-recommended"
-            >Automatically pick recommended species whenever you load a species
-            list (instead of needing to manually click the "PICK RECOMMENDED"
-            button).
-            <ul>
-              <li>
-                Note that without storing progress on your device (see setting
-                above), recommendations will be much less useful.
-              </li>
-            </ul>
+            >Automatically pick a recommended subset of species to practice
+            whenever you return to the species list or add new species.
           </label>
         </div>
       </div>
@@ -369,15 +376,22 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <script src="firebase.js"></script>
 
+    <script src="user_location.js"></script>
     <script src="settings_and_storage.js"></script>
 
     <script src="game.js"></script>
-    <script src="game_events.js"></script>
+    <script src="recommended_groups.js"></script>
 
     <script src="autocomplete.js"></script>
     <script src="add_remove_taxa.js"></script>
     <script src="range_map.js"></script>
 
     <script src="spectrogram.js"></script>
+
+    <!-- code to run upon page load... kinda -->
+    <script src="game_events.js"></script>
+    <script>
+      initListScreen();
+    </script>
   </body>
 </html>

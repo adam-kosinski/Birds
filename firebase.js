@@ -46,6 +46,43 @@ function addBadId(taxon_id, iNaturalist_id, mode) {
     });
 }
 
+function firebaseAddSimilarSpecies(data, sounds) {
+  // data is of format {taxonId: {stuff}, ...}
+  for (let taxonId in data) {
+    db.collection(`similar-species-${sounds ? "sounds" : "photos"}`)
+      .doc(String(taxonId))
+      .set(data[taxonId]);
+  }
+}
+
+// debug
+function firebaseDeleteSimilarSpecies(sounds) {
+  for (const obj of list_taxa) {
+    db.collection(`similar-species-${sounds ? "sounds" : "photos"}`)
+      .doc(String(obj.id))
+      .delete();
+
+    if (obj.rank_level < 10) {
+      db.collection(`similar-species-${sounds ? "sounds" : "photos"}`)
+        .doc(String(getSpeciesParent(obj).id))
+        .delete();
+    }
+  }
+}
+
+async function firebaseGetSimilarSpeciesData(sounds) {
+  // get all data, it's much faster than one at a time or filtering and doesn't use much bandwidth
+  const snapshot = await db
+    .collection(`similar-species-${sounds ? "sounds" : "photos"}`)
+    .get();
+
+  const data = {};
+  snapshot.forEach((doc) => {
+    data[doc.id] = doc.data();
+  });
+  return data;
+}
+
 // Old idea: optimize firebase writes by updating in bulk instead of after every game question
 // We'd want to update when the game ended, or when the user left the page
 

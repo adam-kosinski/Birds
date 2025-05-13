@@ -19,7 +19,7 @@ const ANSWER_SHOWN = 2;
 setGameState(INACTIVE);
 
 let mode = "birdsong"; // or "visual_id"
-let data_source = "iNaturalist"; // default "iNaturalist" (see initURLArgs()), other options: "ebird_calls"
+let data_source = "iNaturalist"; // default "iNaturalist" (see initListScreen()), other options: "ebird_calls"
 
 let funny_bird_timeout_id;
 
@@ -30,7 +30,7 @@ function setGameState(state) {
   document.getElementById("game-main").dataset.gameState = state;
 }
 
-function setMode(new_mode) {
+async function setMode(new_mode) {
   mode = new_mode;
 
   //update HTML
@@ -60,9 +60,9 @@ function setMode(new_mode) {
     refreshTaxonProficiencyDisplay(obj.id);
   });
 
-  //update auto-selection if setting is enabled
-  if (loadBooleanSetting("auto-select-recommended", false)) {
-    selectRecommended();
+  //update groups if mode is set after initialization
+  if (initializationComplete) {
+    makeTaxonGroups();
   }
 }
 
@@ -188,7 +188,7 @@ async function initGame() {
   console.log("\nINIT GAME ============================\n\n");
 
   //start loader
-  document.getElementById("bird-list-loader").style.display = "block";
+  startListLoader();
 
   //get taxa_to_use
   taxa_to_use = Array.from(
@@ -197,7 +197,11 @@ async function initGame() {
     let id = Number(el.dataset.taxonId);
     return list_taxa.find((obj) => obj.id === id);
   });
-  if (taxa_to_use.length === 0) taxa_to_use = list_taxa;
+  if (taxa_to_use.length === 0) {
+    alert("No taxa selected");
+    stopListLoader();
+    return;
+  }
   console.log("taxa to use", taxa_to_use);
 
   //init taxon_obs, taxon_queues, taxon bag
@@ -238,7 +242,7 @@ async function initGame() {
       alert(
         "Failed to find research grade iNaturalist observations for any of the chosen taxa. Please try again with different taxa."
       );
-      document.getElementById("bird-list-loader").style.display = "none";
+      stopListLoader();
       resetAndExitGame();
       return;
     }
@@ -741,22 +745,26 @@ function checkAnswer() {
   //update taxon picking probabilities and user data (if storing)
   //don't do anything if squirrel intruder, those are jokes
   if (!current.is_squirrel_intruder) {
+    const correctId = searchAncestorsForTaxonId(current);
+    const idsInPlay = Object.keys(taxon_queues).map((x) => Number(x));
+
     if (correct) {
       updateTaxonBag(guess_obj.id, -CORRECT_REMOVE_COPIES);
       updateTaxonProficiency(guess_obj.id, true);
       updateTaxonReviewedTimestamp(guess_obj.id);
+      updateConfusionScore(correctId, correctId, idsInPlay);
     } else {
       // incorrect or skipped
-      const correct_id = searchAncestorsForTaxonId(current);
       if (guess_obj) {
         // incorrect
         updateTaxonBag(guess_obj.id, INCORRECT_ADD_COPIES);
-        updateTaxonBag(correct_id, INCORRECT_ADD_COPIES);
+        updateTaxonBag(correctId, INCORRECT_ADD_COPIES);
         updateTaxonProficiency(guess_obj.id, false);
-        updateTaxonProficiency(correct_id, false);
+        updateTaxonProficiency(correctId, false);
+        updateConfusionScore(correctId, guess_obj.id, idsInPlay);
       } else {
-        // no guess
-        updateTaxonBag(correct_id, NO_GUESS_ADD_COPIES);
+        // no guess (skipped)
+        updateTaxonBag(correctId, NO_GUESS_ADD_COPIES);
       }
     }
   }

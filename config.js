@@ -1,16 +1,22 @@
+// iNaturalist observation fetching
 const DEFAULT_PER_PAGE = 200;
 const INITIAL_PER_PAGE = 5;
-
 const MAX_FETCH_ATTEMPTS = 15; //how many times to attempt fetching to meet threshold, before quit
 const BIRDSONG_POPULAR_ATTEMPTS = 3; //how many times to attempt fetching popular observations before reverting to popular or not popular
 const VISUAL_ID_POPULAR_ATTEMPTS = 1;
 const N_OBS_PER_TAXON = 20; //number of observations we'd like to have for each taxon, will stop when reach this
 const MAX_POPULAR_OBS = 10; //number of popular observations to add before fetching any observation - set less than N_OBS_PER_TAXON so we don't get only the same popular observations each time
+const SPECIES_COUNTS_RADIUS = 250; //km
 
+// select by location
+const TOP_N_SELECTED = 16;
+
+// question selection
 const MAX_PREFERRED_AUDIO_DURATION = 15; //seconds, if the next observation's sound is longer, try to pick a different next one
 const MAX_SHORT_AUDIO_RETRIES = 3; //max number of tries to pick a shorter audio (to limit requests / possible infinite looping)
 const TIME_TO_REPLENISH_A_SHORT_AUDIO_RETRY = 1000; //ms, retries replenish over time
-
+const SQUIRREL_PROBABILITY = 0.02; //hee hee :)
+// taxon bag
 const MAX_TAXON_BAG_COPIES = 11; //number of times a taxon can be in the taxon bag, min is 1
 const START_TAXON_BAG_COPIES = 7; //may add fewer copies for taxa that the user is very proficient at - see game.js, initGame()
 const CORRECT_REMOVE_COPIES = 2; //number of copies to remove from taxon_bag if the user got a question on this taxon right
@@ -21,9 +27,20 @@ const NO_GUESS_ADD_COPIES = 0; //number of copies to add to bag if no guess - 0 
 // so if you get several wrong, you have to get several right to get the # copies back under START_TAXON_BAG_COPIES
 // so probably don't set MAX_TAXON_BAG_COPIES too high, or this will never get back down enough
 
+// UI stuff
 const AUTOCOMPLETE_DELAY = 1000; //ms after user stops typing, to update the autocomplete
 const N_AUTOCOMPLETE_RESULTS = 5;
-
+const MAX_BIRD_IMAGE_ZOOM_FACTOR = 6;
+const MAX_DESCRIPTION_WORDS = 40;
+const PLACE_STYLE = {
+  //for location geometry
+  color: "orange",
+};
+const FUNNY_BIRD_LEAVE_DELAY = 8000; //ms
+function getFunnyBirdDelay() {
+  return 60000 + 60000 * Math.random();
+}
+// macaulay library spectrogram
 // 250 horizontal pixels per second in raw spectrogram image
 // squished by factor of 2
 // 100% height = 257 pixels raw image height
@@ -31,31 +48,21 @@ const SPECTROGRAM_HORIZ_PERCENT_PER_SEC = (250 / 2) * (100 / 257);
 const SPECTROGRAM_SEC_PER_IMAGE = 60;
 const SPECTROGRAM_IMAGE_FETCH_BUFFER_SEC = 15;
 
-const PLACE_STYLE = {
-  //for location geometry
-  color: "orange",
-};
-const TOP_N_SELECTED = 16; //for location selection
-
-const FUNNY_BIRD_LEAVE_DELAY = 8000; //ms
-function getFunnyBirdDelay() {
-  return 60000 + 60000 * Math.random();
-}
-
-const SQUIRREL_PROBABILITY = 0.02; //hee hee :)
-
-const MAX_BIRD_IMAGE_ZOOM_FACTOR = 6;
-const MAX_DESCRIPTION_WORDS = 40;
-
+// progress, recommendation, and grouping config
+const MAX_GROUP_SIZE = 6;
+const CONFUSION_EMA_FRAC = 0.9;
+const PRED_ACCURACY_TARGET = 0.8; // don't make groups larger if their predicted accuracy is already below this
+const MIN_INAT_CONFUSION_VALUE = 0.05;
+const EXPOSURE_PROFICIENCY_THRESHOLD = 0.2; // after hit this with most common taxon, sort by avg taxon count not just most common taxon count
+const ACCURACY_MATTERS_PROFICIENCY_THRESHOLD = 0.5; // after hit this with the median proficiency of a group, start penalizing for low predicted accuracy when sorting
+const MIN_INAT_COUNT = 1; // used when sorting taxon groups, round up any taxa counts to this
 const N_ANSWERS_TO_STORE = 10;
 // we store recent proficiency in local storage (if setting checked), this is how far back to remember
 // - affects stability of proficiency measurement
 // - also, when starting out, we assume that this many previous questions were all answered incorrectly
 //   (so the user has to build up from 0 proficiency), so this affects how fast that can happen
 
-const RECOMMENDED_SUBSET_SIZES = [16, 8, 4]; // needs to be descending
-const HOURS_SINCE_REVIEWED_THRESHOLD = 24; // if time since reviewed is greater than this, species needs review
-const FRACTION_RESERVED_FOR_REVIEW = 0.25; // this fraction of recommended subsets will consist of species needing review
+// FUNCTIONS (DYNAMIC CONFIG) ----------------------------------------------------
 
 function getInfoURL(taxon_obj, mode) {
   if (taxon_obj.ancestor_ids.includes(3) && taxon_obj.rank === "species") {
@@ -226,6 +233,11 @@ function getQuestionHTML(mode, taxon_obj, is_squirrel_intruder = false) {
 }
 
 /*
+For getting common species (place id 30 is NC)
+https://api.inaturalist.org/v1/observations/species_counts?place_id=30&quality_grade=research&taxon_id=______
+Then you can paste it into the console as "data" and do:
+console.log(data.results.slice(0,50).map(x => `${x.taxon.id},   //${x.taxon.preferred_common_name}\n`).join(""))
+
 For generating preset lists from list_taxa
 console.log(list_taxa.map(obj => `${obj.id},   //${obj.preferred_common_name}\n`).join(""))
 */
@@ -367,8 +379,10 @@ const PRESETS = {
     taxa: [
       12727, //american robin
       9921, //scarlet tanager
+      9915, //summer tanager
       10271, //rose breasted grosbeak
       891704, //red eyed vireo
+      17402, //blue-headed vireo
       11935, //tree swallow
     ],
   },
@@ -792,7 +806,7 @@ const PRESETS = {
   },
   "Insect Orders (NC)": {
     description:
-      "Honestly at this point, why not learn insects too. Tips <a class='default-link-style' target='_blank' href='https://bugguide.net/'>here</a>.",
+      "For all those insect lovers out there. Tips <a class='default-link-style' target='_blank' href='https://bugguide.net/'>here</a>.",
     photo: "images/preset_insects.jpg",
     mode: "visual_id",
     place_id: 30, // north carolina
@@ -859,6 +873,63 @@ const PRESETS = {
       102006, //Dragonhunter
       104585, //Painted Skimmer
       108344, //Wandering Glider
+    ],
+  },
+  "Common Butterflies of NC": {
+    description: "They're so pretty!",
+    photo: "images/preset_butterflies.jpg",
+    mode: "visual_id",
+    taxa: [
+      60551, //Eastern Tiger Swallowtail
+      48662, //Monarch
+      81559, //Silver-spotted Skipper
+      60607, //Red-spotted Admiral
+      49972, //Pipevine Swallowtail
+      48505, //Common Buckeye
+      50340, //Fiery Skipper
+      52925, //Pearl Crescent
+      58523, //Black Swallowtail
+      49150, //Gulf Fritillary
+      48549, //American Lady
+      58525, //Spicebush Swallowtail
+      68244, //Variegated Fritillary
+      1081329, //Zabulon Skipper
+      48550, //Cloudless Sulphur
+      122381, //Eastern Tailed-Blue
+      49133, //Red Admiral
+      1456562, //Great Spangled Fritillary
+      142988, //Clouded Skipper
+      1455248, //Huron Sachem
+      55626, //Small White
+      81727, //Sleepy Orange
+      68232, //Palamedes Swallowtail
+      58579, //Question Mark
+      50931, //Gray Hairstreak
+      122281, //Red-banded Hairstreak
+      50071, //Horace's Duskywing
+      67435, //Long-tailed Skipper
+      82792, //Summer Azure
+      60752, //Carolina Satyr
+      68264, //Hackberry Emperor
+      147931, //Ocola Skipper
+      62978, //Silvery Checkerspot
+      58586, //Viceroy
+      83086, //Zebra Swallowtail
+      1038408, //Common Checkered-Skipper
+      58475, //Juvenal's Duskywing
+      54064, //Eastern Comma
+      48548, //Painted Lady
+      58561, //American Snout
+      198812, //Northern Pearly-eye
+      58481, //Least Skipper
+      58606, //Common Wood-Nymph
+      132227, //Appalachian Brown
+      58532, //Orange Sulphur
+      223532, //Southern Pearly-eye
+      58587, //Tawny Emperor
+      58603, //Little Wood Satyr
+      56832, //Mourning Cloak
+      143140, //Eastern Gemmed-Satyr
     ],
   },
   "Fish Families of the Great Barrier Reef": {
