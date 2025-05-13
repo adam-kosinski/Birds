@@ -33,8 +33,11 @@ async function speciesCountsInLocation(lat, lng, taxonIds) {
   );
   const data = await res.json();
   const counts = {};
+  const readableCounts = new Map();
   data.results.forEach((obj) => {
     counts[obj.taxon.id] = obj.count;
+    readableCounts.set(obj.taxon.preferred_common_name, obj.count);
   });
+  console.log(readableCounts);
   return counts;
 }

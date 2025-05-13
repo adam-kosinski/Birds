@@ -268,48 +268,86 @@ function predictedAccuracy(group, adjList) {
 }
 
 function sortGroups(groups, adjList) {
-  // average frequency metric (frequencies 0-1, all sum to 1) -----------------
+  // groups is an array of arrays each containing the taxon ids in that group
 
-  // first check if we have species counts of all taxa for this mode specifically (sounds=true vs false)
-  // if not, will fall back to overall observation counts
-  const haveSpecificCounts = list_taxa.every(
-    (x) => x.id in similarSpeciesData[mode]
-  );
-  console.log("have mode-specific counts", haveSpecificCounts);
-  const taxaCounts = {};
-  list_taxa.forEach((obj) => {
-    if (haveSpecificCounts) {
-      taxaCounts[obj.id] = similarSpeciesData[mode][obj.id].observations_count;
-    } else {
-      taxaCounts[obj.id] = obj.observations_count;
-    }
-  });
-  const totalCount = Object.values(taxaCounts).reduce((sum, x) => sum + x, 0);
-  const freq = (taxonId) => taxaCounts[taxonId] / totalCount;
+  const count = (taxonId) => regionalSpeciesCounts[taxonId] || 0;
 
-  const avgFreq = (group) => {
-    let sum = group.reduce((sum, x) => sum + freq(x), 0);
+  const avgTaxonObsCount = (group) => {
+    let sum = 0;
+    group.forEach((taxonId) => (sum += count(taxonId)));
     return sum / group.length;
+  };
+
+  // const maxTaxonObsCount = (group) => {
+  //   let max = 0;
+  //   group.forEach(
+  //     (taxonId) => (max = Math.max(max, regionalSpeciesCounts[taxonId] || 0))
+  //   );
+  //   return max;
+  // };
+
+  const maxCountTaxonId = (group) => {
+    let max = -1;
+    let maxId;
+    group.forEach((taxonId) => {
+      const taxonCount = count(taxonId);
+      if (taxonCount > max) {
+        max = taxonCount;
+        maxId = taxonId;
+      }
+    });
+    return maxId;
+  };
+
+  const medianProficiency = (group) => {
+    const proficencies = group.map(
+      (taxonId) => loadTaxonData(taxonId).proficiency
+    );
+    proficencies.sort();
+    const n = proficencies.length;
+    if (n % 2 === 1) return proficencies[(n - 1) / 2];
+    return (proficencies[n / 2] + proficencies[n / 2 - 1]) / 2;
+  };
+
+  const sortMetric = (group) => {
+    // want to prioritize common birds the user is bad at
+    // so sort first the highest p(group | incorrect)
+    // = p(incorrect | group) * p(group) / p(incorrect), by bayes rule
+    // p(incorrect) is constant between groups, so drop that
+    // p(group) = # observations of group taxa / total observations, but total obs is constant so drop that
+    // also in practice I found using the avg # obs per taxa to be better than total # obs belonging to the group,
+    // such that the group size doesn't affect this sort metric
+
+    // Also, we would like to start by learning the most common birds, regardless of confusion,
+    // then transition to reviewing the most confusing birds. Can measure this with taxon proficiency values.
+    // If median proficiency is low, focus on common birds. If it's high, focus on common birds likely to cause mistakes.
+    // Note that different groups can be using a different focus, and it'll work because low proficency groups will have
+    // larger scores because they're not being affected by the (1 - predicted accuracy) term, and they indeed should be
+    // sorted earlier.
+
+    // Update: in practice, it seems that using the # observations of just the most common taxon works better than the avg
+    // because you usually want to learn that one / how to tell it apart from look-alikes. There was a problem with this
+    // though, which is that it would keep the most common taxon in the first group and cycle a bunch of uncommon taxa
+    // through as the other group members, never getting to the second most common birds in the second group. So it seems
+    // after the most common taxon has been seen, this doesn't work so well. Because of this, do indeed focus on the most
+    // common taxon until it has been seen a bit (proficiency isn't like 0), then pivot to the other strategy.
+
+    const commonId = maxCountTaxonId(group);
+    if (loadTaxonData(commonId).proficiency <= EXPOSURE_PROFICIENCY_THRESHOLD) {
+      return count(commonId);
+    }
+    if (medianProficiency(group) <= ACCURACY_MATTERS_PROFICIENCY_THRESHOLD) {
+      return avgTaxonObsCount(group);
+    }
+    return (1 - predictedAccuracy(group, adjList)) * avgTaxonObsCount(group);
   };
 
   // sort ------------------------------
   groups.sort((a, b) => {
-    return predictedAccuracy(a, adjList) - predictedAccuracy(b, adjList);
-    // return avgFreq(b) - avgFreq(a);
+    return sortMetric(b) - sortMetric(a);
   });
 
-  // groups.forEach((g) => {
-  //   console.log(
-  //     `rel freq ${avgFreq(g).toFixed(4)} ${g
-  //       .map((id) => idToName(id) + `(${(taxaCounts[id] / 1000).toFixed(0)})`)
-  //       .join(", ")}`
-  //   );
-  // });
-
-  // TODO use radius around a target location to measure observation count
-  // TODO don't revert back to total counts unless a sizable fraction of the taxa don't have data - can just assume taxa w no data to be at the median count.
-  // - This stops adding one extra bird to the birdsong mode from messing up the sorting
-  // TODO incorporate degree of confusion, and time since reviewed
+  // TODO incorporate time since reviewed?
 }
 
 function displayGroups(groups) {

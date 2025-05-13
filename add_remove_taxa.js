@@ -9,7 +9,7 @@ let similarSpeciesData;
 
 let userLat;
 let userLng;
-let regionalSpeciesCounts; // gets fetched from iNaturalist when page inits, and updates when new taxa are added
+let regionalSpeciesCounts = {}; // gets fetched from iNaturalist when page inits, and updates when new taxa are added
 
 // this function gets called on page load, see html file
 async function initListScreen() {
@@ -49,6 +49,7 @@ async function initListScreen() {
 
 async function initRegionalCounts(taxonIds) {
   let locationData = await getIPLocation();
+  console.log("User location obtained");
   userLat = locationData.lat;
   userLng = locationData.lng;
   document.getElementById("location-name").textContent = locationData.name;
@@ -57,6 +58,7 @@ async function initRegionalCounts(taxonIds) {
     userLng,
     taxonIds
   );
+  console.log("Regional species counts loaded");
 }
 
 function getSpeciesParent(taxonObj) {

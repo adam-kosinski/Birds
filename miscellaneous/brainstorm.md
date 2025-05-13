@@ -4,14 +4,12 @@ Things to tune:
 
 - EMA parameter
 - iNaturalist initial confusion value multiplier
-
-Affects group size
-
 - iNaturalist minimum confusion value
 - Default confusion value
 - Max group size
 - Predicted accuracy threshold for limiting group size
 - Confusion values within and between configured groups
+- Sorting score algorithm, and proficiency thresholds
 
 Location thing - species counts only returns species, so might be tricky for genera, families, etc.
 Minimum iNaturalist confusion score (don't set to 0 if not confused on iNaturalist)
