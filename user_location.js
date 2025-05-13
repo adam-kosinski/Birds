@@ -3,7 +3,7 @@ async function getIPLocation() {
   const ipData = await ipRes.json();
   const ip = ipData.ip;
 
-  const geoRes = await fetch(`http://ip-api.com/json/${ip}`);
+  const geoRes = await fetch(`https://ip-api.com/json/${ip}`);
   const geoData = await geoRes.json();
 
   const lat = geoData.lat;
