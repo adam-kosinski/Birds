@@ -232,6 +232,11 @@ function getQuestionHTML(mode, taxon_obj, is_squirrel_intruder = false) {
 }
 
 /*
+For getting common species (place id 30 is NC)
+https://api.inaturalist.org/v1/observations/species_counts?place_id=30&quality_grade=research&taxon_id=______
+Then you can paste it into the console as "data" and do:
+console.log(data.results.slice(0,50).map(x => `${x.taxon.id},   //${x.taxon.preferred_common_name}\n`).join(""))
+
 For generating preset lists from list_taxa
 console.log(list_taxa.map(obj => `${obj.id},   //${obj.preferred_common_name}\n`).join(""))
 */
@@ -800,7 +805,7 @@ const PRESETS = {
   },
   "Insect Orders (NC)": {
     description:
-      "Honestly at this point, why not learn insects too. Tips <a class='default-link-style' target='_blank' href='https://bugguide.net/'>here</a>.",
+      "For all those insect lovers out there. Tips <a class='default-link-style' target='_blank' href='https://bugguide.net/'>here</a>.",
     photo: "images/preset_insects.jpg",
     mode: "visual_id",
     place_id: 30, // north carolina
@@ -867,6 +872,63 @@ const PRESETS = {
       102006, //Dragonhunter
       104585, //Painted Skimmer
       108344, //Wandering Glider
+    ],
+  },
+  "Common Butterflies of NC": {
+    description: "They're so pretty!",
+    photo: "images/preset_butterflies.jpg",
+    mode: "visual_id",
+    taxa: [
+      60551, //Eastern Tiger Swallowtail
+      48662, //Monarch
+      81559, //Silver-spotted Skipper
+      60607, //Red-spotted Admiral
+      49972, //Pipevine Swallowtail
+      48505, //Common Buckeye
+      50340, //Fiery Skipper
+      52925, //Pearl Crescent
+      58523, //Black Swallowtail
+      49150, //Gulf Fritillary
+      48549, //American Lady
+      58525, //Spicebush Swallowtail
+      68244, //Variegated Fritillary
+      1081329, //Zabulon Skipper
+      48550, //Cloudless Sulphur
+      122381, //Eastern Tailed-Blue
+      49133, //Red Admiral
+      1456562, //Great Spangled Fritillary
+      142988, //Clouded Skipper
+      1455248, //Huron Sachem
+      55626, //Small White
+      81727, //Sleepy Orange
+      68232, //Palamedes Swallowtail
+      58579, //Question Mark
+      50931, //Gray Hairstreak
+      122281, //Red-banded Hairstreak
+      50071, //Horace's Duskywing
+      67435, //Long-tailed Skipper
+      82792, //Summer Azure
+      60752, //Carolina Satyr
+      68264, //Hackberry Emperor
+      147931, //Ocola Skipper
+      62978, //Silvery Checkerspot
+      58586, //Viceroy
+      83086, //Zebra Swallowtail
+      1038408, //Common Checkered-Skipper
+      58475, //Juvenal's Duskywing
+      54064, //Eastern Comma
+      48548, //Painted Lady
+      58561, //American Snout
+      198812, //Northern Pearly-eye
+      58481, //Least Skipper
+      58606, //Common Wood-Nymph
+      132227, //Appalachian Brown
+      58532, //Orange Sulphur
+      223532, //Southern Pearly-eye
+      58587, //Tawny Emperor
+      58603, //Little Wood Satyr
+      56832, //Mourning Cloak
+      143140, //Eastern Gemmed-Satyr
     ],
   },
   "Fish Families of the Great Barrier Reef": {

@@ -11,10 +11,9 @@ Things to tune:
 - Confusion values within and between configured groups
 - Sorting score algorithm, and proficiency thresholds
 
-Location thing - species counts only returns species, so might be tricky for genera, families, etc.
+\*Priority: Location thing - species counts only returns species, so might be tricky for genera, families, etc.
 Minimum iNaturalist confusion score (don't set to 0 if not confused on iNaturalist)
-Allow groups to be configured
-Issue - custom groups won't update local storage because no iNaturalist data fetched yet. Fix this by disallowing local storage update if no iNaturalist AND no conf value from a custom grouping
+Allow groups to be configured. Issue - custom groups won't update local storage because no iNaturalist data fetched yet. Fix this by disallowing local storage update if no iNaturalist AND no conf value from a custom grouping
 It's possible for a group to be created with one species it seems (see turtle preset)
 Sidescrolling in location search results list
 Chipmunk intruder
