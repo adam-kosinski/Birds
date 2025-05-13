@@ -49,7 +49,7 @@ async function initListScreen() {
 
 async function initRegionalCounts(taxonIds) {
   let locationData = await getIPLocation();
-  console.log("User location obtained");
+  console.log(locationData);
   userLat = locationData.lat;
   userLng = locationData.lng;
   document.getElementById("location-name").textContent = locationData.name;

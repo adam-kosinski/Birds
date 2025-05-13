@@ -3,19 +3,19 @@ async function getIPLocation() {
   const ipData = await ipRes.json();
   const ip = ipData.ip;
 
-  const geoRes = await fetch(`http://ip-api.com/json/${ip}`);
+  const geoRes = await fetch(`https://ipwho.is/${ip}`);
   const geoData = await geoRes.json();
 
-  const lat = geoData.lat;
-  const lng = geoData.lon;
+  const lat = geoData.latitude;
+  const lng = geoData.longitude;
   let name = "";
 
-  if (geoData.city && geoData.region) {
-    name = `${geoData.city}, ${geoData.region}`;
+  if (geoData.city && geoData.region_code) {
+    name = `${geoData.city}, ${geoData.region_code}`;
   } else if (geoData.city) {
     name = geoData.city;
-  } else if (geoData.region) {
-    name = geoData.region;
+  } else if (geoData.region_code) {
+    name = geoData.region_code;
   } else if (lat && lng) {
     name = `${lat}, ${lng}`;
   } else {
