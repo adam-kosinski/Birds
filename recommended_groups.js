@@ -270,21 +270,14 @@ function predictedAccuracy(group, adjList) {
 function sortGroups(groups, adjList) {
   // groups is an array of arrays each containing the taxon ids in that group
 
-  const count = (taxonId) => regionalSpeciesCounts[taxonId] || 0;
+  const count = (taxonId) =>
+    Math.max(regionalSpeciesCounts[taxonId] || 0, MIN_INAT_COUNT);
 
   const avgTaxonObsCount = (group) => {
     let sum = 0;
     group.forEach((taxonId) => (sum += count(taxonId)));
     return sum / group.length;
   };
-
-  // const maxTaxonObsCount = (group) => {
-  //   let max = 0;
-  //   group.forEach(
-  //     (taxonId) => (max = Math.max(max, regionalSpeciesCounts[taxonId] || 0))
-  //   );
-  //   return max;
-  // };
 
   const maxCountTaxonId = (group) => {
     let max = -1;

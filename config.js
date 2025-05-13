@@ -55,6 +55,7 @@ const PRED_ACCURACY_TARGET = 0.8; // don't make groups larger if their predicted
 const MIN_INAT_CONFUSION_VALUE = 0.05;
 const EXPOSURE_PROFICIENCY_THRESHOLD = 0.2; // after hit this with most common taxon, sort by avg taxon count not just most common taxon count
 const ACCURACY_MATTERS_PROFICIENCY_THRESHOLD = 0.5; // after hit this with the median proficiency of a group, start penalizing for low predicted accuracy when sorting
+const MIN_INAT_COUNT = 1; // used when sorting taxon groups, round up any taxa counts to this
 const N_ANSWERS_TO_STORE = 10;
 // we store recent proficiency in local storage (if setting checked), this is how far back to remember
 // - affects stability of proficiency measurement
