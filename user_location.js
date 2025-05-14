@@ -88,7 +88,7 @@ async function updateRegionalCounts(
   document.getElementById("location-name").textContent =
     locationName || `${lat.toFixed(2)}°, ${lng.toFixed(2)}°`;
 
-  if (locationName === undefined) {
+  if (!locationName) {
     // fetch it in the background
     reverseGeocode(lat, lng).then((name) => {
       if (!name) return;
@@ -240,18 +240,23 @@ document
   .addEventListener("click", async () => {
     document.getElementById("location-map-modal").style.display = "none";
 
-    startListLoader();
-
-    // update regional species counts and location name
-    const taxonIds = list_taxa.map((obj) => obj.id);
-
     let { lat, lng } = locationMap.getCenter();
     // clamp lng to (-180, 180)
     while (lng <= -180) lng += 360;
     while (lng >= 180) lng -= 360;
 
+    if (coordsClose(lat, userLat) && coordsClose(lng, userLng)) return;
+
+    // update regional species counts and location name
+    startListLoader();
+    const taxonIds = list_taxa.map((obj) => obj.id);
     await updateRegionalCounts(taxonIds, lat, lng);
     makeTaxonGroups();
-
     stopListLoader();
   });
+
+function coordsClose(a, b) {
+  // a and b are either both latitudes or both longitudes
+  if (Math.abs(a - b) < 0.1) return true;
+  return false;
+}
