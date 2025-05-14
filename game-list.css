@@ -105,7 +105,8 @@
 /* location container */
 #target-location-container {
   display: flex;
-  align-items: center;
+  align-items: baseline;
+  gap: 6px;
 }
 
 /* Bird input and autocomplete */
