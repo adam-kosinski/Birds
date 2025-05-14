@@ -7,10 +7,6 @@ let similarSpeciesData;
 // will load both sounds and photos so that it's easier for switching modes
 // format: {birdsong: {taxonId1: {...}, taxonId2: {...}, ...}, visual_id: {...}}
 
-let userLat;
-let userLng;
-let regionalSpeciesCounts = {}; // gets fetched from iNaturalist when page inits, and updates when new taxa are added
-
 // this function gets called on page load, see html file
 async function initListScreen() {
   startListLoader();
@@ -45,20 +41,6 @@ async function initListScreen() {
 
   stopListLoader();
   initializationComplete = true;
-}
-
-async function initRegionalCounts(taxonIds) {
-  let locationData = await getIPLocation();
-  console.log(locationData);
-  userLat = locationData.lat;
-  userLng = locationData.lng;
-  document.getElementById("location-name").textContent = locationData.name;
-  regionalSpeciesCounts = await speciesCountsInLocation(
-    userLat,
-    userLng,
-    taxonIds
-  );
-  console.log("Regional species counts loaded");
 }
 
 function getSpeciesParent(taxonObj) {
