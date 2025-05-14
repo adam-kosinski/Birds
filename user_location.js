@@ -104,11 +104,19 @@ async function updateRegionalCounts(
 }
 
 async function reverseGeocode(lat, lng) {
-  await sleep(1); // api rate throttling
-  const res = await fetch(
-    `https://geocode.maps.co/reverse?lat=${lat}&lon=${lng}&api_key=6825058f1b67a097439135cvl0fb5a7`
-  );
-  const data = await res.json();
+  // do reverse geocoding - try fetching it immediately, and if we get throttled wait a bit and try again
+  let response;
+  for (let i = 0; i < 3; i++) {
+    response = await fetch(
+      `https://geocode.maps.co/reverse?lat=${lat}&lon=${lng}&api_key=6825058f1b67a097439135cvl0fb5a7`
+    );
+    if (response.status === 200) break;
+    console.log("Geocoding request failed, waiting and trying again");
+    await sleep(1.5);
+  }
+  if (response.status !== 200) return;
+
+  const data = await response.json();
   if (data.error) return;
 
   const address = data.address;
