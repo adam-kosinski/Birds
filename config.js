@@ -6,7 +6,10 @@ const BIRDSONG_POPULAR_ATTEMPTS = 3; //how many times to attempt fetching popula
 const VISUAL_ID_POPULAR_ATTEMPTS = 1;
 const N_OBS_PER_TAXON = 20; //number of observations we'd like to have for each taxon, will stop when reach this
 const MAX_POPULAR_OBS = 10; //number of popular observations to add before fetching any observation - set less than N_OBS_PER_TAXON so we don't get only the same popular observations each time
+
+// common species fetching
 const SPECIES_COUNTS_RADIUS = 150; //km
+const FRAC_TAXA_ABSENT_WARNING_THRESHOLD = 0.25; //if more than this fraction of taxa aren't found in the selected location, warn the user
 
 // select by location
 const TOP_N_SELECTED = 16;
