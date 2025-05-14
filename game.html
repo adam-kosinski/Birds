@@ -24,7 +24,7 @@
     <link type="text/css" rel="stylesheet" href="game-list.css" />
     <link type="text/css" rel="stylesheet" href="game.css" />
     <link type="text/css" rel="stylesheet" href="game_display.css" />
-    <link type="text/css" rel="stylesheet" href="range_map.css" />
+    <link type="text/css" rel="stylesheet" href="map.css" />
     <link type="text/css" rel="stylesheet" href="settings.css" />
 
     <meta name="viewport" content="width=device-width initial-scale=1" />
@@ -108,12 +108,12 @@
             <p>
               Location<button
                 class="info-button inline"
-                onclick="alert('Your approximate location is determined using your IP address. It is used to determine which species are more common in your area, so they can be sorted earlier in the list below.')"
+                onclick="alert('Your approximate location is determined using your IP address, or if you used the location select page to create your list, that location. It is used to determine which species are more common in your area, so they can be sorted earlier in the list below.')"
               ></button
               >:
               <span id="location-name">Unknown</span>
             </p>
-            <!-- <button class="font-small">EDIT</button> -->
+            <button id="location-map-button" class="font-small">EDIT</button>
           </div>
 
           <div id="bird-input-container">
@@ -294,7 +294,7 @@
       </div>
     </div>
 
-    <div id="range-map-modal">
+    <div id="range-map-modal" class="map-modal">
       <b class="font-large">Observation Map</b>
       <div id="range-map-taxon-container">
         <img
@@ -310,6 +310,16 @@
       </div>
       <div id="range-map"></div>
       <button id="close-range-map" class="btn-primary">BACK</button>
+    </div>
+
+    <div id="location-map-modal" class="map-modal">
+      <b class="font-large">Location to Study</b>
+      <p>
+        Pan the map to the region you wish to study. The program will use which
+        species are most common in the area within the circle.
+      </p>
+      <div id="location-map"></div>
+      <button id="close-location-map" class="btn-primary">BACK</button>
     </div>
 
     <div id="settings-modal">

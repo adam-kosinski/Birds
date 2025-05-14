@@ -12,11 +12,11 @@ Things to tune:
 - Sorting score algorithm, and proficiency thresholds
 
 \*Priority: Location thing - species counts only returns species, so might be tricky for genera, families, etc.
-Allow editing location. Location should also be a URL param. Also add an alert if a large number of species counts are 0, saying to check the location.
 Allow groups to be configured. Issue - custom groups won't update local storage because no iNaturalist data fetched yet. Fix this by disallowing local storage update if no iNaturalist AND no conf value from a custom grouping
 It's possible for a group to be created with one species it seems (see turtle preset)
 Sidescrolling in location search results list
 Chipmunk intruder
+Warbler field marks game!
 
 ---
 

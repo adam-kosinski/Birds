@@ -39,9 +39,41 @@ document.getElementById("continue-button").addEventListener("click", () => {
   document.querySelectorAll(".list-option.selected").forEach((el) => {
     taxon_ids.push(el.dataset.taxonId);
   });
-  let args = "?mode=visual_id&taxa=" + taxon_ids.join(","); // default to visual id since this is generally always applicable, unlike sound
+  let args =
+    `?mode=visual_id` + // default to visual id since this is generally always applicable, unlike sound
+    `&taxa=${taxon_ids.join(",")}`;
+
+  // if place is small enough, use that as the location to study
+  let bounds = place_bounds ? place_bounds : map.getBounds();
+  if (maxBoundsDimensionKm(bounds) < 2 * SPECIES_COUNTS_RADIUS) {
+    const { lat, lng } = bounds.getCenter();
+    args += `&lat=${lat}&lng=${lng}`;
+  }
+
+  // go to game page
   window.location = "game.html" + (taxon_ids.length > 0 ? args : "");
 });
+
+function maxBoundsDimensionKm(bounds) {
+  const sw = bounds.getSouthWest();
+  const ne = bounds.getNorthEast();
+
+  // Midpoints
+  const midLat = (sw.lat + ne.lat) / 2;
+  const midLng = (sw.lng + ne.lng) / 2;
+
+  // Width: distance between west and east at mid-latitude
+  const west = L.latLng(midLat, sw.lng);
+  const east = L.latLng(midLat, ne.lng);
+  const widthKm = west.distanceTo(east) / 1000;
+
+  // Height: distance between south and north at mid-longitude
+  const south = L.latLng(sw.lat, midLng);
+  const north = L.latLng(ne.lat, midLng);
+  const heightKm = south.distanceTo(north) / 1000;
+
+  return Math.max(widthKm, heightKm);
+}
 
 // image lazy loading (since the location search can return hundreds of species, want to save people's data)
 

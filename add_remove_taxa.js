@@ -7,10 +7,6 @@ let similarSpeciesData;
 // will load both sounds and photos so that it's easier for switching modes
 // format: {birdsong: {taxonId1: {...}, taxonId2: {...}, ...}, visual_id: {...}}
 
-let userLat;
-let userLng;
-let regionalSpeciesCounts = {}; // gets fetched from iNaturalist when page inits, and updates when new taxa are added
-
 // this function gets called on page load, see html file
 async function initListScreen() {
   startListLoader();
@@ -43,22 +39,25 @@ async function initListScreen() {
   // but don't require this to finish before we resolve this function's promise; this can happen in the background
   getMissingSimilarSpeciesData();
 
+  // check if a lot of list taxa aren't found in this location; give warning if so
+  // do this after a delay so that the page will render first
+  setTimeout(() => {
+    let nTaxaNotFound = 0;
+    list_taxa.forEach((obj) => {
+      if (!(obj.id in regionalSpeciesCounts)) nTaxaNotFound++;
+    });
+    console.log("n taxa not found", nTaxaNotFound);
+    const nTaxaThreshold =
+      FRAC_TAXA_ABSENT_WARNING_THRESHOLD * list_taxa.length;
+    if (nTaxaNotFound > nTaxaThreshold) {
+      alert(
+        `${nTaxaNotFound} species weren't found in the chosen location. Make sure that the location reflects the area you wish to study so that common species can be determined correctly.`
+      );
+    }
+  }, 1000);
+
   stopListLoader();
   initializationComplete = true;
-}
-
-async function initRegionalCounts(taxonIds) {
-  let locationData = await getIPLocation();
-  console.log(locationData);
-  userLat = locationData.lat;
-  userLng = locationData.lng;
-  document.getElementById("location-name").textContent = locationData.name;
-  regionalSpeciesCounts = await speciesCountsInLocation(
-    userLat,
-    userLng,
-    taxonIds
-  );
-  console.log("Regional species counts loaded");
 }
 
 function getSpeciesParent(taxonObj) {

@@ -6,7 +6,10 @@ const BIRDSONG_POPULAR_ATTEMPTS = 3; //how many times to attempt fetching popula
 const VISUAL_ID_POPULAR_ATTEMPTS = 1;
 const N_OBS_PER_TAXON = 20; //number of observations we'd like to have for each taxon, will stop when reach this
 const MAX_POPULAR_OBS = 10; //number of popular observations to add before fetching any observation - set less than N_OBS_PER_TAXON so we don't get only the same popular observations each time
-const SPECIES_COUNTS_RADIUS = 250; //km
+
+// common species fetching
+const SPECIES_COUNTS_RADIUS = 150; //km
+const FRAC_TAXA_ABSENT_WARNING_THRESHOLD = 0.25; //if more than this fraction of taxa aren't found in the selected location, warn the user
 
 // select by location
 const TOP_N_SELECTED = 16;
@@ -207,6 +210,7 @@ function getInfoURL(taxon_obj, mode) {
   // swallowtail butterfly guide
   // if ([60551, 49972, 58523].includes(taxon_obj.id)){
   //   return "https://littlewildstreak.com/2015/09/12/distinguishing-swallowtail-butterflies/"
+  //   // or this one? https://usinggeorgianativeplants.blogspot.com/2020/08/confusing-dark-swallowtails.html
   // }
   if (taxon_obj.id in bugguide_mapping) {
     return "https://bugguide.net/node/view/" + bugguide_mapping[taxon_obj.id];
