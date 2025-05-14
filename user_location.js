@@ -60,14 +60,13 @@ async function initRegionalCounts(taxonIds) {
     lat = Number(lat);
     lng = Number(lng);
   } else {
-    locationData = await getIPLocation();
-    if (locationData.lat === undefined || locationData.lng === undefined) {
+    [lat, lng, locationName] = await getIPLocation();
+    if (lat === undefined || lng === undefined) {
       console.warn("Lat or lng is undefined");
       return;
     }
-    [lat, lng, locationName] = locationData;
-    console.log(locationData);
   }
+  console.log(lat, lng, locationName);
   await updateRegionalCounts(taxonIds, lat, lng, locationName);
 }
 
