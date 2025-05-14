@@ -174,36 +174,40 @@ function getInfoURL(taxon_obj, mode) {
     142988: 5648, //Clouded Skipper
     1455248: 9521, //Huron Sachem
     55626: 3259, //Small White
-    // 81727: ,  //Sleepy Orange
-    // 68232: ,  //Palamedes Swallowtail
-    // 58579: ,  //Question Mark
-    // 50931: ,  //Gray Hairstreak
-    // 122281: ,  //Red-banded Hairstreak
-    // 50071: ,  //Horace's Duskywing
-    // 67435: ,  //Long-tailed Skipper
-    // 82792: ,  //Summer Azure
-    // 60752: ,  //Carolina Satyr
-    // 68264: ,  //Hackberry Emperor
-    // 147931: ,  //Ocola Skipper
-    // 62978: ,  //Silvery Checkerspot
-    // 58586: ,  //Viceroy
-    // 83086: ,  //Zebra Swallowtail
-    // 1038408: ,  //Common Checkered-Skipper
-    // 58475: ,  //Juvenal's Duskywing
-    // 54064: ,  //Eastern Comma
-    // 48548: ,  //Painted Lady
-    // 58561: ,  //American Snout
-    // 198812: ,  //Northern Pearly-eye
-    // 58481: ,  //Least Skipper
-    // 58606: ,  //Common Wood-Nymph
-    // 132227: ,  //Appalachian Brown
-    // 58532: ,  //Orange Sulphur
-    // 223532: ,  //Southern Pearly-eye
-    // 58587: ,  //Tawny Emperor
-    // 58603: ,  //Little Wood Satyr
-    // 56832: ,  //Mourning Cloak
-    // 143140: ,  //Eastern Gemmed-Satyr
+    81727: 3815, //Sleepy Orange
+    68232: 3489, //Palamedes Swallowtail
+    58579: 487, //Question Mark
+    50931: 579, //Gray Hairstreak
+    122281: 575, //Red-banded Hairstreak
+    50071: 17268, //Horace's Duskywing
+    67435: 439, //Long-tailed Skipper
+    82792: 223, //Summer Azure
+    60752: 492, //Carolina Satyr
+    68264: 3533, //Hackberry Emperor
+    147931: 3052, //Ocola Skipper
+    62978: 429, //Silvery Checkerspot
+    58586: 548, //Viceroy
+    83086: 3101, //Zebra Swallowtail
+    1038408: 5557, //Common Checkered-Skipper
+    58475: 565, //Juvenal's Duskywing
+    54064: 5509, //Eastern Comma
+    48548: 2649, //Painted Lady
+    58561: 440, //American Snout
+    198812: 3940, //Northern Pearly-eye
+    58481: 5522, //Least Skipper
+    58606: 459, //Common Wood-Nymph
+    132227: 3240, //Appalachian Brown
+    58532: 3248, //Orange Sulphur
+    223532: 4154, //Southern Pearly-eye
+    58587: 2646, //Tawny Emperor
+    58603: 474, //Little Wood Satyr
+    56832: 3188, //Mourning Cloak
+    143140: 502, //Eastern Gemmed-Satyr
   };
+  // swallowtail butterfly guide
+  // if ([60551, 49972, 58523].includes(taxon_obj.id)){
+  //   return "https://littlewildstreak.com/2015/09/12/distinguishing-swallowtail-butterflies/"
+  // }
   if (taxon_obj.id in bugguide_mapping) {
     return "https://bugguide.net/node/view/" + bugguide_mapping[taxon_obj.id];
   }
