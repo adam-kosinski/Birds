@@ -93,6 +93,7 @@ function getInfoURL(taxon_obj, mode) {
   }
   //Insect orders
   let bugguide_mapping = {
+    // iNaturalist taxon id: bugguide node id
     // insect orders
     47157: 57, //Butterflies and Moths
     47208: 60, //Beetles
@@ -150,6 +151,58 @@ function getInfoURL(taxon_obj, mode) {
     // 102006: 17837,    //Dragonhunter  - wikipedia better
     104585: 4085, //Painted Skimmer
     // 108344: 8933    //Wandering Glider  - wikipedia better
+
+    // butterflies
+    60551: 491, //Eastern Tiger Swallowtail
+    48662: 540, //Monarch
+    81559: 403, //Silver-spotted Skipper
+    60607: 484, //Red-spotted Admiral
+    49972: 412, //Pipevine Swallowtail
+    48505: 516, //Common Buckeye
+    50340: 406, //Fiery Skipper
+    52925: 411, //Pearl Crescent
+    58523: 2636, //Black Swallowtail
+    49150: 567, //Gulf Fritillary
+    48549: 488, //American Lady
+    58525: 2648, //Spicebush Swallowtail
+    68244: 400, //Variegated Fritillary
+    1081329: 450, //Zabulon Skipper
+    48550: 501, //Cloudless Sulphur
+    122381: 464, //Eastern Tailed-Blue
+    49133: 448, //Red Admiral
+    1456562: 4221, //Great Spangled Fritillary
+    142988: 5648, //Clouded Skipper
+    1455248: 9521, //Huron Sachem
+    55626: 3259, //Small White
+    // 81727: ,  //Sleepy Orange
+    // 68232: ,  //Palamedes Swallowtail
+    // 58579: ,  //Question Mark
+    // 50931: ,  //Gray Hairstreak
+    // 122281: ,  //Red-banded Hairstreak
+    // 50071: ,  //Horace's Duskywing
+    // 67435: ,  //Long-tailed Skipper
+    // 82792: ,  //Summer Azure
+    // 60752: ,  //Carolina Satyr
+    // 68264: ,  //Hackberry Emperor
+    // 147931: ,  //Ocola Skipper
+    // 62978: ,  //Silvery Checkerspot
+    // 58586: ,  //Viceroy
+    // 83086: ,  //Zebra Swallowtail
+    // 1038408: ,  //Common Checkered-Skipper
+    // 58475: ,  //Juvenal's Duskywing
+    // 54064: ,  //Eastern Comma
+    // 48548: ,  //Painted Lady
+    // 58561: ,  //American Snout
+    // 198812: ,  //Northern Pearly-eye
+    // 58481: ,  //Least Skipper
+    // 58606: ,  //Common Wood-Nymph
+    // 132227: ,  //Appalachian Brown
+    // 58532: ,  //Orange Sulphur
+    // 223532: ,  //Southern Pearly-eye
+    // 58587: ,  //Tawny Emperor
+    // 58603: ,  //Little Wood Satyr
+    // 56832: ,  //Mourning Cloak
+    // 143140: ,  //Eastern Gemmed-Satyr
   };
   if (taxon_obj.id in bugguide_mapping) {
     return "https://bugguide.net/node/view/" + bugguide_mapping[taxon_obj.id];
@@ -879,6 +932,7 @@ const PRESETS = {
     description: "They're so pretty!",
     photo: "images/preset_butterflies.jpg",
     mode: "visual_id",
+    place_id: 30, // NC
     taxa: [
       60551, //Eastern Tiger Swallowtail
       48662, //Monarch
