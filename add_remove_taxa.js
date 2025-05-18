@@ -42,16 +42,21 @@ async function initListScreen() {
   // check if a lot of list taxa aren't found in this location; give warning if so
   // do this after a delay so that the page will render first
   setTimeout(() => {
-    let nTaxaNotFound = 0;
+    const taxaNotFound = [];
     list_taxa.forEach((obj) => {
-      if (!(obj.id in regionalSpeciesCounts)) nTaxaNotFound++;
+      if (!(roundUpIdToSpecies(obj.id) in regionalSpeciesCounts)) {
+        taxaNotFound.push(obj);
+      }
     });
-    console.log("n taxa not found", nTaxaNotFound);
+    console.log("taxa not found", taxaNotFound);
     const nTaxaThreshold =
       FRAC_TAXA_ABSENT_WARNING_THRESHOLD * list_taxa.length;
-    if (nTaxaNotFound > nTaxaThreshold) {
+    if (taxaNotFound.length > nTaxaThreshold) {
       alert(
-        `${nTaxaNotFound} species weren't found in the chosen location. Make sure that the location reflects the area you wish to study so that common species can be determined correctly.`
+        `${taxaNotFound.length} species weren't found in the chosen location. Make sure that the location reflects the area you wish to study so that common species can be determined correctly.\n\n` +
+          `Not found:\n${taxaNotFound
+            .map((x) => x.preferred_common_name || x.name)
+            .join(", ")}`
       );
     }
   }, 1000);
