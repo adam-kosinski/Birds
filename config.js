@@ -56,7 +56,7 @@ const MAX_GROUP_SIZE = 6;
 const CONFUSION_EMA_FRAC = 0.9;
 const PRED_ACCURACY_TARGET = 0.8; // don't make groups larger if their predicted accuracy is already below this
 const MIN_INAT_CONFUSION_VALUE = 0.05;
-const EXPOSURE_PROFICIENCY_THRESHOLD = 0.2; // after hit this with most common taxon, sort by avg taxon count not just most common taxon count
+const EXPOSURE_PROFICIENCY_THRESHOLD = 0.5; // after hit this with most common taxon, sort key switches avg taxon count not just most common taxon count (avg count will be lower = less priority)
 const ACCURACY_MATTERS_PROFICIENCY_THRESHOLD = 0.5; // after hit this with the median proficiency of a group, start penalizing for low predicted accuracy when sorting
 const MIN_INAT_COUNT = 1; // used when sorting taxon groups, round up any taxa counts to this
 const N_ANSWERS_TO_STORE = 10;
@@ -212,6 +212,8 @@ function getInfoURL(taxon_obj, mode) {
   //   return "https://littlewildstreak.com/2015/09/12/distinguishing-swallowtail-butterflies/"
   //   // or this one? https://usinggeorgianativeplants.blogspot.com/2020/08/confusing-dark-swallowtails.html
   // }
+  // american vs painted lady guide - https://bugguide.net/node/view/236368
+
   if (taxon_obj.id in bugguide_mapping) {
     return "https://bugguide.net/node/view/" + bugguide_mapping[taxon_obj.id];
   }

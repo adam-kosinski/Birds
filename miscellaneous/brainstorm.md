@@ -11,7 +11,9 @@ Things to tune:
 - Confusion values within and between configured groups
 - Sorting score algorithm, and proficiency thresholds
 
-\*Priority: Location thing - species counts only returns species, so might be tricky for genera, families, etc.
+\*Priority: Location-based common species sorting - species counts only returns species, so might be tricky for genera, families, etc.
+Tab complete for guesses. If user doesn't tab complete but there was only one tab completion option, assume that was their guess (don't assume otherwise)
+Put in a check for if the guess doesn't match any of the options, and let the user change their guess before revealing. Also note the autocomplete / dropdown menu for the user
 Allow groups to be configured. Issue - custom groups won't update local storage because no iNaturalist data fetched yet. Fix this by disallowing local storage update if no iNaturalist AND no conf value from a custom grouping
 It's possible for a group to be created with one species it seems (see turtle preset)
 Sidescrolling in location search results list
