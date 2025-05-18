@@ -44,6 +44,7 @@ async function initListScreen() {
   setTimeout(() => {
     const taxaNotFound = [];
     list_taxa.forEach((obj) => {
+      if (obj.rank_level > 10) return; // above species level
       if (!(roundUpIdToSpecies(obj.id) in regionalSpeciesCounts)) {
         taxaNotFound.push(obj);
       }
