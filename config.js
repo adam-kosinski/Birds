@@ -996,6 +996,64 @@ const PRESETS = {
       143140, //Eastern Gemmed-Satyr
     ],
   },
+  "Common Moths of NC": {
+    description: "This group of fascinating fuzzy flappers is sure to be fun!",
+    photo: "images/preset_moths.jpg",
+    mode: "visual_id",
+    place_id: 30, // NC
+    taxa: [
+      47916, //North American Luna Moth
+      211100, //Eastern Tent Caterpillar Moth
+      116681, //Ailanthus Webworm Moth
+      47919, //Polyphemus Moth
+      83090, //Tulip-tree Beauty
+      120217, //Banded Tussock Moth
+      81590, //Imperial Moth
+      127133, //Fall Webworm Moth
+      81665, //White-marked Tussock Moth
+      48094, //Rosy Maple Moth
+      59675, //Isabella Tiger Moth
+      63028, //Giant Leopard Moth
+      358549, //Snowberry Clearwing
+      145659, //American Dagger
+      118513, //Green Cloverworm Moth
+      61505, //Carolina Sphinx
+      53577, //Tulip-tree Silkmoth
+      205197, //Curved-toothed Geometer Moth
+      82204, //White-dotted Prominent
+      52902, //Faint-spotted Palthis Moth
+      81663, //Forest Tent Caterpillar Moth
+      143615, //Celery Leaftier Moth
+      143005, //Bent-lined Carpet
+      143518, //Large Maple Spanworm Moth
+      60839, //Virginian Tiger Moth
+      118503, //Virginia Creeper Sphinx
+      81680, //Large Lace-border Moth
+      736797, //Lesser Maple Spanworm Moth
+      52904, //Elegant Grass-veneer
+      82379, //Hummingbird Clearwing
+      143181, //Black-bordered Lemon Moth
+      127460, //Common Idia Moth
+      47914, //Pandorus Sphinx
+      122228, //Saddleback Caterpillar Moth
+      118927, //Clemens' Grass Tubeworm Moth
+      82201, //Baltimore Snout
+      143119, //Wedgling Moth
+      82279, //Io Moth
+      343393, //Yellow-fringed Dolichomia Moth
+      84333, //Beautiful Wood-nymph
+      60754, //Orange-patched Smoky Moth
+      81586, //Regal Moth
+      119953, //Painted Lichen Moth
+      69737, //Tersa Sphinx
+      118531, //Maple Looper Moth
+      126397, //Sycamore Tussock Moth
+      61240, //Agreeable Tiger Moth
+      205233, //Bent-line Gray
+      143105, //Common Tan Wave
+      228593, //Hebrew Moth
+    ],
+  },
   "Fish Families of the Great Barrier Reef": {
     description:
       "Sploosh. I sense something fishy... <a class='default-link-style' target='_blank' href='https://fishesofaustralia.net.au/key/family'>Here</a> is a key to help you out.",
