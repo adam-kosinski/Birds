@@ -12,12 +12,17 @@ Things to tune:
 - Sorting score algorithm, and proficiency thresholds
 
 \*Priority: Location-based common species sorting - species counts only returns species, so might be tricky for genera, families, etc.
-Tab complete for guesses. If user doesn't tab complete but there was only one tab completion option, assume that was their guess (don't assume otherwise)
-Put in a check for if the guess doesn't match any of the options, and let the user change their guess before revealing. Also note the autocomplete / dropdown menu for the user
+
+Teaching page, where it shows you several examples of each taxon next to each other? Have info links for each taxon on that page. Number of examples could be adjusted based on number of taxa. If 2 taxa, show 2-3 examples each. If 4 taxa, maybe 2 examples each. More than that, just do 1 example each.
+
 Allow groups to be configured. Issue - custom groups won't update local storage because no iNaturalist data fetched yet. Fix this by disallowing local storage update if no iNaturalist AND no conf value from a custom grouping
-It's possible for a group to be created with one species it seems (see turtle preset)
+
+It's possible for a group to be created with one species it seems (see turtle preset). I believe only one such group can be created, otherwise they would be merged. Could add it to the group with extra space containing the most similar taxon, but what if all groups are full? Probably the best thing to do is just add it to the group containing its most similar taxon. This might result in one group being over the limit, but maybe that's okay.
+
 Sidescrolling in location search results list
+
 Chipmunk intruder
+
 Warbler field marks game!
 
 ---

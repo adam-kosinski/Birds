@@ -717,15 +717,29 @@ function nextObservation() {
   setGameState(GUESSING);
 }
 
+function getRemainingGuessOptions() {
+  const inputText = document.getElementById("guess-input").value;
+  const datalist = document.getElementById("guess-datalist");
+  const options = Array.from(datalist.options).map((opt) => opt.value);
+  return options.filter((opt) =>
+    opt.toLowerCase().includes(inputText.toLowerCase())
+  );
+}
+
 function checkAnswer() {
-  let guess_input = document.getElementById("guess-input");
-  guess_input.readOnly = true;
-  guess_input.blur();
+  const guess_input = document.getElementById("guess-input");
   let guess = guess_input.value;
+
+  // if only one possible option matches the guess, assume the user meant to type that one
+  const optionMatches = getRemainingGuessOptions();
+  if (optionMatches.length === 1) {
+    guess = optionMatches[0];
+    guess_input.value = guess;
+  }
 
   //find taxon object that matches the guess, if it exists
   //concat with the squirrel taxon to check for correctness of squirrel intruder
-  let guess_obj = list_taxa
+  const guess_obj = list_taxa
     .concat([squirrel_taxon_obj])
     .find(
       (obj) =>
@@ -734,7 +748,19 @@ function checkAnswer() {
           guess.toLowerCase() === obj.preferred_common_name.toLowerCase())
     );
 
-  let correct = Boolean(
+  // if no valid taxon matches the guess, warn the user and don't count it against them
+  if (!guess_obj && guess !== "") {
+    alert(
+      "Your guess doesn't match a possible option, please check your spelling and submit again. Note that there is a dropdown list attached to the guess input box of all the possible options given what you've typed already."
+    );
+    return;
+  }
+
+  // at this point, the user's guess is final, disable the input and check the answer
+  guess_input.readOnly = true;
+  guess_input.blur();
+
+  const correct = Boolean(
     guess_obj &&
       (current.taxon.id === guess_obj.id ||
         current.taxon.ancestor_ids.includes(guess_obj.id))

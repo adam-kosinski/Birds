@@ -181,6 +181,16 @@ document.addEventListener("keypress", (e) => {
   }
 });
 
+document.addEventListener("keydown", (e) => {
+  // guess input tab completion
+  const guessInput = document.getElementById("guess-input");
+  if (e.key === "Tab" && document.activeElement === guessInput) {
+    e.preventDefault();
+    const options = getRemainingGuessOptions();
+    if (options.length > 0) guessInput.value = options[0];
+  }
+});
+
 //check answer
 document.getElementById("guess-button").addEventListener("click", checkAnswer);
 document.getElementById("skip-button").addEventListener("click", (e) => {
