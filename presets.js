@@ -20,9 +20,10 @@ function initPresets() {
     link.textContent = "Select";
     let params = new URLSearchParams();
     if (obj.place_id) params.append("place_id", obj.place_id);
-    if (obj.taxa.length > 0) params.append("taxa", obj.taxa.join(","));
+    if (obj.taxa.length > 0) params.append("taxa", obj.taxa.flat().join(",")); // if custom groups, taxa won't be flat already
     if (obj.mode) params.append("mode", obj.mode);
     if (obj.data_source) params.append("data_source", obj.data_source);
+    if (obj.custom_groups) params.append("custom_groups", name);
     link.href = "game.html?" + params.toString();
 
     title.append(img, preset_name, link);

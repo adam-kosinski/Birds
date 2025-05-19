@@ -52,6 +52,7 @@ const SPECTROGRAM_SEC_PER_IMAGE = 60;
 const SPECTROGRAM_IMAGE_FETCH_BUFFER_SEC = 15;
 
 // progress, recommendation, and grouping config
+
 const MAX_GROUP_SIZE = 6;
 const CONFUSION_EMA_FRAC = 0.9;
 const PRED_ACCURACY_TARGET = 0.8; // don't make groups larger if their predicted accuracy is already below this
@@ -59,6 +60,10 @@ const MIN_INAT_CONFUSION_VALUE = 0.05;
 const EXPOSURE_PROFICIENCY_THRESHOLD = 0.5; // after hit this with most common taxon, sort key switches avg taxon count not just most common taxon count (avg count will be lower = less priority)
 const ACCURACY_MATTERS_PROFICIENCY_THRESHOLD = 0.5; // after hit this with the median proficiency of a group, start penalizing for low predicted accuracy when sorting
 const MIN_INAT_COUNT = 1; // used when sorting taxon groups, round up any taxa counts to this
+const DEFAULT_CONF = 0.25;
+const WITHIN_GROUP_DEFAULT_CONF = 0.3;
+const BETWEEN_GROUPS_DEFAULT_CONF = 0.1;
+
 const N_ANSWERS_TO_STORE = 10;
 // we store recent proficiency in local storage (if setting checked), this is how far back to remember
 // - affects stability of proficiency measurement
@@ -353,57 +358,68 @@ const PRESETS = {
     mode: "birdsong",
     data_source: "ebird_calls",
     photo: "images/preset_backyard_calls.jpg",
+    custom_groups: true,
     taxa: [
-      // scolding / raspy
-      144814, //Carolina Chickadee
-      13632, //Tufted Titmouse
-      7513, //Carolina Wren
-
-      // squirrel-like
-      14886, //Northern Mockingbird
-      14995, //Gray Catbird
-      9602, //Common Grackle
-      9744, //Red-winged Blackbird
-      19893, //Barred Owl
-
-      // "weeps" and barks
-      12727, //American Robin
-      9100, //Song Sparrow
-      18205, //Red-bellied Woodpecker
-      18236, //Northern Flicker
-
-      // clean chip calls
-      9083, //Northern Cardinal
-      10227, //Indigo Bunting
-      9135, //Chipping Sparrow
-      17008, //Eastern Phoebe
-      10094, //Dark-eyed Junco
-      9184, //White-throated Sparrow
-      145244, //Pine Warbler
-
-      // raspier chip calls
-      145245, //Yellow-rumped Warbler
-      1289388, //Ruby-crowned Kinglet
-      14898, //Brown Thrasher
-
-      792988, //Downy Woodpecker
-
-      // harsh / nasaly
-      8021, //American Crow
-      8229, //Blue Jay
-      14801, //White-breasted Nuthatch
-
-      // squeaky or finchy
-      9424, //Eastern Towhee
-      199840, //House Finch
-      145310, //American Goldfinch
-      14825, //Brown-headed Nuthatch
-
-      // chirps and wildness
-      13858, //House Sparrow
-      14850, //European Starling
-
-      12942, //Eastern Bluebird
+      [
+        // scolding / raspy
+        144814, //Carolina Chickadee
+        13632, //Tufted Titmouse
+        7513, //Carolina Wren
+      ],
+      [
+        // squirrel-like
+        14886, //Northern Mockingbird
+        14995, //Gray Catbird
+        9602, //Common Grackle
+        9744, //Red-winged Blackbird
+        19893, //Barred Owl
+      ],
+      [
+        // "weeps" and barks
+        12727, //American Robin
+        9100, //Song Sparrow
+        18205, //Red-bellied Woodpecker
+        18236, //Northern Flicker
+      ],
+      [
+        // clean chip calls
+        9083, //Northern Cardinal
+        10227, //Indigo Bunting
+        9135, //Chipping Sparrow
+        17008, //Eastern Phoebe
+        10094, //Dark-eyed Junco
+        9184, //White-throated Sparrow
+        145244, //Pine Warbler
+      ],
+      [
+        // raspier chip calls
+        145245, //Yellow-rumped Warbler
+        1289388, //Ruby-crowned Kinglet
+        14898, //Brown Thrasher
+      ],
+      [
+        // harsh / nasaly
+        8021, //American Crow
+        8229, //Blue Jay
+        14801, //White-breasted Nuthatch
+      ],
+      [
+        // squeaky or finchy
+        9424, //Eastern Towhee
+        199840, //House Finch
+        145310, //American Goldfinch
+        14825, //Brown-headed Nuthatch
+      ],
+      [
+        // chirps and wildness
+        13858, //House Sparrow
+        14850, //European Starling
+      ],
+      [
+        // miscellaneous
+        12942, //Eastern Bluebird
+        792988, //Downy Woodpecker
+      ],
     ],
   },
 

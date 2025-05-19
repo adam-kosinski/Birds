@@ -20,6 +20,8 @@ setGameState(INACTIVE);
 
 let mode = "birdsong"; // or "visual_id"
 let data_source = "iNaturalist"; // default "iNaturalist" (see initListScreen()), other options: "ebird_calls"
+let place_id = undefined;
+let custom_groups_key = undefined; // use iNaturalist similar species as default if undefined - see defaultConf() in recommended_groups.js
 
 let funny_bird_timeout_id;
 

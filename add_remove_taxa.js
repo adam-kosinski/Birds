@@ -1,7 +1,6 @@
 let initializationComplete = false;
 let list_taxa = []; //list of iNaturalist taxon objects that are on the practice list
 let taxa_to_use = []; //subset of list_taxa being used this game, initialized at game init based on the selected birds
-let place_id;
 let similarSpeciesData = { birdsong: {}, visual_id: {} };
 // gets fetched from firebase once, when addBirds() is called for the first time (on page load)
 // will load both sounds and photos so that it's easier for switching modes
@@ -17,6 +16,7 @@ async function initListScreen() {
   let data_source_setting =
     url.searchParams.get("data_source") || "iNaturalist";
   place_id = url.searchParams.get("place_id");
+  custom_groups_key = url.searchParams.get("custom_groups") || undefined;
 
   // It helps to set data source before adding birds because the proficiency
   // values use a different key for different data sources.
@@ -113,6 +113,9 @@ function getSpeciesParent(taxonObj) {
 }
 
 async function getMissingSimilarSpeciesData(taxonIdSubset = undefined) {
+  // if using custom groups, similar species data isn't necessary, skip this
+  if (custom_groups_key) return;
+
   // do it for both modes, but prioritize the current mode
   // this helps make sure it's still happening even if the mode is switched back and forth, without happening multiple times
   // having extra data is okay, and the fetch rate adapts to whether a game is going on
@@ -218,7 +221,10 @@ async function addBirds(taxa_id_list) {
   }
 
   // also fetch similar species data from firebase
-  promises.push(getSimilarSpeciesDataFromFirebase(ids_to_fetch));
+  // if we are using custom groups, this isn't necessary, so skip it
+  if (!custom_groups_key) {
+    promises.push(getSimilarSpeciesDataFromFirebase(ids_to_fetch));
+  }
 
   await Promise.all(promises);
 

@@ -19,7 +19,23 @@
 function defaultConf(correctTaxonId, otherTaxonId) {
   // returns [numerator, denominator] for default confusion values, should add to 1
 
-  // TODO use configuration (e.g. for bird calls, doesn't align w iNat confusion)
+  // if custom grouping was specified, use that to determine confusion instead of iNaturalist confusion
+  if (custom_groups_key) {
+    const groups = PRESETS[custom_groups_key].taxa;
+    for (const g of groups) {
+      if (g.includes(correctTaxonId)) {
+        if (g.includes(otherTaxonId)) {
+          // in same group
+          return confToNumDenom(WITHIN_GROUP_DEFAULT_CONF);
+        } else {
+          // in different groups
+          return confToNumDenom(BETWEEN_GROUPS_DEFAULT_CONF);
+        }
+      }
+    }
+    // correctTaxonId not found in a predefined group, so certainly not in the same group
+    return confToNumDenom(BETWEEN_GROUPS_DEFAULT_CONF);
+  }
 
   // try iNaturalist data
   let iNatConf = iNaturalistConf(correctTaxonId, otherTaxonId);
@@ -28,23 +44,27 @@ function defaultConf(correctTaxonId, otherTaxonId) {
     iNatConf = iNaturalistConf(otherTaxonId, correctTaxonId);
   }
   if (iNatConf !== undefined) {
-    // threshold the ratio - only makes sense to be between 0 and 1
-    iNatConf = Math.min(1, iNatConf);
-    // get num and denom from the ratio
-    // 1-x / x = ratio r
-    // 1-x = xr
-    // 1 = (1+r)x
-    // 1/(1+r) = x
-    const denom = 1 / (1 + iNatConf);
-    const num = 1 - denom;
-    return [num, denom];
+    return confToNumDenom(iNatConf);
   }
 
   // for taxa without data, assume we won't confuse them that much so that it doesn't mess with
   // the groupings of taxa for which we do have data, but still leave room for confusion,
   // since that's realistic and also we want all pairings to be considered for a taxon group,
   // which won't happen if we assume not confused at all
-  return [0.2, 0.8];
+  return confToNumDenom(DEFAULT_CONF);
+}
+
+function confToNumDenom(confRatio) {
+  // threshold the ratio - only makes sense to be between 0 and 1
+  confRatio = Math.min(1, confRatio);
+  // get num and denom from the ratio
+  // 1-x / x = ratio r
+  // 1-x = xr
+  // 1 = (1+r)x
+  // 1/(1+r) = x
+  const denom = 1 / (1 + confRatio);
+  const num = 1 - denom;
+  return [num, denom];
 }
 
 function roundUpIdToSpecies(taxonId) {
