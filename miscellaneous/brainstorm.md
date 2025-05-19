@@ -1,8 +1,5 @@
 TODO
 
-Priority: Location-based common species sorting - species counts only returns species, so might be tricky for genera, families, etc.
-Also note that the not-found-in-region alert is ignoring rank levels higher than species right now.
-
 IP location doesn't work when using the make your own list page
 
 Allow groups to be configured. Issue - custom groups won't update local storage because no iNaturalist data fetched yet. Fix this by disallowing local storage update if no iNaturalist AND no conf value from a custom grouping

@@ -48,7 +48,11 @@ async function initListScreen() {
   setTimeout(() => {
     const taxaNotFound = [];
     list_taxa.forEach((obj) => {
-      if (obj.rank_level > 10) return; // above species level
+      // if above species level, it could exist but just not be very common
+      // (regional counts are best-effort, not guaranteed), so don't alert the user
+      // since it could be a false alert
+      if (obj.rank_level > 10) return;
+
       if (!(roundUpIdToSpecies(obj.id) in regionalSpeciesCounts)) {
         taxaNotFound.push(obj);
       }
