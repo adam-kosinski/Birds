@@ -177,7 +177,7 @@ function getInfoURL(taxon_obj, mode) {
     142988: 5648, //Clouded Skipper
     1455248: 9521, //Huron Sachem
     55626: 3259, //Small White
-    81727: 3815, //Sleepy Orange
+    67439: 3815, //Sleepy Orange
     68232: 3489, //Palamedes Swallowtail
     58579: 487, //Question Mark
     50931: 579, //Gray Hairstreak
@@ -965,7 +965,7 @@ const PRESETS = {
       142988, //Clouded Skipper
       1455248, //Huron Sachem
       55626, //Small White
-      81727, //Sleepy Orange
+      67439, //Sleepy Orange
       68232, //Palamedes Swallowtail
       58579, //Question Mark
       50931, //Gray Hairstreak
