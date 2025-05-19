@@ -329,12 +329,14 @@ async function initGame() {
   }
 }
 
-function searchAncestorsForTaxonId(obj) {
+function searchAncestorsForTaxonInList(obj) {
   //since observations can come from children of a taxon, try each ancestry level one by one, starting w most specific
-  let ancestor_ids = obj.taxon.ancestor_ids.slice();
+  const ancestor_ids = obj.taxon.ancestor_ids.slice();
+  const taxonIds = list_taxa.map((obj) => obj.id);
+  console.log(taxonIds);
   while (ancestor_ids.length > 0) {
     let id = ancestor_ids.pop(); //end of list is most specific taxon, starting with observation's taxon id
-    if (taxon_obs.hasOwnProperty(id)) {
+    if (taxonIds.includes(id)) {
       return id;
     }
   }
@@ -444,7 +446,7 @@ async function fetchObservationData(
       continue;
     }
 
-    const id = searchAncestorsForTaxonId(obj);
+    const id = searchAncestorsForTaxonInList(obj);
 
     // don't add too many popular observations, when fetching only popular observations
     if (args.includes("popular=true")) {
@@ -573,7 +575,7 @@ function nextObservation() {
   next = pickObservation();
   console.log("current", current);
 
-  let taxon_id = searchAncestorsForTaxonId(current);
+  let taxon_id = searchAncestorsForTaxonInList(current);
   let taxon_obj = taxa_to_use.find((obj) => obj.id === taxon_id);
   if (current.is_squirrel_intruder) {
     taxon_obj = squirrel_taxon_obj;
@@ -771,7 +773,7 @@ function checkAnswer() {
   //update taxon picking probabilities and user data (if storing)
   //don't do anything if squirrel intruder, those are jokes
   if (!current.is_squirrel_intruder) {
-    const correctId = searchAncestorsForTaxonId(current);
+    const correctId = searchAncestorsForTaxonInList(current);
     const idsInPlay = Object.keys(taxon_queues).map((x) => Number(x));
 
     if (correct) {

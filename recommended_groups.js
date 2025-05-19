@@ -234,6 +234,7 @@ function makeTaxonGroups() {
   sortGroups(groups, adjList); // sorts in place
 
   // print out groups
+  console.groupCollapsed("Predicted Group Accuracies");
   for (const g of groups) {
     const groupNames = g.map(
       (id) => list_taxa.find((obj) => obj.id === id).preferred_common_name
@@ -241,6 +242,7 @@ function makeTaxonGroups() {
     const predAcc = predictedAccuracy(g, adjList);
     console.log(`pred acc ${predAcc.toFixed(2)} ${groupNames.join(",")}`);
   }
+  console.groupEnd();
 
   displayGroups(groups);
 

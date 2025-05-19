@@ -30,6 +30,10 @@ async function initListScreen() {
   }
   console.log("Taxa loaded");
 
+  // print human-readable species counts, useful for debugging sorting and it's just interesting
+  // list_taxa is initialized by now so can use it
+  printHumanReadableTaxonCounts();
+
   if (default_mode) setMode(default_mode);
   setDataSource(data_source_setting);
 
@@ -64,6 +68,23 @@ async function initListScreen() {
 
   stopListLoader();
   initializationComplete = true;
+}
+
+function printHumanReadableTaxonCounts() {
+  console.groupCollapsed("Taxa Counts");
+  const countInfo = list_taxa.map((taxon) => {
+    const count = regionalSpeciesCounts[taxon.id] || 0;
+    return {
+      count: count,
+      tabs: count < 1000 ? "\t\t" : "\t",
+      name: taxon.preferred_common_name || taxon.name,
+    };
+  });
+  countInfo.sort((a, b) => b.count - a.count);
+  console.log(
+    countInfo.map((obj) => `${obj.count}${obj.tabs}${obj.name}`).join("\n")
+  );
+  console.groupEnd();
 }
 
 function getSpeciesParent(taxonObj) {

@@ -76,9 +76,12 @@ async function updateRegionalCounts(
   }
 
   // regional species counts
+  // Get most common species, store counts for individual species but also for genera, family, etc.
+  // by summing individual species counts who share a genus, family, etc.
+  // This way we are maximally flexible - e.g. suppose the user had "coneflowers" as a taxon but
+  // then decided to also add "cutleaf coneflower" to the taxa list
 
   regionalSpeciesCounts = {};
-  const readableCounts = new Map();
 
   if (lat && lng) {
     const res = await fetch(
@@ -88,12 +91,14 @@ async function updateRegionalCounts(
     );
     const data = await res.json();
     data.results.forEach((obj) => {
-      regionalSpeciesCounts[obj.taxon.id] = obj.count;
-      readableCounts.set(obj.taxon.preferred_common_name, obj.count);
+      // iterate through ancestors, adding this species' count to each taxon level
+      // note that obj.taxon.ancestor_ids includes the species id
+      for (const id of obj.taxon.ancestor_ids) {
+        if (!(id in regionalSpeciesCounts)) regionalSpeciesCounts[id] = 0;
+        regionalSpeciesCounts[id] += obj.count;
+      }
     });
   }
-
-  console.log("counts", readableCounts);
 
   console.log("Regional species counts loaded");
 }
