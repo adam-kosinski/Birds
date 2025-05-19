@@ -18,6 +18,12 @@ async function initListScreen() {
     url.searchParams.get("data_source") || "iNaturalist";
   place_id = url.searchParams.get("place_id");
 
+  // It helps to set data source before adding birds because the proficiency
+  // values use a different key for different data sources.
+  // Technically we could do it later, but before setting the mode, since setMode()
+  // will override the proficiency displays
+  setDataSource(data_source_setting);
+
   // fill in taxa
   let taxonIds = [];
   if (taxonIdsString === null) {
@@ -34,8 +40,8 @@ async function initListScreen() {
   // list_taxa is initialized by now so can use it
   printHumanReadableTaxonCounts();
 
+  // need to set mode after adding birds because it targets / modifies bird list tems
   if (default_mode) setMode(default_mode);
-  setDataSource(data_source_setting);
 
   makeTaxonGroups();
 
