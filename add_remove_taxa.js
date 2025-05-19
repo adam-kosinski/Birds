@@ -63,7 +63,7 @@ async function initListScreen() {
         taxaNotFound.push(obj);
       }
     });
-    console.log("taxa not found", taxaNotFound);
+    console.log("taxa not found in region of study", taxaNotFound);
     const nTaxaThreshold =
       FRAC_TAXA_ABSENT_WARNING_THRESHOLD * list_taxa.length;
     if (taxaNotFound.length > nTaxaThreshold) {
@@ -121,18 +121,17 @@ async function getMissingSimilarSpeciesData(taxonIdSubset = undefined) {
 
   for (const m of modeList) {
     // determine which taxa we don't have similar species data for already
-    // note that subspecies use their parent species' data
+    // note that subspecies use their parent species' data, but in firebase
+    // the object key is the subspecies taxon id
 
     const idsWithoutData = [];
     for (const obj of list_taxa) {
       // if rank is too high, this data doesn't exist, don't try to fetch it
       if (obj.rank_level > 20) continue;
 
-      const idInData = obj.rank_level < 10 ? getSpeciesParent(obj).id : obj.id;
-      const noData = !(String(idInData) in similarSpeciesData[m]);
+      const noData = !(String(obj.id) in similarSpeciesData[m]);
       const inSubset =
         taxonIdSubset === undefined || taxonIdSubset.includes(obj.id);
-      // console.log(obj.id, idInData, noData, inSubset);
 
       if (noData && inSubset) {
         idsWithoutData.push(obj.id);

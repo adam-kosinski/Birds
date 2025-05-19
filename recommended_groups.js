@@ -484,7 +484,10 @@ async function updateFirebaseSimilarSpecies(taxonIds, sounds) {
     );
 
     const data = {};
-    data[taxonObj.id] = {
+    // Store the data with the original taxon id as the key (could be id of a subspecies).
+    // This makes it easier to fetch data from firebase before we've loaded taxon
+    // data, since we don't need to know the species-level parent of a subspecies
+    data[taxonId] = {
       preferred_common_name: taxonObj.preferred_common_name || taxonObj.name,
       observations_count: taxonObj.observations_count,
       similar_species: similarSpecies,
