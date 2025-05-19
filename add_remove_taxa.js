@@ -19,15 +19,15 @@ async function initListScreen() {
   place_id = url.searchParams.get("place_id");
 
   // fill in taxa
+  let taxonIds = [];
   if (taxonIdsString === null) {
-    //if no taxa, display message
-    document.getElementById("bird-list-message").style.display = "block";
+    document.getElementById("list-empty-message").style.display = "block";
   } else {
-    const taxonIds = taxonIdsString.split(",").map((s) => Number(s));
-    const addBirdsPromise = addBirds(taxonIds, false);
-    const locationPromise = initRegionalCounts(taxonIds);
-    await Promise.all([addBirdsPromise, locationPromise]);
+    taxonIds = taxonIdsString.split(",").map((s) => Number(s));
   }
+  const addBirdsPromise = addBirds(taxonIds, false);
+  const locationPromise = initRegionalCounts(taxonIds);
+  await Promise.all([addBirdsPromise, locationPromise]);
   console.log("Taxa loaded");
 
   // print human-readable species counts, useful for debugging sorting and it's just interesting
@@ -314,7 +314,7 @@ async function addBirds(taxa_id_list) {
 
   //update count
   document.getElementById("n-species-display").textContent = list_taxa.length;
-  document.getElementById("bird-list-message").style.display = "none";
+  document.getElementById("list-empty-message").style.display = "none";
 
   //if birds are added after initialization, update groups and missing similar species data
   if (initializationComplete) {
@@ -353,7 +353,7 @@ function removeBird(taxon_id) {
   if (list_taxa.length === 0) {
     //clear search params
     setURLParam("taxa", "");
-    document.getElementById("bird-list-message").style.display = "block";
+    document.getElementById("list-empty-message").style.display = "block";
   } else {
     setURLParam("taxa", list_taxa.map((obj) => obj.id).join(","));
   }
