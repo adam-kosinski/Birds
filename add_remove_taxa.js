@@ -2,7 +2,7 @@ let initializationComplete = false;
 let list_taxa = []; //list of iNaturalist taxon objects that are on the practice list
 let taxa_to_use = []; //subset of list_taxa being used this game, initialized at game init based on the selected birds
 let place_id;
-let similarSpeciesData;
+let similarSpeciesData = { birdsong: {}, visual_id: {} };
 // gets fetched from firebase once, when addBirds() is called for the first time (on page load)
 // will load both sounds and photos so that it's easier for switching modes
 // format: {birdsong: {taxonId1: {...}, taxonId2: {...}, ...}, visual_id: {...}}
@@ -81,22 +81,8 @@ function getSpeciesParent(taxonObj) {
   throw new Error("Couldn't find a species level parent");
 }
 
-async function loadSimilarSpeciesData() {
-  similarSpeciesData = {};
-  const promiseSounds = firebaseGetSimilarSpeciesData(true).then(
-    (data) => (similarSpeciesData["birdsong"] = data)
-  );
-  const promisePhotos = firebaseGetSimilarSpeciesData(false).then(
-    (data) => (similarSpeciesData["visual_id"] = data)
-  );
-  await Promise.all([promiseSounds, promisePhotos]);
-  console.log("Similar species data loaded");
-
-  return;
-}
-
 async function getMissingSimilarSpeciesData(taxonIdSubset = undefined) {
-  // do it for both modes,, but prioritize the current mode
+  // do it for both modes, but prioritize the current mode
   // this helps make sure it's still happening even if the mode is switched back and forth, without happening multiple times
   // having extra data is okay, and the fetch rate adapts to whether a game is going on
   const modeList =
@@ -201,10 +187,8 @@ async function addBirds(taxa_id_list) {
     );
   }
 
-  // also fetch similar species data at the same time if we haven't yet
-  if (!similarSpeciesData) {
-    promises.push(loadSimilarSpeciesData());
-  }
+  // also fetch similar species data from firebase
+  promises.push(getSimilarSpeciesDataFromFirebase(ids_to_fetch));
 
   await Promise.all(promises);
 
@@ -310,7 +294,7 @@ async function addBirds(taxa_id_list) {
   //if birds are added after initialization, update groups and missing similar species data
   if (initializationComplete) {
     makeTaxonGroups();
-    getMissingSimilarSpeciesData(taxa_id_list);
+    getMissingSimilarSpeciesData(ids_to_fetch);
   }
 
   // if just added a bird manually (proxy this with if only added one), highlight it

@@ -1,5 +1,26 @@
 TODO
 
+Actual priority: rework firebase so that the similar species data fetch doesn't read so many documents. This is already starting to approach my free usage quota.
+
+Priority: Location-based common species sorting - species counts only returns species, so might be tricky for genera, families, etc.
+Also note that the not-found-in-region alert is ignoring rank levels higher than species right now.
+
+Allow groups to be configured. Issue - custom groups won't update local storage because no iNaturalist data fetched yet. Fix this by disallowing local storage update if no iNaturalist AND no conf value from a custom grouping
+
+Teaching page, where it shows you several examples of each taxon next to each other? Have info links for each taxon on that page. Number of examples could be adjusted based on number of taxa. If 2 taxa, show 2-3 examples each. If 4 taxa, maybe 2 examples each. More than that, just do 1 example each.
+
+It's possible for a group to be created with one species it seems (see common warblers visual ID). I believe only one such group can be created, otherwise they would be merged. Could add it to the group with extra space containing the most similar taxon, but what if all groups are full? Probably the best thing to do is just add it to the group containing its most similar taxon. This might result in one group being over the limit, but maybe that's okay.
+
+Sidescrolling in location search results list
+
+Region of study radius may need to vary? For instance, turtles of NC with the sea turtles.
+
+Convert Sophie's warbler calls into all warbler calls?
+
+Chipmunk intruder
+
+Warbler field marks game!
+
 Things to tune:
 
 - EMA parameter
@@ -10,25 +31,6 @@ Things to tune:
 - Predicted accuracy threshold for limiting group size
 - Confusion values within and between configured groups
 - Sorting score algorithm, and proficiency thresholds
-
-\*Priority: Location-based common species sorting - species counts only returns species, so might be tricky for genera, families, etc.
-Also note that the not-found-in-region alert is ignoring rank levels higher than species right now.
-
-Region of study radius may need to vary? For instance, turtles of NC with the sea turtles.
-
-Teaching page, where it shows you several examples of each taxon next to each other? Have info links for each taxon on that page. Number of examples could be adjusted based on number of taxa. If 2 taxa, show 2-3 examples each. If 4 taxa, maybe 2 examples each. More than that, just do 1 example each.
-
-Allow groups to be configured. Issue - custom groups won't update local storage because no iNaturalist data fetched yet. Fix this by disallowing local storage update if no iNaturalist AND no conf value from a custom grouping
-
-It's possible for a group to be created with one species it seems (see common warblers visual ID). I believe only one such group can be created, otherwise they would be merged. Could add it to the group with extra space containing the most similar taxon, but what if all groups are full? Probably the best thing to do is just add it to the group containing its most similar taxon. This might result in one group being over the limit, but maybe that's okay.
-
-Sidescrolling in location search results list
-
-Convert Sophie's warbler calls into all warbler calls?
-
-Chipmunk intruder
-
-Warbler field marks game!
 
 ---
 

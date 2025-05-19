@@ -70,58 +70,38 @@ function firebaseDeleteSimilarSpecies(sounds) {
   }
 }
 
-async function firebaseGetSimilarSpeciesData(sounds) {
-  // get all data, it's much faster than one at a time or filtering and doesn't use much bandwidth
-  const snapshot = await db
-    .collection(`similar-species-${sounds ? "sounds" : "photos"}`)
-    .get();
+async function getSimilarSpeciesDataFromFirebase(taxonIds) {
+  // each query can only get 10 documents at a time, so split up id list into chunks
+  taxonIds = taxonIds.map((id) => String(id));
+  const chunks = [];
+  for (let i = 0; i < taxonIds.length; i += 10) {
+    chunks.push(taxonIds.slice(i, i + 10));
+  }
+  // console.log("getting similar species data from firebase", taxonIds);
 
-  const data = {};
-  snapshot.forEach((doc) => {
-    data[doc.id] = doc.data();
+  const soundPromises = chunks.map((chunk) => {
+    return db
+      .collection("similar-species-sounds")
+      .where(firebase.firestore.FieldPath.documentId(), "in", chunk)
+      .get()
+      .then((snapshot) => {
+        snapshot.docs.forEach(
+          (doc) => (similarSpeciesData.birdsong[doc.id] = doc.data())
+        );
+      });
   });
-  return data;
+
+  const photoPromises = chunks.map((chunk) => {
+    return db
+      .collection("similar-species-photos")
+      .where(firebase.firestore.FieldPath.documentId(), "in", chunk)
+      .get()
+      .then((snapshot) =>
+        snapshot.docs.forEach(
+          (doc) => (similarSpeciesData.visual_id[doc.id] = doc.data())
+        )
+      );
+  });
+
+  await Promise.all(soundPromises.concat(photoPromises));
 }
-
-// Old idea: optimize firebase writes by updating in bulk instead of after every game question
-// We'd want to update when the game ended, or when the user left the page
-
-// to send a request when closing the page, we need to use navigator.sendBeacon()
-// but we need to know what HTTP request to send - firebase has an API
-
-// here is a GET
-// await (await fetch("https://firestore.googleapis.com/v1beta1/projects/birds-bbabb/databases/(default)/documents/bad-observations-birdsong/9083?key=AIzaSyDZT6ZnYnrOvWjN3__u2vz7M3gmFS8hX2A")).json()
-
-// how to do this (see webpages and below code):
-// https://firebase.google.com/docs/firestore/reference/rest/v1beta1/projects.databases.documents/batchWrite
-// https://firebase.google.com/docs/firestore/reference/rest/v1beta1/Write#FieldTransform
-// problem though... the REST API needs an access token from OAuth, unlike using the namespaced API
-/*
-
-function addBadIds(bad_ids_to_add, mode) {
-    // appends iNaturalist ids of bad observations to firebase
-    // bad_ids_to_add is an object, key is taxon id, value is array of iNaturalist observation ids
-    const writes = [];
-    for(const [taxon_id, ids] of Object.entries(bad_ids_to_add)){
-        writes.push(makeBadIdWriteObject(taxon_id, mode, ids))
-    }
-    const post_data = JSON.stringify({"writes": writes});
-    console.log(post_data)
-    // TODO set appropriate headers
-}
-
-function makeBadIdWriteObject(taxon_id, mode, ids) {
-    return {
-        "transform": {
-            "document": `projects/birds-bbabb/databases/(default)/documents/bad-observations-${mode}/${taxon_id}`,
-            "fieldTransforms": [{
-                "fieldPath": "ids",
-                "appendMissingElements": {
-                    "values": ids.map(id => { return { "integerValue": id } })
-                }
-            }]
-        }
-    }
-}
-
-*/
