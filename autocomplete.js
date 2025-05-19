@@ -72,14 +72,14 @@ function updateAutocomplete(
   get_api_endpoint,
   result_callback
 ) {
-  console.log(get_api_endpoint());
+  // console.log(get_api_endpoint());
   let query = document.getElementById(input_id).value;
   fetch(
     get_api_endpoint() + "&q=" + query + "&per_page=" + N_AUTOCOMPLETE_RESULTS
   )
     .then((res) => res.json())
     .then((data) => {
-      console.log("autocomplete results", data);
+      // console.log("autocomplete results", data);
 
       let list = document.getElementById(list_id);
       list.innerHTML = "";
