@@ -1,7 +1,5 @@
 TODO
 
-Actual priority: rework firebase so that the similar species data fetch doesn't read so many documents. This is already starting to approach my free usage quota.
-
 Priority: Location-based common species sorting - species counts only returns species, so might be tricky for genera, families, etc.
 Also note that the not-found-in-region alert is ignoring rank levels higher than species right now.
 

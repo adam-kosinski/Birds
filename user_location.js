@@ -25,27 +25,6 @@ async function getIPLocation() {
   return [lat, lng, name];
 }
 
-async function speciesCountsInLocation(lat, lng, taxonIds) {
-  const counts = {};
-  const readableCounts = new Map();
-
-  if (lat && lng) {
-    const res = await fetch(
-      `https://api.inaturalist.org/v1/observations/species_counts?` +
-        `lat=${lat}&lng=${lng}&radius=${SPECIES_COUNTS_RADIUS}` +
-        `&taxon_id=${taxonIds.join(",")}&verifiable=true&per_page=100`
-    );
-    const data = await res.json();
-    data.results.forEach((obj) => {
-      counts[obj.taxon.id] = obj.count;
-      readableCounts.set(obj.taxon.preferred_common_name, obj.count);
-    });
-  }
-
-  console.log("counts", readableCounts);
-  return counts;
-}
-
 async function initRegionalCounts(taxonIds) {
   let lat, lng, locationName;
 
@@ -98,7 +77,24 @@ async function updateRegionalCounts(
 
   // regional species counts
 
-  regionalSpeciesCounts = await speciesCountsInLocation(lat, lng, taxonIds);
+  regionalSpeciesCounts = {};
+  const readableCounts = new Map();
+
+  if (lat && lng) {
+    const res = await fetch(
+      `https://api.inaturalist.org/v1/observations/species_counts?` +
+        `lat=${lat}&lng=${lng}&radius=${SPECIES_COUNTS_RADIUS}` +
+        `&taxon_id=${taxonIds.join(",")}&verifiable=true&per_page=100`
+    );
+    const data = await res.json();
+    data.results.forEach((obj) => {
+      regionalSpeciesCounts[obj.taxon.id] = obj.count;
+      readableCounts.set(obj.taxon.preferred_common_name, obj.count);
+    });
+  }
+
+  console.log("counts", readableCounts);
+
   console.log("Regional species counts loaded");
 }
 
