@@ -333,7 +333,6 @@ function searchAncestorsForTaxonInList(obj) {
   //since observations can come from children of a taxon, try each ancestry level one by one, starting w most specific
   const ancestor_ids = obj.taxon.ancestor_ids.slice();
   const taxonIds = list_taxa.map((obj) => obj.id);
-  console.log(taxonIds);
   while (ancestor_ids.length > 0) {
     let id = ancestor_ids.pop(); //end of list is most specific taxon, starting with observation's taxon id
     if (taxonIds.includes(id)) {
