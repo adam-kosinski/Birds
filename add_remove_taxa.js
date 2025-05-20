@@ -49,6 +49,8 @@ async function initListScreen() {
   // but don't require this to finish before we resolve this function's promise; this can happen in the background
   getMissingSimilarSpeciesData();
 
+  if (data_source === "ebird_calls") initSpectrogram();
+
   // check if a lot of list taxa aren't found in this location; give warning if so
   // do this after a delay so that the page will render first
   setTimeout(() => {

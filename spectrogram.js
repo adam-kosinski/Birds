@@ -1,7 +1,10 @@
-initSpectrogram();
-
 function initSpectrogram() {
-  if (data_source !== "ebird_calls") return;
+  if (data_source !== "ebird_calls") {
+    console.warn(
+      "Tried to initialize spectrogram but data source isn't compatible."
+    );
+    return;
+  }
 
   const audio = document.getElementById("birdsong-audio-0");
   const imgs_div = document.getElementById("spectrogram-images");

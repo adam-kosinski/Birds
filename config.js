@@ -61,8 +61,8 @@ const EXPOSURE_PROFICIENCY_THRESHOLD = 0.5; // after hit this with most common t
 const ACCURACY_MATTERS_PROFICIENCY_THRESHOLD = 0.5; // after hit this with the median proficiency of a group, start penalizing for low predicted accuracy when sorting
 const MIN_INAT_COUNT = 1; // used when sorting taxon groups, round up any taxa counts to this
 const DEFAULT_CONF = 0.25;
-const WITHIN_GROUP_DEFAULT_CONF = 0.3;
-const BETWEEN_GROUPS_DEFAULT_CONF = 0.1;
+const WITHIN_GROUP_DEFAULT_CONF = 0.25;
+const BETWEEN_GROUPS_DEFAULT_CONF = 0.05;
 
 const N_ANSWERS_TO_STORE = 10;
 // we store recent proficiency in local storage (if setting checked), this is how far back to remember
