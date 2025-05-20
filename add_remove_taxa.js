@@ -13,16 +13,20 @@ async function initListScreen() {
   let url = new URL(window.location.href);
   let taxonIdsString = url.searchParams.get("taxa");
   let default_mode = url.searchParams.get("mode");
-  let data_source_setting =
-    url.searchParams.get("data_source") || "iNaturalist";
+  data_source = url.searchParams.get("data_source") || "iNaturalist";
+  let custom_game_type = url.searchParams.get("custom_game_type") || "";
   place_id = url.searchParams.get("place_id");
   custom_groups_key = url.searchParams.get("custom_groups") || undefined;
 
-  // It helps to set data source before adding birds because the proficiency
-  // values use a different key for different data sources.
-  // Technically we could do it later, but before setting the mode, since setMode()
-  // will override the proficiency displays
-  setDataSource(data_source_setting);
+  // apply styling changes for custom data sources and custom game types
+  const mainDiv = document.getElementById("game-main");
+  mainDiv.dataset.dataSource = data_source;
+  if (custom_game_type) {
+    const overrideText = document.getElementById("mode-override");
+    overrideText.textContent = custom_game_type;
+    overrideText.classList.add("active");
+    mainDiv.dataset.customGameType = custom_game_type;
+  }
 
   // fill in taxa
   let taxonIds = [];

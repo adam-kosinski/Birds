@@ -68,24 +68,6 @@ async function setMode(new_mode) {
   }
 }
 
-function setDataSource(new_data_source) {
-  data_source = new_data_source;
-
-  // game mode override (if data source doesn't allow visual id / birdsong toggling)
-  if (new_data_source === "ebird_calls") {
-    document
-      .querySelector(".override[data-name=ebird_calls]")
-      .setAttribute("active", true);
-  } else {
-    document
-      .querySelectorAll(".override[active]")
-      .forEach((el) => el.removeAttribute("active"));
-  }
-
-  // apply CSS styling changes to the game
-  document.getElementById("game-main").dataset.dataSource = new_data_source;
-}
-
 // try a different observation if the audio is too long
 
 let n_short_audio_retries_left = MAX_SHORT_AUDIO_RETRIES;

@@ -356,6 +356,7 @@ const PRESETS = {
     description:
       "Bird calls curated from the Macaulay Library to help you tell all those chip notes apart.",
     mode: "birdsong",
+    custom_game_type: "eBird Calls",
     data_source: "ebird_calls",
     photo: "images/preset_backyard_calls.jpg",
     custom_groups: true,
@@ -545,6 +546,13 @@ const PRESETS = {
       10286, //Black-and-white Warbler
       145235, //Magnolia Warbler
     ],
+  },
+  "Warbler Field Marks (East US)": {
+    description: "",
+    photo: "",
+    mode: "visual_id",
+    custom_game_type: "Warbler Field Marks",
+    taxa: [],
   },
   "Sparrows (NC)": {
     description:

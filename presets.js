@@ -23,6 +23,8 @@ function initPresets() {
     if (obj.taxa.length > 0) params.append("taxa", obj.taxa.flat().join(",")); // if custom groups, taxa won't be flat already
     if (obj.mode) params.append("mode", obj.mode);
     if (obj.data_source) params.append("data_source", obj.data_source);
+    if (obj.custom_game_type)
+      params.append("custom_game_type", obj.custom_game_type);
     if (obj.custom_groups) params.append("custom_groups", name);
     link.href = "game.html?" + params.toString();
 
