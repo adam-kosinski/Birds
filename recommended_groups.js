@@ -96,10 +96,10 @@ function iNaturalistConf(correctTaxonId, otherTaxonId) {
 function updateConfusionScore(correctId, guessedId, idsInPlay) {
   // update incorrect and correct counts using an exponential moving average
 
-  // don't store anything if we don't have iNaturalist data, we want to start from a reasonable confusion score
-  if (!(correctId in similarSpeciesData[mode])) {
+  // don't store anything if we don't have a decent initial confusion score
+  if (!custom_groups_key && !(correctId in similarSpeciesData[mode])) {
     console.log(
-      `No iNaturalist data for taxon ${correctId}, not updating local storage`
+      `No good conf initialization for taxon ${correctId}, not updating local storage`
     );
     return;
   }

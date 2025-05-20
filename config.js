@@ -375,11 +375,12 @@ const PRESETS = {
         19893, //Barred Owl
       ],
       [
-        // "weeps" and barks
+        // "weeps", "peeks", and barks
         12727, //American Robin
         9100, //Song Sparrow
         18205, //Red-bellied Woodpecker
         18236, //Northern Flicker
+        792988, //Downy Woodpecker
       ],
       [
         // clean chip calls
@@ -418,7 +419,6 @@ const PRESETS = {
       [
         // miscellaneous
         12942, //Eastern Bluebird
-        792988, //Downy Woodpecker
       ],
     ],
   },
