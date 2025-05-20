@@ -385,17 +385,18 @@ const PRESETS = {
       [
         // clean chip calls
         9083, //Northern Cardinal
-        10227, //Indigo Bunting
-        9135, //Chipping Sparrow
-        17008, //Eastern Phoebe
-        10094, //Dark-eyed Junco
-        9184, //White-throated Sparrow
         145244, //Pine Warbler
+        10227, //Indigo Bunting
+        10094, //Dark-eyed Junco
+        9135, //Chipping Sparrow
+        9184, //White-throated Sparrow
+        17008, //Eastern Phoebe
       ],
       [
         // raspier chip calls
         145245, //Yellow-rumped Warbler
         1289388, //Ruby-crowned Kinglet
+        12942, //Eastern Bluebird
         14898, //Brown Thrasher
       ],
       [
@@ -406,19 +407,15 @@ const PRESETS = {
       ],
       [
         // squeaky or finchy
-        9424, //Eastern Towhee
         199840, //House Finch
         145310, //American Goldfinch
         14825, //Brown-headed Nuthatch
+        9424, //Eastern Towhee
       ],
       [
         // chirps and wildness
         13858, //House Sparrow
         14850, //European Starling
-      ],
-      [
-        // miscellaneous
-        12942, //Eastern Bluebird
       ],
     ],
   },

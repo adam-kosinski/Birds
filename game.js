@@ -734,8 +734,10 @@ function checkAnswer() {
   let guess = guess_input.value;
 
   // if only one possible option matches the guess, assume the user meant to type that one
+  // unless there was only one taxon being practiced (in which case the user isn't guessing, but
+  // just getting to know that taxon)
   const optionMatches = getRemainingGuessOptions();
-  if (optionMatches.length === 1) {
+  if (optionMatches.length === 1 && taxa_to_use.length > 1) {
     guess = optionMatches[0];
     guess_input.value = guess;
   }
