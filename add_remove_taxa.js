@@ -28,6 +28,9 @@ async function initListScreen() {
     mainDiv.dataset.customGameType = custom_game_type;
   }
 
+  // fill in field marks options, if applicable
+  initFieldMarksUI();
+
   // fill in taxa
   let taxonIds = [];
   if (taxonIdsString === null) {
@@ -84,6 +87,32 @@ async function initListScreen() {
 
   stopListLoader();
   initializationComplete = true;
+}
+
+function initFieldMarksUI() {
+  if (custom_game_type === "Warbler Field Marks") {
+    const containerGrid = document.getElementById("field-marks");
+    for (const mark of ["Wing Bars", "Yellow Throat"]) {
+      const p = document.createElement("p");
+      p.textContent = mark;
+
+      const buttonContainer = document.createElement("div");
+      buttonContainer.className = "field-mark-buttons";
+
+      const buttonYes = document.createElement("button");
+      const imgYes = document.createElement("img");
+      imgYes.src = FIELD_MARK_CONFIG[mark].photo_yes;
+      buttonYes.append(imgYes);
+
+      const buttonNo = document.createElement("button");
+      const imgNo = document.createElement("img");
+      imgNo.src = FIELD_MARK_CONFIG[mark].photo_no;
+      buttonNo.append(imgNo);
+
+      buttonContainer.append(buttonYes, buttonNo);
+      containerGrid.append(p, buttonContainer);
+    }
+  }
 }
 
 function printHumanReadableTaxonCounts() {

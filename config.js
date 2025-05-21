@@ -39,7 +39,7 @@ const PLACE_STYLE = {
   //for location geometry
   color: "orange",
 };
-const FIELD_MARKS_VIEW_BIRD_DURATION = 4000; // ms
+const FIELD_MARKS_VIEW_BIRD_DURATION = 300; // ms
 
 // funny bird
 const FUNNY_BIRD_LEAVE_DELAY = 8000; //ms
@@ -349,6 +349,12 @@ const FIELD_MARK_CONFIG = {
       10442, //Swainson's Warbler
       10431, //Connecticut Warbler
     ],
+  },
+  "Yellow Throat": {
+    photo_yes: "images/yellow_throat_yes.png",
+    photo_no: "images/yellow_throat_no.png",
+    taxa_yes: [],
+    taxa_no: [],
   },
 };
 

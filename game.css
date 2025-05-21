@@ -303,6 +303,30 @@
 
 #field-marks-container {
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+#field-marks {
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: 55px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+.field-mark-buttons {
+  display: flex;
+  gap: 10px;
+}
+#field-marks button {
+  display: flex;
+}
+#field-marks button img {
+  max-height: 75px;
+  max-width: 100px;
+  border-radius: 12px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 /* bottom of game screen */
