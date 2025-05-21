@@ -275,6 +275,9 @@
   position: relative;
   /* for percentage styling of pseudo element */
 }
+.bird-grid-option.field-mark-mismatch {
+  display: none;
+}
 
 .bird-grid-option img {
   border-radius: inherit;
@@ -309,21 +312,38 @@
   margin-bottom: 10px;
 }
 #field-marks {
+  display: flex;
+  column-gap: 20px;
+  row-gap: 10px;
+  flex-wrap: wrap;
   margin-bottom: 10px;
+}
+.field-mark-row {
   display: grid;
-  grid-template-columns: 55px 1fr;
+  grid-template-columns: 55px min-content min-content;
   gap: 10px;
   align-items: center;
-}
-.field-mark-buttons {
-  display: flex;
-  gap: 10px;
+  text-align: center;
 }
 #field-marks button {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+#field-marks button.selected::after {
+  content: "";
+  width: calc(100% + 3px);
+  height: calc(100% + 3px);
+  border: 3px solid black;
+  border-radius: 16px;
+  position: absolute;
+}
+.field-mark-row:has(.selected) button:not(.selected) {
+  opacity: 0.5;
 }
 #field-marks button img {
-  max-height: 75px;
+  max-height: 60px;
   max-width: 100px;
   border-radius: 12px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);

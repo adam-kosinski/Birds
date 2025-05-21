@@ -87,6 +87,47 @@ bird_grid.addEventListener("click", (e) => {
     : bird_grid_option.dataset.commonName;
 });
 
+// field marks selection
+document.getElementById("field-marks").addEventListener("click", (e) => {
+  const button = e.target.closest("button");
+  if (!button) return;
+
+  const originally_selected = button.classList.contains("selected");
+  // deselect all
+  button
+    .closest(".field-mark-row")
+    .querySelectorAll("button")
+    .forEach((b) => b.classList.remove("selected"));
+  // if not originally selected, select
+  if (!originally_selected) button.classList.add("selected");
+
+  // filter the bird list
+
+  document
+    .querySelectorAll(".bird-grid-option")
+    .forEach((el) => el.classList.remove("field-mark-mismatch"));
+  const selectedMarks = getSelectedFieldMarks();
+
+  // filter out ids that have the opposite field mark
+  // this is better than keeping the ones with the field mark because
+  // our config lists aren't comprehensive (bird might not be in either yes
+  // or no lists, and wouldn't want to filter them if so)
+  const idsInUse = new Set(taxa_to_use.map((obj) => obj.id));
+  let idsToHide = new Set();
+  for (const [mark, hasIt] of Object.entries(selectedMarks)) {
+    let notMatching = new Set(
+      FIELD_MARK_CONFIG[mark][hasIt ? "taxa_no" : "taxa_yes"]
+    );
+    notMatching = notMatching.intersection(idsInUse);
+    idsToHide = idsToHide.union(notMatching);
+  }
+  idsToHide.forEach((id) => {
+    document
+      .querySelector(`.bird-grid-option[data-taxon-id="${id}"`)
+      .classList.add("field-mark-mismatch");
+  });
+});
+
 //bird list bird selection
 
 function toggleListSelection(taxon_id) {

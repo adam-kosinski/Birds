@@ -252,6 +252,7 @@ async function initGame() {
     //HTML
     let button = document.createElement("button");
     button.className = "bird-grid-option";
+    button.dataset.taxonId = obj.id;
     button.dataset.commonName = obj.preferred_common_name;
     if (obj.default_photo)
       button.style.backgroundImage = `url('${obj.default_photo.square_url}')`;
@@ -724,6 +725,19 @@ function getRemainingGuessOptions() {
   return options.filter((opt) =>
     opt.toLowerCase().includes(inputText.toLowerCase())
   );
+}
+
+function getSelectedFieldMarks() {
+  const out = {};
+  for (const mark in FIELD_MARK_CONFIG) {
+    const selected = document.querySelector(
+      `[data-field-mark="${mark}"] .selected`
+    );
+    if (selected) {
+      out[mark] = selected.dataset.value === "yes";
+    }
+  }
+  return out;
 }
 
 function checkAnswer() {

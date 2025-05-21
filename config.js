@@ -356,6 +356,12 @@ const FIELD_MARK_CONFIG = {
     taxa_yes: [],
     taxa_no: [],
   },
+  "Breast Streaks": {
+    photo_yes: "images/breast_streaks_yes.png",
+    photo_no: "images/breast_streaks_no.png",
+    taxa_yes: [],
+    taxa_no: [],
+  },
 };
 
 /*
