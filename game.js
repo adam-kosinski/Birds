@@ -608,10 +608,10 @@ function nextObservation() {
   document
     .querySelectorAll(".mark-as-bad-button")
     .forEach((el) => el.classList.remove("marked"));
-  document.getElementById("bird-selection-container").scrollTop = 0;
   document
     .querySelectorAll("#field-marks button.selected")
     .forEach((el) => el.classList.remove("selected"));
+  document.getElementById("bird-selection-container").scrollTop = 0;
 
   //game mode specific stuff
 
@@ -722,6 +722,9 @@ function nextObservation() {
     const delay = FIELD_MARKS_VIEW_BIRD_DURATION; // TODO make variable
     fieldMarksSetTimeoutId = setTimeout(() => {
       setGameState(FIELD_MARKS_SCREEN);
+      // need to reset scrollTop now, since this element wasn't visible
+      // earlier (in the GUESSING state) for this custom game type
+      document.getElementById("bird-selection-container").scrollTop = 0;
     }, delay);
   }
 }
