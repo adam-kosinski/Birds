@@ -695,6 +695,7 @@ const PRESETS = {
     description: "",
     photo: "",
     mode: "visual_id",
+    place_id: 81418, // eastern US, avoid western plumage of yellow rumped warbler
     custom_game_type: "Warbler Field Marks",
     taxa: [
       145245, //Yellow-rumped Warbler

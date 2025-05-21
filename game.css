@@ -25,7 +25,7 @@
   height: 90dvh;
 }
 
-#game-main > .game-bottom {
+#game-bottom {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -66,6 +66,11 @@
 /* bird image / answer styling */
 
 #bird-image-container {
+  display: flex;
+  gap: 4px;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
   height: 0;
   /* start at 0 and then use flex-grow to take up as much space as is available*/
   flex-grow: 1;
@@ -77,6 +82,7 @@
 }
 
 #bird-image-parent-div {
+  margin-top: 6px;
   aspect-ratio: 3 / 2;
   /* arbitrary, javascript will update this to match the image's aspect ratio */
   position: relative;
@@ -348,6 +354,32 @@
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
+/* field marks answers */
+
+.field-mark-answer {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 8px;
+  padding: 2px 8px 2px 2px;
+  margin: 2px;
+  align-items: center;
+  text-align: left;
+  white-space: nowrap;
+  width: min-content;
+  border-radius: 12px;
+}
+.field-mark-answer.correct {
+  border: 1px solid black;
+  background-color: var(--correct-color);
+}
+.field-mark-answer.incorrect {
+  border: 1px solid black;
+  background-color: var(--incorrect-color);
+}
+.field-mark-answer img {
+  width: 20px;
+}
+
 /* bottom of game screen */
 
 #guess-input {
@@ -358,13 +390,13 @@
 }
 
 #correct-button {
-  background-color: #5bcf5b;
-  border-bottom-color: #095200;
+  background-color: var(--correct-color);
+  border-bottom-color: var(--correct-color-shadow);
 }
 
 #incorrect-button {
-  background-color: #ff7d7d;
-  border-bottom-color: #740000;
+  background-color: var(--incorrect-color);
+  border-bottom-color: var(--incorrect-color-shadow);
 }
 
 #guess-and-skip-buttons {

@@ -129,4 +129,12 @@
   display: none;
 }
 
+#field-marks-answers {
+  display: none;
+}
+
+[data-custom-game-type="Warbler Field Marks"][data-game-state="3"] #field-marks-answers {
+  display: block;
+}
+
 /*# sourceMappingURL=game_display.css.map */

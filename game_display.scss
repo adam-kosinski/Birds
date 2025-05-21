@@ -173,3 +173,11 @@ $ANSWER_SHOWN: 3;
     display: none;
   }
 }
+
+#field-marks-answers {
+  display: none;
+}
+[data-custom-game-type="Warbler Field Marks"][data-game-state="#{$ANSWER_SHOWN}"]
+  #field-marks-answers {
+  display: block;
+}

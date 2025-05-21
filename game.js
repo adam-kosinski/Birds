@@ -801,6 +801,10 @@ function checkAnswer() {
   document.getElementById("game-main").dataset.correct =
     guess.length > 0 ? correct : "no-guess";
 
+  if (custom_game_type === "Warbler Field Marks") {
+    setFieldMarksAnswers();
+  }
+
   //update taxon picking probabilities and user data (if storing)
   //don't do anything if squirrel intruder, those are jokes
   if (!current.is_squirrel_intruder) {
@@ -829,6 +833,46 @@ function checkAnswer() {
   }
 
   setGameState(ANSWER_SHOWN);
+}
+
+function setFieldMarksAnswers() {
+  const id = current.taxon.id;
+  const guesses = getSelectedFieldMarks();
+
+  const container = document.getElementById("field-marks-answers");
+  container.innerHTML = "";
+  for (const mark in FIELD_MARK_CONFIG) {
+    // note - since list isn't necessarily comprehensive, it's possible
+    // for a taxon to not be in the "yes" or "no" list for that field mark
+    const markPresent = FIELD_MARK_CONFIG[mark].taxa_yes.includes(id);
+    const markAbsent = FIELD_MARK_CONFIG[mark].taxa_no.includes(id);
+    if (!markPresent && !markAbsent) continue;
+
+    const guessed = mark in guesses;
+    const correct = guessed && guesses[mark] === markPresent;
+    const incorrect = guessed && !correct;
+
+    const div = document.createElement("div");
+    div.classList.add("field-mark-answer");
+    if (correct) div.classList.add("correct");
+    else if (incorrect) div.classList.add("incorrect");
+
+    const img = document.createElement("img");
+    img.src = markPresent
+      ? "images/checkmark_circle.png"
+      : "images/x_circle.png";
+
+    const p = document.createElement("p");
+    let msg = mark;
+    if (correct) msg += " - Correct!";
+    else if (incorrect) {
+      msg += "- Guessed " + (guesses[mark] ? "Yes" : "No");
+    }
+    p.textContent = msg;
+
+    div.append(img, p);
+    container.append(div);
+  }
 }
 
 function updateTaxonBag(taxon_id, delta) {

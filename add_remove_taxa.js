@@ -95,7 +95,7 @@ async function initListScreen() {
 function initFieldMarksUI() {
   if (custom_game_type === "Warbler Field Marks") {
     const container = document.getElementById("field-marks");
-    for (const mark of ["Wing Bars", "Yellow Throat", "Breast Streaks"]) {
+    for (const mark in FIELD_MARK_CONFIG) {
       const div = document.createElement("div");
       div.className = "field-mark-row";
       div.dataset.fieldMark = mark;
@@ -313,7 +313,7 @@ async function addBirds(taxa_id_list) {
     bird_square.alt = "Photo of " + taxon.preferred_common_name;
 
     let checkmark = document.createElement("img");
-    checkmark.src = "images/checkmark_icon.png";
+    checkmark.src = "images/selected.png";
     checkmark.className = "checkmark";
 
     let name_container = document.createElement("div");
