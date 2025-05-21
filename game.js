@@ -611,7 +611,13 @@ function nextObservation() {
   document
     .querySelectorAll("#field-marks button.selected")
     .forEach((el) => el.classList.remove("selected"));
-  document.getElementById("bird-selection-container").scrollTop = 0;
+
+  // need to use a delay-0 setTimeout to reset scrollTop so that the element
+  // is visible before we reset it
+  setTimeout(
+    () => (document.getElementById("bird-selection-container").scrollTop = 0),
+    0
+  );
 
   //game mode specific stuff
 
