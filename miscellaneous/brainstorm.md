@@ -6,6 +6,8 @@ It's possible for a group to be created with one species it seems (see common wa
 
 Sidescrolling in location search results list
 
+Standardize selection UI of location search results list to match the main bird list
+
 Region of study radius may need to vary? For instance, turtles of NC with the sea turtles.
 
 Convert Sophie's warbler calls into all warbler calls?
@@ -13,10 +15,7 @@ Convert Sophie's warbler calls into all warbler calls?
 Chipmunk intruder
 
 Warbler field marks game! Maybe focus on fall (or transition to focusing on that) since that's when field marks are more important
-The local storage key should probably be different for different custom games?
 Female / immature plumage sometimes has the opposite field mark (particularly for yellow throat). Maybe fix by using curated ebird photos? Would need to be careful if want to build in a fall-season setting.
-
-Scroll reset not working
 
 Things to tune:
 
