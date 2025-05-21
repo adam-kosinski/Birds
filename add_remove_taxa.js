@@ -14,7 +14,7 @@ async function initListScreen() {
   let taxonIdsString = url.searchParams.get("taxa");
   let default_mode = url.searchParams.get("mode");
   data_source = url.searchParams.get("data_source") || "iNaturalist";
-  let custom_game_type = url.searchParams.get("custom_game_type") || "";
+  custom_game_type = url.searchParams.get("custom_game_type") || "";
   place_id = url.searchParams.get("place_id");
   custom_groups_key = url.searchParams.get("custom_groups") || undefined;
 
@@ -228,7 +228,9 @@ async function addBirds(taxa_id_list) {
 
   // also fetch similar species data from firebase
   // if we are using custom groups, this isn't necessary, so skip it
-  if (!custom_groups_key) {
+  if (custom_groups_key) {
+    console.log("Using custom groups, so not fetching similar species data");
+  } else {
     promises.push(getSimilarSpeciesDataFromFirebase(ids_to_fetch));
   }
 

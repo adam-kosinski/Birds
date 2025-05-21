@@ -163,7 +163,7 @@ document.querySelectorAll(".mark-as-bad-button").forEach((el) => {
 //keypress handling
 document.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
-    if (game_state === GUESSING) {
+    if (game_state === GUESSING || game_state === FIELD_MARKS_SCREEN) {
       e.preventDefault();
       checkAnswer();
     } else if (game_state === ANSWER_SHOWN) {

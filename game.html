@@ -201,7 +201,7 @@
 
         <p id="birdsong-question"></p>
 
-        <div id="bird-image-container" class="birdsong-subflex">
+        <div id="bird-image-container" class="game-bottom">
           <div id="answer-caption">
             <div>
               <b id="answer-common-name" class="font-large"></b>
@@ -248,11 +248,18 @@
           <button class="mark-as-bad-button">Flag as Low Quality</button>
         </div>
 
-        <div id="bird-grid">
-          <!-- <button id="other-option" class="bird-grid-option font-medium" data-common-name="Other">Other</button> -->
+        <div id="bird-selection-container">
+          <div id="field-marks-container">
+            <p>Select field marks (optional):</p>
+            <div id="field-marks"></div>
+          </div>
+
+          <div id="bird-grid">
+            <!-- <button id="other-option" class="bird-grid-option font-medium" data-common-name="Other">Other</button> -->
+          </div>
         </div>
 
-        <div class="birdsong-subflex">
+        <div class="game-bottom">
           <datalist id="guess-datalist"></datalist>
           <input
             id="guess-input"

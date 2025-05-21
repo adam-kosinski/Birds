@@ -12,7 +12,8 @@ Convert Sophie's warbler calls into all warbler calls?
 
 Chipmunk intruder
 
-Warbler field marks game!
+Warbler field marks game! Maybe focus on fall (or transition to focusing on that) since that's when field marks are more important
+The local storage key should probably be different for different custom games?
 
 Things to tune:
 

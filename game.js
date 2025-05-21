@@ -8,6 +8,7 @@ let taxon_bag = []; //list of unordered taxon ids, perhaps each id in here multi
 let bad_ids = {}; // object (taxon_id: [array of iNaturalist ids]) that records ids that were skipped before or are otherwise bad (e.g. missing audio). This coordinates w firebase
 let current; //current observation object
 let next; //helpful for preloading
+let fieldMarksSetTimeoutId;
 
 const audio_preloader = new Audio();
 audio_preloader.addEventListener("loadedmetadata", checkNextAudioDuration);
@@ -15,13 +16,15 @@ audio_preloader.addEventListener("loadedmetadata", checkNextAudioDuration);
 let game_state;
 const INACTIVE = 0;
 const GUESSING = 1;
-const ANSWER_SHOWN = 2;
+const FIELD_MARKS_SCREEN = 2;
+const ANSWER_SHOWN = 3;
 setGameState(INACTIVE);
 
 let mode = "birdsong"; // or "visual_id"
 let data_source = "iNaturalist"; // default "iNaturalist" (see initListScreen()), other options: "ebird_calls"
 let place_id = undefined;
 let custom_groups_key = undefined; // use iNaturalist similar species as default if undefined - see defaultConf() in recommended_groups.js
+let custom_game_type = undefined;
 
 let funny_bird_timeout_id;
 
@@ -30,6 +33,10 @@ let already_notified_full_progress_bar = false;
 function setGameState(state) {
   game_state = state;
   document.getElementById("game-main").dataset.gameState = state;
+  // if a game state transition happens, don't want the field marks set timeout to act anymore
+  if (fieldMarksSetTimeoutId !== undefined) {
+    clearTimeout(fieldMarksSetTimeoutId);
+  }
 }
 
 async function setMode(new_mode) {
@@ -700,6 +707,14 @@ function nextObservation() {
   document.getElementById("description").textContent = descriptionDisplay;
 
   setGameState(GUESSING);
+
+  // for field marks game, switch to the field marks screen after a delay
+  if (custom_game_type === "Warbler Field Marks") {
+    const delay = FIELD_MARKS_VIEW_BIRD_DURATION; // TODO make variable
+    fieldMarksSetTimeoutId = setTimeout(() => {
+      setGameState(FIELD_MARKS_SCREEN);
+    }, delay);
+  }
 }
 
 function getRemainingGuessOptions() {

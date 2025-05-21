@@ -25,7 +25,7 @@
   height: 90dvh;
 }
 
-#game-main > .birdsong-subflex {
+#game-main > .game-bottom {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -237,24 +237,29 @@
 
 /* grid */
 
-#bird-grid {
+#bird-selection-container {
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+  padding: 10px;
   width: 100%;
   max-width: 800px;
+  height: 325px;
+  flex-grow: 1;
+  overflow-y: auto;
+  background-color: white;
+}
+
+#bird-grid {
   /* round the height down to the nearest multiple of 85px
     so it grows, but you always realize you can scroll down b/c bird squares overlap the fold*/
   /* height: calc(round(down, 100dvh - 275px, 85px) + 25px); */
   /* flex-shrink: 0; */
-  height: 325px;
-  overflow-y: auto;
-  background-color: white;
   display: grid;
   box-sizing: border-box;
   justify-content: center;
   grid-template-columns: repeat(auto-fill, 75px);
   grid-template-rows: repeat(auto-fill, 75px);
-  padding: 10px;
   gap: 10px;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .bird-grid-option {
@@ -292,6 +297,12 @@
   background-color: var(--light-gray);
   font-weight: bold;
   color: var(--dark-gray);
+}
+
+/* field marks screen */
+
+#field-marks-container {
+  text-align: left;
 }
 
 /* bottom of game screen */
