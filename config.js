@@ -330,6 +330,7 @@ const FIELD_MARK_CONFIG = {
       73553, //Blue-winged Warbler
       145232, //Cerulean Warbler
       145230, //Kirtland's Warbler
+      9807, //Golden-winged Warbler
     ],
     taxa_no: [
       9721, //Common Yellowthroat
@@ -344,7 +345,6 @@ const FIELD_MARK_CONFIG = {
       72912, //Worm-eating Warbler
       145276, //Wilson's Warbler
       145225, //Kentucky Warbler
-      9807, //Golden-winged Warbler
       145224, //Mourning Warbler
       10442, //Swainson's Warbler
       10431, //Connecticut Warbler

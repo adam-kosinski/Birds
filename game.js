@@ -852,26 +852,19 @@ function setFieldMarksAnswers() {
     const correct = guessed && guesses[mark] === markPresent;
     const incorrect = guessed && !correct;
 
-    const div = document.createElement("div");
-    div.classList.add("field-mark-answer");
-    if (correct) div.classList.add("correct");
-    else if (incorrect) div.classList.add("incorrect");
-
-    const img = document.createElement("img");
-    img.src = markPresent
-      ? "images/checkmark_circle.png"
-      : "images/x_circle.png";
-
     const p = document.createElement("p");
-    let msg = mark;
+    p.classList.add("field-mark-answer");
+    if (correct) p.classList.add("correct");
+    else if (incorrect) p.classList.add("incorrect");
+
+    let msg = (markPresent ? "" : "No ") + mark;
     if (correct) msg += " - Correct!";
     else if (incorrect) {
-      msg += "- Guessed " + (guesses[mark] ? "Yes" : "No");
+      msg += " - Guessed " + (guesses[mark] ? "Yes" : "No");
     }
     p.textContent = msg;
 
-    div.append(img, p);
-    container.append(div);
+    container.append(p);
   }
 }
 
