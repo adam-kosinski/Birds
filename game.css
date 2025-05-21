@@ -250,30 +250,29 @@
 }
 
 #bird-grid {
-  /* round the height down to the nearest multiple of 85px
-    so it grows, but you always realize you can scroll down b/c bird squares overlap the fold*/
-  /* height: calc(round(down, 100dvh - 275px, 85px) + 25px); */
-  /* flex-shrink: 0; */
+  /* note that grid image size may be modified by javascript, so keep it as a variable */
+  --grid-img-size: 75px;
   display: grid;
   box-sizing: border-box;
   justify-content: center;
-  grid-template-columns: repeat(auto-fill, 75px);
-  grid-template-rows: repeat(auto-fill, 75px);
+  grid-template-columns: repeat(auto-fill, var(--grid-img-size));
+  grid-template-rows: repeat(auto-fill, var(--grid-img-size));
   gap: 10px;
 }
 
 .bird-grid-option {
   background-size: cover;
+  background-position: center;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 12px;
-  width: 75px;
-  height: 75px;
+  width: var(--grid-img-size);
+  height: var(--grid-img-size);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  /* for percentage styling of pseudo element */
+  /* position relative for percentage styling of pseudo element */
 }
 .bird-grid-option.field-mark-mismatch {
   display: none;

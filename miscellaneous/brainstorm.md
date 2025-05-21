@@ -14,6 +14,9 @@ Chipmunk intruder
 
 Warbler field marks game! Maybe focus on fall (or transition to focusing on that) since that's when field marks are more important
 The local storage key should probably be different for different custom games?
+Female / immature plumage sometimes has the opposite field mark (particularly for yellow throat). Maybe fix by using curated ebird photos? Would need to be careful if want to build in a fall-season setting.
+
+Scroll reset not working
 
 Things to tune:
 

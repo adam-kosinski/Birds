@@ -26,6 +26,9 @@ async function initListScreen() {
     overrideText.textContent = custom_game_type;
     overrideText.classList.add("active");
     mainDiv.dataset.customGameType = custom_game_type;
+    document
+      .getElementById("bird-grid")
+      .style.setProperty("--grid-img-size", "150px");
   }
 
   // fill in field marks options, if applicable

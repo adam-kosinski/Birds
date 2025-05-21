@@ -30,13 +30,13 @@ let funny_bird_timeout_id;
 
 let already_notified_full_progress_bar = false;
 
-function setGameState(state) {
-  game_state = state;
-  document.getElementById("game-main").dataset.gameState = state;
+function setGameState(new_state) {
   // if a game state transition happens, don't want the field marks set timeout to act anymore
-  if (fieldMarksSetTimeoutId !== undefined) {
+  if (game_state !== new_state && fieldMarksSetTimeoutId !== undefined) {
     clearTimeout(fieldMarksSetTimeoutId);
   }
+  game_state = new_state;
+  document.getElementById("game-main").dataset.gameState = new_state;
 }
 
 async function setMode(new_mode) {
@@ -254,8 +254,13 @@ async function initGame() {
     button.className = "bird-grid-option";
     button.dataset.taxonId = obj.id;
     button.dataset.commonName = obj.preferred_common_name;
-    if (obj.default_photo)
-      button.style.backgroundImage = `url('${obj.default_photo.square_url}')`;
+    if (obj.default_photo) {
+      let url = obj.default_photo.square_url;
+      if (custom_game_type === "Warbler Field Marks") {
+        url = obj.default_photo.medium_url;
+      }
+      button.style.backgroundImage = `url('${url}')`;
+    }
     bird_grid.append(button);
 
     //datalist - only include scientific option if taxon isn't a species/subspecies, OR if taxon is a plant
@@ -589,19 +594,24 @@ function nextObservation() {
   );
   document.getElementById("observation-link").href = current.uri;
 
-  //reset HTML from answer screen
+  //reset HTML from before
   document.getElementById("guess-input").value = "";
   document.getElementById("guess-input").readOnly = false;
   document
     .getElementById("bird-grid")
-    .querySelectorAll(".bird-grid-option.selected")
+    .querySelectorAll(".bird-grid-option")
     .forEach((el) => {
       el.classList.remove("selected");
+      el.classList.remove("field-mark-mismatch");
     });
   document.getElementById("image-attribution").classList.remove("visible");
   document
     .querySelectorAll(".mark-as-bad-button")
     .forEach((el) => el.classList.remove("marked"));
+  document.getElementById("bird-selection-container").scrollTop = 0;
+  document
+    .querySelectorAll("#field-marks button.selected")
+    .forEach((el) => el.classList.remove("selected"));
 
   //game mode specific stuff
 
@@ -645,8 +655,6 @@ function nextObservation() {
       audio1.removeAttribute("src");
     }
     // note: spectrogram stuff happens automatically when audio src changed
-    // misc
-    document.getElementById("bird-grid").scrollTop = 0;
 
     //start loading the next observation's audio
     //the event listener on the preloader will try to change the choice for 'next' if the audio is too long
