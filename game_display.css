@@ -2,51 +2,60 @@
 /* Easier to not miss things in css */
 /* By default everything is visible */
 /* All attributes will target #game-main, but omitting that here for cleanliness */
-/*
-Game states:
-INACTIVE = 0;
-GUESSING = 1;
-ANSWER_SHOWN = 2;
-*/
 /* General stuff */
-[data-game-state="1"] #correct-button {
+[data-game-state="1"] #correct-button,
+[data-game-state="2"] #correct-button {
   display: none;
 }
-[data-game-state="1"] #incorrect-button {
+[data-game-state="1"] #incorrect-button,
+[data-game-state="2"] #incorrect-button {
   display: none;
 }
-[data-game-state="1"] #neutral-next-button {
+[data-game-state="1"] #neutral-next-button,
+[data-game-state="2"] #neutral-next-button {
   display: none;
 }
-[data-game-state="1"] #description {
+[data-game-state="1"] #description,
+[data-game-state="2"] #description {
   display: none;
 }
 
-[data-game-state="2"] #guess-and-skip-buttons {
+[data-game-state="1"] #field-marks-container {
   display: none;
 }
-[data-game-state="2"] #description {
+
+[data-game-state="2"] #bird-image-container {
+  display: none;
+}
+
+[data-game-state="3"] #guess-and-skip-buttons {
+  display: none;
+}
+[data-game-state="3"] #description {
   display: block;
 }
-
-[data-game-state="2"][data-correct=true] #incorrect-button {
-  display: none;
-}
-[data-game-state="2"][data-correct=true] #neutral-next-button {
+[data-game-state="3"] #bird-selection-container {
   display: none;
 }
 
-[data-game-state="2"][data-correct=false] #correct-button {
+[data-game-state="3"][data-correct=true] #incorrect-button {
   display: none;
 }
-[data-game-state="2"][data-correct=false] #neutral-next-button {
+[data-game-state="3"][data-correct=true] #neutral-next-button {
   display: none;
 }
 
-[data-game-state="2"][data-correct=no-guess] #correct-button {
+[data-game-state="3"][data-correct=false] #correct-button {
   display: none;
 }
-[data-game-state="2"][data-correct=no-guess] #incorrect-button {
+[data-game-state="3"][data-correct=false] #neutral-next-button {
+  display: none;
+}
+
+[data-game-state="3"][data-correct=no-guess] #correct-button {
+  display: none;
+}
+[data-game-state="3"][data-correct=no-guess] #incorrect-button {
   display: none;
 }
 
@@ -68,10 +77,10 @@ ANSWER_SHOWN = 2;
   display: none;
 }
 
-[data-mode=birdsong][data-game-state="2"] #bird-grid {
+[data-mode=birdsong][data-game-state="3"] #bird-selection-container {
   display: none;
 }
-[data-mode=birdsong][data-game-state="2"] #birdsong-question {
+[data-mode=birdsong][data-game-state="3"] #birdsong-question {
   display: none;
 }
 
@@ -88,7 +97,8 @@ ANSWER_SHOWN = 2;
 [data-mode=visual_id] #birdsong-question {
   display: none;
 }
-[data-mode=visual_id] #bird-grid {
+
+[data-mode=visual_id]:not([data-game-state="2"]) #bird-selection-container {
   display: none;
 }
 
@@ -96,11 +106,11 @@ ANSWER_SHOWN = 2;
   display: none;
 }
 
-[data-mode=visual_id][data-game-state="2"] #visual-id-question {
+[data-mode=visual_id][data-game-state="3"] #visual-id-question {
   display: none;
 }
 
-/* Other game types */
+/* Other game types or data sources */
 [data-data-source=ebird_calls] .mark-as-bad-button {
   display: none;
 }
@@ -117,6 +127,14 @@ ANSWER_SHOWN = 2;
 }
 .spectrogram-visible #bird-image-parent-div {
   display: none;
+}
+
+#field-marks-answers {
+  display: none;
+}
+
+[data-custom-game-type="Warbler Field Marks"][data-game-state="3"] #field-marks-answers {
+  display: block;
 }
 
 /*# sourceMappingURL=game_display.css.map */

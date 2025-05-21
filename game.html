@@ -90,8 +90,8 @@
           <div id="mode-container">
             Game Mode:
 
-            <!-- if one of these modes is selected, we hide the audio/visual id toggle -->
-            <p class="override" data-name="ebird_calls">eBird Calls</p>
+            <!-- if game is a custom game type, this will override the sound/visual mode toggle, when has class "active" -->
+            <p id="mode-override"></p>
 
             <div id="mode-toggle">
               <div id="mode-highlight"></div>
@@ -201,7 +201,7 @@
 
         <p id="birdsong-question"></p>
 
-        <div id="bird-image-container" class="birdsong-subflex">
+        <div id="bird-image-container">
           <div id="answer-caption">
             <div>
               <b id="answer-common-name" class="font-large"></b>
@@ -248,11 +248,21 @@
           <button class="mark-as-bad-button">Flag as Low Quality</button>
         </div>
 
-        <div id="bird-grid">
-          <!-- <button id="other-option" class="bird-grid-option font-medium" data-common-name="Other">Other</button> -->
+        <div id="bird-selection-container">
+          <div id="field-marks-container">
+            <p>Select field marks to filter species (optional):</p>
+            <div id="field-marks"></div>
+            <p>Which species was it?</p>
+          </div>
+
+          <div id="bird-grid">
+            <!-- <button id="other-option" class="bird-grid-option font-medium" data-common-name="Other">Other</button> -->
+          </div>
         </div>
 
-        <div class="birdsong-subflex">
+        <div id="field-marks-answers"></div>
+
+        <div id="game-bottom">
           <datalist id="guess-datalist"></datalist>
           <input
             id="guess-input"

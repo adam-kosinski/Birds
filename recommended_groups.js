@@ -420,12 +420,18 @@ function displayGroups(groups) {
   // this is just selecting the first group
   if (loadBooleanSetting("auto-select-recommended", false)) {
     deselectAll();
+    // select the first group
     document
       .querySelector(".taxa-group")
       ?.querySelectorAll(".bird-list-item") // ?. b/c if list is empty there are no taxa groups
       .forEach((el) => {
         toggleListSelection(el.dataset.taxonId);
       });
+
+    // if practicing field marks, just select everything for nice diversity
+    if (custom_game_type === "Warbler Field Marks") {
+      selectAll();
+    }
   }
 }
 

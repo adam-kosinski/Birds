@@ -39,10 +39,14 @@ const PLACE_STYLE = {
   //for location geometry
   color: "orange",
 };
+const FIELD_MARKS_VIEW_BIRD_DURATION = 4000; // ms
+
+// funny bird
 const FUNNY_BIRD_LEAVE_DELAY = 8000; //ms
 function getFunnyBirdDelay() {
   return 60000 + 60000 * Math.random();
 }
+
 // macaulay library spectrogram
 // 250 horizontal pixels per second in raw spectrogram image
 // squished by factor of 2
@@ -300,6 +304,146 @@ function getQuestionHTML(mode, taxon_obj, is_squirrel_intruder = false) {
   }
 }
 
+const FIELD_MARK_CONFIG = {
+  "Wing Bars": {
+    photo_yes: "images/wing_bars_yes.png",
+    photo_no: "images/wing_bars_no.png",
+    taxa_yes: [
+      145245, //Yellow-rumped Warbler
+      10247, //American Redstart
+      10286, //Black-and-white Warbler
+      145238, //Yellow Warbler
+      145233, //Northern Parula
+      145242, //Palm Warbler
+      145244, //Pine Warbler
+      145258, //Black-throated Green Warbler
+      199916, //Black-throated Blue Warbler
+      145239, //Chestnut-sided Warbler
+      145231, //Cape May Warbler
+      145246, //Yellow-throated Warbler
+      145235, //Magnolia Warbler
+      145249, //Prairie Warbler
+      979756, //Tennessee Warbler
+      145240, //Blackpoll Warbler
+      145236, //Bay-breasted Warbler
+      145237, //Blackburnian Warbler
+      73553, //Blue-winged Warbler
+      145232, //Cerulean Warbler
+      145230, //Kirtland's Warbler
+      9807, //Golden-winged Warbler
+    ],
+    taxa_no: [
+      9721, //Common Yellowthroat
+      62550, //Ovenbird
+      10729, //Prothonotary Warbler
+      145229, //Hooded Warbler
+      979753, //Nashville Warbler
+      73149, //Northern Waterthrush
+      73148, //Louisiana Waterthrush
+      979757, //Orange-crowned Warbler
+      145275, //Canada Warbler
+      72912, //Worm-eating Warbler
+      145276, //Wilson's Warbler
+      145225, //Kentucky Warbler
+      145224, //Mourning Warbler
+      10442, //Swainson's Warbler
+      10431, //Connecticut Warbler
+    ],
+  },
+  "Yellow Throat": {
+    // NOTE - hooded warbler female/immature has yellow throat, same for black throated blue, blackburnian
+    // NOTE - common yellowthroat female doesn't have a yellow throat
+    photo_yes: "images/yellow_throat_yes.png",
+    photo_no: "images/yellow_throat_no.png",
+    taxa_yes: [
+      145238, //Yellow Warbler
+      145233, //Northern Parula
+      145242, //Palm Warbler
+      145244, //Pine Warbler
+      145231, //Cape May Warbler
+      145246, //Yellow-throated Warbler
+      145235, //Magnolia Warbler
+      145249, //Prairie Warbler
+      73553, //Blue-winged Warbler
+      145230, //Kirtland's Warbler
+      9721, //Common Yellowthroat
+      10729, //Prothonotary Warbler
+      979753, //Nashville Warbler
+      979757, //Orange-crowned Warbler
+      145275, //Canada Warbler
+      145276, //Wilson's Warbler
+      145225, //Kentucky Warbler
+    ],
+    taxa_no: [
+      145245, //Yellow-rumped Warbler
+      10247, //American Redstart
+      10286, //Black-and-white Warbler
+      145258, //Black-throated Green Warbler
+      199916, //Black-throated Blue Warbler
+      145239, //Chestnut-sided Warbler
+      979756, //Tennessee Warbler
+      145240, //Blackpoll Warbler
+      145236, //Bay-breasted Warbler
+      145237, //Blackburnian Warbler
+      145232, //Cerulean Warbler
+      62550, //Ovenbird
+      145229, //Hooded Warbler
+      73149, //Northern Waterthrush
+      73148, //Louisiana Waterthrush
+      72912, //Worm-eating Warbler
+      9807, //Golden-winged Warbler
+      145224, //Mourning Warbler
+      10442, //Swainson's Warbler
+      10431, //Connecticut Warbler
+    ],
+  },
+  "Breast Streaks": {
+    photo_yes: "images/breast_streaks_yes.png",
+    photo_no: "images/breast_streaks_no.png",
+    taxa_yes: [
+      10286, //Black-and-white Warbler
+      145240, //Blackpoll Warbler
+      979757, //Orange-crowned Warbler
+      145238, //Yellow Warbler
+      145235, //Magnolia Warbler
+      145231, //Cape May Warbler
+      145245, //Yellow-rumped Warbler
+      145258, //Black-throated Green Warbler
+      145246, //Yellow-throated Warbler
+      145237, //Blackburnian Warbler
+      145244, //Pine Warbler
+      145249, //Prairie Warbler
+      145242, //Palm Warbler
+      62550, //Ovenbird
+      73149, //Northern Waterthrush
+      73148, //Louisiana Waterthrush
+      145275, //Canada Warbler
+      145232, //Cerulean Warbler
+      145230, //Kirtland's Warbler
+    ],
+    taxa_no: [
+      10729, //Prothonotary Warbler
+      10442, //Swainson's Warbler
+      72912, //Worm-eating Warbler
+      9807, //Golden-winged Warbler
+      73553, //Blue-winged Warbler
+      979756, //Tennessee Warbler
+      979753, //Nashville Warbler
+      145233, //Northern Parula
+      199916, //Black-throated Blue Warbler
+      145239, //Chestnut-sided Warbler - I don't think the chestnut side counts as streaks
+      145236, //Bay-breasted Warbler
+      9721, //Common Yellowthroat
+      145225, //Kentucky Warbler
+      145224, //Mourning Warbler
+      10431, //Connecticut Warbler
+      145229, //Hooded Warbler
+      145276, //Wilson's Warbler
+      10247, //American Redstart
+    ],
+  },
+};
+
 /*
 For getting common species (place id 30 is NC)
 https://api.inaturalist.org/v1/observations/species_counts?place_id=30&quality_grade=research&taxon_id=______
@@ -356,6 +500,7 @@ const PRESETS = {
     description:
       "Bird calls curated from the Macaulay Library to help you tell all those chip notes apart.",
     mode: "birdsong",
+    custom_game_type: "eBird Calls",
     data_source: "ebird_calls",
     photo: "images/preset_backyard_calls.jpg",
     custom_groups: true,
@@ -502,6 +647,53 @@ const PRESETS = {
       145231, //Cape May Warbler
       145235, //Magnolia Warbler
       145240, //Blackpoll Warbler
+    ],
+  },
+  "Warbler Field Marks (East US)": {
+    description:
+      "In this set, the warbler disappears after only a few seconds. Can you spot the field marks to help identify it?",
+    photo: "images/preset_warbler_field_marks.jpg",
+    mode: "visual_id",
+    place_id: 81418, // eastern US, avoid western plumage of yellow rumped warbler
+    custom_game_type: "Warbler Field Marks",
+    taxa: [
+      145245, //Yellow-rumped Warbler
+      145242, //Palm Warbler
+      9721, //Common Yellowthroat
+      145244, //Pine Warbler
+      10247, //American Redstart
+      10286, //Black-and-white Warbler
+      145238, //Yellow Warbler
+      145233, //Northern Parula
+      62550, //Ovenbird
+      145235, //Magnolia Warbler
+      145258, //Black-throated Green Warbler
+      199916, //Black-throated Blue Warbler
+      145239, //Chestnut-sided Warbler
+      145231, //Cape May Warbler
+      10729, //Prothonotary Warbler
+      145249, //Prairie Warbler
+      979756, //Tennessee Warbler
+      145240, //Blackpoll Warbler
+      145246, //Yellow-throated Warbler
+      145236, //Bay-breasted Warbler
+      145237, //Blackburnian Warbler
+      145229, //Hooded Warbler
+      979753, //Nashville Warbler
+      73149, //Northern Waterthrush
+      73148, //Louisiana Waterthrush
+      979757, //Orange-crowned Warbler
+      145275, //Canada Warbler
+      73553, //Blue-winged Warbler
+      72912, //Worm-eating Warbler
+      145276, //Wilson's Warbler
+      145225, //Kentucky Warbler
+      9807, //Golden-winged Warbler
+      145232, //Cerulean Warbler
+      145224, //Mourning Warbler
+      10442, //Swainson's Warbler
+      10431, //Connecticut Warbler
+      145230, //Kirtland's Warbler
     ],
   },
   "Sophie's Favorite Warblers (Calls)": {

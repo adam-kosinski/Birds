@@ -88,9 +88,14 @@ function loadBooleanSetting(name, default_value) {
 }
 
 function key(taxonId) {
-  const baseKey = `taxon-${taxonId}-${mode}`;
-  if (data_source === "iNaturalist") return baseKey;
-  return baseKey + "-" + data_source;
+  let keyString = `taxon-${taxonId}-${mode}`;
+  if (data_source !== "iNaturalist") {
+    keyString += "-" + data_source;
+  }
+  if (custom_game_type) {
+    keyString += "-" + custom_game_type;
+  }
+  return keyString;
 }
 
 function loadTaxonData(taxonId, raw = false) {

@@ -5,6 +5,10 @@
   --light-gray: #d1d1d1;
   --medium-gray: #9d9d9d;
   --dark-gray: #464646;
+  --correct-color: #5bcf5b;
+  --correct-color-shadow: #095200;
+  --incorrect-color: #ff7d7d;
+  --incorrect-color-shadow: #740000;
 }
 
 /* General stuff */

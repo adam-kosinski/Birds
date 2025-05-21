@@ -69,7 +69,7 @@
   grid-template-columns: 1fr 1fr;
   position: relative;
 }
-#mode-container:has(.override[active]) #mode-toggle {
+#mode-container:has(#mode-override.active) #mode-toggle {
   display: none;
 }
 
@@ -99,7 +99,7 @@
   left: 50%;
 }
 
-#mode-container .override:not([active]) {
+#mode-override:not(.active) {
   display: none;
 }
 

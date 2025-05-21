@@ -13,16 +13,26 @@ async function initListScreen() {
   let url = new URL(window.location.href);
   let taxonIdsString = url.searchParams.get("taxa");
   let default_mode = url.searchParams.get("mode");
-  let data_source_setting =
-    url.searchParams.get("data_source") || "iNaturalist";
+  data_source = url.searchParams.get("data_source") || "iNaturalist";
+  custom_game_type = url.searchParams.get("custom_game_type") || "";
   place_id = url.searchParams.get("place_id");
   custom_groups_key = url.searchParams.get("custom_groups") || undefined;
 
-  // It helps to set data source before adding birds because the proficiency
-  // values use a different key for different data sources.
-  // Technically we could do it later, but before setting the mode, since setMode()
-  // will override the proficiency displays
-  setDataSource(data_source_setting);
+  // apply styling changes for custom data sources and custom game types
+  const mainDiv = document.getElementById("game-main");
+  mainDiv.dataset.dataSource = data_source;
+  if (custom_game_type) {
+    const overrideText = document.getElementById("mode-override");
+    overrideText.textContent = custom_game_type;
+    overrideText.classList.add("active");
+    mainDiv.dataset.customGameType = custom_game_type;
+    document
+      .getElementById("bird-grid")
+      .style.setProperty("--grid-img-size", "150px");
+  }
+
+  // fill in field marks options, if applicable
+  initFieldMarksUI();
 
   // fill in taxa
   let taxonIds = [];
@@ -80,6 +90,35 @@ async function initListScreen() {
 
   stopListLoader();
   initializationComplete = true;
+}
+
+function initFieldMarksUI() {
+  if (custom_game_type === "Warbler Field Marks") {
+    const container = document.getElementById("field-marks");
+    for (const mark in FIELD_MARK_CONFIG) {
+      const div = document.createElement("div");
+      div.className = "field-mark-row";
+      div.dataset.fieldMark = mark;
+
+      const p = document.createElement("p");
+      p.textContent = mark;
+
+      const buttonYes = document.createElement("button");
+      buttonYes.dataset.value = "yes";
+      const imgYes = document.createElement("img");
+      imgYes.src = FIELD_MARK_CONFIG[mark].photo_yes;
+      buttonYes.append(imgYes);
+
+      const buttonNo = document.createElement("button");
+      buttonNo.dataset.value = "no";
+      const imgNo = document.createElement("img");
+      imgNo.src = FIELD_MARK_CONFIG[mark].photo_no;
+      buttonNo.append(imgNo);
+
+      div.append(p, buttonYes, buttonNo);
+      container.append(div);
+    }
+  }
 }
 
 function printHumanReadableTaxonCounts() {
@@ -224,7 +263,9 @@ async function addBirds(taxa_id_list) {
 
   // also fetch similar species data from firebase
   // if we are using custom groups, this isn't necessary, so skip it
-  if (!custom_groups_key) {
+  if (custom_groups_key) {
+    console.log("Using custom groups, so not fetching similar species data");
+  } else {
     promises.push(getSimilarSpeciesDataFromFirebase(ids_to_fetch));
   }
 
@@ -272,7 +313,7 @@ async function addBirds(taxa_id_list) {
     bird_square.alt = "Photo of " + taxon.preferred_common_name;
 
     let checkmark = document.createElement("img");
-    checkmark.src = "images/checkmark_icon.png";
+    checkmark.src = "images/selected.png";
     checkmark.className = "checkmark";
 
     let name_container = document.createElement("div");

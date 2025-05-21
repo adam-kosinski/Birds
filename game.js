@@ -8,6 +8,7 @@ let taxon_bag = []; //list of unordered taxon ids, perhaps each id in here multi
 let bad_ids = {}; // object (taxon_id: [array of iNaturalist ids]) that records ids that were skipped before or are otherwise bad (e.g. missing audio). This coordinates w firebase
 let current; //current observation object
 let next; //helpful for preloading
+let fieldMarksSetTimeoutId;
 
 const audio_preloader = new Audio();
 audio_preloader.addEventListener("loadedmetadata", checkNextAudioDuration);
@@ -15,21 +16,27 @@ audio_preloader.addEventListener("loadedmetadata", checkNextAudioDuration);
 let game_state;
 const INACTIVE = 0;
 const GUESSING = 1;
-const ANSWER_SHOWN = 2;
+const FIELD_MARKS_SCREEN = 2;
+const ANSWER_SHOWN = 3;
 setGameState(INACTIVE);
 
 let mode = "birdsong"; // or "visual_id"
 let data_source = "iNaturalist"; // default "iNaturalist" (see initListScreen()), other options: "ebird_calls"
 let place_id = undefined;
 let custom_groups_key = undefined; // use iNaturalist similar species as default if undefined - see defaultConf() in recommended_groups.js
+let custom_game_type = undefined;
 
 let funny_bird_timeout_id;
 
 let already_notified_full_progress_bar = false;
 
-function setGameState(state) {
-  game_state = state;
-  document.getElementById("game-main").dataset.gameState = state;
+function setGameState(new_state) {
+  // if a game state transition happens, don't want the field marks set timeout to act anymore
+  if (game_state !== new_state && fieldMarksSetTimeoutId !== undefined) {
+    clearTimeout(fieldMarksSetTimeoutId);
+  }
+  game_state = new_state;
+  document.getElementById("game-main").dataset.gameState = new_state;
 }
 
 async function setMode(new_mode) {
@@ -66,24 +73,6 @@ async function setMode(new_mode) {
   if (initializationComplete) {
     makeTaxonGroups();
   }
-}
-
-function setDataSource(new_data_source) {
-  data_source = new_data_source;
-
-  // game mode override (if data source doesn't allow visual id / birdsong toggling)
-  if (new_data_source === "ebird_calls") {
-    document
-      .querySelector(".override[data-name=ebird_calls]")
-      .setAttribute("active", true);
-  } else {
-    document
-      .querySelectorAll(".override[active]")
-      .forEach((el) => el.removeAttribute("active"));
-  }
-
-  // apply CSS styling changes to the game
-  document.getElementById("game-main").dataset.dataSource = new_data_source;
 }
 
 // try a different observation if the audio is too long
@@ -263,9 +252,15 @@ async function initGame() {
     //HTML
     let button = document.createElement("button");
     button.className = "bird-grid-option";
+    button.dataset.taxonId = obj.id;
     button.dataset.commonName = obj.preferred_common_name;
-    if (obj.default_photo)
-      button.style.backgroundImage = `url('${obj.default_photo.square_url}')`;
+    if (obj.default_photo) {
+      let url = obj.default_photo.square_url;
+      if (custom_game_type === "Warbler Field Marks") {
+        url = obj.default_photo.medium_url;
+      }
+      button.style.backgroundImage = `url('${url}')`;
+    }
     bird_grid.append(button);
 
     //datalist - only include scientific option if taxon isn't a species/subspecies, OR if taxon is a plant
@@ -599,19 +594,30 @@ function nextObservation() {
   );
   document.getElementById("observation-link").href = current.uri;
 
-  //reset HTML from answer screen
+  //reset HTML from before
   document.getElementById("guess-input").value = "";
   document.getElementById("guess-input").readOnly = false;
   document
     .getElementById("bird-grid")
-    .querySelectorAll(".bird-grid-option.selected")
+    .querySelectorAll(".bird-grid-option")
     .forEach((el) => {
       el.classList.remove("selected");
+      el.classList.remove("field-mark-mismatch");
     });
   document.getElementById("image-attribution").classList.remove("visible");
   document
     .querySelectorAll(".mark-as-bad-button")
     .forEach((el) => el.classList.remove("marked"));
+  document
+    .querySelectorAll("#field-marks button.selected")
+    .forEach((el) => el.classList.remove("selected"));
+
+  // need to use a delay-0 setTimeout to reset scrollTop so that the element
+  // is visible before we reset it
+  setTimeout(
+    () => (document.getElementById("bird-selection-container").scrollTop = 0),
+    0
+  );
 
   //game mode specific stuff
 
@@ -655,8 +661,6 @@ function nextObservation() {
       audio1.removeAttribute("src");
     }
     // note: spectrogram stuff happens automatically when audio src changed
-    // misc
-    document.getElementById("bird-grid").scrollTop = 0;
 
     //start loading the next observation's audio
     //the event listener on the preloader will try to change the choice for 'next' if the audio is too long
@@ -718,6 +722,17 @@ function nextObservation() {
   document.getElementById("description").textContent = descriptionDisplay;
 
   setGameState(GUESSING);
+
+  // for field marks game, switch to the field marks screen after a delay
+  if (custom_game_type === "Warbler Field Marks") {
+    const delay = FIELD_MARKS_VIEW_BIRD_DURATION; // TODO make variable
+    fieldMarksSetTimeoutId = setTimeout(() => {
+      setGameState(FIELD_MARKS_SCREEN);
+      // need to reset scrollTop now, since this element wasn't visible
+      // earlier (in the GUESSING state) for this custom game type
+      document.getElementById("bird-selection-container").scrollTop = 0;
+    }, delay);
+  }
 }
 
 function getRemainingGuessOptions() {
@@ -727,6 +742,19 @@ function getRemainingGuessOptions() {
   return options.filter((opt) =>
     opt.toLowerCase().includes(inputText.toLowerCase())
   );
+}
+
+function getSelectedFieldMarks() {
+  const out = {};
+  for (const mark in FIELD_MARK_CONFIG) {
+    const selected = document.querySelector(
+      `[data-field-mark="${mark}"] .selected`
+    );
+    if (selected) {
+      out[mark] = selected.dataset.value === "yes";
+    }
+  }
+  return out;
 }
 
 function checkAnswer() {
@@ -773,6 +801,10 @@ function checkAnswer() {
   document.getElementById("game-main").dataset.correct =
     guess.length > 0 ? correct : "no-guess";
 
+  if (custom_game_type === "Warbler Field Marks") {
+    setFieldMarksAnswers();
+  }
+
   //update taxon picking probabilities and user data (if storing)
   //don't do anything if squirrel intruder, those are jokes
   if (!current.is_squirrel_intruder) {
@@ -801,6 +833,39 @@ function checkAnswer() {
   }
 
   setGameState(ANSWER_SHOWN);
+}
+
+function setFieldMarksAnswers() {
+  const id = current.taxon.id;
+  const guesses = getSelectedFieldMarks();
+
+  const container = document.getElementById("field-marks-answers");
+  container.innerHTML = "";
+  for (const mark in FIELD_MARK_CONFIG) {
+    // note - since list isn't necessarily comprehensive, it's possible
+    // for a taxon to not be in the "yes" or "no" list for that field mark
+    const markPresent = FIELD_MARK_CONFIG[mark].taxa_yes.includes(id);
+    const markAbsent = FIELD_MARK_CONFIG[mark].taxa_no.includes(id);
+    if (!markPresent && !markAbsent) continue;
+
+    const guessed = mark in guesses;
+    const correct = guessed && guesses[mark] === markPresent;
+    const incorrect = guessed && !correct;
+
+    const p = document.createElement("p");
+    p.classList.add("field-mark-answer");
+    if (correct) p.classList.add("correct");
+    else if (incorrect) p.classList.add("incorrect");
+
+    let msg = (markPresent ? "" : "No ") + mark;
+    if (correct) msg += " - Correct!";
+    else if (incorrect) {
+      msg += " - Guessed " + (guesses[mark] ? "Yes" : "No");
+    }
+    p.textContent = msg;
+
+    container.append(p);
+  }
 }
 
 function updateTaxonBag(taxon_id, delta) {

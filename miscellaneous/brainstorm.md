@@ -1,7 +1,5 @@
 TODO
 
-Allow groups to be configured. Note that new taxa might be added or removed, so don't assume the taxa list will stay the same. Issue - custom groups won't update local storage because no iNaturalist data fetched yet. Fix this by disallowing local storage update if no iNaturalist AND no conf value from a custom grouping.
-
 Teaching page, where it shows you several examples of each taxon next to each other? Have info links for each taxon on that page. Number of examples could be adjusted based on number of taxa. If 2 taxa, show 2-3 examples each. If 4 taxa, maybe 2 examples each. More than that, just do 1 example each.
 
 It's possible for a group to be created with one species it seems (see common warblers visual ID). I believe only one such group can be created, otherwise they would be merged. Could add it to the group with extra space containing the most similar taxon, but what if all groups are full? Probably the best thing to do is just add it to the group containing its most similar taxon. This might result in one group being over the limit, but maybe that's okay.
@@ -14,7 +12,11 @@ Convert Sophie's warbler calls into all warbler calls?
 
 Chipmunk intruder
 
-Warbler field marks game!
+Warbler field marks game! Maybe focus on fall (or transition to focusing on that) since that's when field marks are more important
+The local storage key should probably be different for different custom games?
+Female / immature plumage sometimes has the opposite field mark (particularly for yellow throat). Maybe fix by using curated ebird photos? Would need to be careful if want to build in a fall-season setting.
+
+Scroll reset not working
 
 Things to tune:
 
