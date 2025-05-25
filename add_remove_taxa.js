@@ -61,33 +61,6 @@ async function initListScreen() {
 
   if (data_source === "ebird_calls") initSpectrogram();
 
-  // check if a lot of list taxa aren't found in this location; give warning if so
-  // do this after a delay so that the page will render first
-  setTimeout(() => {
-    const taxaNotFound = [];
-    list_taxa.forEach((obj) => {
-      // if above species level, it could exist but just not be very common
-      // (regional counts are best-effort, not guaranteed), so don't alert the user
-      // since it could be a false alert
-      if (obj.rank_level > 10) return;
-
-      if (!(roundUpIdToSpecies(obj.id) in regionalSpeciesCounts)) {
-        taxaNotFound.push(obj);
-      }
-    });
-    console.log("taxa not found in region of study", taxaNotFound);
-    const nTaxaThreshold =
-      FRAC_TAXA_ABSENT_WARNING_THRESHOLD * list_taxa.length;
-    if (taxaNotFound.length > nTaxaThreshold) {
-      alert(
-        `${taxaNotFound.length} species weren't found in the chosen location. Make sure that the location reflects the area you wish to study so that common species can be determined correctly.\n\n` +
-          `Not found:\n${taxaNotFound
-            .map((x) => x.preferred_common_name || x.name)
-            .join(", ")}`
-      );
-    }
-  }, 1000);
-
   stopListLoader();
   initializationComplete = true;
 }
