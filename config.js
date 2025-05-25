@@ -20,8 +20,9 @@ const MAX_SHORT_AUDIO_RETRIES = 3; //max number of tries to pick a shorter audio
 const TIME_TO_REPLENISH_A_SHORT_AUDIO_RETRY = 1000; //ms, retries replenish over time
 const SQUIRREL_PROBABILITY = 0.02; //hee hee :)
 // taxon bag
-const MAX_TAXON_BAG_COPIES = 11; //number of times a taxon can be in the taxon bag, min is 1
-const START_TAXON_BAG_COPIES = 7; //may add fewer copies for taxa that the user is very proficient at - see game.js, initGame()
+const START_TAXON_BAG_COPIES = 7; //default amount in taxon bag, may add fewer copies for taxa that the user is very proficient at - see game.js, initGame()
+const MAX_TAXON_BAG_COPIES = 11; //number of times a taxon can be in the taxon bag
+const MIN_TAXON_BAG_COPIES = 4; //if user is fully proficient, will add this many copies to taxon bag
 const CORRECT_REMOVE_COPIES = 2; //number of copies to remove from taxon_bag if the user got a question on this taxon right
 const INCORRECT_ADD_COPIES = 3; //number of copies to add if incorrect, for both the guess and what it actually is
 const NO_GUESS_ADD_COPIES = 0; //number of copies to add to bag if no guess - 0 seems okay, since some recordings/images are v bad

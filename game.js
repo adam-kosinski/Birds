@@ -201,10 +201,10 @@ async function initGame() {
     taxon_obs[obj.id] = [];
     taxon_queues[obj.id] = [];
     // determine how many to add to taxon bag, based on previous proficiency
-    // should range from 2 to START_TAXON_BAG_COPIES (never 1 b/c we don't want them to start at full proficiency meter)
-    const n_copies = Math.ceil(
-      2 + (START_TAXON_BAG_COPIES - 2) * (1 - loadTaxonData(obj.id).proficiency)
-    );
+    // should range from MIN_TAXON_BAG_COPIES to START_TAXON_BAG_COPIES
+    const x = 1 - loadTaxonData(obj.id).proficiency;
+    const slope = START_TAXON_BAG_COPIES - MIN_TAXON_BAG_COPIES;
+    const n_copies = Math.ceil(MIN_TAXON_BAG_COPIES + slope * x);
     console.log(obj.preferred_common_name, n_copies, "copies in taxon bag");
     // add to taxon_bag
     for (let i = 0; i < n_copies; i++) {
