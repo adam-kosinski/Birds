@@ -163,8 +163,9 @@ const WARBLER_EXAMPLE_IMAGES = {
     Male: {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/28687821/480",
     },
-    Female: {
-      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/556396981/480",
+    Immature: {
+      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/171413871/480",
+      backgroundPosition: "0%",
     },
   },
   145240: {
@@ -333,8 +334,9 @@ const WARBLER_EXAMPLE_IMAGES = {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/171770341/480",
       backgroundPosition: "80%",
     },
-    Female: {
-      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/60015451/480",
+    Immature: {
+      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/375224841/480",
+      backgroundPosition: "30%",
     },
   },
 };

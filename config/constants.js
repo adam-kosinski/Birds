@@ -40,7 +40,7 @@ const PLACE_STYLE = {
   //for location geometry
   color: "orange",
 };
-const FIELD_MARKS_VIEW_BIRD_DURATION = 400; // ms
+const FIELD_MARKS_VIEW_BIRD_DURATION = 4000; // ms
 
 // funny bird
 const FUNNY_BIRD_LEAVE_DELAY = 8000; //ms
