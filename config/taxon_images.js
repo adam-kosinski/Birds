@@ -146,6 +146,7 @@ const WARBLER_EXAMPLE_IMAGES = {
     },
     Female: {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/80274771/480",
+      backgroundPosition: "70%",
     },
   },
   145249: {
@@ -256,6 +257,7 @@ const WARBLER_EXAMPLE_IMAGES = {
     },
     Female: {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/110994131/480",
+      backgroundPosition: "70%",
     },
   },
   72912: {
