@@ -631,13 +631,9 @@ const WARBLER_EXAMPLE_IMAGES = {
   },
   145246: {
     //Yellow-throated Warbler
-    Male: {
+    "Male/Female": {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/203613341/480",
     },
-    Female: {
-      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/50953061/480",
-    },
-    // Immature: { url: "" },
   },
   145236: {
     //Bay-breasted Warbler
@@ -671,43 +667,27 @@ const WARBLER_EXAMPLE_IMAGES = {
   },
   979753: {
     //Nashville Warbler
-    Male: {
+    "Male/Female": {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/281696181/480",
     },
-    Female: {
-      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/340120141/480",
-    },
-    // Immature: { url: "" },
   },
   73149: {
     //Northern Waterthrush
-    Male: {
-      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/488877831/480",
+    "Male/Female": {
+      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/634965123/480",
     },
-    Female: {
-      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/622216271/480",
-    },
-    // Immature: { url: "" },
   },
   73148: {
     //Louisiana Waterthrush
-    Male: {
-      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/558756841/480",
+    "Male/Female": {
+      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/435187311/480",
     },
-    Female: {
-      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/96348581/480",
-    },
-    // Immature: { url: "" },
   },
   979757: {
     //Orange-crowned Warbler
-    Male: {
+    "Male/Female": {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/443699521/480",
     },
-    Female: {
-      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/362018611/480",
-    },
-    // Immature: { url: "" },
   },
   145275: {
     //Canada Warbler
@@ -725,19 +705,15 @@ const WARBLER_EXAMPLE_IMAGES = {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/462916791/480",
     },
     Female: {
-      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/238909311/480",
+      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/582238771/480",
     },
     // Immature: { url: "" },
   },
   72912: {
     //Worm-eating Warbler
-    Male: {
+    "Male/Female": {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/576852071/480",
     },
-    Female: {
-      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/276687291/480",
-    },
-    // Immature: { url: "" },
   },
   145276: {
     //Wilson's Warbler
@@ -791,13 +767,9 @@ const WARBLER_EXAMPLE_IMAGES = {
   },
   10442: {
     //Swainson's Warbler
-    Male: {
+    "Male/Female": {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/442283851/480",
     },
-    Female: {
-      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/98980851/480",
-    },
-    // Immature: { url: "" },
   },
   10431: {
     //Connecticut Warbler
@@ -805,7 +777,7 @@ const WARBLER_EXAMPLE_IMAGES = {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/448496541/480",
     },
     Female: {
-      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/238928671/480",
+      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/238932401/480",
     },
     // Immature: { url: "" },
   },
