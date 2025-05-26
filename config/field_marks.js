@@ -97,7 +97,7 @@ const FIELD_MARK_CONFIG = {
     taxa_yes: [
       10286, //Black-and-white Warbler
       145240, //Blackpoll Warbler
-      // 979757, //Orange-crowned Warbler - these are very faint, so omit
+      979757, //Orange-crowned Warbler - very faint but this differentiates from Tennessee's
       145238, //Yellow Warbler
       145235, //Magnolia Warbler
       145231, //Cape May Warbler
