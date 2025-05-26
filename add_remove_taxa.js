@@ -19,16 +19,21 @@ async function initListScreen() {
   custom_groups_key = url.searchParams.get("custom_groups") || undefined;
 
   // apply styling changes for custom data sources and custom game types
+
   const mainDiv = document.getElementById("game-main");
   mainDiv.dataset.dataSource = data_source;
+
   if (custom_game_type) {
     const overrideText = document.getElementById("mode-override");
     overrideText.textContent = custom_game_type;
     overrideText.classList.add("active");
     mainDiv.dataset.customGameType = custom_game_type;
-    document
-      .getElementById("bird-grid")
-      .style.setProperty("--grid-img-size", "150px");
+
+    if (custom_game_type === "Warbler Field Marks") {
+      const choiceGrid = document.getElementById("bird-grid");
+      choiceGrid.style.setProperty("--grid-img-width", "300px");
+      choiceGrid.style.setProperty("--grid-img-height", "150px");
+    }
   }
 
   // fill in field marks options, if applicable

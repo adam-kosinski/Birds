@@ -40,7 +40,7 @@ const PLACE_STYLE = {
   //for location geometry
   color: "orange",
 };
-const FIELD_MARKS_VIEW_BIRD_DURATION = 4000; // ms
+const FIELD_MARKS_VIEW_BIRD_DURATION = 400; // ms
 
 // funny bird
 const FUNNY_BIRD_LEAVE_DELAY = 8000; //ms
@@ -442,6 +442,250 @@ const FIELD_MARK_CONFIG = {
       145276, //Wilson's Warbler
       10247, //American Redstart
     ],
+  },
+};
+
+const WARBLER_EXAMPLE_IMAGES = {
+  145245: {
+    //Yellow-rumped Warbler
+    Male: {
+      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/634611824/480",
+    },
+    Female: {
+      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/506630041/480",
+      backgroundPosition: "80%",
+    },
+    // Immature: { url: "" },
+  },
+  145242: {
+    //Palm Warbler
+    Male: {
+      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/618090134/480",
+    },
+    Female: {
+      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/180766671/480",
+    },
+    // Immature: { url: "" },
+  },
+  9721: {
+    //Common Yellowthroat
+    Male: {
+      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/576714211/480",
+    },
+    Female: {
+      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/30879311/480",
+      backgroundPosition: "10%",
+    },
+    // Immature: { url: "" },
+  },
+  145244: {
+    //Pine Warbler
+    Male: {
+      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/433958301/480",
+    },
+    Female: {
+      url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/35414171/480",
+      backgroundPosition: "25%",
+    },
+    // Immature: { url: "" },
+  },
+  10247: {
+    //American Redstart
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  10286: {
+    //Black-and-white Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145238: {
+    //Yellow Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145233: {
+    //Northern Parula
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  62550: {
+    //Ovenbird
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145235: {
+    //Magnolia Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145258: {
+    //Black-throated Green Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  199916: {
+    //Black-throated Blue Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145239: {
+    //Chestnut-sided Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145231: {
+    //Cape May Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  10729: {
+    //Prothonotary Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145249: {
+    //Prairie Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  979756: {
+    //Tennessee Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145240: {
+    //Blackpoll Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145246: {
+    //Yellow-throated Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145236: {
+    //Bay-breasted Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145237: {
+    //Blackburnian Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145229: {
+    //Hooded Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  979753: {
+    //Nashville Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  73149: {
+    //Northern Waterthrush
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  73148: {
+    //Louisiana Waterthrush
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  979757: {
+    //Orange-crowned Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145275: {
+    //Canada Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  73553: {
+    //Blue-winged Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  72912: {
+    //Worm-eating Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145276: {
+    //Wilson's Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145225: {
+    //Kentucky Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  9807: {
+    //Golden-winged Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145232: {
+    //Cerulean Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145224: {
+    //Mourning Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  10442: {
+    //Swainson's Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  10431: {
+    //Connecticut Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
+  },
+  145230: {
+    //Kirtland's Warbler
+    Male: { url: "" },
+    Female: { url: "" },
+    // Immature: { url: "" },
   },
 };
 
