@@ -122,9 +122,11 @@ const WARBLER_EXAMPLE_IMAGES = {
     //Chestnut-sided Warbler
     Male: {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/336974031/480",
+      backgroundPosition: "40%",
     },
     Female: {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/132902571/480",
+      backgroundPosition: "8%",
     },
   },
   145231: {
