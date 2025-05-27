@@ -379,7 +379,6 @@
 
 #field-marks-answers {
   display: flex;
-  gap: 3px;
   padding: 3px;
   width: min-content;
   max-width: 100%;
@@ -388,27 +387,33 @@
   border: 1px solid var(--medium-gray);
   border-radius: 12px;
 }
-#field-marks-answers:has(.field-mark-correctness-comment) {
-  padding-bottom: 0;
+#field-marks-answers > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 6px;
+}
+#field-marks-answers > div:not(:last-child) {
+  border-right: 1px solid var(--medium-gray);
 }
 .field-mark-answer {
-  padding: 2px 6px;
+  font-size: 14px;
   white-space: nowrap;
+}
+.field-mark-correctness-msg {
+  font-size: 12px;
+  width: min-content;
+  white-space: nowrap;
+  padding: 0px 6px;
   border-radius: 12px;
 }
-.field-mark-answer.correct {
-  border: 1px solid black;
+.correct .field-mark-correctness-msg {
+  /* border: 1px solid black; */
   background-color: var(--correct-color);
 }
-.field-mark-answer.incorrect {
-  border: 1px solid black;
+.incorrect .field-mark-correctness-msg {
+  /* border: 1px solid black; */
   background-color: var(--incorrect-color);
-}
-.field-mark-correctness-comment {
-  font-size: 12px;
-}
-.field-mark-answer img {
-  width: 20px;
 }
 
 /* bottom of game screen */

@@ -882,25 +882,25 @@ function setFieldMarksAnswers() {
     const incorrect = guessed && !correct;
 
     const div = document.createElement("div");
+    if (correct) div.classList.add("correct");
+    else if (incorrect) div.classList.add("incorrect");
 
     // text describing the presence / absence of the field mark
     const pMark = document.createElement("p");
     pMark.classList.add("field-mark-answer");
     pMark.textContent = (markPresent ? "" : "No ") + mark;
-    if (correct) pMark.classList.add("correct");
-    else if (incorrect) pMark.classList.add("incorrect");
     div.append(pMark);
 
     // text commenting on whether the user got it right or wrong
     // omit this if they didn't guess
     if (correct || incorrect) {
-      const pComment = document.createElement("p");
-      pComment.classList.add("field-mark-correctness-comment");
-      if (correct) pComment.textContent = "Correct!";
+      const pMsg = document.createElement("p");
+      pMsg.classList.add("field-mark-correctness-msg");
+      if (correct) pMsg.textContent = "Correct!";
       else if (incorrect) {
-        pComment.textContent = "Guessed " + (guesses[mark] ? "Yes" : "No");
+        pMsg.textContent = "Guessed " + (guesses[mark] ? "Yes" : "No");
       }
-      div.append(pComment);
+      div.append(pMsg);
     }
 
     container.append(div);
