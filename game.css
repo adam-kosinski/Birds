@@ -452,7 +452,7 @@
 
 #bottom-buttons {
   display: flex;
-  gap: 15px;
+  gap: 8px;
 }
 #skip-button {
   color: var(--dark-gray);
