@@ -139,8 +139,8 @@ const FIELD_MARK_CONFIG = {
     // 145224, //Mourning Warbler
   },
   "Eye Ring": {
-    photo_yes: "/images/eye_ring_yes.jpg",
-    photo_no: "/images/eye_ring_no.jpg",
+    photo_yes: "images/eye_ring_yes.jpg",
+    photo_no: "images/eye_ring_no.jpg",
     advanced: true,
     taxa_yes: [
       145275, //Canada Warbler
