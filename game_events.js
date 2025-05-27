@@ -88,6 +88,14 @@ bird_grid.addEventListener("click", (e) => {
 });
 
 // field marks selection
+const fieldMarkToggle = document.getElementById("toggle-advanced-field-marks");
+fieldMarkToggle.addEventListener("click", () => {
+  document
+    .querySelectorAll(".field-mark-row.advanced")
+    .forEach((el) => el.classList.toggle("hidden"));
+  fieldMarkToggle.classList.toggle("showing-more");
+});
+
 document.getElementById("field-marks").addEventListener("click", (e) => {
   const button = e.target.closest("button");
   if (!button) return;

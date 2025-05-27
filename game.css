@@ -336,6 +336,20 @@
   flex-direction: column;
   gap: 10px;
   margin-bottom: 10px;
+  position: relative;
+}
+#toggle-advanced-field-marks {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 10px;
+  width: min-content;
+}
+#toggle-advanced-field-marks::after {
+  content: "SHOW MORE";
+}
+#toggle-advanced-field-marks.showing-more::after {
+  content: "SHOW LESS";
 }
 #field-marks {
   display: flex;
@@ -350,6 +364,9 @@
   gap: 10px;
   align-items: center;
   text-align: center;
+}
+.field-mark-row.hidden {
+  display: none;
 }
 #field-marks button {
   display: flex;

@@ -77,6 +77,10 @@ function initFieldMarksUI() {
       const div = document.createElement("div");
       div.className = "field-mark-row";
       div.dataset.fieldMark = mark;
+      if (FIELD_MARK_CONFIG[mark].advanced) {
+        div.classList.add("advanced");
+        div.classList.add("hidden");
+      }
 
       const p = document.createElement("p");
       p.textContent = mark;
