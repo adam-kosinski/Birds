@@ -248,7 +248,7 @@
   box-sizing: border-box;
   padding: 10px;
   width: 100%;
-  max-width: 800px;
+  max-width: 960px;
   height: 325px;
   flex-grow: 1;
   overflow-y: auto;
@@ -257,12 +257,12 @@
 
 #bird-grid {
   /* note that grid image size may be modified by javascript, so keep it as a variable */
-  --grid-img-size: 75px;
+  --grid-img-width: 75px;
+  --grid-img-height: 75px;
   display: grid;
   box-sizing: border-box;
   justify-content: center;
-  grid-template-columns: repeat(auto-fill, var(--grid-img-size));
-  grid-template-rows: repeat(auto-fill, var(--grid-img-size));
+  grid-template-columns: repeat(auto-fill, var(--grid-img-width));
   gap: 10px;
 }
 
@@ -271,21 +271,42 @@
   background-position: center;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 12px;
-  width: var(--grid-img-size);
-  height: var(--grid-img-size);
+  width: var(--grid-img-width);
+  height: var(--grid-img-height);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  /* position relative so the outline size will calculate correctly */
   position: relative;
-  /* position relative for percentage styling of pseudo element */
-}
-.bird-grid-option.field-mark-mismatch {
-  display: none;
 }
 
-.bird-grid-option img {
-  border-radius: inherit;
+.bird-grid-img-div {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* overlay text styling */
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  color: white;
+  /* text outline = shadow in all directions, looks nice */
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black,
+    1px 1px 0 black;
+}
+.bird-grid-img-div:first-child {
+  border-top-left-radius: inherit;
+  border-bottom-left-radius: inherit;
+}
+.bird-grid-img-div:last-child {
+  border-top-right-radius: inherit;
+  border-bottom-right-radius: inherit;
+}
+
+.bird-grid-option.field-mark-mismatch {
+  display: none;
 }
 
 .bird-grid-option.selected::after {
@@ -315,6 +336,20 @@
   flex-direction: column;
   gap: 10px;
   margin-bottom: 10px;
+  position: relative;
+}
+#toggle-advanced-field-marks {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 10px;
+  width: min-content;
+}
+#toggle-advanced-field-marks::after {
+  content: "SHOW MORE";
+}
+#toggle-advanced-field-marks.showing-more::after {
+  content: "SHOW LESS";
 }
 #field-marks {
   display: flex;
@@ -329,6 +364,9 @@
   gap: 10px;
   align-items: center;
   text-align: center;
+}
+.field-mark-row.hidden {
+  display: none;
 }
 #field-marks button {
   display: flex;
@@ -357,26 +395,40 @@
 /* field marks answers */
 
 #field-marks-answers {
+  display: flex;
+  padding: 3px;
+  width: min-content;
+  max-width: 100%;
+  overflow-x: auto;
   background-color: white;
   border: 1px solid var(--medium-gray);
   border-radius: 12px;
 }
+#field-marks-answers > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 6px;
+}
+#field-marks-answers > div:not(:last-child) {
+  border-right: 1px solid var(--medium-gray);
+}
 .field-mark-answer {
-  padding: 2px 6px;
-  margin: 3px;
+  font-size: 14px;
   white-space: nowrap;
+}
+.field-mark-correctness-msg {
+  font-size: 12px;
+  width: min-content;
+  white-space: nowrap;
+  padding: 0px 6px;
   border-radius: 12px;
 }
-.field-mark-answer.correct {
-  border: 1px solid black;
+.correct .field-mark-correctness-msg {
   background-color: var(--correct-color);
 }
-.field-mark-answer.incorrect {
-  border: 1px solid black;
+.incorrect .field-mark-correctness-msg {
   background-color: var(--incorrect-color);
-}
-.field-mark-answer img {
-  width: 20px;
 }
 
 /* bottom of game screen */
@@ -398,9 +450,9 @@
   border-bottom-color: var(--incorrect-color-shadow);
 }
 
-#guess-and-skip-buttons {
+#bottom-buttons {
   display: flex;
-  gap: 15px;
+  gap: 8px;
 }
 #skip-button {
   color: var(--dark-gray);
@@ -413,6 +465,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+#field-marks-review-button,
+#reshow-answer-button {
+  font-size: 12px;
 }
 
 #page-disabler {

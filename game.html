@@ -251,6 +251,7 @@
         <div id="bird-selection-container">
           <div id="field-marks-container">
             <p>Select field marks to filter species:</p>
+            <button id="toggle-advanced-field-marks"></button>
             <div id="field-marks"></div>
             <p>Which species was it?</p>
           </div>
@@ -272,23 +273,33 @@
             placeholder="Write your guess"
           />
 
-          <div id="guess-and-skip-buttons">
+          <div id="bottom-buttons">
             <div id="skip-button-container">
               <button id="skip-button" class="btn-secondary">SKIP</button>
               <div id="skip-loader" class="loader"></div>
             </div>
             <button id="guess-button" class="btn-primary">REVEAL</button>
-          </div>
 
-          <button id="correct-button" class="btn-primary">
-            CORRECT! NEXT >
-          </button>
-          <button id="incorrect-button" class="btn-primary">
-            INCORRECT, NEXT >
-          </button>
-          <button id="neutral-next-button" class="btn-primary">
-            NO GUESS, NEXT >
-          </button>
+            <button id="field-marks-review-button" class="btn-secondary">
+              BACK TO<br />
+              FIELD MARKS
+            </button>
+
+            <button id="reshow-answer-button" class="btn-secondary">
+              SHOW<br />
+              PHOTO
+            </button>
+
+            <button id="correct-button" class="btn-primary">
+              CORRECT! NEXT >
+            </button>
+            <button id="incorrect-button" class="btn-primary">
+              INCORRECT, NEXT >
+            </button>
+            <button id="neutral-next-button" class="btn-primary">
+              NO GUESS, NEXT >
+            </button>
+          </div>
         </div>
 
         <div>
@@ -386,7 +397,12 @@
 
     <!-- script order is important so function declarations work properly -->
 
-    <script src="config.js"></script>
+    <script src="config/constants.js"></script>
+    <script src="config/dynamic_config.js"></script>
+    <script src="config/field_marks.js"></script>
+    <script src="config/taxon_images.js"></script>
+    <script src="config/presets.js"></script>
+
     <script src="squirrels.js"></script>
     <script src="ebird_calls_prep/ebird_calls.js"></script>
 

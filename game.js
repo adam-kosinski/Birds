@@ -18,6 +18,7 @@ const INACTIVE = 0;
 const GUESSING = 1;
 const FIELD_MARKS_SCREEN = 2;
 const ANSWER_SHOWN = 3;
+const REVIEWING_FIELD_MARKS = 4;
 setGameState(INACTIVE);
 
 let mode = "birdsong"; // or "visual_id"
@@ -240,7 +241,7 @@ async function initGame() {
   }
 
   //populate bird grid
-  let bird_grid = document.getElementById("bird-grid");
+  const bird_grid = document.getElementById("bird-grid");
   //clear previous grid
   bird_grid
     .querySelectorAll(".bird-grid-option:not(#other-option")
@@ -250,25 +251,52 @@ async function initGame() {
   //add taxa
   taxa_to_use.forEach((obj) => {
     //HTML
-    let button = document.createElement("button");
+    const button = document.createElement("button");
     button.className = "bird-grid-option";
     button.dataset.taxonId = obj.id;
     button.dataset.commonName = obj.preferred_common_name;
-    if (obj.default_photo) {
-      let url = obj.default_photo.square_url;
-      if (custom_game_type === "Warbler Field Marks") {
-        url = obj.default_photo.medium_url;
+
+    let imgs = [];
+    if (
+      custom_game_type === "Warbler Field Marks" &&
+      obj.id in WARBLER_EXAMPLE_IMAGES
+    ) {
+      const config = WARBLER_EXAMPLE_IMAGES[obj.id];
+      for (const label in config) {
+        const imgData = { url: config[label].url, text: label };
+        if ("backgroundPosition" in config[label]) {
+          imgData.backgroundPosition = config[label].backgroundPosition;
+        }
+        imgs.push(imgData);
       }
-      button.style.backgroundImage = `url('${url}')`;
     }
+    // default photo
+    else if (obj.default_photo) {
+      imgs = [{ url: obj.default_photo.square_url }];
+    }
+    // add images into the button
+    for (const imgData of imgs) {
+      const imgDiv = document.createElement("div");
+      imgDiv.className = "bird-grid-img-div";
+      imgDiv.style.backgroundImage = `url("${imgData.url}")`;
+      if (imgData.text) {
+        imgDiv.textContent = imgData.text;
+        imgDiv.dataset.label = imgData.text;
+      }
+      if (imgData.backgroundPosition) {
+        imgDiv.style.backgroundPosition = imgData.backgroundPosition;
+      }
+      button.append(imgDiv);
+    }
+
     bird_grid.append(button);
 
     //datalist - only include scientific option if taxon isn't a species/subspecies, OR if taxon is a plant
-    let option_common = document.createElement("option");
+    const option_common = document.createElement("option");
     option_common.value = obj.preferred_common_name;
     document.getElementById("guess-datalist").append(option_common);
     if (obj.rank_level > 10 || obj.ancestor_ids.includes(47126)) {
-      let option_scientific = document.createElement("option");
+      const option_scientific = document.createElement("option");
       option_scientific.value = obj.name;
       document.getElementById("guess-datalist").append(option_scientific);
     }
@@ -597,6 +625,7 @@ function nextObservation() {
   //reset HTML from before
   document.getElementById("guess-input").value = "";
   document.getElementById("guess-input").readOnly = false;
+  delete document.getElementById("game-main").dataset.correct;
   document
     .getElementById("bird-grid")
     .querySelectorAll(".bird-grid-option")
@@ -852,19 +881,29 @@ function setFieldMarksAnswers() {
     const correct = guessed && guesses[mark] === markPresent;
     const incorrect = guessed && !correct;
 
-    const p = document.createElement("p");
-    p.classList.add("field-mark-answer");
-    if (correct) p.classList.add("correct");
-    else if (incorrect) p.classList.add("incorrect");
+    const div = document.createElement("div");
+    if (correct) div.classList.add("correct");
+    else if (incorrect) div.classList.add("incorrect");
 
-    let msg = (markPresent ? "" : "No ") + mark;
-    if (correct) msg += " - Correct!";
-    else if (incorrect) {
-      msg += " - Guessed " + (guesses[mark] ? "Yes" : "No");
+    // text describing the presence / absence of the field mark
+    const pMark = document.createElement("p");
+    pMark.classList.add("field-mark-answer");
+    pMark.textContent = (markPresent ? "" : "No ") + mark;
+    div.append(pMark);
+
+    // text commenting on whether the user got it right or wrong
+    // omit this if they didn't guess
+    if (correct || incorrect) {
+      const pMsg = document.createElement("p");
+      pMsg.classList.add("field-mark-correctness-msg");
+      if (correct) pMsg.textContent = "Correct!";
+      else if (incorrect) {
+        pMsg.textContent = "Guessed " + (guesses[mark] ? "Yes" : "No");
+      }
+      div.append(pMsg);
     }
-    p.textContent = msg;
 
-    container.append(p);
+    container.append(div);
   }
 }
 

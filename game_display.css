@@ -1,7 +1,11 @@
-/* Controls whether or not certain elements are visible based on the game mode and state */
-/* Easier to not miss things in css */
-/* By default everything is visible */
-/* All attributes will target #game-main, but omitting that here for cleanliness */
+/*
+Controls whether or not certain elements are visible based on the game mode and state.
+By default everything is visible, and here we set things to display: none.
+This is a bit annoying compared to saying when things are visible, but it means we don't
+have to remember whether elements should be "display: block" or "display: flex" when visible
+All attributes will target #game-main, but omitting that here for cleanliness
+We ignore game state inactive here because nothing is visible then anyways, so no need to style.
+*/
 /* General stuff */
 [data-game-state="1"] #correct-button,
 [data-game-state="2"] #correct-button {
@@ -15,8 +19,16 @@
 [data-game-state="2"] #neutral-next-button {
   display: none;
 }
+[data-game-state="1"] #field-marks-review-button,
+[data-game-state="2"] #field-marks-review-button {
+  display: none;
+}
 [data-game-state="1"] #description,
 [data-game-state="2"] #description {
+  display: none;
+}
+[data-game-state="1"] #reshow-answer-button,
+[data-game-state="2"] #reshow-answer-button {
   display: none;
 }
 
@@ -24,11 +36,19 @@
   display: none;
 }
 
-[data-game-state="2"] #bird-image-container {
+[data-game-state="2"] #bird-image-container,
+[data-game-state="4"] #bird-image-container {
+  display: none;
+}
+[data-game-state="2"] #field-marks-review-button,
+[data-game-state="4"] #field-marks-review-button {
   display: none;
 }
 
-[data-game-state="3"] #guess-and-skip-buttons {
+[data-game-state="3"] #skip-button-container {
+  display: none;
+}
+[data-game-state="3"] #guess-button {
   display: none;
 }
 [data-game-state="3"] #description {
@@ -37,25 +57,35 @@
 [data-game-state="3"] #bird-selection-container {
   display: none;
 }
-
-[data-game-state="3"][data-correct=true] #incorrect-button {
-  display: none;
-}
-[data-game-state="3"][data-correct=true] #neutral-next-button {
+[data-game-state="3"] #reshow-answer-button {
   display: none;
 }
 
-[data-game-state="3"][data-correct=false] #correct-button {
+[data-correct=true] #incorrect-button {
   display: none;
 }
-[data-game-state="3"][data-correct=false] #neutral-next-button {
+[data-correct=true] #neutral-next-button {
   display: none;
 }
 
-[data-game-state="3"][data-correct=no-guess] #correct-button {
+[data-correct=false] #correct-button {
   display: none;
 }
-[data-game-state="3"][data-correct=no-guess] #incorrect-button {
+[data-correct=false] #neutral-next-button {
+  display: none;
+}
+
+[data-correct=no-guess] #correct-button {
+  display: none;
+}
+[data-correct=no-guess] #incorrect-button {
+  display: none;
+}
+
+[data-game-state="4"] #skip-button-container {
+  display: none;
+}
+[data-game-state="4"] #guess-button {
   display: none;
 }
 
@@ -98,8 +128,13 @@
   display: none;
 }
 
-[data-mode=visual_id]:not([data-game-state="2"]) #bird-selection-container {
+[data-mode=visual_id] #bird-selection-container {
   display: none;
+}
+
+[data-mode=visual_id][data-game-state="2"] #bird-selection-container,
+[data-mode=visual_id][data-game-state="4"] #bird-selection-container {
+  display: block;
 }
 
 [data-mode=visual_id][data-game-state="1"] #answer-caption {
@@ -129,12 +164,20 @@
   display: none;
 }
 
-#field-marks-answers {
+#game-main:not([data-custom-game-type="Warbler Field Marks"]) #field-marks-answers {
+  display: none;
+}
+#game-main:not([data-custom-game-type="Warbler Field Marks"]) #field-marks-review-button {
+  display: none;
+}
+#game-main:not([data-custom-game-type="Warbler Field Marks"]) #reshow-answer-button {
   display: none;
 }
 
-[data-custom-game-type="Warbler Field Marks"][data-game-state="3"] #field-marks-answers {
-  display: block;
+[data-game-state="0"] #field-marks-answers,
+[data-game-state="1"] #field-marks-answers,
+[data-game-state="2"] #field-marks-answers {
+  display: none;
 }
 
 /*# sourceMappingURL=game_display.css.map */
