@@ -18,6 +18,7 @@ const INACTIVE = 0;
 const GUESSING = 1;
 const FIELD_MARKS_SCREEN = 2;
 const ANSWER_SHOWN = 3;
+const REVIEWING_FIELD_MARKS = 4;
 setGameState(INACTIVE);
 
 let mode = "birdsong"; // or "visual_id"
@@ -624,6 +625,7 @@ function nextObservation() {
   //reset HTML from before
   document.getElementById("guess-input").value = "";
   document.getElementById("guess-input").readOnly = false;
+  delete document.getElementById("game-main").dataset.correct;
   document
     .getElementById("bird-grid")
     .querySelectorAll(".bird-grid-option")
@@ -879,19 +881,29 @@ function setFieldMarksAnswers() {
     const correct = guessed && guesses[mark] === markPresent;
     const incorrect = guessed && !correct;
 
-    const p = document.createElement("p");
-    p.classList.add("field-mark-answer");
-    if (correct) p.classList.add("correct");
-    else if (incorrect) p.classList.add("incorrect");
+    const div = document.createElement("div");
 
-    let msg = (markPresent ? "" : "No ") + mark;
-    if (correct) msg += " - Correct!";
-    else if (incorrect) {
-      msg += " - Guessed " + (guesses[mark] ? "Yes" : "No");
+    // text describing the presence / absence of the field mark
+    const pMark = document.createElement("p");
+    pMark.classList.add("field-mark-answer");
+    pMark.textContent = (markPresent ? "" : "No ") + mark;
+    if (correct) pMark.classList.add("correct");
+    else if (incorrect) pMark.classList.add("incorrect");
+    div.append(pMark);
+
+    // text commenting on whether the user got it right or wrong
+    // omit this if they didn't guess
+    if (correct || incorrect) {
+      const pComment = document.createElement("p");
+      pComment.classList.add("field-mark-correctness-comment");
+      if (correct) pComment.textContent = "Correct!";
+      else if (incorrect) {
+        pComment.textContent = "Guessed " + (guesses[mark] ? "Yes" : "No");
+      }
+      div.append(pComment);
     }
-    p.textContent = msg;
 
-    container.append(p);
+    container.append(div);
   }
 }
 

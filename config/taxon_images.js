@@ -102,6 +102,7 @@ const WARBLER_EXAMPLE_IMAGES = {
     //Black-throated Green Warbler
     Male: {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/621555947/480",
+      backgroundPosition: "60%",
     },
     Female: {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/454776431/480",
@@ -126,7 +127,7 @@ const WARBLER_EXAMPLE_IMAGES = {
     },
     Female: {
       url: "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/132902571/480",
-      backgroundPosition: "8%",
+      backgroundPosition: "75%",
     },
   },
   145231: {

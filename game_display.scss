@@ -8,6 +8,7 @@ $INACTIVE: 0;
 $GUESSING: 1;
 $FIELD_MARKS_SCREEN: 2;
 $ANSWER_SHOWN: 3;
+$REVIEWING_FIELD_MARKS: 4;
 
 // use with: sass --watch game_display.scss game_display.css
 
@@ -29,7 +30,7 @@ $ANSWER_SHOWN: 3;
     display: none;
   }
 }
-// if normal guessing, don't show field marks container
+
 [data-game-state="#{$GUESSING}"] {
   #field-marks-container {
     display: none;
@@ -37,7 +38,8 @@ $ANSWER_SHOWN: 3;
 }
 
 // field mark screen
-[data-game-state="#{$FIELD_MARKS_SCREEN}"] {
+[data-game-state="#{$FIELD_MARKS_SCREEN}"],
+[data-game-state="#{$REVIEWING_FIELD_MARKS}"] {
   #bird-image-container {
     display: none;
   }
@@ -56,7 +58,7 @@ $ANSWER_SHOWN: 3;
   }
 }
 
-[data-game-state="#{$ANSWER_SHOWN}"][data-correct="true"] {
+[data-correct="true"] {
   #incorrect-button {
     display: none;
   }
@@ -64,7 +66,7 @@ $ANSWER_SHOWN: 3;
     display: none;
   }
 }
-[data-game-state="#{$ANSWER_SHOWN}"][data-correct="false"] {
+[data-correct="false"] {
   #correct-button {
     display: none;
   }
@@ -72,11 +74,18 @@ $ANSWER_SHOWN: 3;
     display: none;
   }
 }
-[data-game-state="#{$ANSWER_SHOWN}"][data-correct="no-guess"] {
+[data-correct="no-guess"] {
   #correct-button {
     display: none;
   }
   #incorrect-button {
+    display: none;
+  }
+}
+
+// reviewing field marks
+[data-game-state="#{$REVIEWING_FIELD_MARKS}"] {
+  #guess-and-skip-buttons {
     display: none;
   }
 }
@@ -131,9 +140,15 @@ $ANSWER_SHOWN: 3;
     display: none;
   }
 }
-[data-mode="visual_id"]:not([data-game-state="#{$FIELD_MARKS_SCREEN}"]) {
+[data-mode="visual_id"] {
   #bird-selection-container {
     display: none;
+  }
+}
+[data-mode="visual_id"][data-game-state="#{$FIELD_MARKS_SCREEN}"],
+[data-mode="visual_id"][data-game-state="#{$REVIEWING_FIELD_MARKS}"] {
+  #bird-selection-container {
+    display: block;
   }
 }
 
@@ -174,10 +189,14 @@ $ANSWER_SHOWN: 3;
   }
 }
 
-#field-marks-answers {
+#game-main:not([data-custom-game-type="Warbler Field Marks"])
+  #field-marks-answers {
   display: none;
 }
-[data-custom-game-type="Warbler Field Marks"][data-game-state="#{$ANSWER_SHOWN}"]
+[data-game-state="#{$INACTIVE}"],
+[data-game-state="#{$GUESSING}"],
+[data-game-state="#{$FIELD_MARKS_SCREEN}"] {
   #field-marks-answers {
-  display: block;
+    display: none;
+  }
 }

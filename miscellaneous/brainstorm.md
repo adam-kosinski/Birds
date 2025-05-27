@@ -16,6 +16,8 @@ Chipmunk intruder
 
 Warbler field marks game! Maybe focus on fall (or transition to focusing on that) since that's when field marks are more important
 Female / immature plumage sometimes has the opposite field mark (particularly for yellow throat). Maybe fix by using curated ebird photos? Would need to be careful if want to build in a fall-season setting.
+If you get a warbler wrong, and there are definitive field marks to tell your guess apart from the correct answer, the program could tell you those distinguishing factors.
+Would be nice to be able to go back to the field marks selection page after answer revealed
 
 Things to tune:
 

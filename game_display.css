@@ -24,7 +24,8 @@
   display: none;
 }
 
-[data-game-state="2"] #bird-image-container {
+[data-game-state="2"] #bird-image-container,
+[data-game-state="4"] #bird-image-container {
   display: none;
 }
 
@@ -38,24 +39,28 @@
   display: none;
 }
 
-[data-game-state="3"][data-correct=true] #incorrect-button {
+[data-correct=true] #incorrect-button {
   display: none;
 }
-[data-game-state="3"][data-correct=true] #neutral-next-button {
-  display: none;
-}
-
-[data-game-state="3"][data-correct=false] #correct-button {
-  display: none;
-}
-[data-game-state="3"][data-correct=false] #neutral-next-button {
+[data-correct=true] #neutral-next-button {
   display: none;
 }
 
-[data-game-state="3"][data-correct=no-guess] #correct-button {
+[data-correct=false] #correct-button {
   display: none;
 }
-[data-game-state="3"][data-correct=no-guess] #incorrect-button {
+[data-correct=false] #neutral-next-button {
+  display: none;
+}
+
+[data-correct=no-guess] #correct-button {
+  display: none;
+}
+[data-correct=no-guess] #incorrect-button {
+  display: none;
+}
+
+[data-game-state="4"] #guess-and-skip-buttons {
   display: none;
 }
 
@@ -98,8 +103,13 @@
   display: none;
 }
 
-[data-mode=visual_id]:not([data-game-state="2"]) #bird-selection-container {
+[data-mode=visual_id] #bird-selection-container {
   display: none;
+}
+
+[data-mode=visual_id][data-game-state="2"] #bird-selection-container,
+[data-mode=visual_id][data-game-state="4"] #bird-selection-container {
+  display: block;
 }
 
 [data-mode=visual_id][data-game-state="1"] #answer-caption {
@@ -129,12 +139,14 @@
   display: none;
 }
 
-#field-marks-answers {
+#game-main:not([data-custom-game-type="Warbler Field Marks"]) #field-marks-answers {
   display: none;
 }
 
-[data-custom-game-type="Warbler Field Marks"][data-game-state="3"] #field-marks-answers {
-  display: block;
+[data-game-state="0"] #field-marks-answers,
+[data-game-state="1"] #field-marks-answers,
+[data-game-state="2"] #field-marks-answers {
+  display: none;
 }
 
 /*# sourceMappingURL=game_display.css.map */
