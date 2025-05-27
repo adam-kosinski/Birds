@@ -232,7 +232,8 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-//check answer
+// buttons on the bottom
+
 document.getElementById("guess-button").addEventListener("click", checkAnswer);
 document.getElementById("skip-button").addEventListener("click", (e) => {
   // show a loader so the user knows something is happening (if we transition instantly, it looks like nothing happened)
@@ -249,8 +250,6 @@ document.getElementById("skip-button").addEventListener("click", (e) => {
     nextObservation();
   }, 500);
 });
-
-//next observation
 document
   .getElementById("correct-button")
   .addEventListener("click", nextObservation);
@@ -260,6 +259,12 @@ document
 document
   .getElementById("neutral-next-button")
   .addEventListener("click", nextObservation);
+document
+  .getElementById("field-marks-review-button")
+  .addEventListener("click", () => setGameState(REVIEWING_FIELD_MARKS));
+document
+  .getElementById("reshow-answer-button")
+  .addEventListener("click", () => setGameState(ANSWER_SHOWN));
 
 //autoplay second audio when first finishes
 document.getElementById("birdsong-audio-0").addEventListener("ended", () => {

@@ -1,7 +1,11 @@
-/* Controls whether or not certain elements are visible based on the game mode and state */
-/* Easier to not miss things in css */
-/* By default everything is visible */
-/* All attributes will target #game-main, but omitting that here for cleanliness */
+/*
+Controls whether or not certain elements are visible based on the game mode and state.
+By default everything is visible, and here we set things to display: none.
+This is a bit annoying compared to saying when things are visible, but it means we don't
+have to remember whether elements should be "display: block" or "display: flex" when visible
+All attributes will target #game-main, but omitting that here for cleanliness
+We ignore game state inactive here because nothing is visible then anyways, so no need to style.
+*/
 
 // Game states:
 $INACTIVE: 0;
@@ -14,7 +18,7 @@ $REVIEWING_FIELD_MARKS: 4;
 
 /* General stuff */
 
-// guessing (or field marks screen, which is also guessing)
+// guessing (or field marks screen, which is also a form of guessing)
 [data-game-state="#{$GUESSING}"],
 [data-game-state="#{$FIELD_MARKS_SCREEN}"] {
   #correct-button {
@@ -26,7 +30,13 @@ $REVIEWING_FIELD_MARKS: 4;
   #neutral-next-button {
     display: none;
   }
+  #field-marks-review-button {
+    display: none;
+  }
   #description {
+    display: none;
+  }
+  #reshow-answer-button {
     display: none;
   }
 }
@@ -43,17 +53,26 @@ $REVIEWING_FIELD_MARKS: 4;
   #bird-image-container {
     display: none;
   }
+  #field-marks-review-button {
+    display: none;
+  }
 }
 
 // answer
 [data-game-state="#{$ANSWER_SHOWN}"] {
-  #guess-and-skip-buttons {
+  #skip-button-container {
+    display: none;
+  }
+  #guess-button {
     display: none;
   }
   #description {
     display: block;
   }
   #bird-selection-container {
+    display: none;
+  }
+  #reshow-answer-button {
     display: none;
   }
 }
@@ -85,7 +104,10 @@ $REVIEWING_FIELD_MARKS: 4;
 
 // reviewing field marks
 [data-game-state="#{$REVIEWING_FIELD_MARKS}"] {
-  #guess-and-skip-buttons {
+  #skip-button-container {
+    display: none;
+  }
+  #guess-button {
     display: none;
   }
 }
@@ -189,9 +211,16 @@ $REVIEWING_FIELD_MARKS: 4;
   }
 }
 
-#game-main:not([data-custom-game-type="Warbler Field Marks"])
+#game-main:not([data-custom-game-type="Warbler Field Marks"]) {
   #field-marks-answers {
-  display: none;
+    display: none;
+  }
+  #field-marks-review-button {
+    display: none;
+  }
+  #reshow-answer-button {
+    display: none;
+  }
 }
 [data-game-state="#{$INACTIVE}"],
 [data-game-state="#{$GUESSING}"],
