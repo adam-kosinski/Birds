@@ -116,19 +116,33 @@ document.getElementById("field-marks").addEventListener("click", (e) => {
     .forEach((el) => el.classList.remove("field-mark-mismatch"));
   const selectedMarks = getSelectedFieldMarks();
 
-  // filter out ids that have the opposite field mark
-  // this is better than keeping the ones with the field mark because
-  // our config lists aren't comprehensive (bird might not be in either yes
+  // filter out taxa that have only mismatching field mark values
+  // this is better than keeping just the ones with the matching field mark because
+  // our config lists aren't comprehensive (taxon might not be in either yes
   // or no lists, and wouldn't want to filter them out if so)
-  const idsInUse = new Set(taxa_to_use.map((obj) => obj.id));
+
   let idsToHide = new Set();
-  for (const [mark, hasIt] of Object.entries(selectedMarks)) {
-    let notMatching = new Set(
-      FIELD_MARK_CONFIG[mark][hasIt ? "taxa_no" : "taxa_yes"]
+  for (const [mark, selectedValue] of Object.entries(selectedMarks)) {
+    let notMatching = new Set();
+
+    // first consider all taxa with a known field mark value as mismatching
+    // then remove any taxa that appear in the matching mark list
+    // this deals with taxa appearing in multiple lists or not at all
+    // in this way, we filter out taxa only for which we know the possible field mark values,
+    // and where none of those possible field mark values match
+    for (const data of Object.values(FIELD_MARK_CONFIG[mark].values)) {
+      data.taxa.forEach((id) => notMatching.add(id));
+    }
+    FIELD_MARK_CONFIG[mark].values[selectedValue].taxa.forEach((id) =>
+      notMatching.delete(id)
     );
-    notMatching = notMatching.intersection(idsInUse);
     idsToHide = idsToHide.union(notMatching);
   }
+  // it's possible that some mismatching ids won't be in play and thus not in the DOM
+  // so only use ids in play
+  const idsInUse = new Set(taxa_to_use.map((obj) => obj.id));
+  idsToHide = idsToHide.intersection(idsInUse);
+  // hide mismatching options
   idsToHide.forEach((id) => {
     document
       .querySelector(`.bird-grid-option[data-taxon-id="${id}"`)

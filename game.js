@@ -780,7 +780,7 @@ function getSelectedFieldMarks() {
       `[data-field-mark="${mark}"] .selected`
     );
     if (selected) {
-      out[mark] = selected.dataset.value === "yes";
+      out[mark] = selected.dataset.value;
     }
   }
   return out;
@@ -867,18 +867,28 @@ function checkAnswer() {
 function setFieldMarksAnswers() {
   const id = searchAncestorsForTaxonIdInList(current);
   const guesses = getSelectedFieldMarks();
-
   const container = document.getElementById("field-marks-answers");
   container.innerHTML = "";
-  for (const mark in FIELD_MARK_CONFIG) {
+
+  markLoop: for (const mark in FIELD_MARK_CONFIG) {
     // note - since list isn't necessarily comprehensive, it's possible
-    // for a taxon to not be in the "yes" or "no" list for that field mark
-    const markPresent = FIELD_MARK_CONFIG[mark].taxa_yes.includes(id);
-    const markAbsent = FIELD_MARK_CONFIG[mark].taxa_no.includes(id);
-    if (!markPresent && !markAbsent) continue;
+    // for a taxon to not be in any list (neither "yes" nor "no" nor something else) for that field mark
+    // a taxon can also be in multiple lists if it varies
+
+    let correctValue;
+    for (const [value, data] of Object.entries(
+      FIELD_MARK_CONFIG[mark].values
+    )) {
+      if (data.taxa.includes(id)) {
+        // if in multiple lists, skip this mark, since it varies
+        if (correctValue) continue markLoop; // another list already matched
+        else correctValue = value;
+      }
+    }
+    if(!correctValue) continue;
 
     const guessed = mark in guesses;
-    const correct = guessed && guesses[mark] === markPresent;
+    const correct = guessed && (guesses[mark] === correctValue);
     const incorrect = guessed && !correct;
 
     const div = document.createElement("div");
@@ -888,7 +898,7 @@ function setFieldMarksAnswers() {
     // text describing the presence / absence of the field mark
     const pMark = document.createElement("p");
     pMark.classList.add("field-mark-answer");
-    pMark.textContent = (markPresent ? "" : "No ") + mark;
+    pMark.textContent = FIELD_MARK_CONFIG[mark].values[correctValue].description;
     div.append(pMark);
 
     // text commenting on whether the user got it right or wrong
@@ -898,7 +908,7 @@ function setFieldMarksAnswers() {
       pMsg.classList.add("field-mark-correctness-msg");
       if (correct) pMsg.textContent = "Correct!";
       else if (incorrect) {
-        pMsg.textContent = "Guessed " + (guesses[mark] ? "Yes" : "No");
+        pMsg.textContent = "Guessed " + (guesses[mark]);
       }
       div.append(pMsg);
     }
