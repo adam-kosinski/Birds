@@ -226,7 +226,7 @@ const FIELD_MARK_CONFIG = {
     // 145224, //Mourning Warbler
   },
 
-  "Eye Ring: Full / Partial / None": {
+  "Eye Ring: Full / Broken / None": {
     advanced: true,
     values: {
       full: {
@@ -236,17 +236,32 @@ const FIELD_MARK_CONFIG = {
           145275, //Canada Warbler
           979753, //Nashville Warbler
           10431, //Connecticut Warbler
+          62550, //Ovenbird
         ],
       },
-      partial: {
-        description: "Partial Eye Ring",
-        photo: "images/eye_ring_partial.jpg",
+      broken: {
+        description: "Broken Eye Ring",
+        photo: "images/eye_ring_broken.jpg",
         taxa: [
           145244, //Pine Warbler
-          10286, //Black-and-white Warbler - they have it but is white so can blend in with surrounding feathers
-          62550, //Ovenbird
           145230, //Kirtland's Warbler
+          145233, //Northern Parula
           979757, //Orange-crowned Warbler - sometimes a bit tricky to see
+
+          // broken vs. none - varies or unclear
+          9721, //Common Yellowthroat
+          10247, //American Redstart
+          145238, //Yellow Warbler
+          145239, //Chestnut-sided Warbler
+          145249, //Prairie Warbler
+          10442, //Swainson's Warbler
+          145240, //Blackpoll Warbler
+          145236, //Bay-breasted Warbler
+          145224, //Mourning Warbler
+          145245, //Yellow-rumped Warbler
+          145235, //Magnolia Warbler
+          199916, //Black-throated Blue Warbler
+          145242, //Palm Warbler
         ],
       },
       none: {
@@ -267,26 +282,26 @@ const FIELD_MARK_CONFIG = {
           145225, //Kentucky Warbler
           9807, //Golden-winged Warbler
           145232, //Cerulean Warbler
+          145246, //Yellow-throated Warbler
+
+          // broken vs. none - varies or unclear
+          9721, //Common Yellowthroat
+          10247, //American Redstart
+          145238, //Yellow Warbler
+          145239, //Chestnut-sided Warbler
+          145249, //Prairie Warbler
+          10442, //Swainson's Warbler
+          145240, //Blackpoll Warbler
+          145236, //Bay-breasted Warbler
+          145224, //Mourning Warbler
+          145245, //Yellow-rumped Warbler
+          145235, //Magnolia Warbler
+          199916, //Black-throated Blue Warbler
+          145242, //Palm Warbler
         ],
       },
     },
-    // varies or unclear
-    // 9721, //Common Yellowthroat
-    // 10247, //American Redstart
-    // 145238, //Yellow Warbler
-    // 145233, //Northern Parula
-    // 145239, //Chestnut-sided Warbler
-    // 145249, //Prairie Warbler
-    // 10442, //Swainson's Warbler
-    // 145240, //Blackpoll Warbler
-    // 145236, //Bay-breasted Warbler
-    // 145224, //Mourning Warbler
-    // 145245, //Yellow-rumped Warbler
-
-    // has half an eye ring in some plumage - hmm
-    // 145235, //Magnolia Warbler
-    // 199916, //Black-throated Blue Warbler
-    // 145242, //Palm Warbler
-    // 145246, //Yellow-throated Warbler
+    // unclear among all three options
+    // 10286, //Black-and-white Warbler - they have a full eye ring but is white so can blend in with surrounding feathers
   },
 };
