@@ -360,7 +360,7 @@
 }
 .field-mark-row {
   display: grid;
-  grid-template-columns: 55px min-content min-content;
+  grid-template-columns: 68px min-content min-content;
   gap: 10px;
   align-items: center;
   text-align: center;

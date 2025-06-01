@@ -45,7 +45,7 @@ const FIELD_MARK_CONFIG = {
     ],
   },
   "Breast Streaks": {
-    photo_yes: "images/breast_streaks_yes.png",
+    photo_yes: "images/breast_streaks_yes.jpg",
     photo_no: "images/breast_streaks_no.png",
     taxa_yes: [
       10286, //Black-and-white Warbler
@@ -90,10 +90,59 @@ const FIELD_MARK_CONFIG = {
     // 10442, //Swainson's Warbler
     // 145238, //Yellow Warbler
   },
+  "Line Through Eye": {
+    photo_yes: "images/eye_line_yes.jpg",
+    photo_no: "images/eye_line_no.jpg",
+    taxa_yes: [
+      145242, //Palm Warbler
+      145244, //Pine Warbler
+      145258, //Black-throated Green Warbler
+      145231, //Cape May Warbler
+      145249, //Prairie Warbler
+      979756, //Tennessee Warbler
+      145246, //Yellow-throated Warbler
+      145237, //Blackburnian Warbler
+      73149, //Northern Waterthrush
+      73148, //Louisiana Waterthrush
+      979757, //Orange-crowned Warbler
+      73553, //Blue-winged Warbler
+      72912, //Worm-eating Warbler
+      10442, //Swainson's Warbler
+    ],
+    taxa_no: [
+      9721, //Common Yellowthroat
+      10247, //American Redstart
+      145238, //Yellow Warbler
+      145233, //Northern Parula
+      62550, //Ovenbird
+      145235, //Magnolia Warbler
+      199916, //Black-throated Blue Warbler
+      145239, //Chestnut-sided Warbler
+      10729, //Prothonotary Warbler
+      145229, //Hooded Warbler
+      979753, //Nashville Warbler
+      145275, //Canada Warbler
+      145276, //Wilson's Warbler
+      145225, //Kentucky Warbler
+      145224, //Mourning Warbler - faint slightly darker line on female but not really an eyeline
+      10431, //Connecticut Warbler
+      145230, //Kirtland's Warbler - darkness barely makes it past the eye, so saying no
+    ],
+    // varies
+    // 10286, //Black-and-white Warbler
+    // 145240, //Blackpoll Warbler
+    // 145236, //Bay-breasted Warbler
+
+    // can be unclear
+    // 145232, //Cerulean Warbler - seems to have it, but can be unclear in the male
+    // 145245, //Yellow-rumped Warbler - male eye patch can look like a line
+
+    // could be misinterpreted
+    // 9807, //Golden-winged Warbler - technically a patch around eye, but at a glance can look like a line
+  },
   "Yellow Throat": {
-    // NOTE - black throated blue female seems to have a yellow throat sometimes?
-    // NOTE - common yellowthroat female doesn't have a yellow throat sometimes?
-    photo_yes: "images/yellow_throat_yes.png",
+    advanced: true,
+    photo_yes: "images/yellow_throat_yes.jpg",
     photo_no: "images/yellow_throat_no.png",
     taxa_yes: [
       145238, //Yellow Warbler
@@ -147,7 +196,7 @@ const FIELD_MARK_CONFIG = {
       979753, //Nashville Warbler
       10431, //Connecticut Warbler
       145244, //Pine Warbler
-      10286, //Black-and-white Warbler
+      10286, //Black-and-white Warbler - they have it but is white so can blend in with surrounding feathers
       62550, //Ovenbird
       145230, //Kirtland's Warbler
       979757, //Orange-crowned Warbler - sometimes a bit tricky to see
