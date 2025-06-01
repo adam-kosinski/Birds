@@ -11,7 +11,6 @@ const FIELD_MARK_CONFIG = {
       145242, //Palm Warbler
       145244, //Pine Warbler
       145258, //Black-throated Green Warbler
-      199916, //Black-throated Blue Warbler
       145239, //Chestnut-sided Warbler
       145231, //Cape May Warbler
       145246, //Yellow-throated Warbler
@@ -43,6 +42,8 @@ const FIELD_MARK_CONFIG = {
       10431, //Connecticut Warbler
       979756, //Tennessee Warbler
     ],
+    // unclear
+    // 199916, //Black-throated Blue Warbler
   },
   "Breast Streaks": {
     photo_yes: "images/breast_streaks_yes.jpg",

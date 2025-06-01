@@ -119,7 +119,7 @@ document.getElementById("field-marks").addEventListener("click", (e) => {
   // filter out ids that have the opposite field mark
   // this is better than keeping the ones with the field mark because
   // our config lists aren't comprehensive (bird might not be in either yes
-  // or no lists, and wouldn't want to filter them if so)
+  // or no lists, and wouldn't want to filter them out if so)
   const idsInUse = new Set(taxa_to_use.map((obj) => obj.id));
   let idsToHide = new Set();
   for (const [mark, hasIt] of Object.entries(selectedMarks)) {

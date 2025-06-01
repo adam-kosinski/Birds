@@ -14,9 +14,7 @@ Convert Sophie's warbler calls into all warbler calls?
 
 Chipmunk intruder
 
-Observations of subspecies mess up the field marks answers.
 Warbler field marks game! Maybe focus on fall (or transition to focusing on that) since that's when field marks are more important
-Female / immature plumage sometimes has the opposite field mark (particularly for yellow throat). Maybe fix by using curated ebird photos? Would need to be careful if want to build in a fall-season setting.
 If you get a warbler wrong, and there are definitive field marks to tell your guess apart from the correct answer, the program could tell you those distinguishing factors.
 
 Things to tune:
