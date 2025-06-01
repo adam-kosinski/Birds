@@ -84,20 +84,17 @@ function initFieldMarksUI() {
 
       const p = document.createElement("p");
       p.textContent = mark;
+      div.append(p);
 
-      const buttonYes = document.createElement("button");
-      buttonYes.dataset.value = "yes";
-      const imgYes = document.createElement("img");
-      imgYes.src = FIELD_MARK_CONFIG[mark].photo_yes;
-      buttonYes.append(imgYes);
+      for (const value in FIELD_MARK_CONFIG[mark].values) {
+        const button = document.createElement("button");
+        button.dataset.value = value;
+        const img = document.createElement("img");
+        img.src = FIELD_MARK_CONFIG[mark].values[value].photo;
+        button.append(img);
+        div.append(button);
+      }
 
-      const buttonNo = document.createElement("button");
-      buttonNo.dataset.value = "no";
-      const imgNo = document.createElement("img");
-      imgNo.src = FIELD_MARK_CONFIG[mark].photo_no;
-      buttonNo.append(imgNo);
-
-      div.append(p, buttonYes, buttonNo);
       container.append(div);
     }
   }
