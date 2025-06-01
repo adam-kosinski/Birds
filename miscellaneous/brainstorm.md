@@ -17,6 +17,33 @@ Chipmunk intruder
 Warbler field marks game! Maybe focus on fall (or transition to focusing on that) since that's when field marks are more important
 If you get a warbler wrong, and there are definitive field marks to tell your guess apart from the correct answer, the program could tell you those distinguishing factors.
 
+TODO in the case that a taxon is both in a matching and non-matching list (because of variation), only filter it out if it can only not match
+
+TODO restructure field marks config to support nonbinary. Allow taxa to be in multiple lists (e.g. partial eye ring and no eye ring, so that full eye ring will still filter those taxa out). But only show field mark answer text if the field mark is unambiguous (taxon is listed in just one list).
+
+```
+"Wing Bars": {
+  advanced: false,
+  values: {
+    yes: {
+      text: "Wing Bars",
+      photo: "",
+      taxa: [...]
+    },
+    no: {
+      text: "No Wing Bars",
+      photo: "",
+      taxa: [...]
+    },
+    custom: {
+      text: "Rainbow Wings",
+      photo: "",
+      taxa: [...]
+    }
+  }
+}
+```
+
 Things to tune:
 
 - EMA parameter

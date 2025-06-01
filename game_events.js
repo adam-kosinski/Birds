@@ -122,10 +122,14 @@ document.getElementById("field-marks").addEventListener("click", (e) => {
   // or no lists, and wouldn't want to filter them out if so)
   const idsInUse = new Set(taxa_to_use.map((obj) => obj.id));
   let idsToHide = new Set();
-  for (const [mark, hasIt] of Object.entries(selectedMarks)) {
-    let notMatching = new Set(
-      FIELD_MARK_CONFIG[mark][hasIt ? "taxa_no" : "taxa_yes"]
-    );
+  for (const [mark, value] of Object.entries(selectedMarks)) {
+    let notMatching = new Set();
+    // add all field mark values that don't match
+    for (const key in FIELD_MARK_CONFIG[mark]) {
+      if (key.startsWith("taxa_") && key.split("taxa_")[1] !== value) {
+        FIELD_MARK_CONFIG[mark][key].forEach((id) => notMatching.add(id));
+      }
+    }
     notMatching = notMatching.intersection(idsInUse);
     idsToHide = idsToHide.union(notMatching);
   }

@@ -780,7 +780,7 @@ function getSelectedFieldMarks() {
       `[data-field-mark="${mark}"] .selected`
     );
     if (selected) {
-      out[mark] = selected.dataset.value === "yes";
+      out[mark] = selected.dataset.value;
     }
   }
   return out;
@@ -872,13 +872,13 @@ function setFieldMarksAnswers() {
   container.innerHTML = "";
   for (const mark in FIELD_MARK_CONFIG) {
     // note - since list isn't necessarily comprehensive, it's possible
-    // for a taxon to not be in the "yes" or "no" list for that field mark
+    // for a taxon to not be in any list ("yes", "no", or nonbinary) for that field mark
     const markPresent = FIELD_MARK_CONFIG[mark].taxa_yes.includes(id);
     const markAbsent = FIELD_MARK_CONFIG[mark].taxa_no.includes(id);
     if (!markPresent && !markAbsent) continue;
 
     const guessed = mark in guesses;
-    const correct = guessed && guesses[mark] === markPresent;
+    const correct = guessed && (guesses[mark] === "yes") === markPresent;
     const incorrect = guessed && !correct;
 
     const div = document.createElement("div");
