@@ -250,6 +250,7 @@ document.getElementById("skip-button").addEventListener("click", (e) => {
   const page_disabler = document.getElementById("page-disabler");
   loader.style.visibility = "visible";
   page_disabler.style.display = "block";
+  if (fieldMarksSetTimeoutId) clearTimeout(fieldMarksSetTimeoutId);
   setTimeout(() => {
     e.target.style.visibility = "visible";
     loader.style.visibility = "hidden";
