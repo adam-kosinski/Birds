@@ -429,7 +429,7 @@ initAutocomplete(
         ? ""
         : "taxon_id=" + taxa_to_search_in.join() + "&";
 
-    return `https://api.inaturalist.org/v1/taxa/autocomplete?${taxonIdParam}rank=species,genus,family,order&is_active=true`;
+    return `https://api.inaturalist.org/v1/taxa/autocomplete?${taxonIdParam}rank=subspecies,species,genus,family,order&is_active=true`;
   },
   //result callback
   (obj, list_option) => {
