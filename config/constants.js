@@ -12,7 +12,7 @@ const SPECIES_COUNTS_RADIUS = 150; //km
 const FRAC_TAXA_ABSENT_WARNING_THRESHOLD = 0.25; //if more than this fraction of taxa aren't found in the selected location, warn the user
 
 // select by location
-const TOP_N_SELECTED = 16;
+const TOP_N_SELECTED = 32;
 
 // question selection
 const MAX_PREFERRED_AUDIO_DURATION = 15; //seconds, if the next observation's sound is longer, try to pick a different next one
